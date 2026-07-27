@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Goshtoso favicon</title><desc id="desc">Three interface waves below the Arai Hû horizon.</desc>
+  <rect width="64" height="64" rx="12" fill="#07111f"/>
+  <path d="M9 35c7-8 14-8 21 0s14 8 21 0 14-8 21 0" fill="none" stroke="#31588f" stroke-width="10" stroke-linecap="round"/>
+  <path d="M9 47c7-8 14-8 21 0s14 8 21 0 14-8 21 0" fill="none" stroke="#d5ddeb" stroke-width="7" stroke-linecap="round"/>
+  <path d="M14 54h36" stroke="#c7ff4a" stroke-width="3" stroke-linecap="round"/>
+</svg>

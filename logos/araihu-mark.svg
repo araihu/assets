@@ -1,6 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
-  <title id="title">Arai Hû mark</title><desc id="desc">A dark cloud over a horizon line.</desc>
-  <rect width="64" height="64" rx="12" fill="#07111f"/>
-  <path d="M13 42c0-6 4-10 10-10 2-8 8-13 16-13 9 0 16 6 17 15 4 1 7 4 7 8H13Z" fill="#31588f"/>
-  <path d="M13 45h38" stroke="#c7ff4a" stroke-width="3" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Arai Hû mark</title><desc id="desc">Dark cloud over lime horizon.</desc>
+  <rect width="128" height="128" rx="30" fill="#07111f"/><path d="M24 84c0-12 8-21 20-21 5-17 17-28 35-28 20 0 36 13 39 34 9 2 16 10 16 20H24Z" fill="#31588f"/><path d="M25 102h78" stroke="#c7ff4a" stroke-width="5" stroke-linecap="round"/>
 </svg>

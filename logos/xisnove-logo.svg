@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 192" role="img" aria-labelledby="title desc">
+  <title id="title">Xisnove</title><desc id="desc">Xisnove logo, derived from the Arai Hû dark-cloud identity.</desc>
+  <rect width="192" height="192" rx="38" fill="#07111f"/>
+  <path d="M35 65h27l16 27 23-47 21 35h35" fill="none" stroke="#7aa4df" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="101" cy="45" r="9" fill="#c7ff4a"/><path d="M37 137h118" stroke="#31588f" stroke-width="28" stroke-linecap="round"/><path d="M37 153h118" stroke="#c7ff4a" stroke-width="7" stroke-linecap="round"/>
+  <text x="228" y="119" fill="#07111f" font-family="Instrument Sans, Arial, sans-serif" font-size="76" font-weight="750" letter-spacing="-3">Xisnove</text>
+</svg>
