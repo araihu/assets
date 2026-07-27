@@ -2,6 +2,17 @@
 
 Shared, release-ready brand assets for Arai Hû projects.
 
+## License and use
+
+Unless a more specific notice applies, this repository is licensed under the
+[Apache License 2.0](LICENSE). Projects owned by the Arai Hû GitHub
+organization are expressly authorized to use and redistribute these assets in
+products, documentation, websites, and release artifacts.
+
+Third-party material retains its original license under [LICENSES/](LICENSES/).
+The Apache license does not grant trademark rights or permission to imply Arai
+Hû endorsement or affiliation.
+
 ## Logos
 
 - `logos/araihu-logo.svg`, `logos/araihu-mark.svg`, and `logos/araihu-favicon.svg` form the Arai Hû organization identity.
