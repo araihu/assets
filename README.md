@@ -36,7 +36,12 @@ ready version in `review/screenshots/logo-system-all-versions.png`, inspect v10
 at normal, monochrome, and 16 px sizes in
 `review/screenshots/logo-system-v10.png`, and inspect product contexts in
 `review/screenshots/context/site-context-current-v10.png`. Validate canonical
-assets with `scripts/validate-logo-system.sh`.
+assets with `scripts/validate-logo-system.sh`. Run the interactive v10 blind
+review at `review/blind-review.html`; its printable A4 form is generated from
+`review/blind-review-print.html` with `scripts/render-blind-review-pdf.sh`.
+The final PDF is under `output/pdf/`; page proofs are retained as
+`review/screenshots/blind-review-v10-page-1.png` and
+`review/screenshots/blind-review-v10-page-2.png` for visual comparison.
 
 ## Goshtoso theme
 

@@ -48,8 +48,8 @@ def load_review(path: Path) -> dict[str, object]:
         raise ValueError(f"{path}: cannot read valid JSON: {error}") from error
     if payload.get("schema") != 3:
         raise ValueError(f"{path}: expected schema 3 export")
-    if payload.get("system") != "araihu-logo-system-v3":
-        raise ValueError(f"{path}: expected araihu-logo-system-v3 review")
+    if payload.get("system") != "araihu-logo-system-v10":
+        raise ValueError(f"{path}: expected araihu-logo-system-v10 review")
     evaluator = str(payload.get("evaluator", "")).strip()
     if not evaluator:
         raise ValueError(f"{path}: evaluator is required")
@@ -112,7 +112,7 @@ def aggregate(paths: list[Path]) -> tuple[str, bool]:
         passed = False
 
     lines = [
-        "System: araihu-logo-system-v3",
+        "System: araihu-logo-system-v10",
         f"Reviewers: {len(reviews)} · required matches per product: {required_matches}",
         "",
         "| Product | Intended-category matches | Clarity mean | Distinction mean | Exact dominant reading | Gate |",
@@ -130,7 +130,7 @@ def aggregate(paths: list[Path]) -> tuple[str, bool]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("reviews", nargs="+", type=Path, help="schema 3 v3 JSON exports")
+    parser.add_argument("reviews", nargs="+", type=Path, help="schema 3 v10 JSON exports")
     args = parser.parse_args()
     try:
         report, passed = aggregate(args.reviews)

@@ -45,20 +45,20 @@
   <p id="status" class="status" aria-live="polite">Respostas ficam somente neste navegador até exportação.</p>
   <script>
     const products = [
-      { id: "araihu", name: "Arai Hû", intent: "nuvem escura de tempestade + raio" },
-      { id: "goshtoso", name: "Goshtoso", intent: "ritmo de calçadão + fluxo de interface" },
-      { id: "manja", name: "Manja", intent: "documentação aberta + árvore de paths OpenAPI" },
-      { id: "paje", name: "Pajé", intent: "rota durável com cinco checkpoints" },
-      { id: "xisnove", name: "Xisnove", intent: "diagrama ferroviário + sinal de monitoramento" },
+      { id: "araihu", name: "Arai Hû", intent: "nuvem escura carregada + descarga elétrica; única nuvem da família" },
+      { id: "goshtoso", name: "Goshtoso", intent: "painéis de componentes sobrepostos + módulo ativo" },
+      { id: "manja", name: "Manja", intent: "publicação de API aberta + endpoint roteado" },
+      { id: "paje", name: "Pajé", intent: "rota contínua e durável + checkpoints" },
+      { id: "xisnove", name: "Xisnove", intent: "sinal de monitoramento de três estados + sonda externa" },
     ];
-    const storageKey = "araihu-logo-blind-review-v3";
+    const storageKey = "araihu-logo-blind-review-v10";
     const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
     const shuffled = saved?.order?.length === products.length
       ? saved.order.map(id => products.find(product => product.id === id))
       : [...products].sort(() => Math.random() - .5);
     const state = {
       schema: 3,
-      system: "araihu-logo-system-v3",
+      system: "araihu-logo-system-v10",
       order: shuffled.map(product => product.id),
       evaluator: saved?.evaluator || "",
       answers: saved?.answers || {},
@@ -83,7 +83,7 @@
       cards.classList.toggle("revealed", state.revealed);
       cards.innerHTML = shuffled.map((product, index) => `
         <article class="card" data-product="${product.id}">
-          <div class="art" data-index="${String(index + 1).padStart(2, "0")}"><img src="../concepts/v3/${product.id}-mark.svg" alt=""></div>
+          <div class="art" data-index="${String(index + 1).padStart(2, "0")}"><img src="../concepts/v10/${product.id}-mark.svg" alt=""></div>
           <div class="form">
             <label>Primeira leitura<textarea data-field="reading" placeholder="Objeto, sistema ou ideia…">${escaped(value(product.id, "reading"))}</textarea></label>
             <div class="scores">
