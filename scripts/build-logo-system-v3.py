@@ -63,7 +63,17 @@ def replace_midnight_with_paper(root: ET.Element) -> None:
                 node.set(attribute, "#f3f2e9")
 
 
-def build_product(concept_dir: Path, slug: str, name: str) -> None:
+def swap_midnight_and_paper(root: ET.Element) -> None:
+    for node in root.iter():
+        for attribute in ("fill", "stroke"):
+            value = node.get(attribute, "").lower()
+            if value == "#07111f":
+                node.set(attribute, "#f3f2e9")
+            elif value == "#f3f2e9":
+                node.set(attribute, "#07111f")
+
+
+def build_product(concept_dir: Path, slug: str, name: str, swap_paper: bool = False) -> None:
     source = concept_dir / f"{slug}-a.svg"
     source_root = ET.parse(source).getroot()
     source_desc = source_root.findtext(f"{{{SVG}}}desc") or f"{name} v3 selected mark."
@@ -74,7 +84,10 @@ def build_product(concept_dir: Path, slug: str, name: str) -> None:
 
     reverse = copy.deepcopy(mark)
     reverse.find(f"{{{SVG}}}title").text = f"{name} reverse mark"
-    replace_midnight_with_paper(reverse)
+    if swap_paper:
+        swap_midnight_and_paper(reverse)
+    else:
+        replace_midnight_with_paper(reverse)
     write(concept_dir / f"{slug}-mark-reverse.svg", reverse)
 
     favicon = titled_root("0 0 64 64", f"{name} favicon", source_desc)
@@ -107,9 +120,10 @@ def build_product(concept_dir: Path, slug: str, name: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--concept-dir", type=Path, required=True)
+    parser.add_argument("--swap-paper", action="store_true", help="Swap midnight and paper in reverse marks.")
     args = parser.parse_args()
     for slug, name in PRODUCTS.items():
-        build_product(args.concept_dir, slug, name)
+        build_product(args.concept_dir, slug, name, swap_paper=args.swap_paper)
 
 
 if __name__ == "__main__":

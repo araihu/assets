@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 192" role="img" aria-labelledby="title desc">
+  <title id="title">Manja logo</title>
+  <desc id="desc">The Arai Hû storm hood containing an open API publication.</desc>
+  <g transform="translate(32 32)">
+    <path d="M20 106V72c0-14 10-24 24-26 5-18 21-30 39-28 18 2 31 18 31 37v53" fill="none" stroke="#07111f" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M20 106V92" fill="none" stroke="#31588f" stroke-width="14" stroke-linecap="round" />
+    <path d="M40 52c9-4 17-2 24 4v38c-7-6-15-8-24-4Zm48 0c-9-4-17-2-24 4v38c7-6 15-8 24-4Z" fill="none" stroke="#31588f" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="84" cy="80" r="7" fill="#c7ff4a" stroke="#07111f" stroke-width="4" />
+  </g>
+  <text x="198" y="123" fill="#07111f" font-family="Instrument Sans SemiCondensed, sans-serif" font-size="78" font-weight="700">Manja</text>
+</svg>

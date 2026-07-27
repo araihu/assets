@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arai Hû identity v8 — site context gate</title>
+  <link rel="icon" href="../concepts/v8/araihu-favicon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --midnight: #07111f;
+      --paper: #f3f2e9;
+      --lime: #c7ff4a;
+      --cobalt: #365f9c;
+      --line-dark: rgba(243, 242, 233, .2);
+      --line-light: rgba(7, 17, 31, .16);
+      --muted-dark: #b5c0cf;
+      --muted-light: #566274;
+      --sans: "Instrument Sans", Inter, ui-sans-serif, system-ui, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: #cfd1ca; }
+    body { margin: 0; color: var(--midnight); font-family: var(--sans); }
+    img { display: block; }
+    .review-head { background: #cfd1ca; padding: 40px 48px 32px; }
+    .review-head p { color: #526981; margin: 8px 0 0; }
+    .review-head h1 { font-size: 44px; letter-spacing: -.045em; margin: 0; }
+    .label { font: 700 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .screen { min-height: 760px; overflow: hidden; position: relative; }
+    .screen + .screen { border-top: 16px solid #cfd1ca; }
+    .shell { margin: 0 auto; max-width: 1232px; padding-inline: 24px; }
+    .topbar { align-items: center; border-bottom: 1px solid; display: flex; height: 82px; justify-content: space-between; }
+    .brand { align-items: center; display: inline-flex; font-size: 22px; font-weight: 850; gap: 12px; letter-spacing: -.035em; }
+    .brand img { height: 42px; width: 42px; }
+    .nav { display: flex; font-size: 14px; font-weight: 700; gap: 26px; }
+    .org { background: var(--midnight); color: var(--paper); min-height: 920px; }
+    .org .topbar { border-color: var(--line-dark); }
+    .org-hero { align-items: end; display: grid; min-height: 470px; padding-block: 96px 72px; position: relative; }
+    .org-hero::after { background: radial-gradient(circle at 68% 42%, #365f9c 0 12%, transparent 34%), radial-gradient(circle at 88% 65%, #173b72 0 8%, transparent 29%); content: ""; filter: blur(24px); inset: 0; opacity: .8; position: absolute; }
+    .org-copy { position: relative; z-index: 1; }
+    .org h2 { font-size: 74px; letter-spacing: -.065em; line-height: .92; margin: 0; max-width: 780px; }
+    .org .intro { color: #d5ddeb; font-size: 20px; line-height: 1.55; margin: 36px 0 0; max-width: 670px; }
+    .ledger { border-top: 1px solid var(--line-dark); padding: 44px 0 70px; }
+    .ledger h3 { font-size: 36px; letter-spacing: -.04em; margin: 0 0 28px; }
+    .project { align-items: center; border-top: 1px solid var(--line-dark); display: grid; gap: 22px; grid-template-columns: 32px 44px 210px 1fr 24px; min-height: 82px; }
+    .project:last-child { border-bottom: 1px solid var(--line-dark); }
+    .project img { height: 44px; width: 44px; }
+    .project .index { color: #8d9aad; font: 12px var(--mono); }
+    .project strong { font-size: 25px; letter-spacing: -.04em; }
+    .project span { color: #c2ccda; }
+    .dark-product { background: #10161f; color: #f6f4ec; }
+    .dark-product .topbar { border-color: rgba(246,244,236,.14); }
+    .product-hero { min-height: 520px; padding: 76px 0 90px; }
+    .eyebrow { color: var(--lime); font: 700 13px var(--mono); letter-spacing: .08em; margin: 0 0 24px; text-transform: uppercase; }
+    .product-hero h2 { font-size: 78px; letter-spacing: -.06em; line-height: .95; margin: 0; max-width: 760px; }
+    .product-hero .lead { color: var(--muted-dark); font-size: 21px; line-height: 1.55; margin: 30px 0 0; max-width: 690px; }
+    .button { background: var(--lime); border-radius: 7px; color: var(--midnight); display: inline-block; font-size: 14px; font-weight: 800; margin-top: 34px; padding: 15px 21px; }
+    .feature-strip { border-top: 1px solid rgba(246,244,236,.14); display: grid; grid-template-columns: repeat(3, 1fr); }
+    .feature-strip div { min-height: 150px; padding: 30px; }
+    .feature-strip div + div { border-left: 1px solid rgba(246,244,236,.14); }
+    .feature-strip strong { display: block; font-size: 18px; margin-bottom: 10px; }
+    .feature-strip span { color: var(--muted-dark); line-height: 1.5; }
+    .manja { background: #0f1513; }
+    .manja .eyebrow { color: #68f0c8; }
+    .manja .button { background: #68f0c8; }
+    .light-product { background: var(--paper); color: var(--midnight); }
+    .light-product .topbar { border-color: var(--line-light); }
+    .light-product .nav { color: #596374; }
+    .light-product .product-hero { overflow: hidden; position: relative; }
+    .light-product .product-hero::after { border: 72px solid rgba(54,95,156,.07); border-radius: 50%; content: ""; height: 540px; position: absolute; right: -90px; top: -40px; width: 540px; }
+    .light-product .eyebrow { color: #365f9c; }
+    .light-product .lead { color: var(--muted-light); }
+    .light-product .button { background: #315cf0; color: white; }
+    .light-product .feature-strip { border-color: var(--line-light); }
+    .light-product .feature-strip div + div { border-color: var(--line-light); }
+    .light-product .feature-strip span { color: var(--muted-light); }
+    .xisnove { background: #09101b; color: var(--paper); min-height: 860px; }
+    .xisnove .topbar { border-color: var(--line-dark); }
+    .monitor { display: grid; gap: 22px; grid-template-columns: 230px 1fr; padding-block: 40px 64px; }
+    .sidebar, .panel { background: #101a29; border: 1px solid #23334a; border-radius: 12px; }
+    .sidebar { min-height: 650px; padding: 24px; }
+    .sidebar .brand { border-bottom: 1px solid #23334a; display: flex; padding-bottom: 22px; }
+    .sidebar ul { color: #aebbd0; font-weight: 700; list-style: none; margin: 28px 0; padding: 0; }
+    .sidebar li { border-radius: 7px; margin-bottom: 8px; padding: 12px; }
+    .sidebar li:first-child { background: #1a2940; color: white; }
+    .workspace h2 { font-size: 38px; letter-spacing: -.045em; margin: 4px 0 8px; }
+    .workspace > p { color: #9caac0; margin: 0 0 30px; }
+    .stats { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); }
+    .panel { min-height: 138px; padding: 22px; }
+    .panel span { color: #9caac0; font-size: 13px; }
+    .panel strong { display: block; font-size: 34px; margin-top: 22px; }
+    .events { margin-top: 16px; min-height: 330px; }
+    .events h3 { margin: 0 0 28px; }
+    .event { align-items: center; border-top: 1px solid #23334a; display: grid; grid-template-columns: 12px 1fr auto; padding: 17px 0; }
+    .event i { background: var(--lime); border-radius: 50%; height: 8px; width: 8px; }
+    .event small { color: #8392a8; }
+  </style>
+</head>
+<body>
+  <header class="review-head">
+    <div class="label">V8 · site-context gate</div>
+    <h1>One family, five real usage registers.</h1>
+    <p>Header scale, dark reverse, light regular, project ledger, and dense application shell.</p>
+  </header>
+
+  <section class="screen org" id="araihu">
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand"><img src="../concepts/v8/araihu-mark-reverse.svg" alt=""><span>Arai Hû</span></div>
+        <nav class="nav"><span>PT</span><span style="color:var(--lime)">EN</span><span>ES</span></nav>
+      </header>
+      <div class="org-hero"><div class="org-copy"><h2>Independent software for work that matters.</h2><p class="intro">Arai Hû is a small organization that builds and maintains durable, open software. In Guarani, arai hû means black or dark cloud.</p></div></div>
+      <div class="ledger"><h3>Maintained projects</h3>
+        <div class="project"><span class="index">01</span><img src="../concepts/v8/goshtoso-mark-reverse.svg" alt=""><strong>Goshtoso</strong><span>A Go UI library for server-rendered applications.</span><b>↗</b></div>
+        <div class="project"><span class="index">02</span><img src="../concepts/v8/manja-mark-reverse.svg" alt=""><strong>Manja</strong><span>OpenAPI documentation and publishing workbench.</span><b>↗</b></div>
+        <div class="project"><span class="index">03</span><img src="../concepts/v8/paje-mark-reverse.svg" alt=""><strong>Pajé</strong><span>Durable workflows for code changes.</span><b>↗</b></div>
+        <div class="project"><span class="index">04</span><img src="../concepts/v8/xisnove-mark-reverse.svg" alt=""><strong>Xisnove</strong><span>Self-hosted monitoring control plane.</span><b>↗</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen dark-product" id="goshtoso">
+    <div class="shell">
+      <header class="topbar"><div class="brand"><img src="../concepts/v8/goshtoso-mark-reverse.svg" alt=""><span>Goshtoso</span></div><nav class="nav"><span>Components</span><span>Examples</span><span>Get started</span></nav></header>
+      <div class="product-hero"><p class="eyebrow">Server-rendered Go UI</p><h2>Build Go interfaces that feel alive.</h2><p class="lead">Typed templ components, HTMX-native behavior, and Alpine.js where it helps. Themeable, accessible, and bundled for one-binary deployments.</p><span class="button">Browse components →</span></div>
+      <div class="feature-strip"><div><strong>Typed templates</strong><span>Compile UI with the Go tools you already use.</span></div><div><strong>HTML fragments</strong><span>Return focused updates without a client router.</span></div><div><strong>One binary</strong><span>Ship the interface with the application.</span></div></div>
+    </div>
+  </section>
+
+  <section class="screen dark-product manja" id="manja">
+    <div class="shell">
+      <header class="topbar"><div class="brand"><img src="../concepts/v8/manja-mark-reverse.svg" alt=""><span>Manja</span></div><nav class="nav"><span>Demo</span><span>Docs</span><span>GitHub</span></nav></header>
+      <div class="product-hero"><p class="eyebrow">Source-connected OpenAPI publishing</p><h2>Point Manja at your spec.</h2><p class="lead">Manja tracks the source, understands revisions, renders the OpenAPI reference, and keeps the public version stable.</p><span class="button">View live demo</span></div>
+      <div class="feature-strip"><div><strong>Connect source</strong><span>Use the repo and spec path developers maintain.</span></div><div><strong>Discover versions</strong><span>Branches, tags, and commits become revisions.</span></div><div><strong>Publish deliberately</strong><span>Readers stay on the selected known-good version.</span></div></div>
+    </div>
+  </section>
+
+  <section class="screen light-product" id="paje">
+    <div class="shell">
+      <header class="topbar"><div class="brand"><img src="../concepts/v8/paje-mark.svg" alt=""><span>Pajé</span></div><nav class="nav"><span>Product</span><span>How it works</span><span>GitHub</span></nav></header>
+      <div class="product-hero"><p class="eyebrow">Agent-piloted durable orchestration</p><h2>From request to pull request. Without losing the thread.</h2><p class="lead">Pajé turns each change into a verifiable flow: isolated execution, human approval, and idempotent publication.</p><span class="button">Start with the guide →</span></div>
+      <div class="feature-strip"><div><strong>Agent piloted</strong><span>Hooks and skills drive work without owning policy.</span></div><div><strong>Durable</strong><span>Recoverable state survives interruptions.</span></div><div><strong>Provider neutral</strong><span>Ports keep workflow logic independent.</span></div></div>
+    </div>
+  </section>
+
+  <section class="screen xisnove" id="xisnove">
+    <div class="shell">
+      <header class="topbar"><div class="brand"><img src="../concepts/v8/xisnove-mark-reverse.svg" alt=""><span>Xisnove</span></div><nav class="nav"><span>Monitors</span><span>Incidents</span><span>Settings</span></nav></header>
+      <div class="monitor">
+        <aside class="sidebar"><div class="brand"><img src="../concepts/v8/xisnove-mark-reverse.svg" alt=""><span>Xisnove</span></div><ul><li>Overview</li><li>Monitors</li><li>Incidents</li><li>Destinations</li><li>Settings</li></ul></aside>
+        <main class="workspace"><h2>System overview</h2><p>First observation across self-hosted monitors.</p><div class="stats"><div class="panel"><span>Healthy monitors</span><strong>18</strong></div><div class="panel"><span>Open incidents</span><strong>2</strong></div><div class="panel"><span>Unknown</span><strong>1</strong></div></div><div class="panel events"><h3>Recent observations</h3><div class="event"><i></i><span>api.araihu.com recovered</span><small>2m ago</small></div><div class="event"><i></i><span>manja public docs healthy</span><small>7m ago</small></div><div class="event"><i></i><span>goshtoso catalog healthy</span><small>11m ago</small></div></div></main>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 2600 2420" role="img" aria-labelledby="title desc">
+  <title id="title">Current identity and V8 site context comparison</title>
+  <desc id="desc">Side-by-side screenshot crops for Arai Hû, Goshtoso, Manja, Pajé, and Xisnove.</desc>
+  <defs>
+    <clipPath id="left-1"><rect x="70" y="240" width="1190" height="380" rx="10"/></clipPath>
+    <clipPath id="right-1"><rect x="1340" y="240" width="1190" height="380" rx="10"/></clipPath>
+    <clipPath id="left-2"><rect x="70" y="680" width="1190" height="380" rx="10"/></clipPath>
+    <clipPath id="right-2"><rect x="1340" y="680" width="1190" height="380" rx="10"/></clipPath>
+    <clipPath id="left-3"><rect x="70" y="1120" width="1190" height="380" rx="10"/></clipPath>
+    <clipPath id="right-3"><rect x="1340" y="1120" width="1190" height="380" rx="10"/></clipPath>
+    <clipPath id="left-4"><rect x="70" y="1560" width="1190" height="380" rx="10"/></clipPath>
+    <clipPath id="right-4"><rect x="1340" y="1560" width="1190" height="380" rx="10"/></clipPath>
+    <clipPath id="left-5"><rect x="70" y="2000" width="1190" height="350" rx="10"/></clipPath>
+    <clipPath id="right-5"><rect x="1340" y="2000" width="1190" height="350" rx="10"/></clipPath>
+  </defs>
+  <rect width="2600" height="2420" fill="#d9d9d0"/>
+  <text x="70" y="84" fill="#07111f" font-family="system-ui, sans-serif" font-size="50" font-weight="800">Current identity → V8 · site context</text>
+  <text x="70" y="128" fill="#526981" font-family="system-ui, sans-serif" font-size="22">Browser screenshots · equivalent header and hero registers · no production mutation</text>
+  <text x="665" y="190" fill="#526981" font-family="ui-monospace, monospace" font-size="18" font-weight="700" letter-spacing="2" text-anchor="middle">CURRENT</text>
+  <text x="1935" y="190" fill="#526981" font-family="ui-monospace, monospace" font-size="18" font-weight="700" letter-spacing="2" text-anchor="middle">V8 CANDIDATE</text>
+
+  <g font-family="system-ui, sans-serif">
+    <text x="70" y="232" fill="#07111f" font-size="22" font-weight="800">Arai Hû</text>
+    <image x="70" y="240" width="1190" height="1339" preserveAspectRatio="xMidYMin slice" clip-path="url(#left-1)" xlink:href="screenshots/context/araihu-current.png"/>
+    <image x="1340" y="240" width="1190" height="990" preserveAspectRatio="xMidYMin slice" clip-path="url(#right-1)" xlink:href="screenshots/context/site-context-v8-araihu.png"/>
+
+    <text x="70" y="672" fill="#07111f" font-size="22" font-weight="800">Goshtoso</text>
+    <image x="70" y="680" width="1190" height="3441" preserveAspectRatio="xMidYMin slice" clip-path="url(#left-2)" xlink:href="screenshots/context/goshtoso-current.png"/>
+    <image x="1340" y="680" width="1190" height="723" preserveAspectRatio="xMidYMin slice" clip-path="url(#right-2)" xlink:href="screenshots/context/site-context-v8-goshtoso.png"/>
+
+    <text x="70" y="1112" fill="#07111f" font-size="22" font-weight="800">Manja</text>
+    <image x="70" y="1120" width="1190" height="875" preserveAspectRatio="xMidYMin slice" clip-path="url(#left-3)" xlink:href="screenshots/context/manja-current.png"/>
+    <image x="1340" y="1120" width="1190" height="723" preserveAspectRatio="xMidYMin slice" clip-path="url(#right-3)" xlink:href="screenshots/context/site-context-v8-manja.png"/>
+
+    <text x="70" y="1552" fill="#07111f" font-size="22" font-weight="800">Pajé</text>
+    <image x="70" y="1560" width="1190" height="8168" preserveAspectRatio="xMidYMin slice" clip-path="url(#left-4)" xlink:href="screenshots/context/paje-current.png"/>
+    <image x="1340" y="1560" width="1190" height="791" preserveAspectRatio="xMidYMin slice" clip-path="url(#right-4)" xlink:href="screenshots/context/site-context-v8-paje.png"/>
+
+    <text x="70" y="1992" fill="#07111f" font-size="22" font-weight="800">Xisnove</text>
+    <rect x="70" y="2000" width="1190" height="350" rx="10" fill="#f3f2e9" stroke="#93a1b1"/>
+    <text x="665" y="2165" fill="#526981" font-size="25" text-anchor="middle">Live site unavailable · DNS did not resolve</text>
+    <text x="665" y="2205" fill="#7b8795" font-family="ui-monospace, monospace" font-size="17" text-anchor="middle">ERR_NAME_NOT_RESOLVED</text>
+    <image x="1340" y="2000" width="1190" height="669" preserveAspectRatio="xMidYMin slice" clip-path="url(#right-5)" xlink:href="screenshots/context/site-context-v8-xisnove.png"/>
+  </g>
+  <g fill="none" stroke="#93a1b1">
+    <rect x="70" y="240" width="1190" height="380" rx="10"/><rect x="1340" y="240" width="1190" height="380" rx="10"/>
+    <rect x="70" y="680" width="1190" height="380" rx="10"/><rect x="1340" y="680" width="1190" height="380" rx="10"/>
+    <rect x="70" y="1120" width="1190" height="380" rx="10"/><rect x="1340" y="1120" width="1190" height="380" rx="10"/>
+    <rect x="70" y="1560" width="1190" height="380" rx="10"/><rect x="1340" y="1560" width="1190" height="380" rx="10"/>
+    <rect x="70" y="2000" width="1190" height="350" rx="10"/><rect x="1340" y="2000" width="1190" height="350" rx="10"/>
+  </g>
+</svg>

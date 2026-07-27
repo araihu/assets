@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arai Hû logo system v4</title>
+  <style>
+    :root { font-family: ui-sans-serif, system-ui, sans-serif; color: #07111f; background: #d9d9d0; }
+    * { box-sizing: border-box; }
+    body { margin: 0 auto; max-width: 1500px; padding: 38px 32px 64px; }
+    header { display: grid; grid-template-columns: 1.1fr .9fr; gap: 54px; align-items: end; margin-bottom: 24px; }
+    h1 { margin: 0; font-size: 58px; line-height: .92; letter-spacing: -.055em; }
+    header p { margin: 0; max-width: 62ch; color: #34465d; line-height: 1.55; }
+    .legend { display: flex; flex-wrap: wrap; gap: 12px 24px; padding: 13px 16px; margin-bottom: 16px; border: 1px solid #93a1b1; background: #f3f2e9; font-size: 13px; }
+    .product { display: grid; grid-template-columns: 190px 1fr 300px; min-height: 232px; margin-bottom: 14px; border: 1px solid #93a1b1; background: #f3f2e9; }
+    .source, .candidate, .notes { padding: 20px; }
+    .candidate, .notes { border-left: 1px solid #93a1b1; }
+    .source { display: grid; justify-items: center; align-content: center; gap: 10px; background: #e4e8eb; }
+    .source img { width: 112px; height: 112px; object-fit: contain; }
+    .source a { color: #173b72; font-size: 12px; font-weight: 700; }
+    .candidate { display: grid; grid-template-columns: 176px 1fr; gap: 24px; align-items: center; }
+    .candidate > img { width: 176px; height: 176px; object-fit: contain; }
+    .notes { display: grid; align-content: center; gap: 10px; }
+    h2, h3, p { margin: 0; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 13px; color: #31588f; text-transform: uppercase; letter-spacing: .08em; }
+    .notes p, .candidate p { color: #526981; font-size: 13px; line-height: 1.48; }
+    .sizes { display: flex; align-items: center; gap: 16px; padding-top: 16px; }
+    .sizes img:nth-child(1) { width: 64px; height: 64px; }
+    .sizes img:nth-child(2) { width: 32px; height: 32px; }
+    .sizes img:nth-child(3) { width: 16px; height: 16px; }
+    .dark { display: inline-grid; place-items: center; width: 52px; height: 52px; background: #07111f; }
+    .dark img { width: 32px; height: 32px; filter: brightness(0) invert(1); }
+    .footer { padding: 22px; border: 1px solid #93a1b1; background: #07111f; color: #f3f2e9; }
+    .footer p { max-width: 90ch; color: #c8d5e3; line-height: 1.55; }
+    .pixel-audit { margin: 14px 0; padding: 20px; border: 1px solid #93a1b1; background: #f3f2e9; }
+    .pixel-audit > p { margin-top: 5px; color: #526981; font-size: 13px; }
+    .pixels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-top: 18px; }
+    .pixel { display: grid; grid-template-columns: 96px 1fr; gap: 14px; align-items: center; }
+    .pixel canvas { width: 96px; height: 96px; border: 1px solid #c8d1db; background: #fff; image-rendering: pixelated; }
+    .pixel strong { display: block; font-size: 13px; }
+    .pixel span { color: #526981; font-size: 12px; }
+    @media (max-width: 900px) { header, .product { grid-template-columns: 1fr; } .candidate, .notes { border-left: 0; border-top: 1px solid #93a1b1; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Reference craft.<br>Original geometry.</h1>
+    <p>V4 abandons improvised pictograms. Mature open-source icons establish proportion, rhythm, and negative-space quality. Every Arai Hû candidate is then redrawn from a blank 128 × 128 field; no reference path is reused.</p>
+  </header>
+  <div class="legend"><strong>Reference</strong><span>Tabler Icons · MIT · pinned commit</span><strong>Candidate</strong><span>original Arai Hû geometry</span><span>128 / 64 / 32 / 16 px</span></div>
+  <main id="products"></main>
+  <section class="pixel-audit"><h2>True 16 px raster audit</h2><p>Each SVG is first rasterized into a 16 × 16 canvas, then enlarged 6× with nearest-neighbor scaling. This exposes collapsed gaps and clipped strokes.</p><div id="pixels" class="pixels"></div></section>
+  <section class="footer"><h2>Family test</h2><p>All five marks share rounded primary strokes, cobalt operational detail, and one lime live state. Semantics stay product-specific: storm, composable component, API publication, durable workflow, external health signal.</p></section>
+  <script>
+    const commit = "fe319f05d943a17efb29c5089e21364d3975843c";
+    const raw = `https://raw.githubusercontent.com/tabler/tabler-icons/${commit}/icons/outline/`;
+    const source = `https://github.com/tabler/tabler-icons/blob/${commit}/icons/outline/`;
+    const products = [
+      ["araihu", "Arai Hû", "cloud-storm.svg", "Continuous weather contour", "Dark cloud contour with a separate charged cut. Original Bézier silhouette and bolt proportions."],
+      ["goshtoso", "Goshtoso", "components.svg", "Module rhythm + central void", "Two interlocking component frames hold one live server-rendered module."],
+      ["manja", "Manja", "api-book.svg", "Publication surface + operation", "Open API book carries one routed endpoint on the active page."],
+      ["paje", "Pajé", "route.svg", "Continuous start-to-finish path", "Smooth durable route passes through five explicit workflow checkpoints."],
+      ["xisnove", "Xisnove", "traffic-lights.svg", "Strong state-signal silhouette", "Three-state signal emits an external probe; live health remains visible at favicon size."],
+    ];
+    const mark = id => `../concepts/v4/${id}-mark.svg`;
+    document.getElementById("products").innerHTML = products.map(([id, name, ref, principle, description]) => `
+      <section class="product">
+        <div class="source"><img src="${raw}${ref}" alt=""><a href="${source}${ref}">reference · ${ref.replace(".svg", "")}</a></div>
+        <div class="candidate"><img src="${mark(id)}" alt=""><div><h2>${name}</h2><p>${description}</p><div class="sizes"><img src="${mark(id)}" alt=""><img src="${mark(id)}" alt=""><img src="${mark(id)}" alt=""><span class="dark"><img src="${mark(id)}" alt=""></span></div></div></div>
+        <div class="notes"><h3>Extracted principle</h3><p>${principle}</p><h3>Geometry boundary</h3><p>New path topology and new coordinates. Reference used only for visual judgment.</p></div>
+      </section>`).join("");
+    const pixels = document.getElementById("pixels");
+    pixels.innerHTML = products.map(([id, name]) => `<div class="pixel"><canvas id="pixel-${id}" width="16" height="16"></canvas><div><strong>${name}</strong><span>actual 16 px</span></div></div>`).join("");
+    products.forEach(([id]) => {
+      const image = new Image();
+      image.onload = () => document.getElementById(`pixel-${id}`).getContext("2d").drawImage(image, 0, 0, 16, 16);
+      image.src = mark(id);
+    });
+  </script>
+</body>
+</html>

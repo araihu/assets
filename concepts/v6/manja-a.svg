@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Manja v6 storm cell</title>
+  <desc id="desc">The solid Arai Hû storm cell containing an open API publication.</desc>
+  <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+  <path d="M16 94v18h18" fill="none" stroke="#31588f" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M39 42c10-4 18-2 25 4v42c-7-6-15-8-25-4Zm50 0c-10-4-18-2-25 4v42c7-6 15-8 25-4Z" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M64 46v42" stroke="#31588f" stroke-width="6" stroke-linecap="round" />
+  <circle cx="84" cy="75" r="7" fill="#c7ff4a" stroke="#07111f" stroke-width="3" />
+</svg>

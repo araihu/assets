@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 1320" role="img" aria-labelledby="title desc">
+  <title id="title">Arai Hû logo system v7 screenshot</title>
+  <desc id="desc">Normalized color, monochrome, blind, and true sixteen pixel comparison.</desc>
+  <rect width="1600" height="1320" fill="#d9d9d0" />
+  <text x="70" y="86" fill="#07111f" font-family="system-ui, sans-serif" font-size="48" font-weight="800">V7 · normalized screenshot</text>
+  <text x="70" y="122" fill="#526981" font-family="system-ui, sans-serif" font-size="18">Same 128 field · blind mono · color · mono · true 16 px</text>
+  <rect x="70" y="156" width="1460" height="210" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="92" y="188" fill="#526981" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2">BLIND MONOCHROME</text>
+  <g transform="translate(126 212) scale(0.9375)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <path d="M67 35h22L75 59h15l-37 43 12-31H48Z" fill="#f3f2e9" />
+  </g>
+  <g transform="translate(412 212) scale(0.9375)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <rect x="42" y="43" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="67" y="43" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="42" y="68" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="67" y="68" width="19" height="19" rx="5" fill="#f3f2e9" />
+  </g>
+  <g transform="translate(698 212) scale(0.9375)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <path d="M39 40c10-4 18-2 25 4v43c-7-6-15-8-25-4Zm50 0c-10-4-18-2-25 4v43c7-6 15-8 25-4Z" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M64 44v43" stroke="#f3f2e9" stroke-width="6" stroke-linecap="round" />
+    <circle cx="84" cy="74" r="7" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+  </g>
+  <g transform="translate(984 212) scale(0.9375)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <path d="M39 38h32c10 0 16 6 16 14s-6 14-16 14H55c-10 0-16 6-16 14s6 14 16 14h32" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <g fill="#f3f2e9">
+      <circle cx="39" cy="38" r="5" />
+      <circle cx="63" cy="38" r="5" />
+      <circle cx="87" cy="52" r="5" />
+      <circle cx="63" cy="66" r="5" />
+    </g>
+    <circle cx="87" cy="94" r="7" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+  </g>
+  <g transform="translate(1270 212) scale(0.9375)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <circle cx="67" cy="39" r="10" fill="#f3f2e9" />
+    <circle cx="67" cy="64" r="10" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+    <circle cx="67" cy="89" r="10" fill="#f3f2e9" />
+  </g>
+  <text x="610" y="408" fill="#526981" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2" text-anchor="middle">COLOR</text>
+  <text x="910" y="408" fill="#526981" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2" text-anchor="middle">MONO</text>
+  <text x="1210" y="408" fill="#526981" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2" text-anchor="middle">TRUE 16 PX</text>
+  <rect x="70" y="432" width="1460" height="152" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="94" y="496" fill="#07111f" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Arai Hû</text>
+  <text x="94" y="522" fill="#526981" font-family="system-ui, sans-serif" font-size="13">araihu</text>
+  <g transform="translate(546 444) scale(1.0)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <path d="M67 35h22L75 59h15l-37 43 12-31H48Z" fill="#c7ff4a" />
+  </g>
+  <g transform="translate(846 444) scale(1.0)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <path d="M67 35h22L75 59h15l-37 43 12-31H48Z" fill="#f3f2e9" />
+  </g>
+  <image x="1162" y="460" width="96" height="96" preserveAspectRatio="none" image-rendering="pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABo0lEQVQ4jcWSsWtTURTGf+e+l/cSU20Sn7wMpnmi0upQUBR1cOio4uAkqOAgFTfBsdL2L5AiFKxx6CC6iCJqJ1fBzVFFRGsEJVibh1DTF3z3OIUGk9ixZ7t83/e737lc2OqR/2m5UvWERY6h6oK+T4bNS5aX1zcFeDujMaN6X5Uj/0jfUXstib8+Gwjwd+zeh+O8BgKASzcCwkqG1pqyMNvAppqCnkua9ecApud6x6l1wgcO57hyM+Ts5RLxjxSbKoADUiOKsj0Ar7hnHJjonK/OhojAt89tHi2sdFvLXqynNwDB6Ha/UL0l2Kcdx9GJPIdO5gH4FadMTod4/sbGInqdKMo6gPjZoSXgIlDsGCZnQvysYduQISi7PJhb4cuHpKuEVN02sfjDlb0Y87HnLYDySIaHb/YzP9XgSe1nP8uSUePm+ykApy4UeHx3dVAYhVXTbpbeAT0NjBEKQYY7M41BfDXKogB4pZGDojIPHAdyAMVdLutrltZv2x2qA39QPiF6O2nWX/T7iY5fqJwRMecVxkSwVuWtg73XatZfDaqzdfMXfr1/wkHVoDkAAAAASUVORK5CYII=" />
+  <rect x="1162" y="460" width="96" height="96" fill="none" stroke="#c8d1db" />
+  <rect x="70" y="602" width="1460" height="152" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="94" y="666" fill="#07111f" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Goshtoso</text>
+  <text x="94" y="692" fill="#526981" font-family="system-ui, sans-serif" font-size="13">goshtoso</text>
+  <g transform="translate(546 614) scale(1.0)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <rect x="42" y="43" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="67" y="43" width="19" height="19" rx="5" fill="#31588f" />
+    <rect x="42" y="68" width="19" height="19" rx="5" fill="#31588f" />
+    <rect x="67" y="68" width="19" height="19" rx="5" fill="#c7ff4a" />
+  </g>
+  <g transform="translate(846 614) scale(1.0)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <rect x="42" y="43" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="67" y="43" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="42" y="68" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="67" y="68" width="19" height="19" rx="5" fill="#f3f2e9" />
+  </g>
+  <image x="1162" y="630" width="96" height="96" preserveAspectRatio="none" image-rendering="pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABvElEQVQ4jcWSv2tTcRTFP/d9896jaU3ykiBP0lirBUstDrYgxUFKoYOCoIIBB3FRXAQH/wGnrl2cHF06iIMKokUHEXTxBwglVcEYwYi1zUtNmiY17zpI0aY24qJnPOfew7k/4H9DOmldyb6xEDmIagQ034hbsxQKq380cFK7Bi3V66qMtkklNLzQCD7c2tLAjfUOYMwTIL1Fshbo8Ua5eBvAtKuRqHfj5LHJfefOnqLZXGOhZkjvHsVEHBrVRQALZLzle1cJgm+RDdG9/v0Qjp85fYJDYwdwbJvX5afEM0O4UY9KaX691HcCPdKEmz8SpPduc52eKRG9AnjJRAzLWNy5+5D82/cY26X6+R31Sunn8kR3tHxvRgBxk32zKBPrYncqS1fMp7ZUZGf/MiOHe8i/WOH5o9rGeYXLxo1n9yAy/SufGZ4k0TuMJYbc+Sq5iym2Z2zuzQTtK1uz1Ip0t7P15U80VyrUvy7w5tUqHwtN5l/WN51DYUlgxHa9L3PAwKaKzlBRJgyUQhONPxBkCPABu0NTEVhEeYbopUZQvP+7TzRuIntUxMopDIoQhipzhvBavVx8/Jcp/wG+A5OOjT8UJloVAAAAAElFTkSuQmCC" />
+  <rect x="1162" y="630" width="96" height="96" fill="none" stroke="#c8d1db" />
+  <rect x="70" y="772" width="1460" height="152" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="94" y="836" fill="#07111f" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Manja</text>
+  <text x="94" y="862" fill="#526981" font-family="system-ui, sans-serif" font-size="13">manja</text>
+  <g transform="translate(546 784) scale(1.0)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <path d="M39 40c10-4 18-2 25 4v43c-7-6-15-8-25-4Zm50 0c-10-4-18-2-25 4v43c7-6 15-8 25-4Z" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M64 44v43" stroke="#31588f" stroke-width="6" stroke-linecap="round" />
+    <circle cx="84" cy="74" r="7" fill="#c7ff4a" stroke="#07111f" stroke-width="3" />
+  </g>
+  <g transform="translate(846 784) scale(1.0)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <path d="M39 40c10-4 18-2 25 4v43c-7-6-15-8-25-4Zm50 0c-10-4-18-2-25 4v43c7-6 15-8 25-4Z" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M64 44v43" stroke="#f3f2e9" stroke-width="6" stroke-linecap="round" />
+    <circle cx="84" cy="74" r="7" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+  </g>
+  <image x="1162" y="800" width="96" height="96" preserveAspectRatio="none" image-rendering="pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABsklEQVQ4jcWS30uTcRTGP+d9v+6dDp2zKCt/vKngEIrQwZRFIYOEvIiu7MrrwIv+kqCgmxSEGKF1UdkPYXQ1CILoJoJRgcNeqxWMpi1yb9R7uoiivTi79Lk85zkfnnM4sNeS3XqtXf0TAZJG1YC+8uPWY9bX6/8FRPa5SUs1p0oq1CqjwUV/c+N+U8DS7aUZ2zI3jLGcR/kCANNTp/m2Xef64i2ePX/xE/S8X/UeAFhhgG3ZV7x3H5zc8gqpTJZUJktueYWPnyrMXjgHYIPM47pRANMQPXH0+NZWrftl8Q2r+QLxQyMArOYLdHS0czI9+sfaHdnUs9/hzu8E+4fbnc7+y0Jwr9lFwxLRS7hu1ADiBPW7CNlm5ljcIInXlCsH/kWccr7onHHivQNo4/CJY0lqta+0tUUBSE8McGY24OlNr5GsTBq1TEwI/tZKbzfIjI/R13MYv+UgijI5eoT3hTIxuxKa57PAWIuTqBSBoXD0ocFBFGVtrbTTZipKVgAiXX0jonINGAdam90C8IAfKCVEr/pV7+FOn2g7nb3TItaMQlKEIFAp2gQL21XvyS7wPdIvVZ2Lwkw2FdAAAAAASUVORK5CYII=" />
+  <rect x="1162" y="800" width="96" height="96" fill="none" stroke="#c8d1db" />
+  <rect x="70" y="942" width="1460" height="152" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="94" y="1006" fill="#07111f" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Pajé</text>
+  <text x="94" y="1032" fill="#526981" font-family="system-ui, sans-serif" font-size="13">paje</text>
+  <g transform="translate(546 954) scale(1.0)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <path d="M39 38h32c10 0 16 6 16 14s-6 14-16 14H55c-10 0-16 6-16 14s6 14 16 14h32" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <g fill="#31588f">
+      <circle cx="39" cy="38" r="5" />
+      <circle cx="63" cy="38" r="5" />
+      <circle cx="87" cy="52" r="5" />
+      <circle cx="63" cy="66" r="5" />
+    </g>
+    <circle cx="87" cy="94" r="7" fill="#c7ff4a" stroke="#07111f" stroke-width="3" />
+  </g>
+  <g transform="translate(846 954) scale(1.0)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <path d="M39 38h32c10 0 16 6 16 14s-6 14-16 14H55c-10 0-16 6-16 14s6 14 16 14h32" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <g fill="#f3f2e9">
+      <circle cx="39" cy="38" r="5" />
+      <circle cx="63" cy="38" r="5" />
+      <circle cx="87" cy="52" r="5" />
+      <circle cx="63" cy="66" r="5" />
+    </g>
+    <circle cx="87" cy="94" r="7" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+  </g>
+  <image x="1162" y="970" width="96" height="96" preserveAspectRatio="none" image-rendering="pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABwElEQVQ4jcWSu2tTcRTHP+eXe29MbY15+Cp9pK3YGlQKCr66ddMiFAquDlbERQrqoEsX/wBFcPCBooOKCNbHEgcHR4mK0Di0EpJiOrRNMEXvTe09DqXW1qt20u94zvd8Od/vOfC/IX/qReKt+31kL6oW6AcvajLk8+5fBZxEqsuo3lFlz4pWCfVPepXiyG8Fjp2/+XJnqr6nsykSymSnadqwhmRdjeu3HvA6+x5gHrTfKxeeBAqkDxx505is7zY6x7ypQ3SOlsYE54ZO0DcwSHGiBDDpRaWNfN61lq0ea9s1nnvXPR5gy2tI077jIMWJhwCbnYoeqsGjBYFkZ0P4mzsMfj+AbVts39bBusSWpQ2O99A3cHspPNHTpFLPBZBwvDWD0guwaWOSx/ev4ro17r0YC8rg5xOckXC0uQNjxhZrF86ewnYshi9eDjDyC54ZNdba1TBtRzCyPHOFGYHddjg2NQpsXWlheqYMQLU6S+7LDXLZKiN3J3/Mi9IrAE68JS0qV4B9QGQxxFgsusBUxU6U+FSofM69nZ1C+YjoJa9ceBr0iaHw+ubDIuaoQpcIvq8yGsK/9rVceLUau/8W3wG9mp4hou8PrwAAAABJRU5ErkJggg==" />
+  <rect x="1162" y="970" width="96" height="96" fill="none" stroke="#c8d1db" />
+  <rect x="70" y="1112" width="1460" height="152" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="94" y="1176" fill="#07111f" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Xisnove</text>
+  <text x="94" y="1202" fill="#526981" font-family="system-ui, sans-serif" font-size="13">xisnove</text>
+  <g transform="translate(546 1124) scale(1.0)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <circle cx="67" cy="39" r="10" fill="#f3f2e9" />
+    <circle cx="67" cy="64" r="10" fill="#c7ff4a" stroke="#07111f" stroke-width="3" />
+    <circle cx="67" cy="89" r="10" fill="#31588f" />
+  </g>
+  <g transform="translate(846 1124) scale(1.0)">
+    <path d="M29 104C15 104 6 94 6 81s9-23 23-24c5-22 23-37 44-37 22 0 40 16 43 38 6 4 10 12 10 21 0 14-10 24-24 24H90c-8 5-16 8-26 8s-18-3-26-7Z" fill="#07111f" />
+    <circle cx="67" cy="39" r="10" fill="#f3f2e9" />
+    <circle cx="67" cy="64" r="10" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+    <circle cx="67" cy="89" r="10" fill="#f3f2e9" />
+  </g>
+  <image x="1162" y="1140" width="96" height="96" preserveAspectRatio="none" image-rendering="pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABjklEQVQ4jcWSv08UURSFv/tm3ceyys4sS7OBnTEaIJjQSBAaKAixIFYWJpZWJhT+CRYmdhYmVlBQ0IMxWBgxFuofQCMkEB2WXzEkLgETGSTvUsgayQxacpOXV5zv3XNO8uCiR/6lFcrhsENuoZoDXUlK5i1xfPjfBfn2qNeozlbaywODA/0svv9EkvwC2EHdw2Rv49W5trat87oNwl0bhLr47o0e7H/Tx0+eqg3C5jm2Qe1OkzepDZ43BVQA4voWqsr65vYZAmSKKGpJVcgHV/sFt/QnjTVUwyLx6gGqZ31UuXu0tz73O0Gl54r1w2eCe/k3dPu+z/SHGjdHL6eCiugjoqglB4h1h/MIYymqaaspBZARu6+TYktd1zBmLQvJW0OlWmQnTlc4nddGTa6YKQEd3eP43Q8oVW9k6grfzVGjvAxkJrhUaAPk9E6/N8qMAOTLtT5ReQEMAYUm4dkCrX6VH7tfUecA6sAxyhdEnyeN+kLWT/Ss3zUhYu4p9IrgnMpnDzf9s1H/eF7di5sTPht+183AdJwAAAAASUVORK5CYII=" />
+  <rect x="1162" y="1140" width="96" height="96" fill="none" stroke="#c8d1db" />
+</svg>

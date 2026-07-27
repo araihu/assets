@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 1320" role="img" aria-labelledby="title desc">
+  <title id="title">Arai Hû logo system v6 screenshot</title>
+  <desc id="desc">Normalized color, monochrome, blind, and true sixteen pixel comparison.</desc>
+  <rect width="1600" height="1320" fill="#d9d9d0" />
+  <text x="70" y="86" fill="#07111f" font-family="system-ui, sans-serif" font-size="48" font-weight="800">V6 · normalized screenshot</text>
+  <text x="70" y="122" fill="#526981" font-family="system-ui, sans-serif" font-size="18">Same 128 field · blind mono · color · mono · true 16 px</text>
+  <rect x="70" y="156" width="1460" height="210" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="92" y="188" fill="#526981" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2">BLIND MONOCHROME</text>
+  <g transform="translate(126 212) scale(0.9375)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M66 34h23L74 59h15L51 101l13-30H47Z" fill="#f3f2e9" />
+    <path d="M16 94v18h18" fill="none" stroke="#f3f2e9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <g transform="translate(412 212) scale(0.9375)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#f3f2e9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="42" y="42" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="67" y="42" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="42" y="67" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="67" y="67" width="19" height="19" rx="5" fill="#f3f2e9" />
+  </g>
+  <g transform="translate(698 212) scale(0.9375)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#f3f2e9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M39 42c10-4 18-2 25 4v42c-7-6-15-8-25-4Zm50 0c-10-4-18-2-25 4v42c7-6 15-8 25-4Z" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M64 46v42" stroke="#f3f2e9" stroke-width="6" stroke-linecap="round" />
+    <circle cx="84" cy="75" r="7" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+  </g>
+  <g transform="translate(984 212) scale(0.9375)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#f3f2e9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M40 40h31c10 0 16 6 16 14s-6 14-16 14H56c-10 0-16 6-16 14s6 14 16 14h31" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <g fill="#f3f2e9">
+      <circle cx="40" cy="40" r="5" />
+      <circle cx="63" cy="40" r="5" />
+      <circle cx="87" cy="54" r="5" />
+      <circle cx="63" cy="68" r="5" />
+    </g>
+    <circle cx="87" cy="96" r="7" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+  </g>
+  <g transform="translate(1270 212) scale(0.9375)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#f3f2e9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="67" cy="40" r="10" fill="#f3f2e9" />
+    <circle cx="67" cy="65" r="10" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+    <circle cx="67" cy="90" r="10" fill="#f3f2e9" />
+  </g>
+  <text x="610" y="408" fill="#526981" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2" text-anchor="middle">COLOR</text>
+  <text x="910" y="408" fill="#526981" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2" text-anchor="middle">MONO</text>
+  <text x="1210" y="408" fill="#526981" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1.2" text-anchor="middle">TRUE 16 PX</text>
+  <rect x="70" y="432" width="1460" height="152" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="94" y="496" fill="#07111f" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Arai Hû</text>
+  <text x="94" y="522" fill="#526981" font-family="system-ui, sans-serif" font-size="13">araihu</text>
+  <g transform="translate(546 444) scale(1.0)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M66 34h23L74 59h15L51 101l13-30H47Z" fill="#c7ff4a" />
+    <path d="M16 94v18h18" fill="none" stroke="#31588f" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <g transform="translate(846 444) scale(1.0)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M66 34h23L74 59h15L51 101l13-30H47Z" fill="#f3f2e9" />
+    <path d="M16 94v18h18" fill="none" stroke="#f3f2e9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <image x="1162" y="460" width="96" height="96" preserveAspectRatio="none" image-rendering="pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABzklEQVQ4jaWRTWgTURSFv/c6M8Y6tBNTlSomqVhQFGkVxJUuuiktLvzZlGJFQYqgiyquBHcKbupSFyKupBQRoQjajRAXRUUUoeguprYRFBMTWjuZybzXRZk2o0kVPav7uOeec+598J8QfyJYifQuGXAI0GidcUu57N8KGOuc1B0EZ2t4Smvue3ZwgdnZRYCmhs4bk/cE4swvJkIIuo2q3B0slsYbJjATHQelUi8NE67d3c6GFknxW8CN83OoQIdSvZXCp2cyMplOx2JO8pRU6jZA70Ccw0dbOHDE5vXz+dVhAK1PABjh27Z3bvJL/qQWogvAtASDI20ATL/6yeTYj2hMTQfASgLP8m8CXeG7fyhOe8oCoOJqhq5sRkSusWy+IiAUfWHdZAh6jrfyJecB0LkvRmaijK7ZIMTqDQRbwjKoai72ZRm9lKfiKq4Ofib7wf19OiJQB8fOJbg+PMf7qYWGHAnQPTB6OZHeH2ls22Hx4kmZzER5LY9lAaHF3pjdFmm4C8p/+qA4LLQ+DdTPT803ro9vpX1PD958ge+5t/ni1+pJtzAzBWC2JqelFI+AZF0BBQ/NZsdzmh0k+mP+3eNbtSS/NPMGSK25y79iCSKlk9TDbQT2AAAAAElFTkSuQmCC" />
+  <rect x="1162" y="460" width="96" height="96" fill="none" stroke="#c8d1db" />
+  <rect x="70" y="602" width="1460" height="152" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="94" y="666" fill="#07111f" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Goshtoso</text>
+  <text x="94" y="692" fill="#526981" font-family="system-ui, sans-serif" font-size="13">goshtoso</text>
+  <g transform="translate(546 614) scale(1.0)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#31588f" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="42" y="42" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="67" y="42" width="19" height="19" rx="5" fill="#31588f" />
+    <rect x="42" y="67" width="19" height="19" rx="5" fill="#31588f" />
+    <rect x="67" y="67" width="19" height="19" rx="5" fill="#c7ff4a" />
+  </g>
+  <g transform="translate(846 614) scale(1.0)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#f3f2e9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <rect x="42" y="42" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="67" y="42" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="42" y="67" width="19" height="19" rx="5" fill="#f3f2e9" />
+    <rect x="67" y="67" width="19" height="19" rx="5" fill="#f3f2e9" />
+  </g>
+  <image x="1162" y="630" width="96" height="96" preserveAspectRatio="none" image-rendering="pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAB1ElEQVQ4jaWQv08TcRjGP+9xlVIrliLxF5YSHcRfEQZ/JhrDgg4uuuBicJAFB3XxjzC6OBgHo6sRQ6KLCglRIyEqspAwWOk1SIXkCgeN195x93UwrQe2iPGZvt/k8z7v87zwn5K/ARsak3s1j2OAQqk3BcuYWq+BXhtruY9wJcD5SvHIiXp9TE/bADVVN8cTDwXpWbVERGjXl7U2z7aeVE0Qamw9ovn+6JrdRLqKufTLlQmSyXCY+u5b168+uHGtp973PL4t6mxrO40eqsO2skHa9grWc730i0b3NLmW+0qJHD5xtIOTxzvIZucYSSk2xhMIGqYx9ntc0bryBtFN9wTOAriOw/yCxcCLQVJTaZS/zNLsF4p5M1CBjFewHpcTiM+50kUGPxi8T3ksfs+y75DJqfMu4+9+MNT/5ynKBghbS8+G5oNE4s1oUkPnhQm6LsXYtbuWoX5rDYOAlua+ovDJmwYfh/M07dQZfZ2vhP4K3d595+bs5NvbZnqsIlRFw8V544wGIEoOhKNbVgOOiOoVpS4DhWou5Qp1DTvYvr8TJ5/DND7PaMJFO5cZAQhtTkxomjwDEhUNfHgaisScWCSGhpqcGR+4G4RcK/MJaPmXfuvWTx5EpWniiS6TAAAAAElFTkSuQmCC" />
+  <rect x="1162" y="630" width="96" height="96" fill="none" stroke="#c8d1db" />
+  <rect x="70" y="772" width="1460" height="152" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="94" y="836" fill="#07111f" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Manja</text>
+  <text x="94" y="862" fill="#526981" font-family="system-ui, sans-serif" font-size="13">manja</text>
+  <g transform="translate(546 784) scale(1.0)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#31588f" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M39 42c10-4 18-2 25 4v42c-7-6-15-8-25-4Zm50 0c-10-4-18-2-25 4v42c7-6 15-8 25-4Z" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M64 46v42" stroke="#31588f" stroke-width="6" stroke-linecap="round" />
+    <circle cx="84" cy="75" r="7" fill="#c7ff4a" stroke="#07111f" stroke-width="3" />
+  </g>
+  <g transform="translate(846 784) scale(1.0)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#f3f2e9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M39 42c10-4 18-2 25 4v42c-7-6-15-8-25-4Zm50 0c-10-4-18-2-25 4v42c7-6 15-8 25-4Z" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M64 46v42" stroke="#f3f2e9" stroke-width="6" stroke-linecap="round" />
+    <circle cx="84" cy="75" r="7" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+  </g>
+  <image x="1162" y="800" width="96" height="96" preserveAspectRatio="none" image-rendering="pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAB5UlEQVQ4jaWQUUhTYRiGn//vbJ7GpKMWtoi5oDBr0kzCDLuwssQ0kAr0IlpBF0Vddd9tBFGX1U14ERQVFdRNERQZbl60upEGFTlZA4tjO7k8286200XM3DxW4Hv1f9/38rzf98MyJf5lcDcENssiOwEb236VNRKf/xeg1GhN1xGcXOAr2TYjeW/xLMmkCbBiyeR6/02BOFEVIoSgTSnIlqJp3HUEZDJf1+7Zt/+CVlt7Jm3M0lCvMXS4j9ZgM19S0/ycMwFaFE9dtGimP1UCAgG1v2v3Q6tQGMjmcjXHw2F6e3vIzv2gY0eIbcFmnj4fLbvNYtZ4rJQrr3fjGsuwnk28/xB6PR7jzr0nDIdPA3B75BpDR/vp6tj+J8xmA4As13m3dQkI/eVTKyVQKgCiRN9SXlUV5Nwf0dPfFs3mAQgay0//eh/BLZuQUiKlpLW9kVMXBUk9vgigVDeM2QyDAz0cPNDNpP67d+xQO7Fb4/g0F/Ci6hKgbfjK+en46GV9MlYx7NzViQ1ExyJOl73MfU90KwDCFkHVu7rakI9Gxs5RIosQNwDViTJ/wsq6dfi27iWfmUFPvE1JwRFzZioC4Frln5BSPAD8joAS3Hd5tLzm0ZDY8dS7R1cXmixj6g3Q5LTBsvULWiSZdiOSjvQAAAAASUVORK5CYII=" />
+  <rect x="1162" y="800" width="96" height="96" fill="none" stroke="#c8d1db" />
+  <rect x="70" y="942" width="1460" height="152" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="94" y="1006" fill="#07111f" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Pajé</text>
+  <text x="94" y="1032" fill="#526981" font-family="system-ui, sans-serif" font-size="13">paje</text>
+  <g transform="translate(546 954) scale(1.0)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#31588f" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M40 40h31c10 0 16 6 16 14s-6 14-16 14H56c-10 0-16 6-16 14s6 14 16 14h31" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <g fill="#31588f">
+      <circle cx="40" cy="40" r="5" />
+      <circle cx="63" cy="40" r="5" />
+      <circle cx="87" cy="54" r="5" />
+      <circle cx="63" cy="68" r="5" />
+    </g>
+    <circle cx="87" cy="96" r="7" fill="#c7ff4a" stroke="#07111f" stroke-width="3" />
+  </g>
+  <g transform="translate(846 954) scale(1.0)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#f3f2e9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M40 40h31c10 0 16 6 16 14s-6 14-16 14H56c-10 0-16 6-16 14s6 14 16 14h31" fill="none" stroke="#f3f2e9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+    <g fill="#f3f2e9">
+      <circle cx="40" cy="40" r="5" />
+      <circle cx="63" cy="40" r="5" />
+      <circle cx="87" cy="54" r="5" />
+      <circle cx="63" cy="68" r="5" />
+    </g>
+    <circle cx="87" cy="96" r="7" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+  </g>
+  <image x="1162" y="970" width="96" height="96" preserveAspectRatio="none" image-rendering="pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAACAklEQVQ4jaWRW0iTYRzGf++7g2t+c+tERrXtoiN00ZKypBULxLKoi4IORFQQRHRRdNFV3QeRF0F4lVF3IZXBoHViFNhVOsVKOuC+1KXOzc3Mte3bvi6U3OYko+fivfo/v//z/F/4T4m/DZgXu9fLHNsAHV1//Sup9s0XYKxwuJoRnCmYy+s6dzNK7gIDAykAw5ybFznvCMTpkiVCCDxGTW7IpZIPyia4dKP13PIquTcaDh0YmjBTac6jTcZ44n9JcvxHIWpPOh4OyCK322351NNZGx2JeB12hUqrBUVZQF2th1f+e1TZlJlZXT9UlEBRVi/NmrLPgE3lKp29eI3PH7sIBtqmAbxIJ9T6Pwky5uz1UrOUBhACt2sl+3euJf49XFABIzD1AIg8jYipK129cp4TRw5y+9EHPOuqqVlj41bzfbq7u2YlMxYQlwE0NuxiR90WvA3HiY6OkdfzoOvlWpUAprVqRTUdoR6GR0bnNM0CeI7dvDzc+4ZYuAP/0yCBthYqzGb61EEAsppGwtCO+nWc9uexIoAEELrYaFGWANA/OMTufSd53/tF83m3Bup92/0L7TZNyuIfn2kObD7a1JKeTJz6Ge8nMxEnpnZGpOBwKq6+BTDZnTVSioeAs8AbTI+pPiNAHlpNVkfGYXUg0XsjocdNhVuyyW/vANe8jvKv+g1aHK5EV3B5sQAAAABJRU5ErkJggg==" />
+  <rect x="1162" y="970" width="96" height="96" fill="none" stroke="#c8d1db" />
+  <rect x="70" y="1112" width="1460" height="152" fill="#f3f2e9" stroke="#93a1b1" />
+  <text x="94" y="1176" fill="#07111f" font-family="system-ui, sans-serif" font-size="24" font-weight="750">Xisnove</text>
+  <text x="94" y="1202" fill="#526981" font-family="system-ui, sans-serif" font-size="13">xisnove</text>
+  <g transform="translate(546 1124) scale(1.0)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#31588f" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="67" cy="40" r="10" fill="#f3f2e9" />
+    <circle cx="67" cy="65" r="10" fill="#c7ff4a" stroke="#07111f" stroke-width="3" />
+    <circle cx="67" cy="90" r="10" fill="#31588f" />
+  </g>
+  <g transform="translate(846 1124) scale(1.0)">
+    <path d="M16 112V72c0-15 11-27 27-29 6-20 23-33 42-30 19 3 33 20 33 40v59H84L64 96l-20 16Z" fill="#07111f" />
+    <path d="M16 94v18h18" fill="none" stroke="#f3f2e9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="67" cy="40" r="10" fill="#f3f2e9" />
+    <circle cx="67" cy="65" r="10" fill="#f3f2e9" stroke="#07111f" stroke-width="3" />
+    <circle cx="67" cy="90" r="10" fill="#f3f2e9" />
+  </g>
+  <image x="1162" y="1140" width="96" height="96" preserveAspectRatio="none" image-rendering="pixelated" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABkUlEQVQ4jaWRO0jDUBSG/5s2TVILTVpLfTapOIgWfIBSZxHBVRcHl7q6uTgozi466uAgopsUxU2Egosoik62IFiqIiq+FR8pzXHRkjamCj1wl3P++/3/uRcos9hfApdfa+JyiAIgEG1/PGXS/wU4BVmdB0PMpDOIsKh7cqO4uHgHAM7W2RdakCRhpDXSxBjL+3CMISa8OZZLxub94S5BUSm+HqeX52saG58gQVELj0/rsybQNFGUQ8OcYcwV9ImsLkQDMO0Gj6cxkOWzmwDafnpuSYDWEETy+BxUDCFsfT5mevMJdFd22nwZAKL9IiaXRTR3StYEDM6CFZiB/mJNVR2PapWH1+ewAr7LaSIGi4cbSw/YT7winfy0Bdh+IwBIgW6wQAyiEi4NaB+aGfNrHZZhha8eDqcLbqW2NIARi4ieyuKZfp/enXq5Olm5Pd37sAPk30BSalDd0gP99R53mcNLjmHwJpXYuUklwHtDsxzH4gBCvwIMYJV3y7rslsGBUpdHa7NmUfbp7ACAartHOfUF/EF1OwU8vgMAAAAASUVORK5CYII=" />
+  <rect x="1162" y="1140" width="96" height="96" fill="none" stroke="#c8d1db" />
+</svg>

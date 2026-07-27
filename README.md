@@ -17,12 +17,11 @@ Hû endorsement or affiliation.
 
 - Every product has a full outlined logo, compact mark, reverse mark, and
   favicon under `logos/`.
-- The family uses an 8 px constructive grid, open silhouettes, and the Arai Hû
-  midnight, cobalt, paper, and lime signal palette.
-- Meaning comes from each product's real work: storm front for Arai Hû,
-  composable interface blocks for Goshtoso, an OpenAPI path document for Manja,
-  a five-stage durable loop for Pajé, and a protected monitoring signal for
-  Xisnove.
+- The family uses a 128-unit constructive grid, rounded 14-unit strokes, and
+  the Arai Hû midnight, cobalt, paper, and lime signal palette.
+- Only Arai Hû uses the charged cloud. Product signs stand alone: composable
+  interface panels for Goshtoso, an open API publication for Manja, a durable
+  route for Pajé, and a three-state monitoring signal for Xisnove.
 
 Each SVG is source-controlled, self-contained, scalable through `viewBox`, and
 suitable for web and documentation use. Canonical wordmarks contain SVG paths,
@@ -31,12 +30,13 @@ artwork without provenance and redistribution authority.
 
 ## Design review
 
-The promoted v3 construction sources and rejected alternatives live under
-`concepts/v3/`. Open `review/logo-system-v3.html` for the canonical contact
-sheet, `review/logo-system-v3-exploration.html` for the A/B exploration, and
-`review/blind-review.html` for the independent recognition test. Validate the
-promoted system with `scripts/validate-logo-system-v3.sh`; aggregate five or
-more blind-review exports with `scripts/score-blind-reviews.py`.
+The promoted v10 construction sources live under `concepts/v10/`; rejected
+directions remain under `concepts/v2/` through `concepts/v9/`. Compare every
+ready version in `review/screenshots/logo-system-all-versions.png`, inspect v10
+at normal, monochrome, and 16 px sizes in
+`review/screenshots/logo-system-v10.png`, and inspect product contexts in
+`review/screenshots/context/site-context-current-v10.png`. Validate canonical
+assets with `scripts/validate-logo-system.sh`.
 
 ## Goshtoso theme
 

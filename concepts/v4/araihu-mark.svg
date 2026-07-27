@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Arai Hû mark v4 exploration</title>
+  <desc id="desc">A dark cloud contour carrying one charged lightning cut.</desc>
+  <path d="M36 96h-8C16 96 8 87 8 75s8-20 20-21c5-20 22-34 43-34 23 0 39 17 39 40 6 3 10 9 10 17 0 10-7 17-17 17H92" fill="none" stroke="#07111f" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M36 96h13" fill="none" stroke="#31588f" stroke-width="14" stroke-linecap="round" />
+  <path d="M67 54h25L76 79h16l-39 40 14-31H50Z" fill="#c7ff4a" />
+</svg>
