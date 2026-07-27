@@ -18,13 +18,19 @@
     .art img { width: 132px; height: 132px; object-fit: contain; }
     .form { padding: 22px; display: grid; gap: 16px; }
     label { display: grid; gap: 7px; color: #34465d; font-size: 13px; font-weight: 650; }
-    textarea { min-height: 62px; resize: vertical; border: 1px solid #a3b0bf; background: white; color: #07111f; padding: 10px; font: inherit; }
+    textarea, input[type="text"] { border: 1px solid #a3b0bf; background: white; color: #07111f; padding: 10px; font: inherit; }
+    textarea { min-height: 62px; resize: vertical; }
     .scores { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
     .range-line { display: flex; gap: 10px; align-items: center; }
     input[type="range"] { width: 100%; accent-color: #173b72; }
     output { min-width: 1.5em; font: 700 14px/1 ui-monospace, monospace; color: #07111f; }
     .reveal { display: none; padding: 10px 12px; border-left: 5px solid #c7ff4a; background: #e4e8eb; line-height: 1.45; }
     .revealed .reveal { display: block; }
+    .match { display: none; margin: 0; padding: 12px; border: 1px solid #a3b0bf; }
+    .revealed .match { display: flex; flex-wrap: wrap; gap: 12px 18px; }
+    .match legend { padding: 0 5px; color: #34465d; font-size: 13px; font-weight: 650; }
+    .match label { display: flex; grid: none; align-items: center; gap: 7px; color: #07111f; }
+    .reviewer { margin-top: 18px; }
     .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
     button { min-height: 44px; border: 1px solid #07111f; background: #07111f; color: #f3f2e9; padding: 10px 16px; font: 700 14px/1 inherit; cursor: pointer; }
     button.secondary { background: transparent; color: #07111f; }
@@ -33,7 +39,7 @@
   </style>
 </head>
 <body>
-  <header><h1>O que estes sinais comunicam?</h1><p>Não procure nomes de produtos. Para cada símbolo, escreva o primeiro objeto, sistema ou ideia que veio à mente. Depois avalie clareza e distinção. Revele o mapa somente após responder todos.</p></header>
+  <header><h1>O que estes sinais comunicam?</h1><div><p>Não procure nomes de produtos. Para cada símbolo, escreva o primeiro objeto, sistema ou ideia que veio à mente. Depois avalie clareza e distinção. Revele o mapa somente após responder todos.</p><label class="reviewer">Identificador do avaliador<input id="evaluator" type="text" autocomplete="off" placeholder="Ex.: pessoa-03"></label></div></header>
   <main id="cards" class="cards"></main>
   <div class="actions"><button id="reveal" type="button">Revelar mapa</button><button id="export" class="secondary" type="button">Exportar respostas JSON</button><button id="reset" class="secondary" type="button">Nova ordem</button></div>
   <p id="status" class="status" aria-live="polite">Respostas ficam somente neste navegador até exportação.</p>
@@ -50,23 +56,41 @@
     const shuffled = saved?.order?.length === products.length
       ? saved.order.map(id => products.find(product => product.id === id))
       : [...products].sort(() => Math.random() - .5);
-    const state = saved || { order: shuffled.map(product => product.id), answers: {}, revealed: false };
+    const state = {
+      schema: 2,
+      order: shuffled.map(product => product.id),
+      evaluator: saved?.evaluator || "",
+      answers: saved?.answers || {},
+      revealed: Boolean(saved?.revealed),
+    };
     const cards = document.getElementById("cards");
+    const evaluator = document.getElementById("evaluator");
+    evaluator.value = state.evaluator;
 
     function persist() { localStorage.setItem(storageKey, JSON.stringify(state)); }
     function value(id, field, fallback = "") { return state.answers[id]?.[field] ?? fallback; }
+    function escaped(input) { return String(input).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]); }
+    function answeredBeforeReveal(product) {
+      const answer = state.answers[product.id] || {};
+      return answer.reading?.trim() && answer.clarity && answer.distinct;
+    }
+    function missingCardNumbers(predicate) {
+      return shuffled.map((product, index) => predicate(product) ? null : index + 1).filter(Boolean).join(", ");
+    }
+    function status(message) { document.getElementById("status").textContent = message; }
     function render() {
       cards.classList.toggle("revealed", state.revealed);
       cards.innerHTML = shuffled.map((product, index) => `
         <article class="card" data-product="${product.id}">
           <div class="art" data-index="${String(index + 1).padStart(2, "0")}"><img src="../concepts/v2/${product.id}-mark.svg" alt=""></div>
           <div class="form">
-            <label>Primeira leitura<textarea data-field="reading" placeholder="Objeto, sistema ou ideia…">${value(product.id, "reading")}</textarea></label>
+            <label>Primeira leitura<textarea data-field="reading" placeholder="Objeto, sistema ou ideia…">${escaped(value(product.id, "reading"))}</textarea></label>
             <div class="scores">
               <label>Clareza visual<div class="range-line"><input data-field="clarity" type="range" min="1" max="5" value="${value(product.id, "clarity", 3)}"><output>${value(product.id, "clarity", 3)}</output></div></label>
               <label>Distinção / memorabilidade<div class="range-line"><input data-field="distinct" type="range" min="1" max="5" value="${value(product.id, "distinct", 3)}"><output>${value(product.id, "distinct", 3)}</output></div></label>
             </div>
             <div class="reveal"><strong>${product.name}</strong><br>${product.intent}</div>
+            <fieldset class="match"><legend>Sua primeira leitura pertence a essa categoria?</legend><label><input data-field="matched" type="radio" name="matched-${product.id}" value="true" ${value(product.id, "matched") === true ? "checked" : ""}> Sim</label><label><input data-field="matched" type="radio" name="matched-${product.id}" value="false" ${value(product.id, "matched") === false ? "checked" : ""}> Não</label></fieldset>
           </div>
         </article>`).join("");
     }
@@ -75,16 +99,26 @@
       if (!card || !event.target.dataset.field) return;
       const id = card.dataset.product;
       state.answers[id] ||= {};
-      state.answers[id][event.target.dataset.field] = event.target.value;
+      state.answers[id][event.target.dataset.field] = event.target.dataset.field === "matched" ? event.target.value === "true" : event.target.value;
       if (event.target.type === "range") event.target.nextElementSibling.value = event.target.value;
       persist();
     });
-    document.getElementById("reveal").addEventListener("click", () => { state.revealed = true; persist(); render(); });
+    evaluator.addEventListener("input", () => { state.evaluator = evaluator.value; persist(); });
+    document.getElementById("reveal").addEventListener("click", () => {
+      const missing = missingCardNumbers(answeredBeforeReveal);
+      if (missing) { status(`Complete leitura e mova os dois controles nos cartões: ${missing}.`); return; }
+      state.revealed = true; persist(); render(); status("Mapa revelado. Agora confirme se cada leitura pertence à categoria pretendida.");
+    });
     document.getElementById("export").addEventListener("click", () => {
-      const payload = { schema: 1, createdAt: new Date().toISOString(), ...state };
+      if (!state.evaluator.trim()) { status("Informe um identificador de avaliador antes de exportar."); evaluator.focus(); return; }
+      if (!state.revealed) { status("Responda todos os cartões e revele o mapa antes de exportar."); return; }
+      const missing = missingCardNumbers(product => typeof state.answers[product.id]?.matched === "boolean");
+      if (missing) { status(`Confirme Sim ou Não nos cartões: ${missing}.`); return; }
+      const payload = { ...state, evaluator: state.evaluator.trim(), createdAt: new Date().toISOString() };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-      const link = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "araihu-logo-blind-review-v2.json" });
-      link.click(); URL.revokeObjectURL(link.href); document.getElementById("status").textContent = "Respostas exportadas.";
+      const safeEvaluator = state.evaluator.trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-|-$/g, "") || "reviewer";
+      const link = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: `araihu-logo-review-${safeEvaluator}.json` });
+      link.click(); URL.revokeObjectURL(link.href); status("Respostas exportadas.");
     });
     document.getElementById("reset").addEventListener("click", () => { localStorage.removeItem(storageKey); location.reload(); });
     render(); persist();

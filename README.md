@@ -22,6 +22,14 @@ Hû endorsement or affiliation.
 
 Each SVG is source-controlled, self-contained, and suitable for web and documentation use. Do not add generated or third-party artwork without provenance and redistribution authority. Xisnove brand work is intentionally deferred while naming research is open.
 
+## V2 design review
+
+Recognizable, product-linked candidate marks live under `concepts/v2/` and do
+not replace the released `logos/` assets. Open `review/logo-system-v2.html` for
+the contact sheet and `review/blind-review.html` for the independent recognition
+test. Validate the SVG system with `scripts/validate-logo-system.sh`; aggregate
+five or more blind-review exports with `scripts/score-blind-reviews.py`.
+
 ## Goshtoso theme
 
 `themes/araihu.css` is Arai Hû's organization theme for Goshtoso. It is not a Goshtoso base theme.

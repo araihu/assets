@@ -31,7 +31,9 @@ total would otherwise pass.
 
 Use `review/blind-review.html` with at least five people who were not shown the
 brief or product mapping. Each reviewer records the first object, system, or
-idea perceived before revealing names.
+idea perceived before revealing names. The page prevents reveal until every
+first reading and score is explicit. After reveal, the reviewer records whether
+their reading belongs to the intended category and exports schema 2 JSON.
 
 Promotion requires:
 
@@ -41,6 +43,17 @@ Promotion requires:
 - mean distinction is at least `4/5`;
 - no two products receive the same dominant first reading;
 - raw exported JSON remains attached to the design review.
+
+Aggregate five or more independent exports with:
+
+```sh
+scripts/score-blind-reviews.py review-results/*.json
+```
+
+The command rejects incomplete exports and duplicate evaluator identifiers,
+then calculates the category-match, clarity, distinction, and exact dominant
+reading gates. Synonyms in dominant readings still require one manual semantic
+check before promotion.
 
 Exact product names are not required. Arai Hû should read as storm cloud,
 Manja as technical documentation, Pajé as staged route or workflow, Xisnove as
