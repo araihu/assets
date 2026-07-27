@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arai Hû logo system v2 review</title>
+  <style>
+    :root { color-scheme: light; font-family: ui-sans-serif, system-ui, sans-serif; background: #d9d9d0; color: #07111f; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 36px; }
+    header { display: flex; justify-content: space-between; align-items: end; margin-bottom: 28px; }
+    h1 { margin: 0; font-size: 34px; letter-spacing: -.04em; }
+    header p { margin: 0; max-width: 44rem; color: #34465d; line-height: 1.5; }
+    .grid { display: grid; gap: 14px; }
+    .row { display: grid; grid-template-columns: 150px 190px 190px 190px 1fr; min-height: 174px; background: #f3f2e9; border: 1px solid #a3b0bf; }
+    .label { padding: 20px; border-right: 1px solid #a3b0bf; display: flex; flex-direction: column; justify-content: space-between; }
+    .label strong { font-size: 22px; }
+    .label span { color: #526981; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+    .cell { display: grid; place-items: center; position: relative; border-right: 1px solid #a3b0bf; padding: 18px; }
+    .cell::before { content: attr(data-label); position: absolute; top: 9px; left: 11px; font-size: 10px; text-transform: uppercase; letter-spacing: .09em; color: #64748b; }
+    .cell.dark { background: #07111f; }
+    .cell.dark::before { color: #718397; }
+    .cell img { width: 112px; height: 112px; object-fit: contain; }
+    .current img { opacity: .7; }
+    .sizes { display: flex; gap: 28px; align-items: end; justify-content: center; }
+    .sizes figure { display: grid; gap: 8px; place-items: center; margin: 0; }
+    .sizes figcaption { color: #64748b; font-size: 10px; }
+    .s128 { width: 96px; height: 96px; }
+    .s32 { width: 32px; height: 32px; }
+    .s16 { width: 16px; height: 16px; }
+    .blind { margin-top: 22px; padding: 24px; background: #f3f2e9; border: 1px solid #a3b0bf; }
+    .blind h2 { margin: 0 0 18px; font-size: 17px; }
+    .blind-row { display: flex; align-items: center; gap: 42px; }
+    .blind-row img { width: 74px; height: 74px; object-fit: contain; filter: grayscale(1) contrast(1.5); }
+    .deliverables { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .panel { background: #f3f2e9; border: 1px solid #a3b0bf; padding: 20px; }
+    .panel h2 { margin: 0 0 16px; font-size: 17px; }
+    .logo-stack { display: grid; gap: 11px; }
+    .logo-stack img { width: 100%; height: 64px; object-fit: contain; object-position: left center; }
+    .favicon-row { display: flex; flex-wrap: wrap; gap: 22px; }
+    .favicon-row figure { display: grid; place-items: center; gap: 7px; margin: 0; font-size: 10px; color: #526981; }
+    .favicon-row img { width: 48px; height: 48px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Arai Hû signs · v2</h1>
+    <p>Current production mark beside product-grounded candidate. Candidate shown on paper, midnight, and reduced sizes. Labels are omitted in final silhouette row.</p>
+  </header>
+  <main class="grid">
+    <section class="row"><div class="label"><strong>Arai Hû</strong><span>anvil cloud</span></div><div class="cell current" data-label="current"><img src="../logos/araihu-mark.svg"></div><div class="cell" data-label="candidate / paper"><img src="../concepts/v2/araihu-mark.svg"></div><div class="cell dark" data-label="candidate / midnight"><img src="../concepts/v2/araihu-mark-reverse.svg"></div><div class="cell" data-label="small sizes"><div class="sizes"><figure><img class="s128" src="../concepts/v2/araihu-mark.svg"><figcaption>128</figcaption></figure><figure><img class="s32" src="../concepts/v2/araihu-mark.svg"><figcaption>32</figcaption></figure><figure><img class="s16" src="../concepts/v2/araihu-mark.svg"><figcaption>16</figcaption></figure></div></div></section>
+    <section class="row"><div class="label"><strong>Goshtoso</strong><span>promenade flow</span></div><div class="cell current" data-label="current"><img src="../logos/goshtoso-mark.svg"></div><div class="cell" data-label="candidate / paper"><img src="../concepts/v2/goshtoso-mark.svg"></div><div class="cell dark" data-label="candidate / midnight"><img src="../concepts/v2/goshtoso-mark-reverse.svg"></div><div class="cell" data-label="small sizes"><div class="sizes"><figure><img class="s128" src="../concepts/v2/goshtoso-mark.svg"><figcaption>128</figcaption></figure><figure><img class="s32" src="../concepts/v2/goshtoso-mark.svg"><figcaption>32</figcaption></figure><figure><img class="s16" src="../concepts/v2/goshtoso-mark.svg"><figcaption>16</figcaption></figure></div></div></section>
+    <section class="row"><div class="label"><strong>Manja</strong><span>API document</span></div><div class="cell current" data-label="current"><img src="../logos/manja-mark.svg"></div><div class="cell" data-label="candidate / paper"><img src="../concepts/v2/manja-mark.svg"></div><div class="cell dark" data-label="candidate / midnight"><img src="../concepts/v2/manja-mark-reverse.svg"></div><div class="cell" data-label="small sizes"><div class="sizes"><figure><img class="s128" src="../concepts/v2/manja-mark.svg"><figcaption>128</figcaption></figure><figure><img class="s32" src="../concepts/v2/manja-mark.svg"><figcaption>32</figcaption></figure><figure><img class="s16" src="../concepts/v2/manja-mark.svg"><figcaption>16</figcaption></figure></div></div></section>
+    <section class="row"><div class="label"><strong>Pajé</strong><span>durable route</span></div><div class="cell current" data-label="current"><img src="../logos/paje-mark.svg"></div><div class="cell" data-label="candidate / paper"><img src="../concepts/v2/paje-mark.svg"></div><div class="cell dark" data-label="candidate / midnight"><img src="../concepts/v2/paje-mark-reverse.svg"></div><div class="cell" data-label="small sizes"><div class="sizes"><figure><img class="s128" src="../concepts/v2/paje-mark.svg"><figcaption>128</figcaption></figure><figure><img class="s32" src="../concepts/v2/paje-mark.svg"><figcaption>32</figcaption></figure><figure><img class="s16" src="../concepts/v2/paje-mark.svg"><figcaption>16</figcaption></figure></div></div></section>
+    <section class="row"><div class="label"><strong>Xisnove</strong><span>signal diagram</span></div><div class="cell current" data-label="current"><img src="../logos/xisnove-mark.svg"></div><div class="cell" data-label="candidate / paper"><img src="../concepts/v2/xisnove-mark.svg"></div><div class="cell dark" data-label="candidate / midnight"><img src="../concepts/v2/xisnove-mark-reverse.svg"></div><div class="cell" data-label="small sizes"><div class="sizes"><figure><img class="s128" src="../concepts/v2/xisnove-mark.svg"><figcaption>128</figcaption></figure><figure><img class="s32" src="../concepts/v2/xisnove-mark.svg"><figcaption>32</figcaption></figure><figure><img class="s16" src="../concepts/v2/xisnove-mark.svg"><figcaption>16</figcaption></figure></div></div></section>
+  </main>
+  <section class="blind"><h2>Blind silhouette check</h2><div class="blind-row"><img src="../concepts/v2/araihu-mark.svg"><img src="../concepts/v2/goshtoso-mark.svg"><img src="../concepts/v2/manja-mark.svg"><img src="../concepts/v2/paje-mark.svg"><img src="../concepts/v2/xisnove-mark.svg"></div></section>
+  <section class="deliverables"><div class="panel"><h2>Outlined lockups</h2><div class="logo-stack"><img src="../concepts/v2/araihu-logo-outlined.svg"><img src="../concepts/v2/goshtoso-logo-outlined.svg"><img src="../concepts/v2/manja-logo-outlined.svg"><img src="../concepts/v2/paje-logo-outlined.svg"><img src="../concepts/v2/xisnove-logo-outlined.svg"></div></div><div class="panel"><h2>Favicons · 48 px review</h2><div class="favicon-row"><figure><img src="../concepts/v2/araihu-favicon.svg"><figcaption>Arai Hû</figcaption></figure><figure><img src="../concepts/v2/goshtoso-favicon.svg"><figcaption>Goshtoso</figcaption></figure><figure><img src="../concepts/v2/manja-favicon.svg"><figcaption>Manja</figcaption></figure><figure><img src="../concepts/v2/paje-favicon.svg"><figcaption>Pajé</figcaption></figure><figure><img src="../concepts/v2/xisnove-favicon.svg"><figcaption>Xisnove</figcaption></figure></div></div></section>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teste cego de sinais</title>
+  <style>
+    :root { font-family: ui-sans-serif, system-ui, sans-serif; color: #07111f; background: #d9d9d0; }
+    * { box-sizing: border-box; }
+    body { margin: 0 auto; max-width: 1180px; padding: 36px 24px 64px; }
+    header { display: grid; grid-template-columns: 1.1fr .9fr; gap: 36px; align-items: end; margin-bottom: 28px; }
+    h1 { margin: 0; font-size: clamp(32px, 5vw, 58px); letter-spacing: -.055em; line-height: .95; }
+    header p { margin: 0; color: #34465d; line-height: 1.55; }
+    .cards { display: grid; gap: 14px; }
+    .card { display: grid; grid-template-columns: 220px 1fr; background: #f3f2e9; border: 1px solid #a3b0bf; }
+    .art { min-height: 230px; display: grid; place-items: center; border-right: 1px solid #a3b0bf; position: relative; }
+    .art::before { content: attr(data-index); position: absolute; top: 14px; left: 16px; font: 700 12px/1 ui-monospace, monospace; color: #526981; }
+    .art img { width: 132px; height: 132px; object-fit: contain; }
+    .form { padding: 22px; display: grid; gap: 16px; }
+    label { display: grid; gap: 7px; color: #34465d; font-size: 13px; font-weight: 650; }
+    textarea { min-height: 62px; resize: vertical; border: 1px solid #a3b0bf; background: white; color: #07111f; padding: 10px; font: inherit; }
+    .scores { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .range-line { display: flex; gap: 10px; align-items: center; }
+    input[type="range"] { width: 100%; accent-color: #173b72; }
+    output { min-width: 1.5em; font: 700 14px/1 ui-monospace, monospace; color: #07111f; }
+    .reveal { display: none; padding: 10px 12px; border-left: 5px solid #c7ff4a; background: #e4e8eb; line-height: 1.45; }
+    .revealed .reveal { display: block; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+    button { min-height: 44px; border: 1px solid #07111f; background: #07111f; color: #f3f2e9; padding: 10px 16px; font: 700 14px/1 inherit; cursor: pointer; }
+    button.secondary { background: transparent; color: #07111f; }
+    .status { margin-top: 14px; color: #526981; font-size: 13px; }
+    @media (max-width: 720px) { header, .card { grid-template-columns: 1fr; } .art { min-height: 180px; border-right: 0; border-bottom: 1px solid #a3b0bf; } .scores { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header><h1>O que estes sinais comunicam?</h1><p>Não procure nomes de produtos. Para cada símbolo, escreva o primeiro objeto, sistema ou ideia que veio à mente. Depois avalie clareza e distinção. Revele o mapa somente após responder todos.</p></header>
+  <main id="cards" class="cards"></main>
+  <div class="actions"><button id="reveal" type="button">Revelar mapa</button><button id="export" class="secondary" type="button">Exportar respostas JSON</button><button id="reset" class="secondary" type="button">Nova ordem</button></div>
+  <p id="status" class="status" aria-live="polite">Respostas ficam somente neste navegador até exportação.</p>
+  <script>
+    const products = [
+      { id: "araihu", name: "Arai Hû", intent: "nuvem escura de tempestade + raio" },
+      { id: "goshtoso", name: "Goshtoso", intent: "ritmo de calçadão + fluxo de interface" },
+      { id: "manja", name: "Manja", intent: "documentação aberta + árvore de paths OpenAPI" },
+      { id: "paje", name: "Pajé", intent: "rota durável com cinco checkpoints" },
+      { id: "xisnove", name: "Xisnove", intent: "diagrama ferroviário + sinal de monitoramento" },
+    ];
+    const storageKey = "araihu-logo-blind-review-v2";
+    const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
+    const shuffled = saved?.order?.length === products.length
+      ? saved.order.map(id => products.find(product => product.id === id))
+      : [...products].sort(() => Math.random() - .5);
+    const state = saved || { order: shuffled.map(product => product.id), answers: {}, revealed: false };
+    const cards = document.getElementById("cards");
+
+    function persist() { localStorage.setItem(storageKey, JSON.stringify(state)); }
+    function value(id, field, fallback = "") { return state.answers[id]?.[field] ?? fallback; }
+    function render() {
+      cards.classList.toggle("revealed", state.revealed);
+      cards.innerHTML = shuffled.map((product, index) => `
+        <article class="card" data-product="${product.id}">
+          <div class="art" data-index="${String(index + 1).padStart(2, "0")}"><img src="../concepts/v2/${product.id}-mark.svg" alt=""></div>
+          <div class="form">
+            <label>Primeira leitura<textarea data-field="reading" placeholder="Objeto, sistema ou ideia…">${value(product.id, "reading")}</textarea></label>
+            <div class="scores">
+              <label>Clareza visual<div class="range-line"><input data-field="clarity" type="range" min="1" max="5" value="${value(product.id, "clarity", 3)}"><output>${value(product.id, "clarity", 3)}</output></div></label>
+              <label>Distinção / memorabilidade<div class="range-line"><input data-field="distinct" type="range" min="1" max="5" value="${value(product.id, "distinct", 3)}"><output>${value(product.id, "distinct", 3)}</output></div></label>
+            </div>
+            <div class="reveal"><strong>${product.name}</strong><br>${product.intent}</div>
+          </div>
+        </article>`).join("");
+    }
+    cards.addEventListener("input", event => {
+      const card = event.target.closest("[data-product]");
+      if (!card || !event.target.dataset.field) return;
+      const id = card.dataset.product;
+      state.answers[id] ||= {};
+      state.answers[id][event.target.dataset.field] = event.target.value;
+      if (event.target.type === "range") event.target.nextElementSibling.value = event.target.value;
+      persist();
+    });
+    document.getElementById("reveal").addEventListener("click", () => { state.revealed = true; persist(); render(); });
+    document.getElementById("export").addEventListener("click", () => {
+      const payload = { schema: 1, createdAt: new Date().toISOString(), ...state };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const link = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "araihu-logo-blind-review-v2.json" });
+      link.click(); URL.revokeObjectURL(link.href); document.getElementById("status").textContent = "Respostas exportadas.";
+    });
+    document.getElementById("reset").addEventListener("click", () => { localStorage.removeItem(storageKey); location.reload(); });
+    render(); persist();
+  </script>
+</body>
+</html>

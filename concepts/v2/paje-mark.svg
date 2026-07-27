@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Pajé candidate mark</title><desc id="desc">A durable P-shaped route with five workflow checkpoints.</desc>
+  <path d="M31 111V25h39c24 0 38 13 38 32S94 89 70 89H50" fill="none" stroke="#07111f" stroke-width="14" stroke-linecap="square" stroke-linejoin="round"/>
+  <g fill="#31588f"><circle cx="31" cy="105" r="8"/><circle cx="31" cy="66" r="8"/><circle cx="47" cy="25" r="8"/><circle cx="85" cy="82" r="8"/></g>
+  <circle cx="94" cy="40" r="8" fill="#c7ff4a"/>
+</svg>

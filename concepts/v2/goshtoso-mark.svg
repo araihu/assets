@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Goshtoso candidate mark</title><desc id="desc">Two continuous promenade waves forming an interface flow.</desc>
+  <path fill="#07111f" d="M6 27h32c18 0 27-17 45-17h39v16H87c-18 0-27 17-45 17H6Z"/>
+  <path fill="#31588f" d="M6 51h32c18 0 27 17 45 17h39v16H79c-18 0-27-17-45-17H6Z"/>
+  <path fill="#07111f" d="M6 91h32c18 0 27-17 45-17h39v16H87c-18 0-27 17-45 17H6Z"/>
+  <circle cx="114" cy="76" r="8" fill="#c7ff4a"/>
+</svg>
