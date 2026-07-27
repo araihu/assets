@@ -3,7 +3,7 @@ set -eu
 
 root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 browser=${BROWSER_BIN:-/opt/homebrew/bin/chromium}
-output=${1:-"$root/review/logo-system-v2-latest.png"}
+output=${1:-"$root/review/logo-system-v3-latest.png"}
 
 "$root/scripts/validate-logo-system.sh"
 "$browser" \
@@ -14,6 +14,6 @@ output=${1:-"$root/review/logo-system-v2-latest.png"}
   --hide-scrollbars \
   --window-size=1600,2100 \
   --screenshot="$output" \
-  "file://$root/review/logo-system-v2.html"
+  "file://$root/review/logo-system-v3.html"
 
 printf '%s\n' "$output"

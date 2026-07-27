@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Goshtoso v3 lane B</title><desc id="desc">Two continuous interface flows exchanging server-rendered components.</desc>
+  <path d="M12 34h28c16 0 20 20 36 20h40" fill="none" stroke="#07111f" stroke-width="14" stroke-linecap="square"/>
+  <path d="M12 94h28c16 0 20-20 36-20h40" fill="none" stroke="#31588f" stroke-width="14" stroke-linecap="square"/>
+  <path fill="#c7ff4a" d="M108 66h16v16h-16Z"/>
+</svg>

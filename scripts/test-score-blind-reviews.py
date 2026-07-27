@@ -14,7 +14,8 @@ PRODUCTS = ("araihu", "goshtoso", "manja", "paje", "xisnove")
 
 def payload(evaluator: str, score: int = 5) -> dict:
     return {
-        "schema": 2,
+        "schema": 3,
+        "system": "araihu-logo-system-v3",
         "evaluator": evaluator,
         "answers": {
             product: {

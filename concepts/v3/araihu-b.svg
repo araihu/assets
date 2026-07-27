@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Arai Hû v3 lane B</title><desc id="desc">A layered dark weather field crossed by a live storm signal.</desc>
+  <path fill="#07111f" d="M40 18h56v16H40ZM24 42h88v16H24ZM12 66h104v20H12Z"/>
+  <path fill="#31588f" d="M24 86h80v10H24Z"/>
+  <path fill="#c7ff4a" d="M66 82h18L73 99h9l-27 25 9-21H53Z"/>
+</svg>

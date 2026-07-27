@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Xisnove v3 lane B</title><desc id="desc">A monitored network crossing with one healthy protected node.</desc>
+  <path d="M12 36h30l22 28-22 28H12M116 36H86L64 64l22 28h30" fill="none" stroke="#07111f" stroke-width="12" stroke-linecap="square" stroke-linejoin="miter"/>
+  <circle cx="64" cy="64" r="20" fill="#31588f"/>
+  <circle cx="64" cy="64" r="9" fill="#c7ff4a"/>
+</svg>

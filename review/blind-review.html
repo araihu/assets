@@ -51,13 +51,14 @@
       { id: "paje", name: "Pajé", intent: "rota durável com cinco checkpoints" },
       { id: "xisnove", name: "Xisnove", intent: "diagrama ferroviário + sinal de monitoramento" },
     ];
-    const storageKey = "araihu-logo-blind-review-v2";
+    const storageKey = "araihu-logo-blind-review-v3";
     const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
     const shuffled = saved?.order?.length === products.length
       ? saved.order.map(id => products.find(product => product.id === id))
       : [...products].sort(() => Math.random() - .5);
     const state = {
-      schema: 2,
+      schema: 3,
+      system: "araihu-logo-system-v3",
       order: shuffled.map(product => product.id),
       evaluator: saved?.evaluator || "",
       answers: saved?.answers || {},
@@ -82,7 +83,7 @@
       cards.classList.toggle("revealed", state.revealed);
       cards.innerHTML = shuffled.map((product, index) => `
         <article class="card" data-product="${product.id}">
-          <div class="art" data-index="${String(index + 1).padStart(2, "0")}"><img src="../concepts/v2/${product.id}-mark.svg" alt=""></div>
+          <div class="art" data-index="${String(index + 1).padStart(2, "0")}"><img src="../concepts/v3/${product.id}-mark.svg" alt=""></div>
           <div class="form">
             <label>Primeira leitura<textarea data-field="reading" placeholder="Objeto, sistema ou ideia…">${escaped(value(product.id, "reading"))}</textarea></label>
             <div class="scores">

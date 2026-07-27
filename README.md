@@ -15,20 +15,28 @@ Hû endorsement or affiliation.
 
 ## Logos
 
-- `logos/araihu-logo.svg`, `logos/araihu-mark.svg`, and `logos/araihu-favicon.svg` form the Arai Hû organization identity.
-- `logos/goshtoso-mark.svg` mirrors Goshtoso's canonical wave icon at source commit `e24d00b3f685f3c1a5a695f8c8a36f732e677317`; see `LICENSES/goshtoso-MIT.txt`.
-- `logos/manja-logo.svg`, `logos/manja-mark.svg`, and `logos/manja-favicon.svg` are cleared Manja brand assets.
-- Every product now has a full logo, compact mark, and favicon. Product marks retain the Arai Hû midnight, cobalt, and lime-horizon grammar.
+- Every product has a full outlined logo, compact mark, reverse mark, and
+  favicon under `logos/`.
+- The family uses an 8 px constructive grid, open silhouettes, and the Arai Hû
+  midnight, cobalt, paper, and lime signal palette.
+- Meaning comes from each product's real work: storm front for Arai Hû,
+  composable interface blocks for Goshtoso, an OpenAPI path document for Manja,
+  a five-stage durable loop for Pajé, and a protected monitoring signal for
+  Xisnove.
 
-Each SVG is source-controlled, self-contained, and suitable for web and documentation use. Do not add generated or third-party artwork without provenance and redistribution authority. Xisnove brand work is intentionally deferred while naming research is open.
+Each SVG is source-controlled, self-contained, scalable through `viewBox`, and
+suitable for web and documentation use. Canonical wordmarks contain SVG paths,
+not runtime text or a font dependency. Do not add generated or third-party
+artwork without provenance and redistribution authority.
 
-## V2 design review
+## Design review
 
-Recognizable, product-linked candidate marks live under `concepts/v2/` and do
-not replace the released `logos/` assets. Open `review/logo-system-v2.html` for
-the contact sheet and `review/blind-review.html` for the independent recognition
-test. Validate the SVG system with `scripts/validate-logo-system.sh`; aggregate
-five or more blind-review exports with `scripts/score-blind-reviews.py`.
+The promoted v3 construction sources and rejected alternatives live under
+`concepts/v3/`. Open `review/logo-system-v3.html` for the canonical contact
+sheet, `review/logo-system-v3-exploration.html` for the A/B exploration, and
+`review/blind-review.html` for the independent recognition test. Validate the
+promoted system with `scripts/validate-logo-system-v3.sh`; aggregate five or
+more blind-review exports with `scripts/score-blind-reviews.py`.
 
 ## Goshtoso theme
 

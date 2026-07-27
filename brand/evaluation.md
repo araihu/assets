@@ -33,7 +33,8 @@ Use `review/blind-review.html` with at least five people who were not shown the
 brief or product mapping. Each reviewer records the first object, system, or
 idea perceived before revealing names. The page prevents reveal until every
 first reading and score is explicit. After reveal, the reviewer records whether
-their reading belongs to the intended category and exports schema 2 JSON.
+their reading belongs to the intended category and exports schema 3 JSON bound
+to `araihu-logo-system-v3`.
 
 Promotion requires:
 
