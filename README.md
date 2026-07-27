@@ -4,6 +4,9 @@ Shared, release-ready brand assets for Arai Hû projects.
 
 ## Logos
 
+- `logos/araihu-logo.svg`, `logos/araihu-mark.svg`, and `logos/araihu-favicon.svg` form the Arai Hû organization identity.
+- `logos/goshtoso-mark.svg` mirrors Goshtoso's canonical wave icon at source commit `e24d00b3f685f3c1a5a695f8c8a36f732e677317`; see `LICENSES/goshtoso-MIT.txt`.
+- `logos/manja-logo.svg`, `logos/manja-mark.svg`, and `logos/manja-favicon.svg` are cleared Manja brand assets.
 - `logos/paje-mark.svg` preserves Pajé’s existing compact `P/` mark, blue field, and orange offset.
 
 Each SVG is source-controlled, self-contained, and suitable for web and documentation use. Do not add generated or third-party artwork without provenance and redistribution authority. Xisnove brand work is intentionally deferred while naming research is open.

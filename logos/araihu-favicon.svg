@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Arai Hû favicon</title>
+  <desc id="desc">A dark cloud over a bright horizon line.</desc>
+  <rect width="64" height="64" rx="12" fill="#07111f"/>
+  <path d="M13 42c0-6 4-10 10-10 2-8 8-13 16-13 9 0 16 6 17 15 4 1 7 4 7 8H13Z" fill="#31588f"/>
+  <path d="M13 45h38" stroke="#c7ff4a" stroke-width="3" stroke-linecap="round"/>
+</svg>
