@@ -72,7 +72,9 @@ The final PDF is under `output/pdf/`; page proofs are retained as
 
 ## Goshtoso theme
 
-`themes/araihu.css` is Arai Hû's organization theme for Goshtoso. It is not a Goshtoso base theme.
+`themes/araihu.css` is Arai Hû's organization theme for Goshtoso. It is the
+default for every Arai Hû-owned product, site, and demo, while remaining
+separate from Goshtoso's base theme catalogue for external consumers.
 
 Load it after the Goshtoso stylesheet and set the product root to `data-theme="araihu"`. The theme provides daylight and `.dark` token pairs: paper and storm-blue in light mode; black-cloud navy, cobalt, and lime horizon in dark mode.
 
