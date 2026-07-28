@@ -28,6 +28,33 @@ suitable for web and documentation use. Canonical wordmarks contain SVG paths,
 not runtime text or a font dependency. Do not add generated or third-party
 artwork without provenance and redistribution authority.
 
+### Adaptive v11
+
+The Recraft-derived v11 family lives under `concepts/v11/`. Each product has
+an icon and horizontal logo, both with adaptive-background and transparent
+variants. Shape geometry comes unchanged from the approved exports under
+`recraft/`; the v11 build assigns every path one semantic color role:
+`surface`, `ink`, or `signal`.
+
+For an external image, use the SVG directly. Its embedded
+`prefers-color-scheme` fallback follows light and dark browser color schemes:
+
+```html
+<img src="/assets/araihu-logo-transparent.svg" alt="Arai Hû">
+```
+
+For an inline SVG in a Goshtoso-based app, load `themes/araihu.css` and keep
+`data-theme="araihu"` plus the usual `.dark` class on `<html>`. The SVG inherits
+`--araihu-logo-surface`, `--araihu-logo-ink`, and `--araihu-logo-signal`, so an
+explicit app theme overrides the operating-system preference.
+
+Regenerate and validate the family with:
+
+```sh
+python3 scripts/derive-logo-system-v11.py
+./scripts/validate-logo-system-v11.sh
+```
+
 ## Design review
 
 The promoted v10 construction sources live under `concepts/v10/`; rejected

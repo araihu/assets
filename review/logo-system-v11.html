@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Arai Hû v11 adaptive logo review</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 24px; background: #20242b; font: 14px/1.4 system-ui, sans-serif; }
+      h1 { margin: 0 0 20px; color: #f3f2e9; }
+      h2 { grid-column: 1 / -1; margin: 0; }
+      .panel { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; padding: 22px; }
+      .panel + .panel { margin-top: 20px; }
+      .light { color-scheme: light; background: #f3f2e9; color: #07111f; }
+      .dark { color-scheme: dark; background: #07111f; color: #f3f2e9; }
+      figure { min-width: 0; margin: 0; }
+      img { display: block; width: 100%; height: 110px; object-fit: contain; border: 1px solid #718397; }
+      figcaption { margin-top: 6px; color: inherit; opacity: .75; }
+      @media (max-width: 900px) { .panel { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    </style>
+  </head>
+  <body>
+    <h1>Arai Hû v11 — external SVG theme response</h1>
+    <main id="review"></main>
+    <script>
+      const products = ['araihu', 'goshtoso', 'manja', 'paje', 'x9'];
+      const variants = ['icon-background', 'icon-transparent', 'logo-background', 'logo-transparent'];
+      const review = document.querySelector('#review');
+      for (const scheme of ['light', 'dark']) {
+        const panel = document.createElement('section');
+        panel.className = `panel ${scheme}`;
+        panel.innerHTML = `<h2>${scheme}</h2>`;
+        for (const product of products) {
+          for (const variant of variants) {
+            const figure = document.createElement('figure');
+            figure.innerHTML = `<img src="../concepts/v11/${product}-${variant}.svg" alt=""><figcaption>${product} ${variant}</figcaption>`;
+            panel.append(figure);
+          }
+        }
+        review.append(panel);
+      }
+    </script>
+  </body>
+</html>

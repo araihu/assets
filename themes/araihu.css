@@ -7,8 +7,14 @@
  */
 @layer base {
   [data-theme="araihu"] {
+    color-scheme: light;
     --font-body: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
     --font-title: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+
+    /* V11 inline SVG contract. External SVGs use their embedded scheme fallback. */
+    --araihu-logo-surface: var(--color-surface);
+    --araihu-logo-ink: var(--color-on-surface-strong);
+    --araihu-logo-signal: #c7ff4a;
 
     /* Daylight after rain: paper, deep blue, and a restrained acid-green signal. */
     --color-surface: #f3f2e9;
@@ -45,5 +51,13 @@
     --color-danger: #b42c46;
     --color-on-danger: #ffffff;
     --radius-radius: var(--radius-lg);
+  }
+
+  [data-theme="araihu"].dark,
+  .dark [data-theme="araihu"] {
+    color-scheme: dark;
+    --araihu-logo-surface: var(--color-surface-dark);
+    --araihu-logo-ink: var(--color-on-surface-dark-strong);
+    --araihu-logo-signal: var(--color-primary-dark);
   }
 }
