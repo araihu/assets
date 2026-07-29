@@ -41,6 +41,13 @@ named internal rails may still scroll.
 Final root Browser screenshots are retained at
 `review/screenshots/v0.1-proof-{375,768,1280,1440}.png`.
 
+| Screenshot | MIME | Dimensions | SHA-256 |
+|---|---|---:|---|
+| `v0.1-proof-375.png` | `image/png` | 375 x 900 | `5cb00d41139f4d97eed53e8ebe8f68f97cd536dd48f69e1852eef1cd1e5df28f` |
+| `v0.1-proof-768.png` | `image/png` | 768 x 900 | `5392f7c370aa36218ec7f1e604bf9014d4c0b365fdd6403d5f50a8818dccc510` |
+| `v0.1-proof-1280.png` | `image/png` | 1280 x 900 | `d634f0d7b1f266b84510a23294d7b50e805d9400396e21c56fe66e7c494ae538` |
+| `v0.1-proof-1440.png` | `image/png` | 1440 x 900 | `5ae99fab52a42705e60847f64aa8ad86d530395ace083ab3dcde9427b9247f6a` |
+
 ## Findings and disposition
 
 ### Asset geometry
