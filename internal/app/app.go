@@ -31,6 +31,9 @@ type Dependencies struct {
 	Rasterizer platform.Rasterizer
 }
 
+// exportAfterEnumerationHook is a test-only cancellation seam.
+var exportAfterEnumerationHook func()
+
 // UsageError describes invalid command or flag syntax. Callers map it to exit
 // status 2; all other errors are command execution failures.
 type UsageError struct{ message string }
@@ -201,17 +204,38 @@ func runExport(ctx context.Context, deps Dependencies, args []string, stdout, st
 	if err != nil {
 		return fmt.Errorf("export: inspect live dist: %w", err)
 	}
-	if err := os.MkdirAll(*output, 0o755); err != nil {
+	if exportAfterEnumerationHook != nil {
+		exportAfterEnumerationHook()
+	}
+	if err := contextError("export", ctx); err != nil {
+		return err
+	}
+	owned, err := createOutputRoot(ctx, *output)
+	if err != nil {
+		removeEmptyOwnedDirectories(owned)
 		return fmt.Errorf("export: create output root %q: %w", *output, err)
+	}
+	cleanupOwned := true
+	defer func() {
+		if cleanupOwned {
+			removeEmptyOwnedDirectories(owned)
+		}
+	}()
+	if err := contextError("export", ctx); err != nil {
+		return err
 	}
 	destination, err := os.OpenRoot(*output)
 	if err != nil {
 		return fmt.Errorf("export: open output root %q: %w", *output, err)
 	}
 	defer destination.Close()
+	if err := contextError("export", ctx); err != nil {
+		return err
+	}
 	if err := assetexport.CopyRootContext(ctx, source, paths, destination); err != nil {
 		return fmt.Errorf("export: copy live dist into output root %q: %w", *output, err)
 	}
+	cleanupOwned = false
 	fmt.Fprintf(stdout, "export: copied %d release files\n", len(paths))
 	return nil
 }
@@ -458,6 +482,44 @@ func rejectSymlinkComponents(root *os.Root, name string) error {
 		}
 	}
 	return nil
+}
+
+// createOutputRoot creates path one component at a time so cancellation can
+// remove only directories created by this invocation. A successful Mkdir is an
+// indivisible boundary; cleanup later removes it only while it remains empty.
+func createOutputRoot(ctx context.Context, output string) ([]string, error) {
+	absolute, err := filepath.Abs(output)
+	if err != nil {
+		return nil, fmt.Errorf("resolve output root: %w", err)
+	}
+	volume := filepath.VolumeName(absolute)
+	current := volume + string(filepath.Separator)
+	tail := strings.TrimPrefix(absolute, volume)
+	var owned []string
+	for _, component := range strings.Split(tail, string(filepath.Separator)) {
+		if component == "" {
+			continue
+		}
+		if err := ctx.Err(); err != nil {
+			return owned, err
+		}
+		current = filepath.Join(current, component)
+		if err := os.Mkdir(current, 0o755); err == nil {
+			owned = append(owned, current)
+		} else if !errors.Is(err, fs.ErrExist) {
+			return owned, err
+		}
+		if err := ctx.Err(); err != nil {
+			return owned, err
+		}
+	}
+	return owned, nil
+}
+
+func removeEmptyOwnedDirectories(owned []string) {
+	for index := len(owned) - 1; index >= 0; index-- {
+		_ = os.Remove(owned[index])
+	}
 }
 
 func newFlagSet(name string, stderr io.Writer, usage string) *flag.FlagSet {

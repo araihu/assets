@@ -3,6 +3,7 @@ package app
 import (
 	"bytes"
 	"context"
+	"errors"
 	"io"
 	"os"
 	"path/filepath"
@@ -86,6 +87,28 @@ func TestExportAndCatalogRejectSymlinkedDist(t *testing.T) {
 	}
 	if entries, err := os.ReadDir(output); err != nil || len(entries) != 0 {
 		t.Fatalf("export used outside dist: %v, %v", entries, err)
+	}
+}
+
+func TestExportCancellationAfterEnumerationLeavesNewOutputAbsent(t *testing.T) {
+	repo, outputParent := t.TempDir(), t.TempDir()
+	if err := os.Mkdir(filepath.Join(repo, "dist"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(repo, "dist", "release.txt"), []byte("release"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	output := filepath.Join(outputParent, "new-output")
+	ctx, cancel := context.WithCancel(context.Background())
+	exportAfterEnumerationHook = cancel
+	t.Cleanup(func() { exportAfterEnumerationHook = nil })
+
+	err := Run(ctx, Dependencies{Repo: repo}, []string{"export", "--output", output}, io.Discard, io.Discard)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("Run(export) error = %v, want context canceled", err)
+	}
+	if _, err := os.Lstat(output); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("cancelled export created output %q: %v", output, err)
 	}
 }
 
