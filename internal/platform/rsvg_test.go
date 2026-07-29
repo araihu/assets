@@ -119,7 +119,29 @@ func TestRSVGIntegrationPinnedBinary(t *testing.T) {
 	}
 }
 
+func TestIntegrationIconMappingUsesAdaptiveTransparentOptical(t *testing.T) {
+	generated := task4Brand(t)
+	icons := integrationIconsFromBrand(t, generated)
+	for index, product := range products {
+		transparent := generated.Files["dist/icons/brand/"+product+"-icon-adaptive-transparent-optical.svg"]
+		platedLauncher := generated.Files["dist/icons/brand/"+product+"-icon-adaptive-plate-launcher.svg"]
+		if !bytes.Equal(icons[index].AdaptiveSVG, transparent) {
+			t.Errorf("%s AdaptiveSVG does not select adaptive-transparent-optical", product)
+		}
+		if bytes.Equal(icons[index].AdaptiveSVG, platedLauncher) {
+			t.Errorf("%s AdaptiveSVG incorrectly selects adaptive-plate-launcher", product)
+		}
+		if !bytes.Equal(icons[index].LauncherSVG, generated.Files["dist/icons/brand/"+product+"-icon-tinted-plate-launcher.svg"]) {
+			t.Errorf("%s LauncherSVG must remain mask-safe plated launcher", product)
+		}
+	}
+}
+
 func integrationIcons(t *testing.T) []BrandIcon {
+	return integrationIconsFromBrand(t, task4Brand(t))
+}
+
+func task4Brand(t *testing.T) transform.Result {
 	t.Helper()
 	root := filepath.Join("..", "..")
 	brand, err := manifest.LoadBrand(os.DirFS(root), "manifests/brand.yaml")
@@ -130,6 +152,11 @@ func integrationIcons(t *testing.T) []BrandIcon {
 	if err != nil {
 		t.Fatalf("BuildBrand(): %v", err)
 	}
+	return generated
+}
+
+func integrationIconsFromBrand(t *testing.T, generated transform.Result) []BrandIcon {
+	t.Helper()
 	icons := make([]BrandIcon, 0, len(products))
 	for _, product := range products {
 		get := func(name string) []byte {
@@ -147,7 +174,7 @@ func integrationIcons(t *testing.T) []BrandIcon {
 			TintedSVG:     get("tinted-transparent-optical"),
 			GrayscaleSVG:  get("grayscale-transparent-optical"),
 			MonochromeSVG: get("monochrome-transparent-optical"),
-			AdaptiveSVG:   get("adaptive-plate-launcher"),
+			AdaptiveSVG:   get("adaptive-transparent-optical"),
 			LauncherSVG:   get("tinted-plate-launcher"),
 		})
 	}
