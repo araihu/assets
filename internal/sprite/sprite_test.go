@@ -89,6 +89,21 @@ func TestValidateRejectsUnsafeFullSpriteContracts(t *testing.T) {
 			svg:  []byte(`<svg xmlns="http://www.w3.org/2000/svg"><symbol id="one" viewBox="0 0 16 16" fill="url(#missing)"><path d="M0 0h1v1z"/></symbol></svg>` + "\n"),
 			want: "has no target",
 		},
+		{
+			name: "qualified symbol wrapper",
+			svg:  []byte(`<svg xmlns="http://www.w3.org/2000/svg"><evil:symbol id="one" viewBox="0 0 16 16"><path d="M0 0h1v1z"/></evil:symbol></svg>` + "\n"),
+			want: "symbol namespace",
+		},
+		{
+			name: "qualified symbol close",
+			svg:  []byte(`<svg xmlns="http://www.w3.org/2000/svg"><symbol id="one" viewBox="0 0 16 16"><path d="M0 0h1v1z"/></evil:symbol></svg>` + "\n"),
+			want: "symbol closes incorrectly",
+		},
+		{
+			name: "mismatched qualified symbol wrapper",
+			svg:  []byte(`<svg xmlns="http://www.w3.org/2000/svg"><evil:symbol id="one" viewBox="0 0 16 16"><path d="M0 0h1v1z"/></other:symbol></svg>` + "\n"),
+			want: "symbol namespace",
+		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			if err := Validate(tc.svg); err == nil || !strings.Contains(err.Error(), tc.want) {

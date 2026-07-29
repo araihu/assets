@@ -132,11 +132,14 @@ func Validate(data []byte) error {
 			}
 			switch depth {
 			case 0:
-				if token.Name.Local != "svg" {
+				if token.Name != (xml.Name{Local: "svg"}) {
 					return errors.New("sprite root is not svg")
 				}
 				depth = 1
 			case 1:
+				if token.Name.Space != "" {
+					return fmt.Errorf("sprite symbol namespace %q is forbidden", token.Name.Space)
+				}
 				if token.Name.Local != "symbol" {
 					return fmt.Errorf("sprite root child %q is not symbol", token.Name.Local)
 				}
@@ -149,7 +152,7 @@ func Validate(data []byte) error {
 				}
 				ids[id] = struct{}{}
 				collectReferences(&references, presentation)
-				symbol = &symbolState{viewBox: viewBox, presentation: presentation}
+				symbol = &symbolState{name: token.Name, viewBox: viewBox, presentation: presentation}
 				symbol.encoder = xml.NewEncoder(&symbol.body)
 				depth = 2
 			default:
@@ -167,12 +170,12 @@ func Validate(data []byte) error {
 			case depth == 0:
 				return errors.New("sprite has unexpected closing element")
 			case depth == 1:
-				if token.Name.Local != "svg" {
+				if token.Name != (xml.Name{Local: "svg"}) {
 					return errors.New("sprite root closes incorrectly")
 				}
 				depth, closed = 0, true
 			case depth == 2:
-				if token.Name.Local != "symbol" || symbol == nil {
+				if symbol == nil || token.Name.Space != "" || token.Name != symbol.name {
 					return errors.New("sprite symbol closes incorrectly")
 				}
 				if err := validateSymbol(symbol); err != nil {
@@ -226,6 +229,7 @@ func Validate(data []byte) error {
 }
 
 type symbolState struct {
+	name         xml.Name
 	viewBox      string
 	presentation []xml.Attr
 	body         bytes.Buffer
