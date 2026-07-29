@@ -68,6 +68,7 @@ func Parse(input []byte) (Document, error) {
 	var root *node
 	stack := make([]*node, 0, 8)
 	ids := make(map[string]struct{})
+	references := make([]string, 0, 4)
 	seenRoot := false
 	closedRoot := false
 	for {
@@ -105,7 +106,7 @@ func Parse(input []byte) (Document, error) {
 				return Document{}, err
 			}
 
-			current, err := newNode(token, len(stack) == 0, ids)
+			current, err := newNode(token, len(stack) == 0, ids, &references)
 			if err != nil {
 				return Document{}, err
 			}
@@ -132,6 +133,11 @@ func Parse(input []byte) (Document, error) {
 	}
 	if err := validateRoot(*root); err != nil {
 		return Document{}, err
+	}
+	for _, reference := range references {
+		if _, found := ids[reference]; !found {
+			return Document{}, fmt.Errorf("SVG local reference %q has no target", reference)
+		}
 	}
 	return Document{root: *root}, nil
 }
@@ -167,7 +173,7 @@ func validateElementName(name string) error {
 	return nil
 }
 
-func newNode(element xml.StartElement, isRoot bool, ids map[string]struct{}) (*node, error) {
+func newNode(element xml.StartElement, isRoot bool, ids map[string]struct{}, references *[]string) (*node, error) {
 	if !isRoot {
 		if err := validateElementName(element.Name.Local); err != nil {
 			return nil, err
@@ -176,6 +182,12 @@ func newNode(element xml.StartElement, isRoot bool, ids map[string]struct{}) (*n
 	n := &node{name: element.Name.Local, attrs: make([]attribute, 0, len(element.Attr))}
 	seenAttrs := make(map[string]struct{}, len(element.Attr))
 	for _, raw := range element.Attr {
+		if raw.Name.Space == "xmlns" {
+			if !isRoot || raw.Name.Local != "xlink" || raw.Value != "http://www.w3.org/1999/xlink" {
+				return nil, fmt.Errorf("SVG namespace declaration %q is forbidden", raw.Name.Local)
+			}
+			continue
+		}
 		if raw.Name.Space != "" && raw.Name.Space != "http://www.w3.org/1999/xlink" {
 			return nil, fmt.Errorf("SVG attribute namespace %q is forbidden", raw.Name.Space)
 		}
@@ -208,6 +220,9 @@ func newNode(element xml.StartElement, isRoot bool, ids map[string]struct{}) (*n
 		if err := validateAttributeValue(lower, raw.Value); err != nil {
 			return nil, err
 		}
+		if reference, ok := localReference(lower, raw.Value); ok {
+			*references = append(*references, reference)
+		}
 		n.attrs = append(n.attrs, attribute{name: canonicalName, value: raw.Value})
 	}
 	return n, nil
@@ -239,6 +254,19 @@ func isLocalURLReference(value string) bool {
 		return false
 	}
 	return identifier.MatchString(strings.TrimSuffix(strings.TrimPrefix(value, "url(#"), ")"))
+}
+
+func localReference(name, value string) (string, bool) {
+	trimmed := strings.TrimSpace(value)
+	if name == "href" || name == "src" {
+		return strings.TrimPrefix(trimmed, "#"), strings.HasPrefix(trimmed, "#")
+	}
+	lower := strings.ToLower(trimmed)
+	if !isLocalURLReference(lower) {
+		return "", false
+	}
+	open := strings.IndexByte(trimmed, '(')
+	return trimmed[open+2 : len(trimmed)-1], true
 }
 
 func validateRoot(root node) error {

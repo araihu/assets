@@ -43,9 +43,10 @@ make verify    # rebuild offline and compare with dist/
 make check     # test, then reject generated-output drift
 ```
 
-`make proof-check` is unavailable in this core RC: its retired V11 inputs are
-not part of managed `dist/`. P1 replaces it with catalog-driven `dist/proof`
-validation before final archive verification.
+The legacy `make proof-check` target remains for retired V11 diagnostics, but
+intentionally does not pass in this core RC because its inputs are not part of
+managed `dist/`. P1 replaces it with catalog-driven `dist/proof` validation
+before final archive verification.
 
 ## CLI
 

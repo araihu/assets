@@ -36,12 +36,17 @@ func TestRunFailurePreservesPublishedDist(t *testing.T) {
 }
 
 func TestRunRejectsUnsafeGeneratedSVG(t *testing.T) {
-	repo := testRepo(t)
-	inputs := testInputs([]byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`))
-	inputs.Brand.Files["dist/icons/brand/asset.svg"] = []byte(`<svg viewBox="0 0 1 1"><script/></svg>`)
-	inputs.Brand.Assets[0].SHA256 = hash(inputs.Brand.Files["dist/icons/brand/asset.svg"])
-	if err := Run(repo, inputs); err == nil || !strings.Contains(err.Error(), "validate generated SVG") {
-		t.Fatalf("Run() error = %v, want generated SVG validation failure", err)
+	for _, generated := range [][]byte{
+		[]byte(`<svg viewBox="0 0 1 1"><script/></svg>`),
+		[]byte(`<svg viewBox="0 0 1 1"><use href="#missing"/></svg>`),
+	} {
+		repo := testRepo(t)
+		inputs := testInputs([]byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`))
+		inputs.Brand.Files["dist/icons/brand/asset.svg"] = generated
+		inputs.Brand.Assets[0].SHA256 = hash(generated)
+		if err := Run(repo, inputs); err == nil || !strings.Contains(err.Error(), "validate generated SVG") {
+			t.Fatalf("Run() error = %v, want generated SVG validation failure", err)
+		}
 	}
 }
 

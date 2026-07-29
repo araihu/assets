@@ -57,6 +57,45 @@ func TestParseGeneratedPermitsOnlyAdaptiveGeneratorStyle(t *testing.T) {
 	}
 }
 
+func TestParseResolvesLocalReferencesAfterFullDocument(t *testing.T) {
+	for _, tc := range []struct {
+		name  string
+		input string
+		valid bool
+	}{
+		{
+			name:  "forward href and xlink href",
+			input: `<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16"><use href="#later"/><use xlink:href="#later"/><path id="later" d="M0 0h1v1z"/></svg>`,
+			valid: true,
+		},
+		{
+			name:  "forward paint filter clip and mask URLs",
+			input: `<svg viewBox="0 0 16 16"><path fill="url(#paint)" filter="URL(#filter)" clip-path="url(#clip)" mask="url(#mask)" d="M0 0h1v1z"/><defs><linearGradient id="paint"><stop offset="0"/></linearGradient><linearGradient id="filter"><stop offset="0"/></linearGradient><clipPath id="clip"><path d="M0 0h1v1z"/></clipPath><mask id="mask"><path d="M0 0h1v1z"/></mask></defs></svg>`,
+			valid: true,
+		},
+		{
+			name:  "missing href target",
+			input: `<svg viewBox="0 0 16 16"><use href="#missing"/></svg>`,
+			valid: false,
+		},
+		{
+			name:  "missing URL target",
+			input: `<svg viewBox="0 0 16 16"><path fill="url(#missing)" d="M0 0h1v1z"/></svg>`,
+			valid: false,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := Parse([]byte(tc.input))
+			if tc.valid && err != nil {
+				t.Fatalf("Parse() error = %v", err)
+			}
+			if !tc.valid && (err == nil || !strings.Contains(err.Error(), "has no target")) {
+				t.Fatalf("Parse() error = %v, want unresolved reference", err)
+			}
+		})
+	}
+}
+
 func TestNormalizeMaintainsPaintRoles(t *testing.T) {
 	tests := []struct {
 		name  string
