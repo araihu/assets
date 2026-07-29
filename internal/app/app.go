@@ -259,6 +259,8 @@ func runExport(ctx context.Context, deps Dependencies, args []string, stdout, st
 	defer func() {
 		if cleanupOwned {
 			removeEmptyOwnedDirectories(owned)
+		} else {
+			closeOwnedDirectories(owned)
 		}
 	}()
 	if err := contextError("export", ctx); err != nil {
@@ -525,8 +527,9 @@ func rejectSymlinkComponents(root *os.Root, name string) error {
 }
 
 type ownedDirectory struct {
-	path string
-	info fs.FileInfo
+	path   string
+	info   fs.FileInfo
+	handle *os.File
 }
 
 // createOutputRoot creates path one component at a time so cancellation can
@@ -550,14 +553,20 @@ func createOutputRoot(ctx context.Context, output string) ([]ownedDirectory, err
 		}
 		current = filepath.Join(current, component)
 		if err := os.Mkdir(current, 0o755); err == nil {
-			info, err := os.Lstat(current)
+			handle, err := os.Open(current)
 			if err != nil {
 				return owned, err
 			}
+			info, err := handle.Stat()
+			if err != nil {
+				_ = handle.Close()
+				return owned, err
+			}
 			if !info.IsDir() {
+				_ = handle.Close()
 				return owned, fmt.Errorf("created output component %q is not a directory", current)
 			}
-			owned = append(owned, ownedDirectory{path: current, info: info})
+			owned = append(owned, ownedDirectory{path: current, info: info, handle: handle})
 		} else if !errors.Is(err, fs.ErrExist) {
 			return owned, err
 		}
@@ -576,10 +585,22 @@ func createOutputRoot(ctx context.Context, output string) ([]ownedDirectory, err
 func removeEmptyOwnedDirectories(owned []ownedDirectory) {
 	for index := len(owned) - 1; index >= 0; index-- {
 		current, err := os.Lstat(owned[index].path)
-		if err != nil || !current.IsDir() || !os.SameFile(current, owned[index].info) {
+		matches := err == nil && current.IsDir() && os.SameFile(current, owned[index].info)
+		if owned[index].handle != nil {
+			_ = owned[index].handle.Close()
+		}
+		if !matches {
 			continue
 		}
 		_ = os.Remove(owned[index].path)
+	}
+}
+
+func closeOwnedDirectories(owned []ownedDirectory) {
+	for _, directory := range owned {
+		if directory.handle != nil {
+			_ = directory.handle.Close()
+		}
 	}
 }
 
