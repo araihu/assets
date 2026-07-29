@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 508" role="img" aria-labelledby="title desc" class="araihu-brand-v11">
-  <title id="title">Manja v11 logo</title>
-  <desc id="desc">Adaptive Manja logo on a transparent surface; colors respond to light and dark themes.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="304.217 91.472 1440.066 325.893" role="img" aria-label="Manja v11 logo" class="araihu-brand-v11">
+  <title>Manja v11 logo</title>
+  <desc>Adaptive Manja logo on a transparent surface; colors respond to light and dark themes.</desc>
   <style>.v11-surface {
   fill: var(--araihu-logo-surface, var(--araihu-logo-auto-surface, #f3f2e9));
 }

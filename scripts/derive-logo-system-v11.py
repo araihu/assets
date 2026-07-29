@@ -27,6 +27,24 @@ KINDS = ("icon", "logo")
 MODES = ("background", "transparent")
 HEX = re.compile(r"^#([0-9a-fA-F]{6})$")
 
+# Optical canvases measured from the approved transparent Recraft exports in a
+# browser SVG renderer. Path geometry stays untouched: these viewBoxes only
+# normalize how much of an <img> box each sign occupies. Icons use a square
+# canvas with the dominant art dimension at 76%; logos carry 8% art-relative
+# padding on every side. Background variants retain their full safe canvas.
+OPTICAL_VIEWBOXES = {
+    ("araihu", "icon"): "262.510 263.185 498.904 498.904",
+    ("goshtoso", "icon"): "237.162 237.080 550.558 550.558",
+    ("manja", "icon"): "167.325 123.377 776.662 776.662",
+    ("paje", "icon"): "154.532 155.566 715.652 715.652",
+    ("x9", "icon"): "69.210 69.362 885.279 885.279",
+    ("araihu", "logo"): "156.655 88.812 1781.202 330.139",
+    ("goshtoso", "logo"): "133.328 88.739 1801.022 330.718",
+    ("manja", "logo"): "304.217 91.472 1440.066 325.893",
+    ("paje", "logo"): "525.286 99.476 985.121 332.227",
+    ("x9", "logo"): "209.911 48.626 1620.856 410.636",
+}
+
 STYLE = """.v11-surface {
   fill: var(--araihu-logo-surface, var(--araihu-logo-auto-surface, #f3f2e9));
 }
@@ -80,6 +98,13 @@ def semanticize_colors(root: ET.Element, source: Path) -> None:
             element.set("class", " ".join(existing))
             element.attrib.pop(attribute)
 
+    # SVG's implicit fill is black. Make that role explicit so every geometry
+    # element responds to the same consumer theme contract.
+    geometry_tags = {"path", "rect", "circle", "ellipse", "polygon", "polyline"}
+    for element in root.iter():
+        if element.tag.rsplit("}", 1)[-1] in geometry_tags and not element.get("class"):
+            element.set("class", "v11-ink")
+
 
 def build_asset(product: str, name: str, kind: str, mode: str) -> str:
     source = SOURCE / f"{product}-{kind}-{mode}.svg"
@@ -89,15 +114,20 @@ def build_asset(product: str, name: str, kind: str, mode: str) -> str:
     root = ET.parse(source).getroot()
     root.attrib.pop("width", None)
     root.attrib.pop("height", None)
+    if mode == "transparent":
+        root.set("viewBox", OPTICAL_VIEWBOXES[(product, kind)])
     root.set("role", "img")
-    root.set("aria-labelledby", "title desc")
+    root.set("aria-label", f"{name} v11 {kind}")
     root.set("class", "araihu-brand-v11")
 
     semanticize_colors(root, source)
 
-    title = ET.Element(q("title"), {"id": "title"})
+    # Keep inline copies collision-free. Static title/desc IDs collide as soon
+    # as the same asset is embedded twice in one document, so the accessible
+    # name lives on the SVG root instead.
+    title = ET.Element(q("title"))
     title.text = f"{name} v11 {kind}"
-    desc = ET.Element(q("desc"), {"id": "desc"})
+    desc = ET.Element(q("desc"))
     surface = "with an adaptive surface" if mode == "background" else "on a transparent surface"
     desc.text = f"Adaptive {name} {kind} {surface}; colors respond to light and dark themes."
     style = ET.Element(q("style"))
@@ -119,7 +149,7 @@ def expected_assets() -> dict[Path, str]:
     }
 
 
-def geometry_signature(path: Path) -> tuple[str | None, tuple[tuple[str, tuple[tuple[str, str], ...]], ...]]:
+def geometry_signature(path: Path) -> tuple[tuple[str, tuple[tuple[str, str], ...]], ...]:
     root = ET.parse(path).getroot()
     geometry = []
     for element in root.iter():
@@ -134,7 +164,7 @@ def geometry_signature(path: Path) -> tuple[str | None, tuple[tuple[str, tuple[t
             )
         )
         geometry.append((tag, attributes))
-    return root.get("viewBox"), tuple(geometry)
+    return tuple(geometry)
 
 
 def main() -> int:

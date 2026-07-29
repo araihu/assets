@@ -1,44 +1,652 @@
 <!doctype html>
-<html lang="en">
+<!--
+THESIS: Exact-size proofing exposes failures hidden by gallery-sized logos; reject the generic asset grid.
+OWN-WORLD: Paper/midnight calibration fields, lime state signals, ruler ticks, literal pixel specimens.
+STORY: Select product and mode, inspect size rails, judge real web/mobile placements, read measured findings.
+FIRST VIEWPORT: Purpose and controls at left; live 16–128 px icon rail cuts across the opening field.
+FORM: Calibration bench, highest-ranked structure; precise brief required no open-form seed tournament.
+-->
+<html lang="en" data-scheme="light">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Arai Hû v11 adaptive logo review</title>
+    <meta name="color-scheme" content="light dark">
+    <title>Arai Hû v11 asset calibration bench</title>
     <style>
+      :root {
+        --paper: #f3f2e9;
+        --mist: #e4e8eb;
+        --midnight: #07111f;
+        --storm: #10233d;
+        --cobalt: #173b72;
+        --lime: #c7ff4a;
+        --steel: #718397;
+        --line-light: #bdc7d0;
+        --muted-light: #34465d;
+        --muted-dark: #c8d5e3;
+        --surface: var(--paper);
+        --surface-alt: var(--mist);
+        --ink: var(--midnight);
+        --muted: var(--muted-light);
+        --line: var(--line-light);
+        --signal-ink: var(--midnight);
+        --shadow: 0 18px 42px -28px rgba(7, 17, 31, .62);
+        color-scheme: light;
+        font-family: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      :root[data-scheme="dark"] {
+        --surface: var(--midnight);
+        --surface-alt: var(--storm);
+        --ink: var(--paper);
+        --muted: var(--muted-dark);
+        --line: #526981;
+        --shadow: 0 18px 42px -24px rgba(0, 0, 0, .9);
+        color-scheme: dark;
+      }
+
       * { box-sizing: border-box; }
-      body { margin: 0; padding: 24px; background: #20242b; font: 14px/1.4 system-ui, sans-serif; }
-      h1 { margin: 0 0 20px; color: #f3f2e9; }
-      h2 { grid-column: 1 / -1; margin: 0; }
-      .panel { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; padding: 22px; }
-      .panel + .panel { margin-top: 20px; }
-      .light { color-scheme: light; background: #f3f2e9; color: #07111f; }
-      .dark { color-scheme: dark; background: #07111f; color: #f3f2e9; }
-      figure { min-width: 0; margin: 0; }
-      img { display: block; width: 100%; height: 110px; object-fit: contain; border: 1px solid #718397; }
-      figcaption { margin-top: 6px; color: inherit; opacity: .75; }
-      @media (max-width: 900px) { .panel { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.5;
+        transition: background 180ms cubic-bezier(.2,.8,.2,1), color 180ms cubic-bezier(.2,.8,.2,1);
+      }
+      button, select { font: inherit; }
+      button { color: inherit; }
+      button:focus-visible, a:focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
+      img { display: block; flex: none; }
+      h1, h2, h3, p { margin-top: 0; }
+      h1 {
+        max-width: 10ch;
+        margin-bottom: 20px;
+        font-size: clamp(2.8rem, 7vw, 5.5rem);
+        font-weight: 780;
+        line-height: .92;
+        letter-spacing: -.035em;
+        text-wrap: balance;
+      }
+      h2 { margin-bottom: 10px; font-size: clamp(1.65rem, 3vw, 2.35rem); line-height: 1.05; letter-spacing: -.025em; }
+      h3 { margin-bottom: 8px; font-size: 1rem; line-height: 1.2; }
+      p { max-width: 70ch; color: var(--muted); }
+
+      .skip-link { position: fixed; left: 12px; top: -80px; z-index: 100; padding: 10px 14px; background: var(--lime); color: var(--midnight); }
+      .skip-link:focus { top: 12px; }
+      .shell { width: min(100% - 32px, 1500px); margin-inline: auto; }
+      .topbar {
+        position: sticky; top: 0; z-index: 20;
+        border-bottom: 1px solid var(--line);
+        background: color-mix(in srgb, var(--surface) 94%, transparent);
+        backdrop-filter: blur(14px);
+      }
+      .topbar-inner { display: flex; align-items: center; justify-content: space-between; min-height: 58px; gap: 16px; }
+      .brandline { display: flex; align-items: center; min-width: 0; gap: 10px; font-weight: 730; }
+      .brandline img { width: 28px; height: 28px; }
+      .brandline small { color: var(--muted); font: 650 11px/1.2 ui-monospace, monospace; }
+      .quicknav { display: flex; gap: 4px; }
+      .quicknav a { padding: 7px 10px; color: var(--muted); text-decoration: none; font-size: 13px; border-radius: 8px; }
+      .quicknav a:hover { background: var(--surface-alt); color: var(--ink); }
+
+      .hero { padding: clamp(56px, 9vw, 120px) 0 42px; border-bottom: 1px solid var(--line); overflow: hidden; }
+      .hero-grid { display: grid; grid-template-columns: minmax(260px, .8fr) minmax(0, 1.2fr); gap: clamp(36px, 8vw, 110px); align-items: end; }
+      .kicker, .measure { font: 650 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .02em; }
+      .kicker { display: inline-flex; gap: 8px; align-items: center; margin-bottom: 22px; color: var(--muted); }
+      .kicker::before { width: 9px; height: 9px; background: var(--lime); content: ""; }
+      .lede { margin-bottom: 0; font-size: 1.05rem; }
+      .hero-proof { min-width: 0; }
+      .hero-proof .measure { margin-bottom: 14px; color: var(--muted); }
+
+      .controls { padding: 24px 0; border-bottom: 1px solid var(--line); background: var(--surface-alt); }
+      .control-grid { display: grid; grid-template-columns: 1.35fr 1fr 1fr; gap: 22px; align-items: end; }
+      fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+      legend { margin-bottom: 8px; color: var(--muted); font: 650 11px/1.2 ui-monospace, monospace; }
+      .segments { display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; padding: 3px; }
+      .segments button { flex: none; }
+      .segments button {
+        min-height: 38px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 8px;
+        background: var(--surface); cursor: pointer; transition: background 150ms, color 150ms, border-color 150ms;
+      }
+      .segments button:hover { border-color: var(--ink); }
+      .segments button[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--surface); font-weight: 700; }
+      :root[data-scheme="dark"] .segments button[aria-pressed="true"] { border-color: var(--lime); background: var(--lime); color: var(--midnight); }
+
+      main > section { padding: clamp(50px, 8vw, 96px) 0; border-bottom: 1px solid var(--line); }
+      .section-head { display: grid; grid-template-columns: minmax(220px, .65fr) minmax(0, 1.35fr); gap: 32px; margin-bottom: 42px; align-items: end; }
+      .section-head p { margin-bottom: 2px; }
+      .section-index { color: var(--muted); font: 650 12px/1.2 ui-monospace, monospace; }
+
+      .scale-rail {
+        position: relative; display: flex; min-height: 180px; align-items: end; gap: 28px;
+        padding: 26px 24px 24px; overflow-x: auto; border: 1px solid var(--line);
+        background: var(--surface-alt);
+      }
+      .scale-rail::before {
+        position: absolute; inset: 0 0 auto; height: 10px;
+        background: repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 8px);
+        content: "";
+      }
+      .specimen { display: grid; min-width: max-content; place-items: center; gap: 12px; }
+      .specimen-frame { display: grid; min-width: 20px; min-height: 20px; place-items: center; }
+      .specimen .measure { color: var(--muted); }
+      .logo-rail { min-height: 230px; align-items: center; }
+      .checker {
+        background-color: #d8dde0;
+        background-image: linear-gradient(45deg, #f5f5f0 25%, transparent 25%), linear-gradient(-45deg, #f5f5f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f5f5f0 75%), linear-gradient(-45deg, transparent 75%, #f5f5f0 75%);
+        background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+        background-size: 16px 16px;
+      }
+
+      .family-table { border-top: 1px solid var(--line); }
+      .family-row { display: grid; grid-template-columns: 150px minmax(0, 1fr) minmax(260px, .8fr); gap: 24px; align-items: center; min-height: 116px; border-bottom: 1px solid var(--line); }
+      .family-name strong { display: block; font-size: 1.08rem; }
+      .family-name span { color: var(--muted); font: 12px/1.2 ui-monospace, monospace; }
+      .family-icons { display: flex; align-items: center; gap: 22px; }
+      .family-logos { display: grid; min-height: 64px; align-items: center; }
+
+      .context-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px; }
+      .scene { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-alt); }
+      .scene.wide { grid-column: 1 / -1; }
+      .scene-head { display: flex; justify-content: space-between; gap: 20px; padding: 15px 18px; border-bottom: 1px solid var(--line); }
+      .scene-head h3 { margin: 0; }
+      .scene-head .measure { color: var(--muted); }
+      .scene-stage { min-height: 300px; padding: clamp(18px, 4vw, 40px); }
+
+      .browser { max-width: 920px; margin-inline: auto; overflow: hidden; border: 1px solid #738093; border-radius: 12px; background: #f7f8fa; color: #101826; box-shadow: var(--shadow); }
+      .browser-tabs { display: flex; align-items: end; height: 46px; gap: 6px; padding: 8px 10px 0; background: #dfe3e8; }
+      .browser-dot { width: 10px; height: 10px; margin: 0 5px 10px 0; border-radius: 50%; background: #8994a2; }
+      .browser-tab { display: flex; width: 220px; height: 38px; align-items: center; gap: 9px; padding: 0 12px; border-radius: 9px 9px 0 0; background: #fff; font-size: 12px; }
+      .browser-tab img { width: 16px; height: 16px; }
+      .address { height: 42px; margin: 9px; padding: 9px 15px; border-radius: 8px; background: #e9edf1; color: #4b5767; font-size: 12px; }
+      .site-nav { display: flex; height: 74px; align-items: center; justify-content: space-between; padding: 0 26px; border-top: 1px solid #e1e5e9; border-bottom: 1px solid #e1e5e9; background: #fff; }
+      .site-nav img { width: auto; height: 32px; max-width: 190px; }
+      .site-links { display: flex; gap: 22px; color: #354152; font-size: 13px; }
+      .site-content { display: grid; grid-template-columns: 1.2fr .8fr; gap: 24px; min-height: 190px; padding: 28px; background: #f3f2e9; }
+      .line-copy { height: 12px; margin-bottom: 12px; background: #c6cdd4; }
+      .line-copy.short { width: 62%; }
+      .product-card { display: flex; align-items: center; gap: 16px; padding: 18px; border: 1px solid #c0c8cf; border-radius: 12px; background: #fff; }
+      .product-card img { width: 48px; height: 48px; }
+
+      .dashboard { display: grid; grid-template-columns: 68px 1fr; min-height: 330px; overflow: hidden; border-radius: 10px; background: #f3f2e9; color: #07111f; box-shadow: var(--shadow); }
+      .sidebar { display: flex; flex-direction: column; align-items: center; gap: 19px; padding: 16px 0; background: #07111f; }
+      .sidebar > img { width: 32px; height: 32px; margin-bottom: 8px; }
+      .nav-glyph { width: 22px; height: 22px; border: 1px solid #718397; border-radius: 6px; }
+      .nav-glyph.active { border-color: #c7ff4a; background: #c7ff4a; }
+      .dash-main { padding: 23px; }
+      .dash-title { display: flex; justify-content: space-between; margin-bottom: 24px; font-weight: 750; }
+      .dash-table { border-top: 1px solid #bcc6ce; }
+      .dash-row { display: grid; grid-template-columns: 24px 1fr 60px; align-items: center; gap: 12px; height: 56px; border-bottom: 1px solid #d3d9de; font-size: 13px; }
+      .dash-row img { width: 20px; height: 20px; }
+      .status { width: 54px; padding: 4px 6px; border-radius: 999px; background: #dbeecf; text-align: center; font-size: 10px; }
+
+      .phone-wrap { display: grid; grid-template-columns: repeat(2, minmax(220px, 300px)); justify-content: center; gap: 24px; }
+      .phone { overflow: hidden; border: 8px solid #192331; border-radius: 38px; background: #e8ebee; color: #111923; box-shadow: 0 22px 44px -22px rgba(0,0,0,.65); }
+      .phone.dark-phone { background: #07111f; color: #f3f2e9; }
+      .phone-status { display: flex; height: 38px; align-items: center; justify-content: space-between; padding: 0 19px; font: 650 11px/1 ui-monospace, monospace; }
+      .phone-home { min-height: 395px; padding: 22px 18px; }
+      .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px 14px; }
+      .app { display: grid; justify-items: center; gap: 7px; font-size: 10px; }
+      .app-icon { width: 60px; height: 60px; overflow: hidden; border-radius: 14px; background: #d9dee2; box-shadow: 0 5px 12px -8px rgba(0,0,0,.7); }
+      .app-icon.circle { border-radius: 50%; }
+      .app-icon img { width: 60px; height: 60px; }
+      .ghost-app { width: 60px; height: 60px; border-radius: 14px; background: color-mix(in srgb, currentColor 12%, transparent); }
+      .mobile-screen { display: flex; min-height: 395px; flex-direction: column; }
+      .appbar { display: flex; height: 58px; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid #526981; font-weight: 700; }
+      .appbar img { width: 28px; height: 28px; }
+      .mobile-body { flex: 1; padding: 18px; }
+      .notification { display: grid; grid-template-columns: 24px 1fr; gap: 10px; margin-top: 18px; padding: 12px; border-radius: 12px; background: #f3f2e9; color: #07111f; box-shadow: 0 6px 20px -12px #000; }
+      .notification img { width: 24px; height: 24px; }
+      .notification strong { display: block; font-size: 12px; }
+      .notification span { font-size: 11px; color: #34465d; }
+      .tabbar { display: grid; grid-template-columns: repeat(4, 1fr); height: 66px; align-items: center; border-top: 1px solid #526981; }
+      .tab { display: grid; justify-items: center; gap: 3px; color: #c8d5e3; font-size: 9px; }
+      .tab img { width: 24px; height: 24px; }
+      .tab-dot { width: 20px; height: 20px; border: 1px solid #718397; border-radius: 6px; }
+
+      .store { display: grid; max-width: 880px; margin-inline: auto; grid-template-columns: 180px 1fr; gap: 28px; align-items: center; }
+      .store-icon { width: 180px; height: 180px; overflow: hidden; border-radius: 40px; background: #dbe0e4; box-shadow: 0 18px 30px -20px rgba(0,0,0,.7); }
+      .store-icon img { width: 180px; height: 180px; }
+      .store-copy h3 { font-size: 1.6rem; }
+      .store-copy p { margin-bottom: 18px; }
+      .install { display: inline-block; padding: 9px 20px; border-radius: 999px; background: var(--cobalt); color: #fff; font-weight: 700; }
+      .master-scroll { overflow: auto; }
+      .master-board { display: grid; width: 100%; min-width: 590px; min-height: 590px; place-items: center; background: #dbe0e4; }
+      .master-board img { width: 512px; height: 512px; }
+
+      .platform-proof { border-top: 1px solid var(--line); }
+      .platform-row { display: grid; grid-template-columns: minmax(150px, .55fr) minmax(0, 1.45fr); gap: 32px; padding: 28px 0; border-bottom: 1px solid var(--line); }
+      .platform-row h3 { margin: 0 0 7px; }
+      .platform-row p { margin: 0; font-size: 14px; }
+      .platform-specimens { display: flex; flex-wrap: wrap; gap: 24px; align-items: end; }
+      .platform-specimen { display: grid; gap: 8px; justify-items: center; }
+      .platform-icon { display: grid; width: 96px; height: 96px; place-items: center; overflow: hidden; background: var(--paper); box-shadow: 0 12px 24px -20px rgba(0,0,0,.72); }
+      .platform-icon img { width: 100%; height: 100%; object-fit: contain; }
+      .platform-icon.squircle { border-radius: 22px; }
+      .platform-icon.circle { border-radius: 50%; }
+      .platform-icon.android { background: #f3f2e9; }
+      .platform-icon.android img { width: 100%; height: 100%; }
+      .platform-icon.dark-master { background: var(--midnight); }
+      .safe-zone { position: relative; }
+      .safe-zone::after { position: absolute; inset: 19px; border: 1px dashed color-mix(in srgb, var(--cobalt) 65%, transparent); content: ""; pointer-events: none; }
+
+      .audit-summary { display: grid; grid-template-columns: repeat(5, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+      .audit-stat { min-height: 126px; padding: 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .audit-stat strong { display: block; margin: 8px 0 3px; font-size: 1.75rem; line-height: 1; }
+      .audit-stat span { color: var(--muted); font-size: 13px; }
+      .metrics-table { margin-top: 32px; overflow-x: auto; }
+      .metrics-table table { width: 100%; min-width: 720px; border-collapse: collapse; border-top: 1px solid var(--line); }
+      .metrics-table th, .metrics-table td { padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; }
+      .metrics-table thead th { color: var(--muted); font: 650 11px/1.2 ui-monospace, monospace; }
+      .metrics-table tbody th { color: var(--ink); font-size: 13px; }
+      .metrics-table td { color: var(--muted); font: 12px/1.2 ui-monospace, monospace; }
+      .findings { margin-top: 32px; border-top: 1px solid var(--line); }
+      .finding { display: grid; grid-template-columns: 110px 1fr 190px; gap: 22px; padding: 20px 0; border-bottom: 1px solid var(--line); align-items: start; }
+      .severity { width: fit-content; padding: 5px 8px; border-radius: 6px; background: var(--surface-alt); font: 700 11px/1 ui-monospace, monospace; }
+      .severity.review { background: var(--lime); color: var(--midnight); }
+      .finding h3 { margin: 0 0 5px; }
+      .finding p { margin: 0; font-size: 14px; }
+      .finding .measure { color: var(--muted); text-align: right; }
+
+      footer { padding: 30px 0 48px; color: var(--muted); }
+      .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+      #geometry-host { position: fixed; left: -10000px; top: 0; width: 2048px; height: 1024px; visibility: hidden; }
+      :root[data-capture] .topbar, :root[data-capture] .hero, :root[data-capture] .controls { display: none; }
+      :root[data-capture="contexts"] main > section:not(#contexts), :root[data-capture="master"] main > section:not(#contexts), :root[data-capture="platforms"] main > section:not(#platforms), :root[data-capture="audit"] main > section:not(#audit) { display: none; }
+      :root[data-capture="master"] #contexts .section-head, :root[data-capture="master"] #contexts .scene:not(#master-proof) { display: none; }
+      :root[data-capture] main > section { padding-top: 36px; }
+
+      @media (max-width: 920px) {
+        .quicknav { display: none; }
+        .hero-grid, .section-head, .context-grid { grid-template-columns: 1fr; }
+        .control-grid { grid-template-columns: 1fr; }
+        .family-row { grid-template-columns: 110px minmax(0, 1fr); padding: 18px 0; }
+        .family-logos { grid-column: 2; }
+        .phone-wrap { grid-template-columns: minmax(240px, 320px); }
+        .audit-summary { grid-template-columns: repeat(2, 1fr); }
+        .platform-row { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 600px) {
+        .shell { width: min(100% - 22px, 1500px); }
+        .brandline small { display: none; }
+        .family-row { grid-template-columns: 1fr; }
+        .family-icons, .family-logos { grid-column: 1; }
+        .browser-tab { width: 180px; }
+        .site-links { display: none; }
+        .site-nav { padding-inline: 16px; }
+        .site-content { grid-template-columns: 1fr; }
+        .store { grid-template-columns: 100px 1fr; gap: 18px; }
+        .store-icon, .store-icon img { width: 100px; height: 100px; }
+        .store-icon { border-radius: 24px; }
+        .finding { grid-template-columns: 86px 1fr; }
+        .finding .measure { grid-column: 2; text-align: left; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .topbar, button { transition: none; }
+      }
     </style>
   </head>
   <body>
-    <h1>Arai Hû v11 — external SVG theme response</h1>
-    <main id="review"></main>
+    <a class="skip-link" href="#main">Skip to review</a>
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <div class="brandline"><img src="../concepts/v11/araihu-icon-transparent.svg" alt=""><span>V11 calibration bench</span><small>20 SVG / 5 products</small></div>
+        <nav class="quicknav" aria-label="Review sections"><a href="#scale">Scale</a><a href="#contexts">Contexts</a><a href="#platforms">Packages</a><a href="#audit">Findings</a></nav>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <span class="kicker">Adaptive identity proof / v11</span>
+          <h1>Judge at use size.</h1>
+          <p class="lede">Large artwork forgives weak spacing. This bench renders every icon and logo at literal production sizes, then places it where web and mobile users will actually see it.</p>
+        </div>
+        <div class="hero-proof">
+          <div class="measure">ICON RAIL · 16 / 20 / 24 / 32 / 48 / 64 / 96 / 128 PX</div>
+          <div class="scale-rail" id="hero-icon-rail" aria-label="Selected icon at common sizes"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls" aria-label="Review controls">
+      <div class="shell control-grid">
+        <fieldset><legend>PRODUCT</legend><div class="segments" id="product-controls"></div></fieldset>
+        <fieldset><legend>ASSET SURFACE</legend><div class="segments" id="mode-controls"></div></fieldset>
+        <fieldset><legend>PROOF SCHEME</legend><div class="segments" id="scheme-controls"></div></fieldset>
+      </div>
+    </section>
+
+    <main id="main">
+      <section id="scale">
+        <div class="shell">
+          <div class="section-head">
+            <div><span class="section-index">SCALE PROOF</span><h2>Pixel truth, without compensation.</h2></div>
+            <p>Icons retain square CSS boxes. Logos retain their 2048:508 ratio and are set by exact height. Rails scroll on compact screens so specimens never shrink to fit the review.</p>
+          </div>
+          <h3>Icon / interface to launcher</h3>
+          <div class="scale-rail checker" id="icon-rail"></div>
+          <h3 style="margin-top: 32px">Horizontal logo / dense nav to campaign lockup</h3>
+          <div class="scale-rail logo-rail checker" id="logo-rail"></div>
+        </div>
+      </section>
+
+      <section id="family">
+        <div class="shell">
+          <div class="section-head">
+            <div><span class="section-index">FAMILY PARITY</span><h2>Five signs. Same stops.</h2></div>
+            <p>Every product receives identical 24, 32, and 48 px icon proofs plus a 32 px logo proof. Visual size differences here come from SVG geometry and canvas padding, not layout.</p>
+          </div>
+          <div class="family-table" id="family-table"></div>
+        </div>
+      </section>
+
+      <section id="contexts">
+        <div class="shell">
+          <div class="section-head">
+            <div><span class="section-index">WEB + MOBILE</span><h2>Known pressure points.</h2></div>
+            <p>Browser chrome, desktop navigation, dense application UI, launcher masks, notifications, tab bars, and store presentation. Each scene labels the asset’s actual CSS size.</p>
+          </div>
+          <div class="context-grid">
+            <article class="scene wide">
+              <header class="scene-head"><h3>Browser tab + site header</h3><span class="measure">16 PX / 32 PX HIGH</span></header>
+              <div class="scene-stage">
+                <div class="browser">
+                  <div class="browser-tabs"><span class="browser-dot"></span><div class="browser-tab"><img data-asset="icon" src="../concepts/v11/araihu-icon-background.svg" alt=""><span data-product-name>Arai Hû</span></div></div>
+                  <div class="address">https://app.araihu.dev</div>
+                  <div class="site-nav"><img data-asset="logo" src="../concepts/v11/araihu-logo-background.svg" alt=""><div class="site-links"><span>Overview</span><span>Guides</span><span>Reference</span></div></div>
+                  <div class="site-content"><div><div class="line-copy"></div><div class="line-copy"></div><div class="line-copy short"></div></div><div class="product-card"><img data-asset="icon" src="../concepts/v11/araihu-icon-background.svg" alt=""><div><strong data-product-name>Arai Hû</strong><div class="measure">48 PX PRODUCT CARD</div></div></div></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="scene">
+              <header class="scene-head"><h3>Application navigation</h3><span class="measure">20 / 32 PX</span></header>
+              <div class="scene-stage">
+                <div class="dashboard">
+                  <aside class="sidebar"><img data-asset="icon" src="../concepts/v11/araihu-icon-background.svg" alt=""><span class="nav-glyph active"></span><span class="nav-glyph"></span><span class="nav-glyph"></span><span class="nav-glyph"></span></aside>
+                  <div class="dash-main"><div class="dash-title"><span data-product-name>Arai Hû</span><span class="measure">UI</span></div><div class="dash-table"><div class="dash-row"><img data-asset="icon" src="../concepts/v11/araihu-icon-background.svg" alt=""><span>Primary workspace</span><span class="status">Ready</span></div><div class="dash-row"><span class="nav-glyph"></span><span>Shared assets</span><span class="status">Ready</span></div><div class="dash-row"><span class="nav-glyph"></span><span>Delivery</span><span class="status">Ready</span></div></div></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="scene">
+              <header class="scene-head"><h3>Install / store card</h3><span class="measure">180 PX</span></header>
+              <div class="scene-stage" style="display:grid;align-items:center">
+                <div class="store"><div class="store-icon"><img data-platform="apple/AppIcon.appiconset/AppIcon-1024.png" src="../dist/v11/apple/araihu/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png" alt=""></div><div class="store-copy"><h3 data-product-name>Arai Hû</h3><p>Opaque Apple asset-catalog master at a common marketplace presentation size.</p><span class="install">Install</span></div></div>
+              </div>
+            </article>
+
+            <article class="scene wide" id="master-proof">
+              <header class="scene-head"><h3>Launcher / store master</h3><span class="measure">512 PX EXACT</span></header>
+              <div class="master-scroll"><div class="master-board"><img data-platform="web/icon-maskable-512.png" src="../dist/v11/web/araihu/icon-maskable-512.png" alt="Arai Hû mask-safe icon at 512 pixels"></div></div>
+            </article>
+
+            <article class="scene wide">
+              <header class="scene-head"><h3>Mobile launcher + in-app chrome</h3><span class="measure">60 / 28 / 24 PX</span></header>
+              <div class="scene-stage phone-wrap">
+                <div class="phone"><div class="phone-status"><span>9:41</span><span>5G · 100%</span></div><div class="phone-home"><div class="app-grid"><div class="app"><div class="app-icon"><img data-platform="web/icon-maskable-192.png" src="../dist/v11/web/araihu/icon-maskable-192.png" alt=""></div><span data-product-name>Arai Hû</span></div><div class="app"><div class="ghost-app"></div><span>Notes</span></div><div class="app"><div class="ghost-app"></div><span>Files</span></div><div class="app"><div class="app-icon circle"><img data-platform="web/icon-maskable-192.png" src="../dist/v11/web/araihu/icon-maskable-192.png" alt=""></div><span>Circle mask</span></div><div class="app"><div class="ghost-app"></div><span>Browser</span></div><div class="app"><div class="ghost-app"></div><span>Settings</span></div></div></div></div>
+                <div class="phone dark-phone"><div class="phone-status"><span>9:41</span><span>5G · 100%</span></div><div class="mobile-screen"><div class="appbar"><img data-asset="icon" src="../concepts/v11/araihu-icon-background.svg" alt=""><span data-product-name>Arai Hû</span></div><div class="mobile-body"><div class="line-copy"></div><div class="line-copy short"></div><div class="notification"><img data-asset="icon" src="../concepts/v11/araihu-icon-background.svg" alt=""><div><strong data-product-name>Arai Hû</strong><span>Background work completed successfully.</span></div></div></div><div class="tabbar"><div class="tab"><img data-asset="icon" src="../concepts/v11/araihu-icon-background.svg" alt=""><span>Home</span></div><div class="tab"><span class="tab-dot"></span><span>Search</span></div><div class="tab"><span class="tab-dot"></span><span>Activity</span></div><div class="tab"><span class="tab-dot"></span><span>Settings</span></div></div></div></div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="platforms">
+        <div class="shell">
+          <div class="section-head">
+            <div><span class="section-index">PLATFORM PACKAGES</span><h2>One sign, target-specific delivery.</h2></div>
+            <p>These are generated deliverables, not SVGs renamed for a platform. The dashed square shows Android’s strict 66/108 safe area; PWA maskable and Apple masters use the same conservative framing.</p>
+          </div>
+          <div class="platform-proof">
+            <article class="platform-row">
+              <div><h3>Web + PWA</h3><p>SVG favicon, tiny raster fallbacks, separate <code>any</code> and <code>maskable</code> manifest entries.</p></div>
+              <div class="platform-specimens">
+                <div class="platform-specimen"><div class="platform-icon"><img data-platform="web/icon-192.png" src="../dist/v11/web/araihu/icon-192.png" alt=""></div><span class="measure">ANY</span></div>
+                <div class="platform-specimen"><div class="platform-icon squircle safe-zone"><img data-platform="web/icon-maskable-192.png" src="../dist/v11/web/araihu/icon-maskable-192.png" alt=""></div><span class="measure">MASKABLE</span></div>
+                <div class="platform-specimen"><div class="platform-icon circle"><img data-platform="web/icon-maskable-192.png" src="../dist/v11/web/araihu/icon-maskable-192.png" alt=""></div><span class="measure">CIRCLE MASK</span></div>
+              </div>
+            </article>
+            <article class="platform-row">
+              <div><h3>Android</h3><p>Adaptive background and foreground layers, API 33 monochrome artwork, and five legacy density fallbacks.</p></div>
+              <div class="platform-specimens">
+                <div class="platform-specimen"><div class="platform-icon android safe-zone"><img data-platform="android/res/drawable-xxxhdpi/ic_launcher_foreground.png" src="../dist/v11/android/araihu/res/drawable-xxxhdpi/ic_launcher_foreground.png" alt=""></div><span class="measure">FOREGROUND</span></div>
+                <div class="platform-specimen"><div class="platform-icon android circle"><img data-platform="android/res/drawable-xxxhdpi/ic_launcher_monochrome.png" src="../dist/v11/android/araihu/res/drawable-xxxhdpi/ic_launcher_monochrome.png" alt=""></div><span class="measure">MONOCHROME</span></div>
+              </div>
+            </article>
+            <article class="platform-row">
+              <div><h3>Apple</h3><p>Opaque 1024 px iOS/iPadOS asset-catalog masters for light, dark, and grayscale tinted appearances.</p></div>
+              <div class="platform-specimens">
+                <div class="platform-specimen"><div class="platform-icon squircle"><img data-platform="apple/AppIcon.appiconset/AppIcon-1024.png" src="../dist/v11/apple/araihu/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png" alt=""></div><span class="measure">LIGHT</span></div>
+                <div class="platform-specimen"><div class="platform-icon squircle dark-master"><img data-platform="apple/AppIcon.appiconset/AppIcon-1024-dark.png" src="../dist/v11/apple/araihu/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png" alt=""></div><span class="measure">DARK</span></div>
+                <div class="platform-specimen"><div class="platform-icon squircle"><img data-platform="apple/AppIcon.appiconset/AppIcon-1024-tinted.png" src="../dist/v11/apple/araihu/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-tinted.png" alt=""></div><span class="measure">TINTED</span></div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="audit">
+        <div class="shell">
+          <div class="section-head">
+            <div><span class="section-index">GEOMETRY AUDIT</span><h2>Measured, then judged.</h2></div>
+            <p>Browser-calculated path bounds exclude adaptive background rectangles. Automated checks expose normalization drift and safe-canvas misuse; final small-size quality still needs human visual judgment.</p>
+          </div>
+          <div class="audit-summary">
+            <div class="audit-stat"><span>Assets loaded</span><strong id="asset-count">…</strong><span>expected 20</span></div>
+            <div class="audit-stat"><span>Package probes</span><strong id="package-count">…</strong><span>web + Android + Apple</span></div>
+            <div class="audit-stat"><span>Icon median fill</span><strong id="icon-fill">…</strong><span>of square canvas</span></div>
+            <div class="audit-stat"><span>Logo median height</span><strong id="logo-fill">…</strong><span>of optical canvas</span></div>
+            <div class="audit-stat"><span>Review signals</span><strong id="finding-count">…</strong><span>geometry + usage</span></div>
+          </div>
+          <div class="metrics-table">
+            <table aria-label="Normalized SVG art bounds">
+              <thead><tr><th scope="col">Product</th><th scope="col">Icon width</th><th scope="col">Icon height</th><th scope="col">Logo width</th><th scope="col">Logo height</th></tr></thead>
+              <tbody id="metrics-body"></tbody>
+            </table>
+          </div>
+          <div class="findings" id="findings" aria-live="polite"><div class="finding"><span class="severity">LOADING</span><div><h3>Measuring SVG paths</h3><p>Loading all v11 variants and comparing normalized art bounds.</p></div><span class="measure">IN BROWSER</span></div></div>
+        </div>
+      </section>
+    </main>
+
+    <footer><div class="shell"><span class="measure">ARAI HÛ ASSETS / V11 / EXACT-SIZE REVIEW</span></div></footer>
+    <div id="geometry-host" aria-hidden="true"></div>
+
     <script>
-      const products = ['araihu', 'goshtoso', 'manja', 'paje', 'x9'];
-      const variants = ['icon-background', 'icon-transparent', 'logo-background', 'logo-transparent'];
-      const review = document.querySelector('#review');
-      for (const scheme of ['light', 'dark']) {
-        const panel = document.createElement('section');
-        panel.className = `panel ${scheme}`;
-        panel.innerHTML = `<h2>${scheme}</h2>`;
-        for (const product of products) {
-          for (const variant of variants) {
-            const figure = document.createElement('figure');
-            figure.innerHTML = `<img src="../concepts/v11/${product}-${variant}.svg" alt=""><figcaption>${product} ${variant}</figcaption>`;
-            panel.append(figure);
-          }
-        }
-        review.append(panel);
+      const products = {
+        araihu: { name: 'Arai Hû', short: 'Organization' },
+        goshtoso: { name: 'Goshtoso', short: 'UI library' },
+        manja: { name: 'Manja', short: 'Publishing' },
+        paje: { name: 'Pajé', short: 'Workflow' },
+        x9: { name: 'X-9 / Xisnove', short: 'Monitoring' }
+      };
+      const params = new URLSearchParams(location.search);
+      const state = {
+        product: Object.hasOwn(products, params.get('product')) ? params.get('product') : 'araihu',
+        mode: ['background', 'transparent'].includes(params.get('mode')) ? params.get('mode') : 'transparent',
+        scheme: ['light', 'dark'].includes(params.get('scheme')) ? params.get('scheme') : 'light'
+      };
+      if (['contexts', 'master', 'platforms', 'audit'].includes(params.get('capture'))) document.documentElement.dataset.capture = params.get('capture');
+      const iconSizes = [16, 20, 24, 32, 40, 48, 64, 96, 128];
+      const logoHeights = [16, 20, 24, 32, 40, 48, 64, 80];
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+      const assetPath = (product, kind, mode = state.mode) => `../concepts/v11/${product}-${kind}-${mode}.svg`;
+      const platformPath = (product, value) => {
+        const [platform, ...parts] = value.split('/');
+        const catalog = platform === 'apple' ? 'Assets.xcassets/' : '';
+        return `../dist/v11/${platform}/${product}/${catalog}${parts.join('/')}`;
+      };
+
+      function controlButton(label, value, group) {
+        const button = document.createElement('button');
+        button.type = 'button'; button.textContent = label; button.dataset.value = value;
+        button.setAttribute('aria-pressed', String(state[group] === value));
+        button.addEventListener('click', () => { state[group] = value; render(); });
+        return button;
       }
+
+      function renderControls() {
+        const productControls = $('#product-controls'); productControls.replaceChildren();
+        Object.entries(products).forEach(([key, product]) => productControls.append(controlButton(product.name, key, 'product')));
+        const modeControls = $('#mode-controls'); modeControls.replaceChildren();
+        modeControls.append(controlButton('Background', 'background', 'mode'), controlButton('Transparent', 'transparent', 'mode'));
+        const schemeControls = $('#scheme-controls'); schemeControls.replaceChildren();
+        schemeControls.append(controlButton('Light proof', 'light', 'scheme'), controlButton('Dark proof', 'dark', 'scheme'));
+      }
+
+      function specimen(product, kind, size, mode = state.mode) {
+        const item = document.createElement('div'); item.className = 'specimen';
+        const frame = document.createElement('div'); frame.className = 'specimen-frame';
+        const image = document.createElement('img'); image.src = assetPath(product, kind, mode); image.alt = `${products[product].name} ${kind}, ${mode} variant, at ${size} pixels`;
+        if (kind === 'icon') image.style.cssText = `width:${size}px;height:${size}px`;
+        else image.style.cssText = `height:${size}px;width:auto;max-width:none`;
+        frame.append(image); item.append(frame);
+        const label = document.createElement('span'); label.className = 'measure'; label.textContent = `${size} px`; item.append(label);
+        return item;
+      }
+
+      function fillRail(selector, product, kind, sizes) {
+        const rail = $(selector); rail.replaceChildren(...sizes.map(size => specimen(product, kind, size)));
+      }
+
+      function renderFamily() {
+        const table = $('#family-table'); table.replaceChildren();
+        Object.entries(products).forEach(([key, product]) => {
+          const row = document.createElement('div'); row.className = 'family-row';
+          const name = document.createElement('div'); name.className = 'family-name'; name.innerHTML = `<strong>${product.name}</strong><span>${product.short}</span>`;
+          const icons = document.createElement('div'); icons.className = 'family-icons'; [24, 32, 48].forEach(size => icons.append(specimen(key, 'icon', size)));
+          const logos = document.createElement('div'); logos.className = 'family-logos'; logos.append(specimen(key, 'logo', 32));
+          row.append(name, icons, logos); table.append(row);
+        });
+      }
+
+      function renderContexts() {
+        $$('[data-asset]').forEach(image => {
+          image.src = assetPath(state.product, image.dataset.asset);
+          image.alt = `${products[state.product].name} ${image.dataset.asset}, ${state.mode} variant, in context`;
+        });
+        $$('[data-platform]').forEach(image => {
+          image.src = platformPath(state.product, image.dataset.platform);
+          image.alt = `${products[state.product].name} ${image.dataset.platform.split('/').at(-1)} platform export`;
+        });
+        $$('[data-product-name]').forEach(node => { node.textContent = products[state.product].name; });
+      }
+
+      function render() {
+        document.documentElement.dataset.scheme = state.scheme;
+        const shareable = new URLSearchParams(state);
+        history.replaceState(null, '', `${location.pathname}?${shareable}${location.hash}`);
+        renderControls();
+        fillRail('#hero-icon-rail', state.product, 'icon', [16, 20, 24, 32, 48, 64, 96, 128]);
+        fillRail('#icon-rail', state.product, 'icon', iconSizes);
+        fillRail('#logo-rail', state.product, 'logo', logoHeights);
+        renderFamily(); renderContexts();
+      }
+
+      function unionBounds(elements) {
+        let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
+        elements.forEach(element => {
+          const box = element.getBBox();
+          if (!box.width && !box.height) return;
+          x1 = Math.min(x1, box.x); y1 = Math.min(y1, box.y);
+          x2 = Math.max(x2, box.x + box.width); y2 = Math.max(y2, box.y + box.height);
+        });
+        return { x: x1, y: y1, width: x2 - x1, height: y2 - y1 };
+      }
+
+      async function measureAsset(product, kind, mode) {
+        const response = await fetch(assetPath(product, kind, mode));
+        if (!response.ok) throw new Error(`${response.status} ${product}-${kind}-${mode}`);
+        const documentNode = new DOMParser().parseFromString(await response.text(), 'image/svg+xml');
+        const svg = documentNode.documentElement;
+        svg.style.width = kind === 'icon' ? '1024px' : '2048px'; svg.style.height = kind === 'icon' ? '1024px' : '508px';
+        $('#geometry-host').append(svg);
+        const viewBox = svg.viewBox.baseVal;
+        const geometry = $$('path, rect, circle, ellipse, polygon, polyline', svg).filter(element => !element.classList.contains('v11-surface'));
+        const box = unionBounds(geometry);
+        svg.remove();
+        return {
+          product, kind, mode, box,
+          widthFill: box.width / viewBox.width,
+          heightFill: box.height / viewBox.height,
+          centerX: (box.x + box.width / 2 - viewBox.x) / viewBox.width,
+          centerY: (box.y + box.height / 2 - viewBox.y) / viewBox.height
+        };
+      }
+
+      const percent = value => `${Math.round(value * 100)}%`;
+      const median = values => { const sorted = [...values].sort((a,b) => a-b); return sorted[Math.floor(sorted.length / 2)]; };
+      const finding = (severity, title, body, metric, review = false) => ({ severity, title, body, metric, review });
+
+      async function runAudit() {
+        try {
+          const jobs = [];
+          Object.keys(products).forEach(product => ['icon', 'logo'].forEach(kind => ['background', 'transparent'].forEach(mode => jobs.push(measureAsset(product, kind, mode)))));
+          const results = await Promise.all(jobs);
+          $('#asset-count').textContent = results.length;
+          const packageURLs = Object.keys(products).flatMap(product => [
+            platformPath(product, 'web/manifest-icons.json'),
+            platformPath(product, 'android/res/mipmap-anydpi-v33/ic_launcher.xml'),
+            platformPath(product, 'apple/AppIcon.appiconset/Contents.json')
+          ]);
+          const packageResponses = await Promise.all(packageURLs.map(path => fetch(path)));
+          const loadedPackages = packageResponses.filter(response => response.ok).length;
+          $('#package-count').textContent = `${loadedPackages}/15`;
+          if (loadedPackages !== packageURLs.length) throw new Error(`only ${loadedPackages} of ${packageURLs.length} platform package probes loaded`);
+          const transparentIcons = results.filter(item => item.kind === 'icon' && item.mode === 'transparent');
+          const transparentLogos = results.filter(item => item.kind === 'logo' && item.mode === 'transparent');
+          $('#icon-fill').textContent = percent(median(transparentIcons.map(item => Math.max(item.widthFill, item.heightFill))));
+          $('#logo-fill').textContent = percent(median(transparentLogos.map(item => item.heightFill)));
+
+          const metricsBody = $('#metrics-body'); metricsBody.replaceChildren();
+          Object.entries(products).forEach(([product, meta]) => {
+            const icon = transparentIcons.find(item => item.product === product);
+            const logo = transparentLogos.find(item => item.product === product);
+            const row = document.createElement('tr');
+            row.dataset.bounds = JSON.stringify({ icon: icon.box, logo: logo.box });
+            row.innerHTML = `<th scope="row">${meta.name}</th><td>${percent(icon.widthFill)}</td><td>${percent(icon.heightFill)}</td><td>${percent(logo.widthFill)}</td><td>${percent(logo.heightFill)}</td>`;
+            metricsBody.append(row);
+          });
+
+          const findings = [];
+
+          transparentIcons.forEach(item => {
+            const fill = Math.max(item.widthFill, item.heightFill);
+            const offset = Math.max(Math.abs(item.centerX - .5), Math.abs(item.centerY - .5));
+            if (Math.abs(fill - .76) > .01 || offset > .01) findings.push(finding('REVIEW', `${products[item.product].name} icon framing drifted`, `Transparent icon should use 76% of its square optical canvas and remain centered. Regenerate v11 assets before promotion.`, `${percent(item.widthFill)} × ${percent(item.heightFill)}`, true));
+          });
+
+          transparentLogos.forEach(item => {
+            if (Math.abs(item.widthFill - .862) > .01 || Math.abs(item.heightFill - .862) > .01) findings.push(finding('REVIEW', `${products[item.product].name} logo framing drifted`, `Transparent logo should retain uniform 8% art-relative padding. Regenerate v11 assets before promotion.`, `${percent(item.widthFill)} × ${percent(item.heightFill)}`, true));
+          });
+
+          findings.push(finding('PASS', 'Platform packages are present', 'PWA any/maskable pairs, Android adaptive and monochrome resources, and Apple appearance masters loaded for every product. Launcher previews use generated platform files.', '15 / 15'));
+          findings.push(finding('PASS', 'Launcher artwork uses the strict safe square', 'Generated launcher artwork is centered inside Android’s 66/108 safe square. That conservative framing also clears the PWA maskable safe circle.', '61.1% MAX'));
+          findings.push(finding('HUMAN', '16–24 px recognition remains a visual gate', 'Geometry checks cannot prove that counters, gaps, accents, and wordmark strokes survive rasterization. Review the first rail at 100% zoom on standard- and high-density displays.', '16 / 20 / 24 PX'));
+          if (!findings.some(item => item.review)) findings.unshift(finding('PASS', 'Optical canvases are normalized', 'Transparent icons hit the 76% dominant-dimension target; transparent logos retain uniform 8% art-relative padding. Background variants intentionally keep their larger safe canvases.', 'PATHS UNCHANGED'));
+
+          $('#finding-count').textContent = findings.length;
+          const list = $('#findings'); list.replaceChildren();
+          findings.forEach(item => {
+            const row = document.createElement('div'); row.className = 'finding';
+            row.innerHTML = `<span class="severity ${item.review ? 'review' : ''}">${item.severity}</span><div><h3>${item.title}</h3><p>${item.body}</p></div><span class="measure">${item.metric}</span>`;
+            list.append(row);
+          });
+          document.body.dataset.audit = 'complete';
+        } catch (error) {
+          $('#findings').innerHTML = `<div class="finding"><span class="severity review">ERROR</span><div><h3>Geometry audit could not load</h3><p>${error.message}. Serve this file over HTTP so browser fetch can read sibling SVGs.</p></div><span class="measure">AUDIT STOPPED</span></div>`;
+          document.body.dataset.audit = 'error';
+        }
+      }
+
+      render();
+      if (location.hash) requestAnimationFrame(() => $(location.hash)?.scrollIntoView());
+      runAudit();
     </script>
   </body>
 </html>

@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 508" role="img" aria-labelledby="title desc" class="araihu-brand-v11">
-  <title id="title">Arai Hû v11 logo</title>
-  <desc id="desc">Adaptive Arai Hû logo with an adaptive surface; colors respond to light and dark themes.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 508" role="img" aria-label="Arai Hû v11 logo" class="araihu-brand-v11">
+  <title>Arai Hû v11 logo</title>
+  <desc>Adaptive Arai Hû logo with an adaptive surface; colors respond to light and dark themes.</desc>
   <style>.v11-surface {
   fill: var(--araihu-logo-surface, var(--araihu-logo-auto-surface, #f3f2e9));
 }
