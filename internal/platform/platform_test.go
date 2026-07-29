@@ -2,6 +2,7 @@ package platform
 
 import (
 	"bytes"
+	"compress/zlib"
 	"context"
 	"encoding/binary"
 	"fmt"
@@ -43,6 +44,40 @@ func TestBuildIncludesAllPlatformContracts(t *testing.T) {
 	}
 }
 
+func TestBuildPublishesAdaptiveFaviconAndUsesGrayscaleAppleSource(t *testing.T) {
+	icons := testIcons()
+	rasterizer := &recordingRasterizer{}
+	result, err := Build(context.Background(), rasterizer, icons)
+	if err != nil {
+		t.Fatalf("Build(): %v", err)
+	}
+	favicon := result.Files["dist/platform/web/araihu/favicon.svg"]
+	if !bytes.Equal(favicon, icons[0].AdaptiveSVG) {
+		t.Fatalf("favicon.svg = %q, want genuine adaptive Task 4 source", favicon)
+	}
+	if bytes.Equal(favicon, icons[0].LightSVG) || !bytes.Contains(favicon, []byte("adaptive-only-marker")) {
+		t.Fatal("favicon.svg lost adaptive semantics")
+	}
+	grayscaleRasters := 0
+	for _, request := range rasterizer.requests {
+		if request.Width == 1024 && request.Background == tintBackground {
+			grayscaleRasters++
+			if !bytes.Contains(request.SVG, []byte("grayscale-source")) || bytes.Contains(request.SVG, []byte("tint-source")) {
+				t.Fatalf("Apple tinted/grayscale raster used wrong source: %s", request.SVG)
+			}
+		}
+	}
+	if grayscaleRasters != len(products) {
+		t.Fatalf("Apple grayscale raster count = %d, want %d", grayscaleRasters, len(products))
+	}
+	contents := string(result.Files["dist/platform/apple/araihu/Assets.xcassets/AppIcon.appiconset/Contents.json"])
+	for _, want := range []string{`"filename":"AppIcon-1024-tinted.png"`, `"appearance":"luminosity"`, `"value":"tinted"`} {
+		if !strings.Contains(contents, want) {
+			t.Errorf("Apple Contents.json missing approved tinted catalog naming %s: %s", want, contents)
+		}
+	}
+}
+
 func TestBuildIsDeterministicAndDoesNotRasterizeAdaptiveSVG(t *testing.T) {
 	icons := testIcons()
 	first, err := Build(context.Background(), fakeRasterizer{}, icons)
@@ -61,9 +96,9 @@ func TestBuildIsDeterministicAndDoesNotRasterizeAdaptiveSVG(t *testing.T) {
 			t.Errorf("non-deterministic output %s", path)
 		}
 	}
-	for _, data := range first.Files {
-		if bytes.Contains(data, []byte("adaptive-only-marker")) {
-			t.Fatal("adaptive individual-only SVG was rasterized")
+	for path, data := range first.Files {
+		if strings.HasSuffix(path, ".png") && bytes.Contains(data, []byte("adaptive-only-marker")) {
+			t.Fatalf("adaptive individual-only SVG was rasterized into %s", path)
 		}
 	}
 }
@@ -92,6 +127,12 @@ func TestValidatePNGRejectsTimestampMetadata(t *testing.T) {
 	data = appendPNGChunk(data, "tIME", []byte{7, 234, 1, 1, 0, 0, 0})
 	if err := validatePNG(data, 16, "", false); err == nil || !strings.Contains(err.Error(), "timestamp") {
 		t.Fatalf("timestamp PNG error = %v", err)
+	}
+}
+
+func TestValidatePNGRejectsOpaqueRGBAForTransparentOutput(t *testing.T) {
+	if err := validatePNG(opaqueRGBAPNG(t, 16), 16, "", false); err == nil || !strings.Contains(err.Error(), "transparent pixels") {
+		t.Fatalf("opaque RGBA PNG error = %v", err)
 	}
 }
 
@@ -142,6 +183,13 @@ func (badRasterizer) Rasterize(context.Context, Request) ([]byte, error) {
 	return []byte("not png"), nil
 }
 
+type recordingRasterizer struct{ requests []Request }
+
+func (r *recordingRasterizer) Rasterize(ctx context.Context, request Request) ([]byte, error) {
+	r.requests = append(r.requests, Request{SVG: append([]byte(nil), request.SVG...), Width: request.Width, Height: request.Height, Background: request.Background})
+	return fakeRasterizer{}.Rasterize(ctx, request)
+}
+
 func appendPNGChunk(data []byte, kind string, payload []byte) []byte {
 	chunk := make([]byte, 12+len(payload))
 	binary.BigEndian.PutUint32(chunk[:4], uint32(len(payload)))
@@ -152,6 +200,44 @@ func appendPNGChunk(data []byte, kind string, payload []byte) []byte {
 	return append(append(append([]byte(nil), data[:insert]...), chunk...), data[insert:]...)
 }
 
+func opaqueRGBAPNG(t *testing.T, size int) []byte {
+	t.Helper()
+	var output bytes.Buffer
+	output.Write([]byte{137, 80, 78, 71, 13, 10, 26, 10})
+	ihdr := make([]byte, 13)
+	binary.BigEndian.PutUint32(ihdr[:4], uint32(size))
+	binary.BigEndian.PutUint32(ihdr[4:8], uint32(size))
+	ihdr[8], ihdr[9] = 8, 6
+	output.Write(pngChunk("IHDR", ihdr))
+	var raw bytes.Buffer
+	for row := 0; row < size; row++ {
+		raw.WriteByte(0)
+		for column := 0; column < size; column++ {
+			raw.Write([]byte{7, 17, 31, 255})
+		}
+	}
+	var compressed bytes.Buffer
+	writer := zlib.NewWriter(&compressed)
+	if _, err := writer.Write(raw.Bytes()); err != nil {
+		t.Fatal(err)
+	}
+	if err := writer.Close(); err != nil {
+		t.Fatal(err)
+	}
+	output.Write(pngChunk("IDAT", compressed.Bytes()))
+	output.Write(pngChunk("IEND", nil))
+	return output.Bytes()
+}
+
+func pngChunk(kind string, payload []byte) []byte {
+	chunk := make([]byte, 12+len(payload))
+	binary.BigEndian.PutUint32(chunk[:4], uint32(len(payload)))
+	copy(chunk[4:8], kind)
+	copy(chunk[8:], payload)
+	binary.BigEndian.PutUint32(chunk[8+len(payload):], crc32.ChecksumIEEE(chunk[4:8+len(payload)]))
+	return chunk
+}
+
 func testIcons() []BrandIcon {
 	icons := make([]BrandIcon, 0, 5)
 	for _, product := range []string{"araihu", "goshtoso", "manja", "paje", "x9"} {
@@ -159,7 +245,8 @@ func testIcons() []BrandIcon {
 			Product:       product,
 			LightSVG:      []byte(`<svg viewBox="0 0 108 108"><path d="M21 21h66v66"/></svg>`),
 			DarkSVG:       []byte(`<svg viewBox="0 0 108 108"><path d="M21 21h66v66"/></svg>`),
-			TintedSVG:     []byte(`<svg viewBox="0 0 108 108"><path d="M21 21h66v66"/></svg>`),
+			TintedSVG:     []byte(`<svg viewBox="0 0 108 108"><!-- tint-source --><path d="M21 21h66v66"/></svg>`),
+			GrayscaleSVG:  []byte(`<svg viewBox="0 0 108 108"><!-- grayscale-source --><path d="M21 21h66v66"/></svg>`),
 			MonochromeSVG: []byte(`<svg viewBox="0 0 108 108"><path d="M21 21h66v66"/></svg>`),
 			AdaptiveSVG:   []byte(`<svg viewBox="0 0 108 108"><!-- adaptive-only-marker --></svg>`),
 			LauncherSVG:   []byte(`<svg viewBox="0 0 108 108"><path d="M21 21h66v66"/></svg>`),
@@ -190,6 +277,9 @@ func requirePNG(t *testing.T, result Result, path string, size int, wantAlpha, r
 	}
 	if info.hasAlpha != wantAlpha {
 		t.Fatalf("%s alpha channel = %v, want %v", path, info.hasAlpha, wantAlpha)
+	}
+	if wantAlpha && !info.transparent {
+		t.Fatalf("%s has no transparent pixels", path)
 	}
 	if !wantAlpha && !info.opaque {
 		t.Fatalf("%s is not opaque", path)

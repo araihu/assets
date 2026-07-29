@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"os"
@@ -65,6 +66,16 @@ func TestRSVGReportsBoundedStderrAndContextFailures(t *testing.T) {
 	}
 }
 
+func TestCommandRunnerBoundsLargeStderr(t *testing.T) {
+	_, stderr, err := commandRunner{}.Run(context.Background(), "sh", []string{"-c", "yes x | head -c 1048576 >&2; exit 1"}, nil)
+	if err == nil {
+		t.Fatal("large-stderr command unexpectedly succeeded")
+	}
+	if got, want := len(stderr), maxStderrBytes+1; got != want {
+		t.Fatalf("captured stderr = %d bytes, want bounded %d", got, want)
+	}
+}
+
 func TestRSVGValidatesRequest(t *testing.T) {
 	rasterizer := NewRSVG(&recordingRunner{})
 	for _, request := range []Request{
@@ -86,14 +97,20 @@ func TestRSVGIntegrationPinnedBinary(t *testing.T) {
 	if _, err := exec.LookPath("rsvg-convert"); err != nil {
 		t.Fatalf("rsvg-convert unavailable: %v", err)
 	}
-	result, err := Build(context.Background(), NewRSVG(nil), integrationIcons(t))
+	icons := integrationIcons(t)
+	result, err := Build(context.Background(), NewRSVG(nil), icons)
 	if err != nil {
 		t.Fatalf("Build with pinned rsvg-convert: %v", err)
 	}
 	if got, want := len(result.Files), 155; got != want {
 		t.Fatalf("generated file count = %d, want %d", got, want)
 	}
+	favicon := result.Files["dist/platform/web/araihu/favicon.svg"]
+	if !strings.Contains(string(favicon), "@media") || !bytes.Equal(favicon, icons[0].AdaptiveSVG) {
+		t.Fatal("actual Task 4 adaptive favicon did not preserve media-query semantics")
+	}
 	requirePNG(t, result, "dist/platform/web/araihu/icon-maskable-512.png", 512, false, true)
+	requirePNG(t, result, "dist/platform/web/araihu/icon-192.png", 192, true, false)
 	requirePNG(t, result, "dist/platform/android/x9/res/drawable-xxxhdpi/ic_launcher_foreground.png", 432, true, true)
 	darkPath := "dist/platform/apple/manja/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png"
 	requirePNG(t, result, darkPath, 1024, false, false)
@@ -128,6 +145,7 @@ func integrationIcons(t *testing.T) []BrandIcon {
 			LightSVG:      get("light-transparent-optical"),
 			DarkSVG:       get("dark-transparent-optical"),
 			TintedSVG:     get("tinted-transparent-optical"),
+			GrayscaleSVG:  get("grayscale-transparent-optical"),
 			MonochromeSVG: get("monochrome-transparent-optical"),
 			AdaptiveSVG:   get("adaptive-plate-launcher"),
 			LauncherSVG:   get("tinted-plate-launcher"),

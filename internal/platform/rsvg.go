@@ -151,9 +151,31 @@ type commandRunner struct{}
 func (commandRunner) Run(ctx context.Context, name string, args []string, stdin []byte) ([]byte, []byte, error) {
 	command := exec.CommandContext(ctx, name, args...)
 	command.Stdin = bytes.NewReader(stdin)
-	var stdout, stderr bytes.Buffer
+	var stdout bytes.Buffer
+	stderr := boundedCapture{limit: maxStderrBytes + 1}
 	command.Stdout = &stdout
 	command.Stderr = &stderr
 	err := command.Run()
-	return stdout.Bytes(), stderr.Bytes(), err
+	return stdout.Bytes(), append([]byte(nil), stderr.Bytes()...), err
 }
+
+// boundedCapture retains enough stderr to report a useful error and discards
+// remaining child output without making the child fail with io.ErrShortWrite.
+type boundedCapture struct {
+	buffer bytes.Buffer
+	limit  int
+}
+
+func (b *boundedCapture) Write(data []byte) (int, error) {
+	original := len(data)
+	remaining := b.limit - b.buffer.Len()
+	if remaining > 0 {
+		if remaining > len(data) {
+			remaining = len(data)
+		}
+		_, _ = b.buffer.Write(data[:remaining])
+	}
+	return original, nil
+}
+
+func (b *boundedCapture) Bytes() []byte { return b.buffer.Bytes() }

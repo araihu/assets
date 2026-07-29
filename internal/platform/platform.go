@@ -24,12 +24,12 @@ const (
 
 var products = []string{"araihu", "goshtoso", "manja", "paje", "x9"}
 
-// BrandIcon is Task 4's static icon matrix for one product. AdaptiveSVG stays
-// individual-only: its media-query behavior is not flattened into a raster.
+// BrandIcon is Task 4's static icon matrix for one product. AdaptiveSVG remains
+// an individual SVG, preserving its media-query behavior in web favicon output.
 type BrandIcon struct {
-	Product                                 string
-	LightSVG, DarkSVG, TintedSVG            []byte
-	MonochromeSVG, AdaptiveSVG, LauncherSVG []byte
+	Product                                    string
+	LightSVG, DarkSVG, TintedSVG, GrayscaleSVG []byte
+	MonochromeSVG, AdaptiveSVG, LauncherSVG    []byte
 }
 
 // Result holds dist-relative generated files. Caller owns publication.
@@ -69,7 +69,7 @@ func validateIcons(icons []BrandIcon) ([]BrandIcon, error) {
 			return nil, fmt.Errorf("platform: duplicate product %q", icon.Product)
 		}
 		for name, svg := range map[string][]byte{
-			"light": icon.LightSVG, "dark": icon.DarkSVG, "tinted": icon.TintedSVG,
+			"light": icon.LightSVG, "dark": icon.DarkSVG, "tinted": icon.TintedSVG, "grayscale": icon.GrayscaleSVG,
 			"monochrome": icon.MonochromeSVG, "adaptive": icon.AdaptiveSVG, "launcher": icon.LauncherSVG,
 		} {
 			if viewBoxOf(svg) == "" {
@@ -91,7 +91,7 @@ func validateIcons(icons []BrandIcon) ([]BrandIcon, error) {
 
 func buildProduct(ctx context.Context, rasterizer Rasterizer, result *Result, icon BrandIcon) error {
 	web := "dist/platform/web/" + icon.Product + "/"
-	result.Files[web+"favicon.svg"] = append([]byte(nil), icon.LightSVG...)
+	result.Files[web+"favicon.svg"] = append([]byte(nil), icon.AdaptiveSVG...)
 	if err := addRaster(ctx, rasterizer, result, web+"favicon-16.png", icon.LightSVG, 16, lightBackground, false); err != nil {
 		return err
 	}
@@ -161,7 +161,9 @@ func buildProduct(ctx context.Context, rasterizer Rasterizer, result *Result, ic
 	}{
 		{"AppIcon-1024.png", icon.LightSVG, lightBackground},
 		{"AppIcon-1024-dark.png", icon.DarkSVG, darkBackground},
-		{"AppIcon-1024-tinted.png", icon.TintedSVG, tintBackground},
+		// Apple's `tinted` appearance uses the approved grayscale/tinted master,
+		// not Task 4's separately designed blue tint artwork.
+		{"AppIcon-1024-tinted.png", icon.GrayscaleSVG, tintBackground},
 	}
 	for _, variant := range appleVariants {
 		safe, err := launcherViewBox(variant.svg, icon.LauncherSVG)
@@ -254,8 +256,8 @@ func viewBoxOf(svg []byte) string {
 }
 
 type pngInfo struct {
-	width, height          int
-	hasAlpha, opaque, safe bool
+	width, height                 int
+	hasAlpha, opaque, transparent bool
 }
 
 func inspectPNG(data []byte) (pngInfo, error) {
@@ -277,17 +279,18 @@ func inspectPNG(data []byte) (pngInfo, error) {
 	if err != nil {
 		return pngInfo{}, fmt.Errorf("decode PNG: %w", err)
 	}
-	opaque := true
+	opaque, transparent := true, false
 	for y := decoded.Bounds().Min.Y; y < decoded.Bounds().Max.Y && opaque; y++ {
 		for x := decoded.Bounds().Min.X; x < decoded.Bounds().Max.X; x++ {
 			_, _, _, alpha := decoded.At(x, y).RGBA()
 			if alpha != 0xffff {
 				opaque = false
+				transparent = true
 				break
 			}
 		}
 	}
-	info := pngInfo{width: width, height: height, hasAlpha: colorType == 4 || colorType == 6, opaque: opaque}
+	info := pngInfo{width: width, height: height, hasAlpha: colorType == 4 || colorType == 6, opaque: opaque, transparent: transparent}
 	return info, nil
 }
 
@@ -326,6 +329,9 @@ func validatePNG(data []byte, size int, background string, requireSafe bool) err
 	if background == "" {
 		if !info.hasAlpha {
 			return errors.New("transparent raster lacks alpha channel")
+		}
+		if !info.transparent {
+			return errors.New("transparent raster lacks transparent pixels")
 		}
 	} else if info.hasAlpha || !info.opaque {
 		return errors.New("opaque raster has alpha channel or transparent pixels")
