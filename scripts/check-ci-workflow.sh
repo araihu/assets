@@ -9,7 +9,18 @@ grep -F 'actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0' "$w
 grep -F 'CARGO_C_VERSION: 0.10.10' "$workflow"
 grep -F 'CARGO_C_SOURCE_SHA256: da2101c5bee6c4bc0d62785c7b79d74a22dd566f93f0530b70d82531d4340b80' "$workflow"
 grep -F 'CARGO_C_LOCK_SHA256: 3d9107cb39d4d3c3503eed03fd668f8c24ad94d2a836f7e8c31f782c31b4a548' "$workflow"
-grep -F 'cargo +1.92.0 install --locked --path "$CARGO_C_SOURCE" --root "$CARGO_C_ROOT"' "$workflow"
+grep -F 'rustup toolchain install 1.92.0 --profile minimal' "$workflow"
+grep -F 'rustup run 1.92.0 rustc --version | grep --fixed-strings "rustc 1.92.0"' "$workflow"
+grep -F 'rustup run 1.92.0 cargo install --locked --path "$CARGO_C_SOURCE" --root "$CARGO_C_ROOT"' "$workflow"
+grep -F 'export PATH="$CARGO_C_ROOT/bin:$HOME/.rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH"' "$workflow"
+grep -F 'test "$(command -v cargo-cbuild)" = "$CARGO_C_ROOT/bin/cargo-cbuild"' "$workflow"
+if grep -F 'cargo +1.92.0 install' "$workflow"; then
+  echo 'CI must use rustup run before direct toolchain PATH export' >&2
+  exit 1
+fi
+install_line=$(rg -n -F 'rustup run 1.92.0 cargo install' "$workflow" | cut -d: -f1)
+path_line=$(rg -n -F 'export PATH="$CARGO_C_ROOT/bin:$HOME/.rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH"' "$workflow" | cut -d: -f1)
+test "$install_line" -lt "$path_line"
 grep -F "printf '%s  %s\\n' \"\$RSVG_SHA256\" \"\$RSVG_ARCHIVE\" > \"\$RSVG_CHECKSUM\"" "$workflow"
 
 probe_dir=$(mktemp -d)
