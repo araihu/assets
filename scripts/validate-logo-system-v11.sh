@@ -2,7 +2,7 @@
 set -eu
 
 root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-target="$root/concepts/v11"
+target="$root/source/brand/proof/v11"
 
 python3 "$root/scripts/derive-logo-system-v11.py" --check
 

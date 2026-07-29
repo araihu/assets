@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the adaptive v11 logo family from the approved Recraft vectors."""
+"""Build the temporary V11 calibration family from promoted vector masters."""
 
 from __future__ import annotations
 
@@ -13,8 +13,8 @@ from pathlib import Path
 SVG = "http://www.w3.org/2000/svg"
 ET.register_namespace("", SVG)
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "recraft"
-TARGET = ROOT / "concepts" / "v11"
+SOURCE = ROOT / "source" / "brand" / "original"
+TARGET = ROOT / "source" / "brand" / "proof" / "v11"
 
 PRODUCTS = {
     "araihu": "Arai Hû",
@@ -27,7 +27,7 @@ KINDS = ("icon", "logo")
 MODES = ("background", "transparent")
 HEX = re.compile(r"^#([0-9a-fA-F]{6})$")
 
-# Optical canvases measured from the approved transparent Recraft exports in a
+# Optical canvases measured from the approved transparent promoted masters in a
 # browser SVG renderer. Path geometry stays untouched: these viewBoxes only
 # normalize how much of an <img> box each sign occupies. Icons use a square
 # canvas with the dominant art dimension at 76%; logos carry 8% art-relative

@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
-  <title id="title">Arai Hû reverse mark</title>
-  <desc id="desc">The master storm hood carrying a charged diagonal cut.</desc>
-  <path d="M20 106V72c0-14 10-24 24-26 5-18 21-30 39-28 18 2 31 18 31 37v53" fill="none" stroke="#f3f2e9" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
-  <path d="M20 106V92" fill="none" stroke="#31588f" stroke-width="14" stroke-linecap="round" />
-  <path d="M67 38h24L75 64h16l-39 42 13-31H47Z" fill="#c7ff4a" />
-</svg>

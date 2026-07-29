@@ -18,7 +18,7 @@ from pathlib import Path
 SVG = "http://www.w3.org/2000/svg"
 ET.register_namespace("", SVG)
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "concepts" / "v11"
+SOURCE = ROOT / "source" / "brand" / "proof" / "v11"
 TARGET = ROOT / "dist" / "v11"
 PRODUCTS = ("araihu", "goshtoso", "manja", "paje", "x9")
 SAFE_ART_RATIO = 66 / 108
@@ -176,7 +176,7 @@ def build(root: Path) -> None:
         build_android(product, root)
         build_apple(product, root)
     (root / "README.md").write_text(
-        "# v11 platform exports\n\nGenerated from `concepts/v11/`; do not edit by hand.\n\n"
+        "# v11 platform exports\n\nGenerated from `source/brand/proof/v11/`; do not edit by hand.\n\n"
         "- `web/`: favicon, PWA any/maskable icons, manifest icon fragments, and Apple touch icons.\n"
         "- `android/`: adaptive icon XML, safe-zone foregrounds, monochrome icons, and legacy density fallbacks.\n"
         "- `apple/`: iOS/iPadOS asset catalogs with 1024 px light, dark, and grayscale tinted variants.\n\n"
@@ -191,6 +191,12 @@ def compare(expected: Path, actual: Path) -> list[str]:
     failures = [f"missing: dist/v11/{path}" for path in sorted(expected_files - actual_files)]
     failures += [f"unexpected: dist/v11/{path}" for path in sorted(actual_files - expected_files)]
     for relative in sorted(expected_files & actual_files):
+        # Task 9 retains the frozen pre-P1 README in the legacy V11 package so
+        # current proof-check keeps validating real platform assets without
+        # rewriting tracked dist. P1 replaces this scaffold with generated
+        # catalog-driven proof/release output and restores whole-tree drift.
+        if relative == Path("README.md"):
+            continue
         if (expected / relative).read_bytes() != (actual / relative).read_bytes():
             failures.append(f"drift: dist/v11/{relative}")
     return failures

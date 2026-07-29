@@ -38,8 +38,8 @@ light and dark surfaces plus adaptive-background and transparent variants.
   background and transparent modes.
 - SVGs remain self-contained, scalable through `viewBox`, accessible, and
   theme-adaptive through semantic `surface`, `ink`, and `signal` roles.
-- Approved Recraft exports under `recraft/` remain geometry authority unless
-  small-size review produces evidence for a source revision.
+- Promoted masters under `source/brand/original/` remain geometry authority
+  unless small-size review produces evidence for a source revision.
 - Generated v11 files must stay reproducible and pass repository validators.
 - Evaluation spans 16 px favicon use through 512 px mobile/store artwork.
 
@@ -51,10 +51,10 @@ name; Goshtoso, Manja, Pajé, and X-9/Xisnove are product identities.
 
 ## Evidence on Hand
 
-- Approved source exports: `recraft/`
-- Generated v11 family: `concepts/v11/`
+- Approved source exports: `source/brand/original/`
+- Temporary V11 calibration scaffold: `source/brand/proof/v11/`
 - Theme contract: `themes/araihu.css`
-- v10 comparison and context proofs: `review/` and `review/screenshots/`
+- Temporary V11 proof: `review/logo-system-v11.html`
 - Deterministic derivation and validation: `scripts/derive-logo-system-v11.py`
   and `scripts/validate-logo-system-v11.sh`
 
