@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Set up exact Go toolchain
-        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v6.0.0
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
         with:
           go-version: '1.26.5'
           check-latest: false
@@ -34,25 +34,60 @@ jobs:
         shell: bash
         run: test "$(go version | awk '{print $3}')" = go1.26.5
 
+      - name: Lint immutable CI bootstrap contract
+        shell: bash
+        run: ./scripts/check-ci-workflow.sh
+
       - name: Build verified rsvg-convert 2.62.1
         shell: bash
         env:
           RSVG_VERSION: 2.62.1
           RSVG_SHA256: b41ca84206242fddd826a2bf76348d7cdf52c1050cbfa060b866e81a252145c3
+          CARGO_C_VERSION: 0.10.10
+          CARGO_C_SOURCE_SHA256: da2101c5bee6c4bc0d62785c7b79d74a22dd566f93f0530b70d82531d4340b80
+          CARGO_C_LOCK_SHA256: 3d9107cb39d4d3c3503eed03fd668f8c24ad94d2a836f7e8c31f782c31b4a548
         run: |
           set -euo pipefail
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends \
-            build-essential ca-certificates cargo curl \
-            libglib2.0-dev libcairo2-dev libpango1.0-dev \
+            build-essential ca-certificates curl \
+            libglib2.0-dev libcairo2-dev libpango1.0-dev libssl-dev \
             libgdk-pixbuf-2.0-dev libxml2-dev meson ninja-build pkg-config
+          command -v rustup
           rustup toolchain install 1.92.0 --profile minimal
+          CARGO_C_ARCHIVE="${RUNNER_TEMP}/cargo-c-v${CARGO_C_VERSION}.tar.gz"
+          CARGO_C_LOCK="${RUNNER_TEMP}/cargo-c-v${CARGO_C_VERSION}.lock"
+          CARGO_C_CHECKSUM="${RUNNER_TEMP}/cargo-c.sha256"
+          CARGO_C_LOCK_CHECKSUM="${RUNNER_TEMP}/cargo-c.lock.sha256"
+          CARGO_C_ROOT="${RUNNER_TEMP}/cargo-c-root"
+          CARGO_C_SOURCE="${RUNNER_TEMP}/cargo-c-${CARGO_C_VERSION}"
           curl --fail --location --show-error --silent --retry 3 \
-            --output "${RUNNER_TEMP}/librsvg-${RSVG_VERSION}.tar.xz" \
-            "https://download.gnome.org/sources/librsvg/2.62/librsvg-${RSVG_VERSION}.tar.xz"
-          printf '%s  %s\\n' "$RSVG_SHA256" "${RUNNER_TEMP}/librsvg-${RSVG_VERSION}.tar.xz" | sha256sum --check --strict
-          tar --extract --file "${RUNNER_TEMP}/librsvg-${RSVG_VERSION}.tar.xz" --directory "$RUNNER_TEMP"
+            --output "$CARGO_C_ARCHIVE" \
+            "https://github.com/lu-zero/cargo-c/archive/refs/tags/v${CARGO_C_VERSION}.tar.gz"
+          curl --fail --location --show-error --silent --retry 3 \
+            --output "$CARGO_C_LOCK" \
+            "https://github.com/lu-zero/cargo-c/releases/download/v${CARGO_C_VERSION}/Cargo.lock"
+          printf '%s  %s\n' "$CARGO_C_SOURCE_SHA256" "$CARGO_C_ARCHIVE" > "$CARGO_C_CHECKSUM"
+          printf '%s  %s\n' "$CARGO_C_LOCK_SHA256" "$CARGO_C_LOCK" > "$CARGO_C_LOCK_CHECKSUM"
+          test "$(tail -c 1 "$CARGO_C_CHECKSUM" | od -An -t x1 | tr -d ' ')" = 0a
+          sha256sum --check --strict "$CARGO_C_CHECKSUM"
+          test "$(tail -c 1 "$CARGO_C_LOCK_CHECKSUM" | od -An -t x1 | tr -d ' ')" = 0a
+          sha256sum --check --strict "$CARGO_C_LOCK_CHECKSUM"
+          tar --extract --gzip --file "$CARGO_C_ARCHIVE" --directory "$RUNNER_TEMP"
+          install -m 0644 "$CARGO_C_LOCK" "$CARGO_C_SOURCE/Cargo.lock"
           export PATH="$HOME/.rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH"
+          cargo +1.92.0 install --locked --path "$CARGO_C_SOURCE" --root "$CARGO_C_ROOT"
+          export PATH="$CARGO_C_ROOT/bin:$PATH"
+          test "$(cargo-cbuild --version)" = "cargo-cbuild 0.10.10+cargo-0.86.0"
+          RSVG_ARCHIVE="${RUNNER_TEMP}/librsvg-${RSVG_VERSION}.tar.xz"
+          RSVG_CHECKSUM="${RUNNER_TEMP}/librsvg.sha256"
+          curl --fail --location --show-error --silent --retry 3 \
+            --output "$RSVG_ARCHIVE" \
+            "https://download.gnome.org/sources/librsvg/2.62/librsvg-${RSVG_VERSION}.tar.xz"
+          printf '%s  %s\n' "$RSVG_SHA256" "$RSVG_ARCHIVE" > "$RSVG_CHECKSUM"
+          test "$(tail -c 1 "$RSVG_CHECKSUM" | od -An -t x1 | tr -d ' ')" = 0a
+          sha256sum --check --strict "$RSVG_CHECKSUM"
+          tar --extract --file "$RSVG_ARCHIVE" --directory "$RUNNER_TEMP"
           meson setup "${RUNNER_TEMP}/librsvg-build" "${RUNNER_TEMP}/librsvg-${RSVG_VERSION}" \
             --prefix "${RUNNER_TEMP}/librsvg" --buildtype release \
             -Ddocs=disabled -Dintrospection=disabled -Dtests=false

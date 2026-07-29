@@ -26,6 +26,10 @@ by this checklist.
   `rsvg-convert 2.62.1`, and runs Go/build gates with `GOPROXY=off`.
 - [x] CI never runs `make vendor`; only its separate, checksum-verified renderer
   bootstrap uses network access.
+- [x] CI pins `actions/setup-go v6.0.0` to
+  `44694675825211faa026b3c33043df3e48a5fa00`; it builds
+  `cargo-cbuild 0.10.10+cargo-0.86.0` from checksum-verified cargo-c source
+  plus its checksum-verified release `Cargo.lock`, with `cargo --locked`.
 
 ## Explicit P1 and cross-repository gates
 
@@ -59,3 +63,10 @@ Generated locally with `go version go1.26.5 darwin/arm64` and
   `698e06cbc577189d8d7f440c066eae5f08fe31c105abbcb499ecdcde534436f2`
 - `dist/releases/araihu-assets-v0.1.0.zip`:
   `4195f7707c15c936bb09892944783bf0b9ea323029d4ab3ef609f8b68cceb588`
+
+CI bootstrap provenance:
+
+- cargo-c source `v0.10.10`:
+  `da2101c5bee6c4bc0d62785c7b79d74a22dd566f93f0530b70d82531d4340b80`
+- cargo-c `v0.10.10` release `Cargo.lock`:
+  `3d9107cb39d4d3c3503eed03fd668f8c24ad94d2a836f7e8c31f782c31b4a548`
