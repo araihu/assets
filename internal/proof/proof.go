@@ -6,12 +6,17 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"html/template"
 	"io"
 	"io/fs"
+	"os"
+	"path"
+	"path/filepath"
 	"reflect"
 	"regexp"
 	"slices"
 	"sort"
+	"strings"
 
 	"github.com/araihu/assets/internal/catalog"
 )
@@ -61,8 +66,8 @@ func Load(c catalog.Catalog, r io.Reader) (Model, error) {
 	return newModel(c, document.Scenarios)
 }
 
-// Build verifies that every scenario asset exists in fsys. Rendering belongs
-// to the next proof layer; this model layer intentionally writes no document.
+// Build verifies every rendered asset before atomically writing one semantic
+// proof document. It retains the canonical model accepted by Load.
 func Build(m Model, fsys fs.FS, output io.Writer) error {
 	if output == nil {
 		return errors.New("build proof: nil writer")
@@ -77,7 +82,7 @@ func Build(m Model, fsys fs.FS, output io.Writer) error {
 	}
 
 	assets := assetsByName(m.Catalog)
-	checked := make(map[string]struct{}, len(m.Scenarios))
+	checked := make(map[string]struct{}, len(m.Scenarios)+len(m.Products)*5)
 	for _, scenario := range m.Scenarios {
 		if _, already := checked[scenario.Asset]; already {
 			continue
@@ -92,7 +97,219 @@ func Build(m Model, fsys fs.FS, output io.Writer) error {
 			return fmt.Errorf("referenced distribution file %q for scenario %q is not regular", asset.Path, scenario.ID)
 		}
 	}
+	for _, product := range proofProducts(m.Products) {
+		for _, proofPath := range product.RequiredPaths {
+			if _, already := checked[proofPath]; already {
+				continue
+			}
+			checked[proofPath] = struct{}{}
+			info, err := fs.Stat(fsys, proofPath)
+			if err != nil {
+				return fmt.Errorf("missing referenced distribution file %q for product %q: %w", proofPath, product.ID, err)
+			}
+			if !info.Mode().IsRegular() {
+				return fmt.Errorf("referenced distribution file %q for product %q is not regular", proofPath, product.ID)
+			}
+		}
+	}
+	if hasUIScenarios(m, assets) {
+		const spritePath = "icons/ui/sprite.svg"
+		info, err := fs.Stat(fsys, spritePath)
+		if err != nil {
+			return fmt.Errorf("missing referenced distribution file %q for UI sprite rail: %w", spritePath, err)
+		}
+		if !info.Mode().IsRegular() {
+			return fmt.Errorf("referenced distribution file %q for UI sprite rail is not regular", spritePath)
+		}
+	}
+
+	document, err := newDocumentModel(m)
+	if err != nil {
+		return err
+	}
+	page, err := parseDocumentTemplate()
+	if err != nil {
+		return err
+	}
+	var rendered bytes.Buffer
+	if err := page.Execute(&rendered, document); err != nil {
+		return fmt.Errorf("render proof document: %w", err)
+	}
+	if _, err := output.Write(rendered.Bytes()); err != nil {
+		return fmt.Errorf("write proof document: %w", err)
+	}
 	return nil
+}
+
+func hasUIScenarios(m Model, assets map[string]catalog.Asset) bool {
+	for _, scenario := range m.Scenarios {
+		if assets[scenario.Asset].Namespace == "ui" {
+			return true
+		}
+	}
+	return false
+}
+
+type documentModel struct {
+	Release        string
+	Products       []documentProduct
+	ExactSizes     []int
+	BrandScenarios []documentSpecimen
+	UIScenarios    []documentSpecimen
+	Metrics        []documentMetric
+	Licenses       []documentLicense
+}
+
+type documentProduct struct {
+	ID            string
+	Name          string
+	MasterURL     string
+	WebPackageURL string
+	AndroidURL    string
+	AppleURL      string
+	RequiredPaths []string
+}
+
+type documentSpecimen struct {
+	ID        string
+	Product   string
+	Artwork   string
+	Variant   string
+	Mask      string
+	Sizes     []int
+	URL       string
+	SpriteURL string
+}
+
+type documentMetric struct {
+	Product string
+	Asset   string
+	ViewBox string
+	Format  string
+}
+
+type documentLicense struct {
+	Product string
+	Asset   string
+	License string
+	Source  string
+	URL     string
+}
+
+func newDocumentModel(m Model) (documentModel, error) {
+	assets := assetsByName(m.Catalog)
+	document := documentModel{
+		Release:        m.Catalog.Release,
+		Products:       proofProducts(m.Products),
+		ExactSizes:     slices.Clone(m.ExactSizes),
+		BrandScenarios: make([]documentSpecimen, 0),
+		UIScenarios:    make([]documentSpecimen, 0),
+		Metrics:        make([]documentMetric, 0, len(m.Catalog.Assets)),
+		Licenses:       make([]documentLicense, 0, len(m.Catalog.Assets)),
+	}
+	for _, scenario := range m.Scenarios {
+		asset := assets[scenario.Asset]
+		specimen := documentSpecimen{
+			ID:        scenario.ID,
+			Product:   productName(asset.Product),
+			Artwork:   asset.Artwork,
+			Variant:   strings.Join([]string{asset.Surface, asset.Appearance, asset.Framing}, " "),
+			Mask:      scenario.Mask,
+			Sizes:     slices.Clone(scenario.Sizes),
+			URL:       relativeProofURL(asset.Path),
+			SpriteURL: relativeProofURL("icons/ui/sprite.svg") + "#" + asset.SpriteSymbol,
+		}
+		if asset.Namespace == "brand" {
+			document.BrandScenarios = append(document.BrandScenarios, specimen)
+		} else {
+			document.UIScenarios = append(document.UIScenarios, specimen)
+		}
+	}
+	for _, asset := range m.Catalog.Assets {
+		document.Metrics = append(document.Metrics, documentMetric{
+			Product: productName(asset.Product), Asset: asset.CanonicalName,
+			ViewBox: asset.Dimensions.ViewBox, Format: asset.Format,
+		})
+		document.Licenses = append(document.Licenses, documentLicense{
+			Product: productName(asset.Product), Asset: asset.CanonicalName,
+			License: asset.License, Source: asset.Source, URL: relativeProofURL(asset.Path),
+		})
+	}
+	return document, nil
+}
+
+func proofProducts(products []ProductProof) []documentProduct {
+	result := make([]documentProduct, 0, len(products))
+	for _, product := range products {
+		if product.ID == "heroicons" {
+			continue
+		}
+		base := path.Join("platform", "web", product.ID)
+		result = append(result, documentProduct{
+			ID: product.ID, Name: productName(product.ID),
+			MasterURL:     relativeProofURL(path.Join(base, "icon-512.png")),
+			WebPackageURL: relativeProofURL(path.Join(base, "manifest-icons.json")),
+			AndroidURL:    relativeProofURL(path.Join("platform", "android", product.ID, "res", "mipmap-anydpi-v26", "ic_launcher.xml")),
+			AppleURL:      relativeProofURL(path.Join("platform", "apple", product.ID, "Assets.xcassets", "AppIcon.appiconset", "Contents.json")),
+			RequiredPaths: []string{
+				path.Join(base, "icon-512.png"), path.Join(base, "manifest-icons.json"),
+				path.Join("platform", "android", product.ID, "res", "mipmap-anydpi-v26", "ic_launcher.xml"),
+				path.Join("platform", "apple", product.ID, "Assets.xcassets", "AppIcon.appiconset", "Contents.json"),
+			},
+		})
+	}
+	return result
+}
+
+func productName(id string) string {
+	switch id {
+	case "araihu":
+		return "Arai Hû"
+	case "paje":
+		return "Pajé"
+	case "x9":
+		return "X9"
+	case "goshtoso":
+		return "Goshtoso"
+	case "manja":
+		return "Manja"
+	case "heroicons":
+		return "Heroicons"
+	default:
+		return id
+	}
+}
+
+func relativeProofURL(distributionPath string) string { return "../" + path.Clean(distributionPath) }
+
+func parseDocumentTemplate() (*template.Template, error) {
+	file, err := proofTemplatePath()
+	if err != nil {
+		return nil, err
+	}
+	page, err := template.ParseFiles(file)
+	if err != nil {
+		return nil, fmt.Errorf("parse proof template: %w", err)
+	}
+	return page, nil
+}
+
+func proofTemplatePath() (string, error) {
+	directory, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("locate proof template: %w", err)
+	}
+	for {
+		candidate := filepath.Join(directory, "site", "proof", "index.tmpl")
+		if info, statErr := os.Stat(candidate); statErr == nil && info.Mode().IsRegular() {
+			return candidate, nil
+		}
+		parent := filepath.Dir(directory)
+		if parent == directory {
+			return "", errors.New("locate proof template: site/proof/index.tmpl not found")
+		}
+		directory = parent
+	}
 }
 
 func validatedCanonicalModel(m Model) (Model, error) {

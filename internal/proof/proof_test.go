@@ -172,6 +172,17 @@ func TestBuildRejectsNonRegularReferencedDistributionFile(t *testing.T) {
 	}
 }
 
+func TestBuildRejectsMissingUISpriteDistributionFile(t *testing.T) {
+	m := fixtureModel(t)
+	distribution := fixtureDistributionFS()
+	delete(distribution, "icons/ui/sprite.svg")
+
+	err := Build(m, distribution, &bytes.Buffer{})
+	if err == nil || !strings.Contains(err.Error(), "icons/ui/sprite.svg") {
+		t.Fatalf("Build() error = %v, want missing UI sprite", err)
+	}
+}
+
 func TestLoadSortsModelDeterministicallyFromPermutedInputs(t *testing.T) {
 	want := loadProduction(t)
 	c := want.Catalog
@@ -260,6 +271,45 @@ func TestBuildAcceptsProductionDistribution(t *testing.T) {
 	}
 }
 
+func TestBuildEmitsSemanticLabelsAndMetricsTable(t *testing.T) {
+	html := buildFixture(t)
+	for _, want := range []string{
+		`<a class="skip-link" href="#proof-main">Skip to proof evidence</a>`,
+		`<table aria-label="Normalized SVG art bounds">`,
+		`aria-label="Arai Hû icon, transparent adaptive optical, 16 pixels"`,
+		`aria-label="Arai Hû mask-safe launcher icon, 512 pixels"`,
+		`<section aria-labelledby="family-comparison-title">`,
+		`<section aria-labelledby="web-contexts-title">`,
+		`<section aria-labelledby="mobile-contexts-title">`,
+		`<section aria-labelledby="platform-packages-title">`,
+		`<section aria-labelledby="ui-sprite-rail-title">`,
+		`<section aria-labelledby="findings-title">`,
+		`<section aria-labelledby="license-provenance-title">`,
+	} {
+		if !strings.Contains(html, want) {
+			t.Fatalf("Build() output missing %q", want)
+		}
+	}
+	if strings.Contains(html, `src="../concepts/v11/`) || strings.Contains(html, "v11/") {
+		t.Fatalf("Build() output contains a legacy V11 URL: %s", html)
+	}
+}
+
+func TestBuildMatchesFixtureGoldenDeterministically(t *testing.T) {
+	first := buildFixture(t)
+	second := buildFixture(t)
+	if first != second {
+		t.Fatal("Build() output is not deterministic")
+	}
+	want, err := os.ReadFile("testdata/golden/index.html")
+	if err != nil {
+		t.Fatalf("ReadFile golden: %v", err)
+	}
+	if first != string(want) {
+		t.Fatal("Build() output differs from golden")
+	}
+}
+
 func fixtureCatalog(t *testing.T) catalog.Catalog {
 	t.Helper()
 	b, err := os.ReadFile("testdata/catalog.json")
@@ -286,10 +336,24 @@ func fixtureModel(t *testing.T) Model {
 	return m
 }
 
+func buildFixture(t *testing.T) string {
+	t.Helper()
+	var output bytes.Buffer
+	if err := Build(fixtureModel(t), fixtureDistributionFS(), &output); err != nil {
+		t.Fatalf("Build() error = %v", err)
+	}
+	return output.String()
+}
+
 func fixtureDistributionFS() fstest.MapFS {
 	return fstest.MapFS{
-		"icons/brand/araihu-icon.svg":           &fstest.MapFile{Data: []byte("svg")},
-		"icons/ui/heroicons/16-solid-check.svg": &fstest.MapFile{Data: []byte("svg")},
+		"icons/brand/araihu-icon.svg":                                            &fstest.MapFile{Data: []byte("svg")},
+		"icons/ui/heroicons/16-solid-check.svg":                                  &fstest.MapFile{Data: []byte("svg")},
+		"icons/ui/sprite.svg":                                                    &fstest.MapFile{Data: []byte("svg")},
+		"platform/web/araihu/icon-512.png":                                       &fstest.MapFile{Data: []byte("png")},
+		"platform/web/araihu/manifest-icons.json":                                &fstest.MapFile{Data: []byte("json")},
+		"platform/android/araihu/res/mipmap-anydpi-v26/ic_launcher.xml":          &fstest.MapFile{Data: []byte("xml")},
+		"platform/apple/araihu/Assets.xcassets/AppIcon.appiconset/Contents.json": &fstest.MapFile{Data: []byte("json")},
 	}
 }
 
