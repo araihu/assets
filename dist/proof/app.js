@@ -2,6 +2,7 @@
   "use strict";
 
   const root = document.documentElement;
+  const summary = document.querySelector("#evidence-summary");
   const controls = {
     product: document.querySelectorAll("[data-product]"),
     mode: document.querySelectorAll("[data-mode]"),
@@ -20,6 +21,15 @@
     state[key] = allowed[key].has(requested) ? requested : defaults[key];
   }
 
+  const matches = (evidence) => {
+    const product = evidence.dataset.proofProduct;
+    const surface = evidence.dataset.proofSurface;
+    const appearance = evidence.dataset.proofAppearance;
+    return (state.product === "all" || product === "all" || product === state.product) &&
+      (state.mode === "all" || surface === state.mode) &&
+      (state.scheme === "all" || appearance === state.scheme);
+  };
+
   const apply = () => {
     root.dataset.product = state.product;
     root.dataset.mode = state.mode;
@@ -31,10 +41,14 @@
       }
     }
 
-    for (const specimen of document.querySelectorAll("[data-proof-product]")) {
-      const product = specimen.dataset.proofProduct;
-      specimen.hidden = product !== "all" && product !== state.product;
+    const evidence = Array.from(document.querySelectorAll("[data-evidence]"));
+    const visible = evidence.filter(matches);
+    for (const specimen of evidence) {
+      specimen.hidden = !matches(specimen);
     }
+    summary.textContent = visible.length === 0
+      ? "No catalog evidence matches this detail filter. Reset to inspect all products."
+      : `${visible.length} of ${evidence.length} catalog evidence records shown. Family comparison remains visible.`;
 
     const next = new URL(window.location.href);
     for (const [key, value] of Object.entries(state)) {
@@ -51,6 +65,13 @@
       });
     }
   }
+
+  document.querySelector("[data-reset]").addEventListener("click", () => {
+    for (const key of Object.keys(state)) {
+      state[key] = defaults[key];
+    }
+    apply();
+  });
 
   apply();
 })();

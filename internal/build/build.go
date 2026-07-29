@@ -14,9 +14,11 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"testing/fstest"
 
 	"github.com/araihu/assets/internal/catalog"
 	"github.com/araihu/assets/internal/platform"
+	"github.com/araihu/assets/internal/proof"
 	"github.com/araihu/assets/internal/provenance"
 	"github.com/araihu/assets/internal/release"
 	"github.com/araihu/assets/internal/sprite"
@@ -35,6 +37,7 @@ var generatedPaths = map[string]struct{}{
 	"catalog.json":     {},
 	"checksums.txt":    {},
 	"NOTICE":           {},
+	"proof/index.html": {},
 	"proof/styles.css": {},
 	"proof/app.js":     {},
 }
@@ -212,7 +215,52 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 		return nil, err
 	}
 	files["catalog.json"] = catalogBytes
+	proofPage, err := proofDocument(repo, files)
+	if err != nil {
+		return nil, err
+	}
+	if proofPage != nil {
+		proofSources := make([]string, 0, len(files))
+		for name := range files {
+			if strings.HasPrefix(name, "proof/") || strings.HasPrefix(name, "releases/") || name == "catalog.json" || name == "checksums.txt" {
+				continue
+			}
+			proofSources = append(proofSources, name)
+		}
+		slices.Sort(proofSources)
+		for _, name := range proofSources {
+			files["proof/assets/"+name] = append([]byte(nil), files[name]...)
+		}
+		files["proof/index.html"] = proofPage
+	}
 	return files, nil
+}
+
+func proofDocument(repo string, files map[string][]byte) ([]byte, error) {
+	scenarios, err := os.ReadFile(filepath.Join(repo, "site", "proof", "scenarios.json"))
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, fmt.Errorf("build: read proof scenarios: %w", err)
+	}
+	decoded, err := catalog.Decode(bytes.NewReader(files["catalog.json"]))
+	if err != nil {
+		return nil, fmt.Errorf("build: decode proof catalog: %w", err)
+	}
+	model, err := proof.Load(decoded, bytes.NewReader(scenarios))
+	if err != nil {
+		return nil, fmt.Errorf("build: load proof model: %w", err)
+	}
+	distribution := make(fstest.MapFS, len(files))
+	for name, data := range files {
+		distribution[name] = &fstest.MapFile{Data: data}
+	}
+	var rendered bytes.Buffer
+	if err := proof.BuildTemplate(model, distribution, filepath.Join(repo, "site", "proof", "index.tmpl"), &rendered); err != nil {
+		return nil, fmt.Errorf("build: render proof document: %w", err)
+	}
+	return rendered.Bytes(), nil
 }
 
 func proofStaticFiles(repo string) (map[string][]byte, error) {

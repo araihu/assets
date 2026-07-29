@@ -70,6 +70,23 @@ func Load(c catalog.Catalog, r io.Reader) (Model, error) {
 // one writer call. It does not make publication to an arbitrary io.Writer
 // filesystem-atomic; a later command layer owns atomic file replacement.
 func Build(m Model, fsys fs.FS, output io.Writer) error {
+	return build(m, fsys, output, parseDocumentTemplate)
+}
+
+// BuildTemplate renders a proof document with the caller-selected template.
+// Build keeps repository discovery for direct command use; build assembly uses
+// this form so its staged repository never depends on process working directory.
+func BuildTemplate(m Model, fsys fs.FS, templateFile string, output io.Writer) error {
+	return build(m, fsys, output, func() (*template.Template, error) {
+		page, err := template.ParseFiles(templateFile)
+		if err != nil {
+			return nil, fmt.Errorf("parse proof template: %w", err)
+		}
+		return page, nil
+	})
+}
+
+func build(m Model, fsys fs.FS, output io.Writer, parseTemplate func() (*template.Template, error)) error {
 	if output == nil {
 		return errors.New("build proof: nil writer")
 	}
@@ -128,7 +145,7 @@ func Build(m Model, fsys fs.FS, output io.Writer) error {
 	if err != nil {
 		return err
 	}
-	page, err := parseDocumentTemplate()
+	page, err := parseTemplate()
 	if err != nil {
 		return err
 	}
@@ -193,6 +210,8 @@ type documentMaster struct {
 	CanonicalName string
 	Artwork       string
 	Variant       string
+	Appearance    string
+	Surface       string
 	URL           string
 }
 
@@ -203,22 +222,29 @@ type documentPackage struct {
 }
 
 type documentSpecimen struct {
-	ID        string
-	ProductID string
-	Product   string
-	Artwork   string
-	Variant   string
-	Mask      string
-	Sizes     []int
-	URL       string
-	SpriteURL string
+	ID             string
+	ProductID      string
+	Product        string
+	Artwork        string
+	Variant        string
+	Appearance     string
+	Surface        string
+	Mask           string
+	Sizes          []int
+	URL            string
+	SpriteURL      string
+	IsTransparent  bool
+	StressSurfaces []string
 }
 
 type documentMetric struct {
-	Product string
-	Asset   string
-	ViewBox string
-	Format  string
+	Product    string
+	ProductID  string
+	Asset      string
+	ViewBox    string
+	Format     string
+	Appearance string
+	Surface    string
 }
 
 type documentLicense struct {
@@ -247,15 +273,19 @@ func newDocumentModel(m Model) (documentModel, error) {
 	for _, scenario := range m.Scenarios {
 		asset := assets[scenario.Asset]
 		specimen := documentSpecimen{
-			ID:        scenario.ID,
-			ProductID: asset.Product,
-			Product:   productName(asset.Product),
-			Artwork:   asset.Artwork,
-			Variant:   strings.Join([]string{asset.Surface, asset.Appearance, asset.Framing}, " "),
-			Mask:      scenario.Mask,
-			Sizes:     slices.Clone(scenario.Sizes),
-			URL:       relativeProofURL(asset.Path),
-			SpriteURL: relativeProofURL("icons/ui/sprite.svg") + "#" + asset.SpriteSymbol,
+			ID:             scenario.ID,
+			ProductID:      asset.Product,
+			Product:        productName(asset.Product),
+			Artwork:        asset.Artwork,
+			Variant:        strings.Join([]string{asset.Surface, asset.Appearance, asset.Framing}, " "),
+			Appearance:     asset.Appearance,
+			Surface:        asset.Surface,
+			Mask:           scenario.Mask,
+			Sizes:          slices.Clone(scenario.Sizes),
+			URL:            relativeProofURL(asset.Path),
+			SpriteURL:      relativeProofURL("icons/ui/sprite.svg") + "#" + asset.SpriteSymbol,
+			IsTransparent:  asset.Surface == "transparent",
+			StressSurfaces: []string{"checker", "paper", "midnight"},
 		}
 		if asset.Namespace == "brand" {
 			document.BrandScenarios = append(document.BrandScenarios, specimen)
@@ -265,8 +295,8 @@ func newDocumentModel(m Model) (documentModel, error) {
 	}
 	for _, asset := range m.Catalog.Assets {
 		document.Metrics = append(document.Metrics, documentMetric{
-			Product: productName(asset.Product), Asset: asset.CanonicalName,
-			ViewBox: asset.Dimensions.ViewBox, Format: asset.Format,
+			Product: productName(asset.Product), ProductID: asset.Product, Asset: asset.CanonicalName,
+			ViewBox: asset.Dimensions.ViewBox, Format: asset.Format, Appearance: asset.Appearance, Surface: asset.Surface,
 		})
 		licenseURL, provenanceURL := relativeProofURL("NOTICE"), relativeProofURL("NOTICE")
 		if asset.Namespace == "ui" {
@@ -297,6 +327,8 @@ func documentProducts(products []PlatformProof) []documentProduct {
 				CanonicalName: product.Master.CanonicalName,
 				Artwork:       product.Master.Artwork,
 				Variant:       strings.Join([]string{product.Master.Appearance, product.Master.Surface, product.Master.Framing}, " "),
+				Appearance:    product.Master.Appearance,
+				Surface:       product.Master.Surface,
 				URL:           relativeProofURL(product.Master.Path),
 			},
 			Packages: packages,
@@ -324,7 +356,9 @@ func productName(id string) string {
 	}
 }
 
-func relativeProofURL(distributionPath string) string { return "../" + path.Clean(distributionPath) }
+func relativeProofURL(distributionPath string) string {
+	return "assets/" + path.Clean(distributionPath)
+}
 
 func parseDocumentTemplate() (*template.Template, error) {
 	file, err := proofTemplatePath()

@@ -16,79 +16,86 @@
   </header>
   <aside class="proof-controls" aria-label="Proof controls">
     <fieldset>
-      <legend>Product</legend>
+      <legend>Product detail</legend>
+      <button type="button" aria-pressed="false" data-product="all">All products</button>
       <button type="button" aria-pressed="false" data-product="araihu">Arai Hû</button>
     </fieldset>
     <fieldset>
-      <legend>Surface</legend>
-      <button type="button" aria-pressed="false" data-mode="transparent">Transparent</button>
-      <button type="button" aria-pressed="false" data-mode="plate">Plate</button>
+      <legend>Catalog surface</legend>
+      <button type="button" aria-pressed="false" data-mode="all">All surfaces</button>
+      <button type="button" aria-pressed="false" data-mode="transparent">Transparent artwork</button>
+      <button type="button" aria-pressed="false" data-mode="plate">Source plate</button>
     </fieldset>
     <fieldset>
-      <legend>Scheme</legend>
-      <button type="button" aria-pressed="false" data-scheme="light">Light</button>
-      <button type="button" aria-pressed="false" data-scheme="dark">Dark</button>
+      <legend>Artwork scheme</legend>
+      <button type="button" aria-pressed="false" data-scheme="all">All schemes</button>
+      <button type="button" aria-pressed="false" data-scheme="light">Light artwork</button>
+      <button type="button" aria-pressed="false" data-scheme="dark">Dark artwork</button>
     </fieldset>
+    <div class="proof-state">
+      <p id="evidence-summary" aria-live="polite">Loading catalog evidence.</p>
+      <button type="button" data-reset>Reset to all products</button>
+    </div>
   </aside>
   <main id="proof-main">
+    <section aria-labelledby="family-comparison-title">
+      <div class="section-heading"><p>Always visible baseline</p><h2 id="family-comparison-title">Five-product family comparison</h2></div>
+      <div class="family-comparison" role="list" aria-label="Five-product launcher-master comparison">
+        <figure role="listitem"><div class="family-baseline"><img src="assets/platform/web/araihu/icon-maskable-512.png" width="64" height="64" aria-label="Arai Hû icon, light plate launcher, 64 pixels"></div><figcaption>Arai Hû / icon / light plate launcher / 64 px</figcaption></figure>
+      </div>
+    </section>
+
     <section aria-labelledby="exact-size-rails-title">
-      <h2 id="exact-size-rails-title">Exact-size rails</h2>
-      <figure data-scenario="araihu-icon-web-navigation" data-proof-product="araihu">
+      <div class="section-heading"><p>Detail evidence</p><h2 id="exact-size-rails-title">Exact-size rails</h2></div>
+      <figure data-evidence data-scenario="araihu-icon-web-navigation" data-proof-product="araihu" data-proof-surface="transparent" data-proof-appearance="adaptive" data-mask="none">
         <figcaption>Arai Hû icon, transparent adaptive optical, none mask</figcaption>
         <div class="exact-size-rail" role="list" aria-label="Arai Hû icon exact-size rail">
-          <figure role="listitem"><img src="../icons/brand/araihu-icon.svg" width="16" height="16" aria-label="Arai Hû icon, transparent adaptive optical, 16 pixels"><figcaption>16 px</figcaption></figure><figure role="listitem"><img src="../icons/brand/araihu-icon.svg" width="20" height="20" aria-label="Arai Hû icon, transparent adaptive optical, 20 pixels"><figcaption>20 px</figcaption></figure><figure role="listitem"><img src="../icons/brand/araihu-icon.svg" width="24" height="24" aria-label="Arai Hû icon, transparent adaptive optical, 24 pixels"><figcaption>24 px</figcaption></figure><figure role="listitem"><img src="../icons/brand/araihu-icon.svg" width="32" height="32" aria-label="Arai Hû icon, transparent adaptive optical, 32 pixels"><figcaption>32 px</figcaption></figure><figure role="listitem"><img src="../icons/brand/araihu-icon.svg" width="48" height="48" aria-label="Arai Hû icon, transparent adaptive optical, 48 pixels"><figcaption>48 px</figcaption></figure><figure role="listitem"><img src="../icons/brand/araihu-icon.svg" width="64" height="64" aria-label="Arai Hû icon, transparent adaptive optical, 64 pixels"><figcaption>64 px</figcaption></figure><figure role="listitem"><img src="../icons/brand/araihu-icon.svg" width="128" height="128" aria-label="Arai Hû icon, transparent adaptive optical, 128 pixels"><figcaption>128 px</figcaption></figure><figure role="listitem"><img src="../icons/brand/araihu-icon.svg" width="512" height="512" aria-label="Arai Hû icon, transparent adaptive optical, 512 pixels"><figcaption>512 px</figcaption></figure>
+          <figure role="listitem"><div class="exact-specimen"><div class="stress-samples" aria-label="Transparent contrast stress"><span class="transparent-stress checker"><img src="assets/icons/brand/araihu-icon.svg" width="16" height="16" aria-label="Arai Hû icon, transparent adaptive optical, 16 pixels"></span><span class="transparent-stress paper"><img src="assets/icons/brand/araihu-icon.svg" width="16" height="16" aria-label="Arai Hû icon, transparent adaptive optical, 16 pixels"></span><span class="transparent-stress midnight"><img src="assets/icons/brand/araihu-icon.svg" width="16" height="16" aria-label="Arai Hû icon, transparent adaptive optical, 16 pixels"></span></div></div><figcaption>16 px</figcaption></figure><figure role="listitem"><div class="exact-specimen"><div class="stress-samples" aria-label="Transparent contrast stress"><span class="transparent-stress checker"><img src="assets/icons/brand/araihu-icon.svg" width="20" height="20" aria-label="Arai Hû icon, transparent adaptive optical, 20 pixels"></span><span class="transparent-stress paper"><img src="assets/icons/brand/araihu-icon.svg" width="20" height="20" aria-label="Arai Hû icon, transparent adaptive optical, 20 pixels"></span><span class="transparent-stress midnight"><img src="assets/icons/brand/araihu-icon.svg" width="20" height="20" aria-label="Arai Hû icon, transparent adaptive optical, 20 pixels"></span></div></div><figcaption>20 px</figcaption></figure><figure role="listitem"><div class="exact-specimen"><div class="stress-samples" aria-label="Transparent contrast stress"><span class="transparent-stress checker"><img src="assets/icons/brand/araihu-icon.svg" width="24" height="24" aria-label="Arai Hû icon, transparent adaptive optical, 24 pixels"></span><span class="transparent-stress paper"><img src="assets/icons/brand/araihu-icon.svg" width="24" height="24" aria-label="Arai Hû icon, transparent adaptive optical, 24 pixels"></span><span class="transparent-stress midnight"><img src="assets/icons/brand/araihu-icon.svg" width="24" height="24" aria-label="Arai Hû icon, transparent adaptive optical, 24 pixels"></span></div></div><figcaption>24 px</figcaption></figure><figure role="listitem"><div class="exact-specimen"><div class="stress-samples" aria-label="Transparent contrast stress"><span class="transparent-stress checker"><img src="assets/icons/brand/araihu-icon.svg" width="32" height="32" aria-label="Arai Hû icon, transparent adaptive optical, 32 pixels"></span><span class="transparent-stress paper"><img src="assets/icons/brand/araihu-icon.svg" width="32" height="32" aria-label="Arai Hû icon, transparent adaptive optical, 32 pixels"></span><span class="transparent-stress midnight"><img src="assets/icons/brand/araihu-icon.svg" width="32" height="32" aria-label="Arai Hû icon, transparent adaptive optical, 32 pixels"></span></div></div><figcaption>32 px</figcaption></figure><figure role="listitem"><div class="exact-specimen"><div class="stress-samples" aria-label="Transparent contrast stress"><span class="transparent-stress checker"><img src="assets/icons/brand/araihu-icon.svg" width="48" height="48" aria-label="Arai Hû icon, transparent adaptive optical, 48 pixels"></span><span class="transparent-stress paper"><img src="assets/icons/brand/araihu-icon.svg" width="48" height="48" aria-label="Arai Hû icon, transparent adaptive optical, 48 pixels"></span><span class="transparent-stress midnight"><img src="assets/icons/brand/araihu-icon.svg" width="48" height="48" aria-label="Arai Hû icon, transparent adaptive optical, 48 pixels"></span></div></div><figcaption>48 px</figcaption></figure><figure role="listitem"><div class="exact-specimen"><div class="stress-samples" aria-label="Transparent contrast stress"><span class="transparent-stress checker"><img src="assets/icons/brand/araihu-icon.svg" width="64" height="64" aria-label="Arai Hû icon, transparent adaptive optical, 64 pixels"></span><span class="transparent-stress paper"><img src="assets/icons/brand/araihu-icon.svg" width="64" height="64" aria-label="Arai Hû icon, transparent adaptive optical, 64 pixels"></span><span class="transparent-stress midnight"><img src="assets/icons/brand/araihu-icon.svg" width="64" height="64" aria-label="Arai Hû icon, transparent adaptive optical, 64 pixels"></span></div></div><figcaption>64 px</figcaption></figure><figure role="listitem"><div class="exact-specimen"><div class="stress-samples" aria-label="Transparent contrast stress"><span class="transparent-stress checker"><img src="assets/icons/brand/araihu-icon.svg" width="128" height="128" aria-label="Arai Hû icon, transparent adaptive optical, 128 pixels"></span><span class="transparent-stress paper"><img src="assets/icons/brand/araihu-icon.svg" width="128" height="128" aria-label="Arai Hû icon, transparent adaptive optical, 128 pixels"></span><span class="transparent-stress midnight"><img src="assets/icons/brand/araihu-icon.svg" width="128" height="128" aria-label="Arai Hû icon, transparent adaptive optical, 128 pixels"></span></div></div><figcaption>128 px</figcaption></figure><figure role="listitem"><div class="exact-specimen"><div class="stress-samples" aria-label="Transparent contrast stress"><span class="transparent-stress checker"><img src="assets/icons/brand/araihu-icon.svg" width="512" height="512" aria-label="Arai Hû icon, transparent adaptive optical, 512 pixels"></span><span class="transparent-stress paper"><img src="assets/icons/brand/araihu-icon.svg" width="512" height="512" aria-label="Arai Hû icon, transparent adaptive optical, 512 pixels"></span><span class="transparent-stress midnight"><img src="assets/icons/brand/araihu-icon.svg" width="512" height="512" aria-label="Arai Hû icon, transparent adaptive optical, 512 pixels"></span></div></div><figcaption>512 px</figcaption></figure>
         </div>
       </figure>
     </section>
 
-    <section aria-labelledby="family-comparison-title">
-      <h2 id="family-comparison-title">Family comparison</h2>
-      <figure data-proof-product="araihu"><img src="../icons/brand/araihu-icon.svg" width="64" height="64" aria-label="Arai Hû icon, transparent adaptive optical, 64 pixels"><figcaption>Arai Hû / icon / transparent adaptive optical / 64 px</figcaption></figure>
-    </section>
-
     <section aria-labelledby="web-contexts-title">
-      <h2 id="web-contexts-title">Web navigation, card, and dashboard</h2>
-      <article class="web-context" data-context="web-navigation" data-proof-product="araihu">
+      <div class="section-heading"><p>Spacing and collision</p><h2 id="web-contexts-title">Web navigation, card, and dashboard</h2></div>
+      <article class="web-context" data-evidence data-context="web-navigation" data-proof-product="araihu" data-proof-surface="transparent" data-proof-appearance="adaptive">
         <h3>Arai Hû web specimens</h3>
-        <nav aria-label="Arai Hû navigation"><img src="../icons/brand/araihu-icon.svg" width="24" height="24" aria-label="Arai Hû icon, transparent adaptive optical, 24 pixels"> Navigation</nav>
-        <p><img src="../icons/brand/araihu-icon.svg" width="48" height="48" aria-label="Arai Hû icon, transparent adaptive optical, 48 pixels"> Card context</p>
-        <p><img src="../icons/brand/araihu-icon.svg" width="32" height="32" aria-label="Arai Hû icon, transparent adaptive optical, 32 pixels"> Dashboard context</p>
+        <nav aria-label="Arai Hû navigation"><span class="browser-dot" aria-hidden="true"></span><img src="assets/icons/brand/araihu-icon.svg" width="24" height="24" aria-label="Arai Hû icon, transparent adaptive optical, 24 pixels"><span>Workspace</span><span>Evidence</span><span class="nav-spacer"></span><span>Review</span></nav>
+        <section class="context-card" aria-label="Arai Hû card context"><img src="assets/icons/brand/araihu-icon.svg" width="48" height="48" aria-label="Arai Hû icon, transparent adaptive optical, 48 pixels"><div><strong>Arai Hû</strong><span>Catalog-bound identity specimen</span></div></section>
+        <section class="dashboard-row" aria-label="Arai Hû dashboard context"><img src="assets/icons/brand/araihu-icon.svg" width="32" height="32" aria-label="Arai Hû icon, transparent adaptive optical, 32 pixels"><span>Latest review evidence</span><span class="status-chip">Verified</span></section>
       </article>
     </section>
 
     <section aria-labelledby="mobile-contexts-title">
-      <h2 id="mobile-contexts-title">Mobile app bar, notification, tab, home, and store</h2>
-      <article class="mobile-context" data-context="araihu-icon-web-navigation" data-proof-product="araihu">
+      <div class="section-heading"><p>Mobile placement</p><h2 id="mobile-contexts-title">App bar, notification, tab, home, and store</h2></div>
+      <article class="mobile-context" data-evidence data-context="araihu-icon-web-navigation" data-proof-product="araihu" data-proof-surface="transparent" data-proof-appearance="adaptive">
         <h3>Arai Hû mobile specimens</h3>
-        <p><img src="../icons/brand/araihu-icon.svg" width="24" height="24" aria-label="Arai Hû icon, transparent adaptive optical, 24 pixels"> App bar</p>
-        <p><img src="../icons/brand/araihu-icon.svg" width="20" height="20" aria-label="Arai Hû icon, transparent adaptive optical, 20 pixels"> Notification</p>
-        <p><img src="../icons/brand/araihu-icon.svg" width="24" height="24" aria-label="Arai Hû icon, transparent adaptive optical, 24 pixels"> Tab bar</p>
-        <p><img src="../icons/brand/araihu-icon.svg" width="64" height="64" aria-label="Arai Hû icon, transparent adaptive optical, 64 pixels"> Home screen</p>
-        <p><img src="../icons/brand/araihu-icon.svg" width="128" height="128" aria-label="Arai Hû icon, transparent adaptive optical, 128 pixels"> Store</p>
+        <div class="phone-shell"><div class="phone-status"><span>9:41</span><span>● ◔</span></div><div class="phone-appbar"><img src="assets/icons/brand/araihu-icon.svg" width="24" height="24" aria-label="Arai Hû icon, transparent adaptive optical, 24 pixels"><strong>Arai Hû</strong><span aria-hidden="true">•••</span></div><div class="notification"><img src="assets/icons/brand/araihu-icon.svg" width="20" height="20" aria-label="Arai Hû icon, transparent adaptive optical, 20 pixels"><span>Identity evidence ready</span></div><div class="phone-home"><span class="source-plate"><img src="assets/icons/brand/araihu-icon.svg" width="64" height="64" aria-label="Arai Hû icon, transparent adaptive optical, 64 pixels"></span><span>Arai Hû</span></div><div class="phone-tabs"><span>Overview</span><span><img src="assets/icons/brand/araihu-icon.svg" width="24" height="24" aria-label="Arai Hû icon, transparent adaptive optical, 24 pixels">Evidence</span><span>Settings</span></div></div>
+        <div class="store-specimen"><span class="source-plate"><img src="assets/icons/brand/araihu-icon.svg" width="128" height="128" aria-label="Arai Hû icon, transparent adaptive optical, 128 pixels"></span><p>Store-scale placement<br><small>128 px source sample</small></p></div>
       </article>
     </section>
 
     <section aria-labelledby="literal-master-title">
-      <h2 id="literal-master-title">Literal 512 master</h2>
-      <figure data-canonical-name="platform-web-araihu-icon-maskable-512-png" data-proof-product="araihu"><img src="../platform/web/araihu/icon-maskable-512.png" width="512" height="512" aria-label="Arai Hû icon, light plate launcher, 512 pixels"><figcaption>Arai Hû / icon / light plate launcher / 512 px</figcaption></figure>
+      <div class="section-heading"><p>Literal artifact</p><h2 id="literal-master-title">512 px launcher masters</h2></div>
+      <div class="master-rail" role="list" aria-label="Literal 512-pixel launcher masters"><figure role="listitem" data-evidence data-canonical-name="platform-web-araihu-icon-maskable-512-png" data-proof-product="araihu" data-proof-surface="plate" data-proof-appearance="light"><span class="source-plate"><img src="assets/platform/web/araihu/icon-maskable-512.png" width="512" height="512" aria-label="Arai Hû icon, light plate launcher, 512 pixels"></span><figcaption>Arai Hû / icon / light plate launcher / 512 px</figcaption></figure></div>
     </section>
 
     <section aria-labelledby="platform-packages-title">
       <h2 id="platform-packages-title">Platform packages</h2>
-      <ul><li data-proof-product="araihu">Arai Hû: <a href="../platform/web/araihu/manifest-icons.json">web-manifest</a> (<a href="../NOTICE">provenance</a>) <a href="../platform/android/araihu/res/mipmap-anydpi-v26/ic_launcher.xml">android-adaptive-icon</a> (<a href="../NOTICE">provenance</a>) <a href="../platform/apple/araihu/Assets.xcassets/AppIcon.appiconset/Contents.json">apple-app-icon</a> (<a href="../NOTICE">provenance</a>) </li></ul>
+      <ul><li data-evidence data-proof-product="araihu" data-proof-surface="plate" data-proof-appearance="light">Arai Hû: <a href="assets/platform/web/araihu/manifest-icons.json">web-manifest</a> (<a href="assets/NOTICE">provenance</a>) <a href="assets/platform/android/araihu/res/mipmap-anydpi-v26/ic_launcher.xml">android-adaptive-icon</a> (<a href="assets/NOTICE">provenance</a>) <a href="assets/platform/apple/araihu/Assets.xcassets/AppIcon.appiconset/Contents.json">apple-app-icon</a> (<a href="assets/NOTICE">provenance</a>) </li></ul>
     </section>
 
     <section aria-labelledby="ui-sprite-rail-title">
       <h2 id="ui-sprite-rail-title">UI icon sprite rail</h2>
-      <figure data-proof-product="all"><svg width="16" height="16" role="img" aria-label="Heroicons icon, transparent default optical, 16 pixels"><use href="../icons/ui/sprite.svg#hi-16-solid-check"></use></svg><figcaption>Heroicons / icon / transparent default optical / 16 px</figcaption></figure>
+      <div class="ui-sprite-rail" role="list"><figure role="listitem" data-evidence data-proof-product="all" data-proof-surface="transparent" data-proof-appearance="default"><svg width="16" height="16" role="img" aria-label="Heroicons icon, transparent default optical, 16 pixels"><use href="assets/icons/ui/sprite.svg#hi-16-solid-check"></use></svg><figcaption>Heroicons / icon / transparent default optical / 16 px</figcaption></figure></div>
     </section>
 
     <section aria-labelledby="geometry-title">
       <h2 id="geometry-title">Semantic geometry</h2>
       <div class="metric-table" tabindex="0">
         <table aria-label="Normalized SVG art bounds">
+          <caption>Catalog-backed geometry for the selected product evidence.</caption>
           <thead><tr><th scope="col">Product</th><th scope="col">Asset</th><th scope="col">ViewBox</th><th scope="col">Format</th></tr></thead>
-          <tbody><tr><td>Arai Hû</td><td>brand-araihu-icon</td><td>0 0 108 108</td><td>svg</td></tr><tr><td>Arai Hû</td><td>platform-web-araihu-icon-maskable-512-png</td><td></td><td>png</td></tr><tr><td>Heroicons</td><td>ui-hi-16-solid-check</td><td>0 0 16 16</td><td>svg</td></tr></tbody>
+          <tbody><tr data-evidence data-proof-product="araihu" data-proof-surface="transparent" data-proof-appearance="adaptive"><td>Arai Hû</td><td>brand-araihu-icon</td><td>0 0 108 108</td><td>svg</td></tr><tr data-evidence data-proof-product="araihu" data-proof-surface="plate" data-proof-appearance="light"><td>Arai Hû</td><td>platform-web-araihu-icon-maskable-512-png</td><td></td><td>png</td></tr><tr data-evidence data-proof-product="heroicons" data-proof-surface="transparent" data-proof-appearance="default"><td>Heroicons</td><td>ui-hi-16-solid-check</td><td>0 0 16 16</td><td>svg</td></tr></tbody>
         </table>
       </div>
     </section>
@@ -100,8 +107,8 @@
 
     <section aria-labelledby="license-provenance-title">
       <h2 id="license-provenance-title">License and provenance</h2>
-      <p><a href="../NOTICE">Release NOTICE</a>; <a href="../licenses/Apache-2.0.txt">repository Apache-2.0 license</a>.</p>
-      <ul><li>Arai Hû <a href="../icons/brand/araihu-icon.svg">brand-araihu-icon</a>: <a href="../NOTICE">Arai Hu Brand Terms v0.1</a>; <a href="../NOTICE">araihu-v11</a></li><li>Arai Hû <a href="../platform/web/araihu/icon-maskable-512.png">platform-web-araihu-icon-maskable-512-png</a>: <a href="../NOTICE">Arai Hu Brand Terms v0.1</a>; <a href="../NOTICE">platform-generator-v0.1</a></li><li>Heroicons <a href="../icons/ui/heroicons/16-solid-check.svg">ui-hi-16-solid-check</a>: <a href="../licenses/heroicons-MIT.txt">MIT</a>; <a href="../icons/ui/heroicons/provenance.json">heroicons@v2.2.0</a></li></ul>
+      <p><a href="assets/NOTICE">Release NOTICE</a>; <a href="assets/licenses/Apache-2.0.txt">repository Apache-2.0 license</a>.</p>
+      <ul><li>Arai Hû <a href="assets/icons/brand/araihu-icon.svg">brand-araihu-icon</a>: <a href="assets/NOTICE">Arai Hu Brand Terms v0.1</a>; <a href="assets/NOTICE">araihu-v11</a></li><li>Arai Hû <a href="assets/platform/web/araihu/icon-maskable-512.png">platform-web-araihu-icon-maskable-512-png</a>: <a href="assets/NOTICE">Arai Hu Brand Terms v0.1</a>; <a href="assets/NOTICE">platform-generator-v0.1</a></li><li>Heroicons <a href="assets/icons/ui/heroicons/16-solid-check.svg">ui-hi-16-solid-check</a>: <a href="assets/licenses/heroicons-MIT.txt">MIT</a>; <a href="assets/icons/ui/heroicons/provenance.json">heroicons@v2.2.0</a></li></ul>
     </section>
   </main>
 </body>

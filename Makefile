@@ -16,8 +16,7 @@ check: test
 	go run ./cmd/araihu-assets build --offline --check
 
 proof:
-	./scripts/validate-logo-system-v11.sh
-	./scripts/validate-platform-assets-v11.sh
+	go run ./cmd/araihu-assets build --offline
 
 proof-check: proof
 

@@ -141,6 +141,37 @@ func TestRunCopiesProofStaticAssetsDeterministically(t *testing.T) {
 	}
 }
 
+func TestRunPublishesCatalogBoundProofDocument(t *testing.T) {
+	repo := testRepo(t)
+	template, err := os.ReadFile(filepath.Join("..", "..", "site", "proof", "index.tmpl"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	mustWrite(t, filepath.Join(repo, "site", "proof", "index.tmpl"), template)
+	mustWrite(t, filepath.Join(repo, "site", "proof", "scenarios.json"), []byte(`{"scenarios":[{"id":"araihu-icon-proof","group":"brand","asset":"araihu-icon-light-transparent-optical","artwork":"icon","appearance":"light","surface":"transparent","framing":"optical","mask":"none","context":"web-navigation","sizes":[16]}]}`))
+
+	if err := Run(repo, proofInputs()); err != nil {
+		t.Fatal(err)
+	}
+	page, err := os.ReadFile(filepath.Join(repo, "dist", "proof", "index.html"))
+	if err != nil {
+		t.Fatalf("ReadFile generated proof: %v", err)
+	}
+	if !bytes.Contains(page, []byte(`data-scenario="araihu-icon-proof"`)) {
+		t.Fatalf("generated proof misses catalog scenario: %s", page)
+	}
+	proofAsset, err := os.ReadFile(filepath.Join(repo, "dist", "proof", "assets", "icons", "brand", "asset.svg"))
+	if err != nil {
+		t.Fatalf("ReadFile proof-local asset: %v", err)
+	}
+	if !bytes.Equal(proofAsset, []byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`)) {
+		t.Fatalf("proof-local asset = %q", proofAsset)
+	}
+	if err := Check(repo, proofInputs()); err != nil {
+		t.Fatalf("Check() rejects generated proof: %v", err)
+	}
+}
+
 func TestRunWritesSortedChecksumsAndDeterministicReleaseMembership(t *testing.T) {
 	first, second := testRepo(t), testRepo(t)
 	inputs := testInputs([]byte("asset"))
@@ -193,6 +224,27 @@ func testInputs(_ []byte) Inputs {
 			CanonicalName: "platform-web-araihu-favicon-svg", Namespace: "brand", Path: "platform/web/araihu/favicon.svg", Product: "araihu", Artwork: "icon", Appearance: "adaptive", Surface: "transparent", Framing: "optical", Format: "svg",
 			Dimensions: catalog.Dimensions{ViewBox: "0 0 1 1"}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "platform generator v0.1.0", SHA256: hash([]byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`)),
 		}}},
+	}
+}
+
+func proofInputs() Inputs {
+	icon := []byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`)
+	master := []byte("png")
+	return Inputs{
+		Brand: transform.Result{Files: map[string][]byte{"dist/icons/brand/asset.svg": icon}, Assets: []catalog.Asset{{
+			CanonicalName: "araihu-icon-light-transparent-optical", Namespace: "brand", Path: "icons/brand/asset.svg", Product: "araihu", Artwork: "icon", Appearance: "light", Surface: "transparent", Framing: "optical", Format: "svg",
+			Dimensions: catalog.Dimensions{ViewBox: "0 0 1 1"}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "source/brand/original/asset.svg", SHA256: hash(icon),
+		}}},
+		Platform: platform.Result{Files: map[string][]byte{
+			"dist/platform/web/araihu/icon-maskable-512.png":                              master,
+			"dist/platform/web/araihu/manifest-icons.json":                                []byte("{}"),
+			"dist/platform/android/araihu/res/mipmap-anydpi-v26/ic_launcher.xml":          []byte("<resources/>"),
+			"dist/platform/apple/araihu/Assets.xcassets/AppIcon.appiconset/Contents.json": []byte("{}"),
+		}, Assets: []catalog.Asset{{
+			CanonicalName: "platform-web-araihu-icon-maskable-512-png", Namespace: "brand", Path: "platform/web/araihu/icon-maskable-512.png", Product: "araihu", Artwork: "icon", Appearance: "light", Surface: "plate", Framing: "launcher", Format: "png",
+			Dimensions: catalog.Dimensions{Width: 512, Height: 512}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "platform generator", SHA256: hash(master),
+		}}},
+		UI: provenance.Result{Files: map[string][]byte{"licenses/heroicons-MIT.txt": []byte("MIT\n")}},
 	}
 }
 

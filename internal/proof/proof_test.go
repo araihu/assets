@@ -321,7 +321,7 @@ func TestProductionMasterProofUsesCatalogMaskable512Semantics(t *testing.T) {
 	}
 	html := output.String()
 	for _, want := range []string{
-		`src="../platform/web/araihu/icon-maskable-512.png"`,
+		`src="assets/platform/web/araihu/icon-maskable-512.png"`,
 		`aria-label="Arai Hû icon, light plate launcher, 512 pixels"`,
 		`data-canonical-name="platform-web-araihu-icon-maskable-512-png"`,
 	} {
@@ -329,7 +329,7 @@ func TestProductionMasterProofUsesCatalogMaskable512Semantics(t *testing.T) {
 			t.Fatalf("production proof missing %q", want)
 		}
 	}
-	if strings.Contains(html, `data-canonical-name="platform-web-araihu-icon-maskable-512-png"><img src="../platform/web/araihu/icon-512.png"`) {
+	if strings.Contains(html, `data-canonical-name="platform-web-araihu-icon-maskable-512-png"><img src="assets/platform/web/araihu/icon-512.png"`) {
 		t.Fatal("literal master mislabels the transparent optical 512 artifact")
 	}
 }
@@ -343,10 +343,10 @@ func TestBuildEmitsSemanticLabelsAndMetricsTable(t *testing.T) {
 		`<table aria-label="Normalized SVG art bounds">`,
 		`aria-label="Arai Hû icon, transparent adaptive optical, 16 pixels"`,
 		`aria-label="Arai Hû icon, light plate launcher, 512 pixels"`,
-		`href="../NOTICE"`,
-		`href="../licenses/Apache-2.0.txt"`,
-		`href="../licenses/heroicons-MIT.txt"`,
-		`href="../icons/ui/heroicons/provenance.json"`,
+		`href="assets/NOTICE"`,
+		`href="assets/licenses/Apache-2.0.txt"`,
+		`href="assets/licenses/heroicons-MIT.txt"`,
+		`href="assets/icons/ui/heroicons/provenance.json"`,
 		`<section aria-labelledby="family-comparison-title">`,
 		`<section aria-labelledby="web-contexts-title">`,
 		`<section aria-labelledby="mobile-contexts-title">`,
@@ -359,8 +359,29 @@ func TestBuildEmitsSemanticLabelsAndMetricsTable(t *testing.T) {
 			t.Fatalf("Build() output missing %q", want)
 		}
 	}
-	if strings.Contains(html, `src="../concepts/v11/`) || strings.Contains(html, "v11/") {
+	if strings.Contains(html, `src="assets/concepts/v11/`) || strings.Contains(html, "v11/") {
 		t.Fatalf("Build() output contains a legacy V11 URL: %s", html)
+	}
+}
+
+func TestBuildEmitsReviewFilteringAndMaskEvidence(t *testing.T) {
+	html := buildProduction(t)
+	for _, want := range []string{
+		`data-evidence`,
+		`data-proof-surface="transparent"`,
+		`data-proof-appearance="light"`,
+		`data-mask="circle"`,
+		`class="mask-frame mask-circle"`,
+		`class="transparent-stress checker"`,
+		`class="transparent-stress paper"`,
+		`class="transparent-stress midnight"`,
+		`<caption>Catalog-backed geometry for the selected product evidence.</caption>`,
+		`id="evidence-summary"`,
+		`data-reset`,
+	} {
+		if !strings.Contains(html, want) {
+			t.Fatalf("Build() output missing review contract %q", want)
+		}
 	}
 }
 
@@ -452,6 +473,15 @@ func buildFixture(t *testing.T) string {
 	var output bytes.Buffer
 	if err := Build(fixtureModel(t), fixtureDistributionFS(), &output); err != nil {
 		t.Fatalf("Build() error = %v", err)
+	}
+	return output.String()
+}
+
+func buildProduction(t *testing.T) string {
+	t.Helper()
+	var output bytes.Buffer
+	if err := Build(loadProduction(t), os.DirFS(filepath.Join("..", "..", "dist")), &output); err != nil {
+		t.Fatalf("Build() production error = %v", err)
 	}
 	return output.String()
 }
