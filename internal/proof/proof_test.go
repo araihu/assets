@@ -444,6 +444,19 @@ func TestProofAssetsConstrainOuterOverflowWithoutRemovingReviewRails(t *testing.
 	}
 }
 
+func TestProofAssetsWrapLicenseAndProvenanceEvidence(t *testing.T) {
+	css, err := os.ReadFile(filepath.Join("..", "..", "site", "proof", "styles.css"))
+	if err != nil {
+		t.Fatalf("ReadFile styles.css: %v", err)
+	}
+	for _, selector := range []string{"#license-provenance-title ~ ul", "#license-provenance-title ~ ul a"} {
+		pattern := regexp.MustCompile(regexp.QuoteMeta(selector) + `\s*\{[^}]*overflow-wrap:\s*anywhere;`)
+		if !pattern.Match(css) {
+			t.Fatalf("%s must wrap long provenance evidence", selector)
+		}
+	}
+}
+
 func TestBuildMatchesFixtureGoldenDeterministically(t *testing.T) {
 	first := buildFixture(t)
 	second := buildFixture(t)

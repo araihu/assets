@@ -115,6 +115,9 @@ caption { padding: 12px 16px; color: var(--muted); text-align: start; font-famil
 th, td { padding: 16px; border-block-end: 1px solid var(--line); text-align: start; }
 th { color: var(--midnight); }
 #findings-title ~ p { margin: 0; padding: 16px; border-block-start: 4px solid var(--lime); background: var(--paper-raised); }
+#license-provenance-title ~ ul { min-inline-size: 0; max-inline-size: 100%; overflow-wrap: anywhere; }
+#license-provenance-title ~ ul li { min-inline-size: 0; }
+#license-provenance-title ~ ul a { overflow-wrap: anywhere; word-break: normal; }
 
 @media (max-width: 46rem) {
   .proof-controls { grid-template-columns: 1fr; }

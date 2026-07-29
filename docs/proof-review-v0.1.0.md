@@ -25,6 +25,13 @@ retaining internal family, exact-size, master, and table scrolling. Root must
 re-capture the retained 375, 768, 1280, and 1440 screenshots after this fix and
 record the final measurements before release approval.
 
+Root then isolated the remaining 375-pixel overflow to the license/provenance
+section (`clientWidth = 343`, `scrollWidth = 817`): long visible source links
+were unbreakable. License and provenance lists and links now use
+`overflow-wrap: anywhere`; the post-fix browser regression is that document
+scroll width equals each viewport at 375, 768, 1280, and 1440 pixels, while the
+named internal rails may still scroll.
+
 ## Findings and disposition
 
 ### Asset geometry
