@@ -161,8 +161,8 @@ func TestBuildBrandReparsesEveryGeneratedSVG(t *testing.T) {
 			continue
 		}
 		if path == "dist/icons/brand/sprite.svg" {
-			if _, err := sprite.Build(result.SpriteEntries); err != nil {
-				t.Errorf("rebuild sprite %s: %v", path, err)
+			if err := sprite.Validate(svg); err != nil {
+				t.Errorf("validate sprite %s: %v", path, err)
 			}
 			continue
 		}

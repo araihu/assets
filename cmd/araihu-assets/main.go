@@ -13,11 +13,13 @@ import (
 
 func main() {
 	ctx, stop := signalContext(context.Background())
-	defer stop()
-	os.Exit(runMain(ctx, app.Dependencies{}, os.Args[1:], os.Stdout, os.Stderr))
+	code := runMain(ctx, app.Dependencies{}, os.Args[1:], os.Stdout, os.Stderr)
+	stop()
+	mainExit(code)
 }
 
 var notifyContext = signal.NotifyContext
+var mainExit = os.Exit
 
 func signalContext(parent context.Context) (context.Context, context.CancelFunc) {
 	return notifyContext(parent, os.Interrupt, syscall.SIGTERM)

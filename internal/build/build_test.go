@@ -35,6 +35,16 @@ func TestRunFailurePreservesPublishedDist(t *testing.T) {
 	}
 }
 
+func TestRunRejectsUnsafeGeneratedSVG(t *testing.T) {
+	repo := testRepo(t)
+	inputs := testInputs([]byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`))
+	inputs.Brand.Files["dist/icons/brand/asset.svg"] = []byte(`<svg viewBox="0 0 1 1"><script/></svg>`)
+	inputs.Brand.Assets[0].SHA256 = hash(inputs.Brand.Files["dist/icons/brand/asset.svg"])
+	if err := Run(repo, inputs); err == nil || !strings.Contains(err.Error(), "validate generated SVG") {
+		t.Fatalf("Run() error = %v, want generated SVG validation failure", err)
+	}
+}
+
 func TestRunContextCancellationBeforePublishPreservesDist(t *testing.T) {
 	repo := testRepo(t)
 	mustWrite(t, filepath.Join(repo, "dist", "sentinel.txt"), []byte("keep"))
@@ -138,7 +148,8 @@ func TestRunWritesSortedChecksumsAndDeterministicReleaseMembership(t *testing.T)
 	requireArchiveMembers(t, firstArchive, []string{"NOTICE", "catalog.json", "checksums.txt", "icons/brand/asset.svg", "licenses/Apache-2.0.txt", "licenses/heroicons-MIT.txt", "platform/web/araihu/favicon.svg"})
 }
 
-func testInputs(data []byte) Inputs {
+func testInputs(_ []byte) Inputs {
+	data := []byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`)
 	sum := sha256.Sum256(data)
 	return Inputs{
 		Brand: transform.Result{Files: map[string][]byte{"dist/icons/brand/asset.svg": data}, Assets: []catalog.Asset{{
@@ -146,9 +157,9 @@ func testInputs(data []byte) Inputs {
 			Dimensions: catalog.Dimensions{ViewBox: "0 0 1 1"}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "source/brand/original/asset.svg", SHA256: hex.EncodeToString(sum[:]),
 		}}},
 		UI: provenance.Result{Files: map[string][]byte{"licenses/heroicons-MIT.txt": []byte("MIT\n")}},
-		Platform: platform.Result{Files: map[string][]byte{"dist/platform/web/araihu/favicon.svg": []byte("platform")}, Assets: []catalog.Asset{{
+		Platform: platform.Result{Files: map[string][]byte{"dist/platform/web/araihu/favicon.svg": []byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`)}, Assets: []catalog.Asset{{
 			CanonicalName: "platform-web-araihu-favicon-svg", Namespace: "brand", Path: "platform/web/araihu/favicon.svg", Product: "araihu", Artwork: "icon", Appearance: "adaptive", Surface: "transparent", Framing: "optical", Format: "svg",
-			Dimensions: catalog.Dimensions{ViewBox: "0 0 1 1"}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "platform generator v0.1.0", SHA256: hash([]byte("platform")),
+			Dimensions: catalog.Dimensions{ViewBox: "0 0 1 1"}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "platform generator v0.1.0", SHA256: hash([]byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`)),
 		}}},
 	}
 }

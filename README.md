@@ -41,11 +41,11 @@ make vendor    # fetch only locked manifest-selected UI sources
 make generate  # build offline and atomically replace managed dist/
 make verify    # rebuild offline and compare with dist/
 make check     # test, then reject generated-output drift
-make proof-check
 ```
 
-The current `make proof-check` remains a V11 calibration gate until P1 replaces
-it with the catalog-driven proof site.
+`make proof-check` is unavailable in this core RC: its retired V11 inputs are
+not part of managed `dist/`. P1 replaces it with catalog-driven `dist/proof`
+validation before final archive verification.
 
 ## CLI
 

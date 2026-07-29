@@ -19,6 +19,8 @@ import (
 	"github.com/araihu/assets/internal/platform"
 	"github.com/araihu/assets/internal/provenance"
 	"github.com/araihu/assets/internal/release"
+	"github.com/araihu/assets/internal/sprite"
+	"github.com/araihu/assets/internal/svgasset"
 	"github.com/araihu/assets/internal/transform"
 )
 
@@ -120,6 +122,9 @@ func stage(ctx context.Context, repo string, input Inputs) (string, error) {
 	if err := writeFiles(ctx, stage, files); err != nil {
 		return "", err
 	}
+	if err := validateGeneratedSVGs(ctx, stage); err != nil {
+		return "", err
+	}
 	if err := validateCatalog(ctx, stage); err != nil {
 		return "", err
 	}
@@ -131,6 +136,35 @@ func stage(ctx context.Context, repo string, input Inputs) (string, error) {
 	}
 	failed = false
 	return stage, nil
+}
+
+func validateGeneratedSVGs(ctx context.Context, root string) error {
+	paths, err := filesUnder(ctx, root)
+	if err != nil {
+		return err
+	}
+	for _, name := range paths {
+		if err := checkContext(ctx); err != nil {
+			return err
+		}
+		if !strings.HasSuffix(name, ".svg") {
+			continue
+		}
+		data, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(name)))
+		if err != nil {
+			return fmt.Errorf("build: read generated SVG %s: %w", name, err)
+		}
+		if strings.HasSuffix(name, "/sprite.svg") {
+			if err := sprite.Validate(data); err != nil {
+				return fmt.Errorf("build: validate generated sprite %s: %w", name, err)
+			}
+			continue
+		}
+		if _, err := svgasset.ParseGenerated(data); err != nil {
+			return fmt.Errorf("build: validate generated SVG %s: %w", name, err)
+		}
+	}
+	return nil
 }
 
 func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string][]byte, error) {

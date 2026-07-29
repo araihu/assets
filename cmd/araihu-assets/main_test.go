@@ -31,6 +31,27 @@ func TestSignalContextWiresInterruptAndSIGTERM(t *testing.T) {
 	}
 }
 
+func TestMainStopsSignalContextBeforeExit(t *testing.T) {
+	originalNotify, originalExit, originalArgs := notifyContext, mainExit, os.Args
+	t.Cleanup(func() {
+		notifyContext, mainExit, os.Args = originalNotify, originalExit, originalArgs
+	})
+	stopped := false
+	notifyContext = func(parent context.Context, _ ...os.Signal) (context.Context, context.CancelFunc) {
+		return parent, func() { stopped = true }
+	}
+	mainExit = func(code int) {
+		if !stopped {
+			t.Fatal("mainExit called before signal context stop")
+		}
+		if code != 2 {
+			t.Fatalf("main exit code = %d, want 2", code)
+		}
+	}
+	os.Args = []string{"araihu-assets", "unknown"}
+	main()
+}
+
 func TestRunMainMapsExecutionFailureToExitOne(t *testing.T) {
 	if got := runMain(context.Background(), app.Dependencies{}, []string{"catalog"}, &bytes.Buffer{}, &bytes.Buffer{}); got != 1 {
 		t.Fatalf("runMain() = %d, want 1", got)

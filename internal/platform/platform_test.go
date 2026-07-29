@@ -16,6 +16,7 @@ import (
 	"testing"
 
 	"github.com/araihu/assets/internal/catalog"
+	"github.com/araihu/assets/internal/svgasset"
 )
 
 func TestBuildIncludesAllPlatformContracts(t *testing.T) {
@@ -25,6 +26,14 @@ func TestBuildIncludesAllPlatformContracts(t *testing.T) {
 	}
 	if got, want := len(result.Files), 155; got != want {
 		t.Fatalf("generated file count = %d, want %d", got, want)
+	}
+	for path, data := range result.Files {
+		if !strings.HasSuffix(path, ".svg") {
+			continue
+		}
+		if _, err := svgasset.ParseGenerated(data); err != nil {
+			t.Errorf("generated platform SVG %s: %v", path, err)
+		}
 	}
 	requirePNG(t, result, "dist/platform/web/araihu/favicon-16.png", 16, false, false)
 	requirePNG(t, result, "dist/platform/web/araihu/icon-maskable-512.png", 512, false, true)

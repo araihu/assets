@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/araihu/assets/internal/manifest"
+	"github.com/araihu/assets/internal/sprite"
 	"github.com/araihu/assets/internal/svgasset"
 )
 
@@ -119,6 +120,9 @@ func TestBuildUIProducesDeterministicUIArtifactsOffline(t *testing.T) {
 	}
 	if !bytes.Contains(first.Files["icons/ui/sprite.svg"], []byte(`id="hi-16-solid-check"`)) {
 		t.Fatal("sprite omits hi-16-solid-check")
+	}
+	if err := sprite.Validate(first.Files["icons/ui/sprite.svg"]); err != nil {
+		t.Fatalf("validate generated UI sprite: %v", err)
 	}
 	if got := string(first.Files["licenses/heroicons-MIT.txt"]); got != heroiconsMIT {
 		t.Fatalf("MIT text differs:\n%s", got)
