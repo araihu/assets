@@ -1,7 +1,14 @@
 // Package proof defines the catalog-backed data model for identity review.
 package proof
 
-import "github.com/araihu/assets/internal/catalog"
+import (
+	"crypto/sha256"
+
+	"github.com/araihu/assets/internal/catalog"
+)
+
+// modelProvenance binds a Model to canonical semantic inputs accepted by Load.
+type modelProvenance [sha256.Size]byte
 
 // Scenario declares one review context for a published catalog asset.
 // Semantic fields repeat the referenced asset's metadata so scenario files are
@@ -32,6 +39,7 @@ type Model struct {
 	Products   []ProductProof
 	Scenarios  []Scenario
 	ExactSizes []int
+	provenance modelProvenance
 }
 
 // HasProduct reports whether id has a product proof in the model.

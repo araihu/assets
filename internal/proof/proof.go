@@ -2,6 +2,7 @@ package proof
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -95,12 +96,18 @@ func Build(m Model, fsys fs.FS, output io.Writer) error {
 }
 
 func validatedCanonicalModel(m Model) (Model, error) {
+	if m.provenance == (modelProvenance{}) {
+		return Model{}, errors.New("missing model provenance: construct model with Load")
+	}
 	if err := catalog.Validate(m.Catalog); err != nil {
 		return Model{}, fmt.Errorf("validate catalog: %w", err)
 	}
 	canonical, err := newModel(m.Catalog, m.Scenarios)
 	if err != nil {
 		return Model{}, err
+	}
+	if m.provenance != canonical.provenance {
+		return Model{}, errors.New("semantic provenance mismatch: Catalog or Scenarios changed after Load")
 	}
 	for _, field := range []struct {
 		name string
@@ -176,7 +183,30 @@ func newModel(c catalog.Catalog, scenarios []Scenario) (Model, error) {
 		sizes = append(sizes, size)
 	}
 	sort.Ints(sizes)
-	return Model{Catalog: catalogCopy, Products: productProofs, Scenarios: modelScenarios, ExactSizes: sizes}, nil
+	provenance, err := semanticProvenance(catalogCopy, modelScenarios)
+	if err != nil {
+		return Model{}, err
+	}
+	return Model{Catalog: catalogCopy, Products: productProofs, Scenarios: modelScenarios, ExactSizes: sizes, provenance: provenance}, nil
+}
+
+func semanticProvenance(c catalog.Catalog, scenarios []Scenario) (modelProvenance, error) {
+	hash := sha256.New()
+	_, _ = io.WriteString(hash, "araihu-proof-model-v1\x00")
+	if err := catalog.Encode(hash, c); err != nil {
+		return modelProvenance{}, fmt.Errorf("encode provenance catalog: %w", err)
+	}
+	_, _ = hash.Write([]byte{0})
+	encoder := json.NewEncoder(hash)
+	encoder.SetEscapeHTML(false)
+	if err := encoder.Encode(struct {
+		Scenarios []Scenario `json:"scenarios"`
+	}{Scenarios: scenarios}); err != nil {
+		return modelProvenance{}, fmt.Errorf("encode provenance scenarios: %w", err)
+	}
+	var provenance modelProvenance
+	copy(provenance[:], hash.Sum(nil))
+	return provenance, nil
 }
 
 func validateScenario(scenario Scenario, assets map[string]catalog.Asset) error {

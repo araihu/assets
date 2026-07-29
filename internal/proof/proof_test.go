@@ -99,6 +99,41 @@ func TestBuildRejectsCatalogMutatedAfterLoad(t *testing.T) {
 	}
 }
 
+func TestBuildRejectsSemanticMutationAfterLoad(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		mutate func(*Model)
+	}{
+		{"scenario context", func(m *Model) { m.Scenarios[0].Context = "mobile-app-bar" }},
+		{"catalog release", func(m *Model) { m.Catalog.Release = "v0.1.1" }},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			m := fixtureModel(t)
+			tc.mutate(&m)
+
+			err := Build(m, fixtureDistributionFS(), &bytes.Buffer{})
+			if err == nil || !strings.Contains(err.Error(), "semantic provenance mismatch") {
+				t.Fatalf("Build() error = %v, want semantic provenance mismatch", err)
+			}
+		})
+	}
+}
+
+func TestBuildRejectsModelWithoutLoadProvenance(t *testing.T) {
+	loaded := fixtureModel(t)
+	manual := Model{
+		Catalog:    loaded.Catalog,
+		Products:   loaded.Products,
+		Scenarios:  loaded.Scenarios,
+		ExactSizes: loaded.ExactSizes,
+	}
+
+	err := Build(manual, fixtureDistributionFS(), &bytes.Buffer{})
+	if err == nil || !strings.Contains(err.Error(), "missing model provenance") {
+		t.Fatalf("Build() error = %v, want missing model provenance", err)
+	}
+}
+
 func TestBuildRejectsNoncanonicalDerivedModel(t *testing.T) {
 	for _, tc := range []struct {
 		name   string
@@ -154,6 +189,9 @@ func TestLoadSortsModelDeterministicallyFromPermutedInputs(t *testing.T) {
 	got, err := Load(c, bytes.NewReader(document))
 	if err != nil {
 		t.Fatalf("Load() error = %v", err)
+	}
+	if got.provenance != want.provenance {
+		t.Fatal("semantic provenance differs for permuted inputs")
 	}
 	if !slices.IsSortedFunc(got.Catalog.Assets, func(a, b catalog.Asset) int { return strings.Compare(a.CanonicalName, b.CanonicalName) }) {
 		t.Fatal("Catalog assets are not sorted by canonicalName")
