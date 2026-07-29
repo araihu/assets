@@ -24,6 +24,8 @@ func TestValidateRejectsInvalidCatalogEntries(t *testing.T) {
 		{"duplicate sprite symbol", func(c *Catalog) { c.Assets[1].SpriteSymbol = c.Assets[0].SpriteSymbol }},
 		{"source path", func(c *Catalog) { c.Assets[0].Path = "source/brand/original/araihu.svg" }},
 		{"non artifact path", func(c *Catalog) { c.Assets[0].Path = "dist/icons/brand/araihu.svg" }},
+		{"windows traversal path", func(c *Catalog) { c.Assets[0].Path = `icons/..\..\escape.svg` }},
+		{"windows volume path", func(c *Catalog) { c.Assets[0].Path = `C:\assets\escape.svg` }},
 		{"unknown format", func(c *Catalog) { c.Assets[0].Format = "webp" }},
 		{"unknown color behavior", func(c *Catalog) { c.Assets[0].ColorBehavior = "rainbow" }},
 		{"non-finite viewBox", func(c *Catalog) { c.Assets[0].Dimensions.ViewBox = "0 0 +Inf 16" }},
@@ -34,6 +36,44 @@ func TestValidateRejectsInvalidCatalogEntries(t *testing.T) {
 			mutate.fn(&c)
 			if err := Validate(c); err == nil {
 				t.Fatal("Validate() error = nil")
+			}
+		})
+	}
+}
+
+func TestValidateRequiresIdentityRevision11(t *testing.T) {
+	c := validCatalog(t)
+	c.IdentityRevision = 10
+	if err := Validate(c); err == nil || !strings.Contains(err.Error(), "identityRevision") {
+		t.Fatalf("Validate() error = %v, want identityRevision", err)
+	}
+}
+
+func TestValidateAcceptsOnlyDocumentedSemVerReleaseTags(t *testing.T) {
+	for _, tc := range []struct {
+		release string
+		valid   bool
+	}{
+		{"v0.0.0", true},
+		{"v1.2.3-alpha.1", true},
+		{"v1.2.3-0", true},
+		{"v1.2.3+build.7", true},
+		{"v1.2.3-rc.1+build.7", true},
+		{"1.2.3", false},
+		{"v01.2.3", false},
+		{"v1.02.3", false},
+		{"v1.2.03", false},
+		{"v1.2.3-", false},
+		{"v1.2.3-..", false},
+		{"v1.2.3-01", false},
+		{"v1.2.3+", false},
+	} {
+		t.Run(tc.release, func(t *testing.T) {
+			c := validCatalog(t)
+			c.Release = tc.release
+			err := Validate(c)
+			if (err == nil) != tc.valid {
+				t.Fatalf("Validate() error = %v, valid = %t", err, tc.valid)
 			}
 		})
 	}
@@ -69,6 +109,27 @@ func TestDecodeRejectsUnknownAndInvalidJSON(t *testing.T) {
 		if _, err := Decode(strings.NewReader(input)); err == nil {
 			t.Fatalf("Decode(%q) error = nil", input)
 		}
+	}
+}
+
+func TestDecodeRejectsDuplicateAndCaseVariantKeysAtEveryLevel(t *testing.T) {
+	base := fixture(t, "catalog.json")
+	for _, tc := range []struct {
+		name  string
+		input string
+	}{
+		{"duplicate top-level", strings.Replace(base, `"release": "v0.1.0",`, `"release": "v0.1.0", "release": "v0.1.0",`, 1)},
+		{"case-variant top-level", strings.Replace(base, `"schemaVersion"`, `"SchemaVersion"`, 1)},
+		{"duplicate asset", strings.Replace(base, `"canonicalName": "ui-hi-16-solid-check",`, `"canonicalName": "ui-hi-16-solid-check", "canonicalName": "ui-hi-16-solid-check",`, 1)},
+		{"case-variant asset", strings.Replace(base, `"canonicalName"`, `"CanonicalName"`, 1)},
+		{"duplicate dimensions", strings.Replace(base, `"viewBox": "0 0 16 16"`, `"viewBox": "0 0 16 16", "viewBox": "0 0 16 16"`, 1)},
+		{"case-variant dimensions", strings.Replace(base, `"viewBox"`, `"ViewBox"`, 1)},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if _, err := Decode(strings.NewReader(tc.input)); err == nil {
+				t.Fatal("Decode() error = nil")
+			}
+		})
 	}
 }
 

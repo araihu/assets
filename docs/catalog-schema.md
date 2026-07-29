@@ -24,7 +24,8 @@ validated catalog.
 - `schemaVersion` is exactly `1`.
 - `release` is a `vMAJOR.MINOR.PATCH` release tag, optionally with normal
   SemVer prerelease/build suffixes.
-- `identityRevision` is a positive traceability value; v0.1.0 records `11`.
+- `identityRevision` is exactly `11` in schema v1; public paths still omit
+  `v11`.
 - `assets` is non-empty and contains unique `canonicalName` values.
 
 ## Asset object
@@ -60,8 +61,9 @@ empty `spriteSymbol`. `colorBehavior` is one of `protected`, `monochrome`, or
 the lowercase hexadecimal SHA-256 of the published artifact.
 
 Catalog emission sorts assets by `canonicalName`, then `path`, uses two-space
-JSON indentation, and terminates with one newline. Decoders reject unknown
-fields and more than one JSON value.
+JSON indentation, and terminates with one newline. Decoders reject unknown,
+duplicate, and case-variant keys at every schema object, plus more than one JSON
+value.
 
 ## Patch compatibility
 
