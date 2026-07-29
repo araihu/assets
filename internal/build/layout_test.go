@@ -13,10 +13,12 @@ import (
 	"testing"
 )
 
+var retainedProofScreenshotPath = regexp.MustCompile(`^review/screenshots/v0\.1-proof-[^/.]+\.png$`)
+
 func TestReleaseTreeHasNoHistoricalAssetTrees(t *testing.T) {
 	for _, name := range []string{
 		"concepts", "recraft", "logos", "brand", "archive",
-		"output/pdf", "review/screenshots",
+		"output/pdf",
 	} {
 		_, err := os.Stat(filepath.Join(repoRoot(t), name))
 		if !errors.Is(err, fs.ErrNotExist) {
@@ -25,7 +27,26 @@ func TestReleaseTreeHasNoHistoricalAssetTrees(t *testing.T) {
 	}
 
 	assertRootIgnorePolicy(t)
+	assertReviewScreenshotTree(t)
 	assertTrackedReleaseLayout(t)
+}
+
+func TestAllowedRetainedReviewPath(t *testing.T) {
+	for path, want := range map[string]bool{
+		"review/logo-system-v11.html":                    true,
+		"review/v11-assessment.md":                       true,
+		"review/screenshots/v0.1-proof-desktop.png":      true,
+		"review/screenshots/v0.1-proof-mobile-1280.png":  true,
+		"review/screenshots/logo-system-v11-desktop.png": false,
+		"review/screenshots/v0.1-proof-desktop.svg":      false,
+		"review/screenshots/random.png":                  false,
+		"review/screenshots/v0.1-proof-/nested.png":      false,
+		"review/site-context-v10.html":                   false,
+	} {
+		if got := allowedRetainedReviewPath(path); got != want {
+			t.Errorf("allowedRetainedReviewPath(%q) = %t, want %t", path, got, want)
+		}
+	}
 }
 
 func assertRootIgnorePolicy(t *testing.T) {
@@ -54,9 +75,7 @@ func assertTrackedReleaseLayout(t *testing.T) {
 		}
 	}
 
-	assertTrackedOnly(t, paths, "review/", []string{
-		"review/.gitignore", "review/logo-system-v11.html", "review/v11-assessment.md",
-	})
+	assertTrackedReviewPaths(t, paths)
 
 	legacyVersion := regexp.MustCompile(`(?:^|[^[:alnum:]])v(?:[2-9]|10)(?:[^[:digit:]]|$)`)
 	legacyScriptNames := map[string]struct{}{
@@ -82,19 +101,53 @@ func assertTrackedReleaseLayout(t *testing.T) {
 	}
 }
 
-func assertTrackedOnly(t *testing.T, paths []string, prefix string, allowed []string) {
+func assertTrackedReviewPaths(t *testing.T, paths []string) {
 	t.Helper()
-	allowedSet := make(map[string]struct{}, len(allowed))
-	for _, path := range allowed {
-		allowedSet[path] = struct{}{}
-	}
 	for _, path := range paths {
-		if strings.HasPrefix(path, prefix) {
-			if _, ok := allowedSet[path]; !ok {
-				t.Errorf("legacy tracked path remains: %s", path)
-			}
+		if strings.HasPrefix(path, "review/") && !allowedRetainedReviewPath(path) {
+			t.Errorf("legacy tracked path remains: %s", path)
 		}
 	}
+}
+
+func assertReviewScreenshotTree(t *testing.T) {
+	t.Helper()
+	root := filepath.Join(repoRoot(t), "review", "screenshots")
+	err := filepath.WalkDir(root, func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if path == root {
+			return nil
+		}
+		if entry.IsDir() || !entry.Type().IsRegular() {
+			t.Errorf("unexpected review screenshot entry: %s", path)
+			return nil
+		}
+		relative, err := filepath.Rel(repoRoot(t), path)
+		if err != nil {
+			return err
+		}
+		if !allowedRetainedReviewPath(filepath.ToSlash(relative)) {
+			t.Errorf("legacy review screenshot remains: %s", relative)
+		}
+		return nil
+	})
+	if errors.Is(err, fs.ErrNotExist) {
+		return
+	}
+	if err != nil {
+		t.Fatalf("walk review screenshots: %v", err)
+	}
+}
+
+func allowedRetainedReviewPath(path string) bool {
+	if slices.Contains([]string{
+		"review/.gitignore", "review/logo-system-v11.html", "review/v11-assessment.md",
+	}, path) {
+		return true
+	}
+	return retainedProofScreenshotPath.MatchString(path)
 }
 
 func trackedPaths(t *testing.T) []string {
