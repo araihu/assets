@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Arai Hû identity proof {{.Release}}</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#proof-main">Skip to proof evidence</a>
@@ -32,7 +34,7 @@
     <section aria-labelledby="exact-size-rails-title">
       <h2 id="exact-size-rails-title">Exact-size rails</h2>
       {{- range .BrandScenarios}}
-      <figure data-scenario="{{.ID}}">
+      <figure data-scenario="{{.ID}}" data-proof-product="{{.ProductID}}">
         <figcaption>{{.Product}} {{.Artwork}}, {{.Variant}}, {{.Mask}} mask</figcaption>
         <div class="exact-size-rail" role="list" aria-label="{{.Product}} {{.Artwork}} exact-size rail">
           {{$specimen := .}}{{range .Sizes}}<figure role="listitem"><img src="{{$specimen.URL}}" width="{{.}}" height="{{.}}" aria-label="{{$specimen.Product}} {{$specimen.Artwork}}, {{$specimen.Variant}}, {{.}} pixels"><figcaption>{{.}} px</figcaption></figure>{{end}}
@@ -43,13 +45,13 @@
 
     <section aria-labelledby="family-comparison-title">
       <h2 id="family-comparison-title">Family comparison</h2>
-      {{range .BrandScenarios}}<figure><img src="{{.URL}}" width="64" height="64" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 64 pixels"><figcaption>{{.Product}} / {{.Artwork}} / {{.Variant}} / 64 px</figcaption></figure>{{end}}
+      {{range .BrandScenarios}}<figure data-proof-product="{{.ProductID}}"><img src="{{.URL}}" width="64" height="64" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 64 pixels"><figcaption>{{.Product}} / {{.Artwork}} / {{.Variant}} / 64 px</figcaption></figure>{{end}}
     </section>
 
     <section aria-labelledby="web-contexts-title">
       <h2 id="web-contexts-title">Web navigation, card, and dashboard</h2>
       {{- range .BrandScenarios}}
-      <article class="web-context" data-context="web-navigation">
+      <article class="web-context" data-context="web-navigation" data-proof-product="{{.ProductID}}">
         <h3>{{.Product}} web specimens</h3>
         <nav aria-label="{{.Product}} navigation"><img src="{{.URL}}" width="24" height="24" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 24 pixels"> Navigation</nav>
         <p><img src="{{.URL}}" width="48" height="48" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 48 pixels"> Card context</p>
@@ -61,7 +63,7 @@
     <section aria-labelledby="mobile-contexts-title">
       <h2 id="mobile-contexts-title">Mobile app bar, notification, tab, home, and store</h2>
       {{- range .BrandScenarios}}
-      <article class="mobile-context" data-context="{{.ID}}">
+      <article class="mobile-context" data-context="{{.ID}}" data-proof-product="{{.ProductID}}">
         <h3>{{.Product}} mobile specimens</h3>
         <p><img src="{{.URL}}" width="24" height="24" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 24 pixels"> App bar</p>
         <p><img src="{{.URL}}" width="20" height="20" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 20 pixels"> Notification</p>
@@ -74,25 +76,27 @@
 
     <section aria-labelledby="literal-master-title">
       <h2 id="literal-master-title">Literal 512 master</h2>
-      {{range .Products}}<figure data-canonical-name="{{.Master.CanonicalName}}"><img src="{{.Master.URL}}" width="512" height="512" aria-label="{{.Name}} {{.Master.Artwork}}, {{.Master.Variant}}, 512 pixels"><figcaption>{{.Name}} / {{.Master.Artwork}} / {{.Master.Variant}} / 512 px</figcaption></figure>{{end}}
+      {{range .Products}}<figure data-canonical-name="{{.Master.CanonicalName}}" data-proof-product="{{.ID}}"><img src="{{.Master.URL}}" width="512" height="512" aria-label="{{.Name}} {{.Master.Artwork}}, {{.Master.Variant}}, 512 pixels"><figcaption>{{.Name}} / {{.Master.Artwork}} / {{.Master.Variant}} / 512 px</figcaption></figure>{{end}}
     </section>
 
     <section aria-labelledby="platform-packages-title">
       <h2 id="platform-packages-title">Platform packages</h2>
-      <ul>{{range .Products}}<li>{{.Name}}: {{range .Packages}}<a href="{{.URL}}">{{.Kind}}</a> (<a href="{{.ProvenanceURL}}">provenance</a>) {{end}}</li>{{end}}</ul>
+      <ul>{{range .Products}}<li data-proof-product="{{.ID}}">{{.Name}}: {{range .Packages}}<a href="{{.URL}}">{{.Kind}}</a> (<a href="{{.ProvenanceURL}}">provenance</a>) {{end}}</li>{{end}}</ul>
     </section>
 
     <section aria-labelledby="ui-sprite-rail-title">
       <h2 id="ui-sprite-rail-title">UI icon sprite rail</h2>
-      {{range .UIScenarios}}<figure><svg width="16" height="16" role="img" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 16 pixels"><use href="{{.SpriteURL}}"></use></svg><figcaption>{{.Product}} / {{.Artwork}} / {{.Variant}} / 16 px</figcaption></figure>{{end}}
+      {{range .UIScenarios}}<figure data-proof-product="all"><svg width="16" height="16" role="img" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 16 pixels"><use href="{{.SpriteURL}}"></use></svg><figcaption>{{.Product}} / {{.Artwork}} / {{.Variant}} / 16 px</figcaption></figure>{{end}}
     </section>
 
     <section aria-labelledby="geometry-title">
       <h2 id="geometry-title">Semantic geometry</h2>
-      <table aria-label="Normalized SVG art bounds">
-        <thead><tr><th scope="col">Product</th><th scope="col">Asset</th><th scope="col">ViewBox</th><th scope="col">Format</th></tr></thead>
-        <tbody>{{range .Metrics}}<tr><td>{{.Product}}</td><td>{{.Asset}}</td><td>{{.ViewBox}}</td><td>{{.Format}}</td></tr>{{end}}</tbody>
-      </table>
+      <div class="metric-table" tabindex="0">
+        <table aria-label="Normalized SVG art bounds">
+          <thead><tr><th scope="col">Product</th><th scope="col">Asset</th><th scope="col">ViewBox</th><th scope="col">Format</th></tr></thead>
+          <tbody>{{range .Metrics}}<tr><td>{{.Product}}</td><td>{{.Asset}}</td><td>{{.ViewBox}}</td><td>{{.Format}}</td></tr>{{end}}</tbody>
+        </table>
+      </div>
     </section>
 
     <section aria-labelledby="findings-title">

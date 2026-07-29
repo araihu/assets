@@ -204,6 +204,7 @@ type documentPackage struct {
 
 type documentSpecimen struct {
 	ID        string
+	ProductID string
 	Product   string
 	Artwork   string
 	Variant   string
@@ -247,6 +248,7 @@ func newDocumentModel(m Model) (documentModel, error) {
 		asset := assets[scenario.Asset]
 		specimen := documentSpecimen{
 			ID:        scenario.ID,
+			ProductID: asset.Product,
 			Product:   productName(asset.Product),
 			Artwork:   asset.Artwork,
 			Variant:   strings.Join([]string{asset.Surface, asset.Appearance, asset.Framing}, " "),

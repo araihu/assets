@@ -114,6 +114,33 @@ func TestRunPublishesOnlyManagedDistAndCheckMatchesExactBytes(t *testing.T) {
 	}
 }
 
+func TestRunCopiesProofStaticAssetsDeterministically(t *testing.T) {
+	repo := testRepo(t)
+	styles := []byte("body { color: cobalt; }\n")
+	script := []byte("window.proofControls = true;\n")
+	mustWrite(t, filepath.Join(repo, "site", "proof", "styles.css"), styles)
+	mustWrite(t, filepath.Join(repo, "site", "proof", "app.js"), script)
+
+	if err := Run(repo, testInputs([]byte("asset"))); err != nil {
+		t.Fatal(err)
+	}
+	for name, want := range map[string][]byte{
+		"styles.css": styles,
+		"app.js":     script,
+	} {
+		got, err := os.ReadFile(filepath.Join(repo, "dist", "proof", name))
+		if err != nil {
+			t.Fatalf("ReadFile dist/proof/%s: %v", name, err)
+		}
+		if !bytes.Equal(got, want) {
+			t.Fatalf("dist/proof/%s = %q, want %q", name, got, want)
+		}
+	}
+	if err := Check(repo, testInputs([]byte("asset"))); err != nil {
+		t.Fatalf("Check() error = %v", err)
+	}
+}
+
 func TestRunWritesSortedChecksumsAndDeterministicReleaseMembership(t *testing.T) {
 	first, second := testRepo(t), testRepo(t)
 	inputs := testInputs([]byte("asset"))
@@ -150,7 +177,7 @@ func TestRunWritesSortedChecksumsAndDeterministicReleaseMembership(t *testing.T)
 	if !bytes.Equal(firstArchive, secondArchive) {
 		t.Fatal("independent tar.gz builds differ")
 	}
-	requireArchiveMembers(t, firstArchive, []string{"NOTICE", "catalog.json", "checksums.txt", "icons/brand/asset.svg", "licenses/Apache-2.0.txt", "licenses/heroicons-MIT.txt", "platform/web/araihu/favicon.svg"})
+	requireArchiveMembers(t, firstArchive, []string{"NOTICE", "catalog.json", "checksums.txt", "icons/brand/asset.svg", "licenses/Apache-2.0.txt", "licenses/heroicons-MIT.txt", "platform/web/araihu/favicon.svg", "proof/app.js", "proof/styles.css"})
 }
 
 func testInputs(_ []byte) Inputs {
@@ -178,6 +205,8 @@ func testRepo(t *testing.T) string {
 	t.Helper()
 	repo := t.TempDir()
 	mustWrite(t, filepath.Join(repo, "LICENSE"), []byte("Apache License\n"))
+	mustWrite(t, filepath.Join(repo, "site", "proof", "styles.css"), []byte("body {}\n"))
+	mustWrite(t, filepath.Join(repo, "site", "proof", "app.js"), []byte("\"use strict\";\n"))
 	return repo
 }
 

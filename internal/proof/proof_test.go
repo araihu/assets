@@ -337,6 +337,8 @@ func TestProductionMasterProofUsesCatalogMaskable512Semantics(t *testing.T) {
 func TestBuildEmitsSemanticLabelsAndMetricsTable(t *testing.T) {
 	html := buildFixture(t)
 	for _, want := range []string{
+		`<link rel="stylesheet" href="styles.css">`,
+		`<script defer src="app.js"></script>`,
 		`<a class="skip-link" href="#proof-main">Skip to proof evidence</a>`,
 		`<table aria-label="Normalized SVG art bounds">`,
 		`aria-label="Arai Hû icon, transparent adaptive optical, 16 pixels"`,
@@ -359,6 +361,43 @@ func TestBuildEmitsSemanticLabelsAndMetricsTable(t *testing.T) {
 	}
 	if strings.Contains(html, `src="../concepts/v11/`) || strings.Contains(html, "v11/") {
 		t.Fatalf("Build() output contains a legacy V11 URL: %s", html)
+	}
+}
+
+func TestProofAssetsContainRequiredInteractionContracts(t *testing.T) {
+	css, err := os.ReadFile(filepath.Join("..", "..", "site", "proof", "styles.css"))
+	if err != nil {
+		t.Fatalf("ReadFile styles.css: %v", err)
+	}
+	js, err := os.ReadFile(filepath.Join("..", "..", "site", "proof", "app.js"))
+	if err != nil {
+		t.Fatalf("ReadFile app.js: %v", err)
+	}
+	for _, want := range []string{
+		`@media (prefers-reduced-motion: reduce)`,
+		`:focus-visible`,
+		`.exact-size-rail`,
+		`.metric-table`,
+		`html[data-mode="plate"]`,
+	} {
+		if !strings.Contains(string(css), want) {
+			t.Fatalf("styles.css missing %q", want)
+		}
+	}
+	for _, want := range []string{
+		`history.replaceState`,
+		`URLSearchParams`,
+		`data-product`,
+		`data-mode`,
+		`data-scheme`,
+		`allowed[key].has`,
+	} {
+		if !strings.Contains(string(js), want) {
+			t.Fatalf("app.js missing %q", want)
+		}
+	}
+	if strings.Contains(string(js), "fetch(") {
+		t.Fatal("app.js must not fetch")
 	}
 }
 

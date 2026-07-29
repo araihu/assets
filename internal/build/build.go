@@ -32,9 +32,11 @@ const (
 )
 
 var generatedPaths = map[string]struct{}{
-	"catalog.json":  {},
-	"checksums.txt": {},
-	"NOTICE":        {},
+	"catalog.json":     {},
+	"checksums.txt":    {},
+	"NOTICE":           {},
+	"proof/styles.css": {},
+	"proof/app.js":     {},
 }
 
 // Inputs are fully generated, offline artifacts from approved generators.
@@ -193,6 +195,13 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 	}
 	files["licenses/Apache-2.0.txt"] = license
 	files["NOTICE"] = []byte("Arai Hu Assets " + releaseVersion + "\n\nArai Hu brand assets are subject to Arai Hu Brand Terms.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\n")
+	proofFiles, err := proofStaticFiles(repo)
+	if err != nil {
+		return nil, err
+	}
+	for name, data := range proofFiles {
+		files[name] = data
+	}
 
 	assets := make([]catalog.Asset, 0, len(input.Brand.Assets)+len(input.UI.Assets)+len(input.Platform.Assets))
 	assets = append(assets, input.Brand.Assets...)
@@ -203,6 +212,18 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 		return nil, err
 	}
 	files["catalog.json"] = catalogBytes
+	return files, nil
+}
+
+func proofStaticFiles(repo string) (map[string][]byte, error) {
+	files := make(map[string][]byte, 2)
+	for _, name := range []string{"styles.css", "app.js"} {
+		data, err := os.ReadFile(filepath.Join(repo, "site", "proof", name))
+		if err != nil {
+			return nil, fmt.Errorf("build: read proof static asset %s: %w", name, err)
+		}
+		files["proof/"+name] = data
+	}
 	return files, nil
 }
 
