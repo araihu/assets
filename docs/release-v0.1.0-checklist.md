@@ -12,8 +12,8 @@ authorized by this checklist.
 - [x] Generate the core RC commit from this checklist and generated output; its
   exact commit is recorded in the ignored Task 10 report after commit.
 - [x] `dist/catalog.json`: `d83be964fa411e87c61b49f0a0b6a2a1465f33ad43bea7cd93b2e434b59266af`.
-- [x] `dist/icons/brand/sprite.svg`: `249bad81cff862871be29b2e79eb903aa5c3fc832ba464a81f42134c310c1b6f`.
-- [x] `dist/icons/ui/sprite.svg`: `6b312ee2cf9f0e91c4621bd4eec348ecaf39cfdc0a00c8ddefdf4d7f8e9f32a5`.
+- [x] `dist/icons/brand/sprite.svg`: `e0c98a783cf65cf52b0a57cca47b84704499200a7fdb113b751d8f6c5828ba45`.
+- [x] `dist/icons/ui/sprite.svg`: `75e282de7a19efba9cf0285b44af0641c1527361f921b7d7f8020efc1f1f0fb7`.
 - [x] Catalog: 302 assets (235 brand, 67 UI). Pre-P1 core `dist/`: 352 regular files.
 
 ## Completed core gates
@@ -61,13 +61,13 @@ Generated locally with `go version go1.26.5 darwin/arm64` and
 
 - Managed `dist/`: 703 regular files; `dist/proof/`: 351 regular files.
 - `dist/catalog.json`: `d83be964fa411e87c61b49f0a0b6a2a1465f33ad43bea7cd93b2e434b59266af`.
-- `dist/icons/brand/sprite.svg`: `249bad81cff862871be29b2e79eb903aa5c3fc832ba464a81f42134c310c1b6f`.
-- `dist/icons/ui/sprite.svg`: `6b312ee2cf9f0e91c4621bd4eec348ecaf39cfdc0a00c8ddefdf4d7f8e9f32a5`.
+- `dist/icons/brand/sprite.svg`: `e0c98a783cf65cf52b0a57cca47b84704499200a7fdb113b751d8f6c5828ba45`.
+- `dist/icons/ui/sprite.svg`: `75e282de7a19efba9cf0285b44af0641c1527361f921b7d7f8020efc1f1f0fb7`.
 
 - `dist/releases/araihu-assets-v0.1.0.tar.gz`:
-  `be7cc2c3b551d9825ea47a04935adba903dc1fe7e05ea454540cbd3f61e03034`
+  `7097178a62fb0dfdbaca9490259b71c0ccb4294e52a9ee3df73f3b2fda588286`
 - `dist/releases/araihu-assets-v0.1.0.zip`:
-  `20669e0c4ffa50f4caca26e9bc3310cc2732f70ea8a9a51f0db56a38f9ed64a6`
+  `914993a9a84b63dbe02dc9790c66bb29c789b31aa247f0c3195712a255c55d0c`
 
 CI bootstrap provenance:
 

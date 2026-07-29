@@ -121,6 +121,19 @@ func TestBuildUIProducesDeterministicUIArtifactsOffline(t *testing.T) {
 	if !bytes.Contains(first.Files["icons/ui/sprite.svg"], []byte(`id="hi-16-solid-check"`)) {
 		t.Fatal("sprite omits hi-16-solid-check")
 	}
+	uiSprite := first.Files["icons/ui/sprite.svg"]
+	checkStart := bytes.Index(uiSprite, []byte(`<symbol id="hi-16-solid-check"`))
+	if checkStart < 0 {
+		t.Fatal("sprite omits complete hi-16-solid-check symbol tag")
+	}
+	checkEnd := bytes.IndexByte(uiSprite[checkStart:], '>')
+	if checkEnd < 0 {
+		t.Fatal("sprite omits complete hi-16-solid-check symbol tag")
+	}
+	checkTag := uiSprite[checkStart : checkStart+checkEnd+1]
+	if !bytes.Contains(checkTag, []byte(`fill="none"`)) {
+		t.Fatalf("UI symbol root paint changed: %s", checkTag)
+	}
 	if err := sprite.Validate(first.Files["icons/ui/sprite.svg"]); err != nil {
 		t.Fatalf("validate generated UI sprite: %v", err)
 	}

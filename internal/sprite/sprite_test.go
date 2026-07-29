@@ -23,6 +23,41 @@ func TestBuildSortsSymbolsAndProducesStableSprite(t *testing.T) {
 	}
 }
 
+func TestBuildPreservesAllowlistedRootPresentationAttributes(t *testing.T) {
+	got, err := Build([]Entry{
+		{Symbol: "filled", SVG: []byte(`<svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 1h1v1z"/></svg>`)},
+		{Symbol: "stroked", SVG: []byte(`<svg viewBox="0 0 16 16" fill="none" stroke="currentColor"><path d="M2 2h1v1z"/></svg>`)},
+	})
+	if err != nil {
+		t.Fatalf("Build() error = %v", err)
+	}
+	for _, want := range []string{
+		`<symbol id="filled" viewBox="0 0 16 16" fill="currentColor">`,
+		`<symbol id="stroked" viewBox="0 0 16 16" fill="none" stroke="currentColor">`,
+	} {
+		if !bytes.Contains(got, []byte(want)) {
+			t.Errorf("Build() = %s, want %s", got, want)
+		}
+	}
+	if err := Validate(got); err != nil {
+		t.Fatalf("Validate(Build()) = %v", err)
+	}
+}
+
+func TestBuildLeavesChildPaintOnProtectedArtwork(t *testing.T) {
+	got, err := Build([]Entry{{
+		Symbol: "protected",
+		SVG:    []byte(`<svg viewBox="0 0 16 16"><path fill="#123456" d="M1 1h1v1z"/></svg>`),
+	}})
+	if err != nil {
+		t.Fatalf("Build() error = %v", err)
+	}
+	want := `<symbol id="protected" viewBox="0 0 16 16"><path fill="#123456"`
+	if !bytes.Contains(got, []byte(want)) {
+		t.Fatalf("Build() = %s, want protected child paint %s", got, want)
+	}
+}
+
 func TestValidateRejectsUnsafeFullSpriteContracts(t *testing.T) {
 	for _, tc := range []struct {
 		name string
@@ -42,6 +77,16 @@ func TestValidateRejectsUnsafeFullSpriteContracts(t *testing.T) {
 		{
 			name: "dangling href",
 			svg:  []byte(`<svg xmlns="http://www.w3.org/2000/svg"><symbol id="one" viewBox="0 0 16 16"><use href="#missing"/></symbol></svg>` + "\n"),
+			want: "has no target",
+		},
+		{
+			name: "forbidden symbol attribute",
+			svg:  []byte(`<svg xmlns="http://www.w3.org/2000/svg"><symbol id="one" viewBox="0 0 16 16" style="display:none"><path d="M0 0h1v1z"/></symbol></svg>` + "\n"),
+			want: `attribute "style" is forbidden`,
+		},
+		{
+			name: "dangling root paint reference",
+			svg:  []byte(`<svg xmlns="http://www.w3.org/2000/svg"><symbol id="one" viewBox="0 0 16 16" fill="url(#missing)"><path d="M0 0h1v1z"/></symbol></svg>` + "\n"),
 			want: "has no target",
 		},
 	} {

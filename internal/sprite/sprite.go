@@ -76,11 +76,23 @@ func Build(entries []Entry) ([]byte, error) {
 	out.WriteString(spritePrefix)
 	for i, entry := range ordered {
 		doc := documents[i]
+		presentation := doc.RootPresentation()
 		out.WriteString(`<symbol id="`)
 		out.WriteString(entry.Symbol)
 		out.WriteString(`" viewBox="`)
-		out.WriteString(doc.ViewBox())
-		out.WriteString(`">`)
+		writeEscaped(&out, doc.ViewBox())
+		out.WriteByte('"')
+		if presentation.HasFill {
+			out.WriteString(` fill="`)
+			writeEscaped(&out, presentation.Fill)
+			out.WriteByte('"')
+		}
+		if presentation.HasStroke {
+			out.WriteString(` stroke="`)
+			writeEscaped(&out, presentation.Stroke)
+			out.WriteByte('"')
+		}
+		out.WriteByte('>')
 		out.Write(doc.ChildrenXML())
 		out.WriteString(`</symbol>`)
 	}
@@ -128,7 +140,7 @@ func Validate(data []byte) error {
 				if token.Name.Local != "symbol" {
 					return fmt.Errorf("sprite root child %q is not symbol", token.Name.Local)
 				}
-				id, viewBox, err := symbolAttributes(token.Attr)
+				id, viewBox, presentation, err := symbolAttributes(token.Attr)
 				if err != nil {
 					return err
 				}
@@ -136,7 +148,8 @@ func Validate(data []byte) error {
 					return fmt.Errorf("duplicate ID %q", id)
 				}
 				ids[id] = struct{}{}
-				symbol = &symbolState{viewBox: viewBox}
+				collectReferences(&references, presentation)
+				symbol = &symbolState{viewBox: viewBox, presentation: presentation}
 				symbol.encoder = xml.NewEncoder(&symbol.body)
 				depth = 2
 			default:
@@ -213,46 +226,70 @@ func Validate(data []byte) error {
 }
 
 type symbolState struct {
-	viewBox  string
-	body     bytes.Buffer
-	encoder  *xml.Encoder
-	document svgasset.Document
+	viewBox      string
+	presentation []xml.Attr
+	body         bytes.Buffer
+	encoder      *xml.Encoder
+	document     svgasset.Document
 }
 
-func symbolAttributes(attrs []xml.Attr) (string, string, error) {
-	if len(attrs) != 2 {
-		return "", "", errors.New("sprite symbol must have only id and viewBox")
-	}
+func symbolAttributes(attrs []xml.Attr) (string, string, []xml.Attr, error) {
 	var id, viewBox string
+	var presentation []xml.Attr
+	seen := make(map[string]struct{}, len(attrs))
 	for _, attr := range attrs {
 		if attr.Name.Space != "" {
-			return "", "", fmt.Errorf("sprite symbol attribute namespace %q is forbidden", attr.Name.Space)
+			return "", "", nil, fmt.Errorf("sprite symbol attribute namespace %q is forbidden", attr.Name.Space)
 		}
+		if _, duplicate := seen[attr.Name.Local]; duplicate {
+			return "", "", nil, fmt.Errorf("sprite symbol has duplicate attribute %q", attr.Name.Local)
+		}
+		seen[attr.Name.Local] = struct{}{}
 		switch attr.Name.Local {
 		case "id":
 			id = attr.Value
 		case "viewBox":
 			viewBox = attr.Value
+		case "fill", "stroke":
+			presentation = append(presentation, attr)
 		default:
-			return "", "", fmt.Errorf("sprite symbol attribute %q is forbidden", attr.Name.Local)
+			return "", "", nil, fmt.Errorf("sprite symbol attribute %q is forbidden", attr.Name.Local)
 		}
 	}
 	if !symbolName.MatchString(id) || viewBox == "" {
-		return "", "", errors.New("sprite symbol id or viewBox is invalid")
+		return "", "", nil, errors.New("sprite symbol id or viewBox is invalid")
 	}
-	return id, viewBox, nil
+	return id, viewBox, presentation, nil
 }
 
 func validateSymbol(symbol *symbolState) error {
 	if err := symbol.encoder.Flush(); err != nil {
 		return err
 	}
-	document, err := svgasset.Parse([]byte(`<svg viewBox="` + symbol.viewBox + `">` + symbol.body.String() + `</svg>`))
+	var source bytes.Buffer
+	source.WriteString(`<svg viewBox="`)
+	writeEscaped(&source, symbol.viewBox)
+	source.WriteByte('"')
+	for _, attr := range symbol.presentation {
+		source.WriteByte(' ')
+		source.WriteString(attr.Name.Local)
+		source.WriteString(`="`)
+		writeEscaped(&source, attr.Value)
+		source.WriteByte('"')
+	}
+	source.WriteByte('>')
+	source.WriteString(symbol.body.String())
+	source.WriteString(`</svg>`)
+	document, err := svgasset.Parse(source.Bytes())
 	if err != nil {
 		return fmt.Errorf("validate sprite symbol: %w", err)
 	}
 	symbol.document = document
 	return nil
+}
+
+func writeEscaped(out io.Writer, value string) {
+	_ = xml.EscapeText(out, []byte(value))
 }
 
 func collectReferences(references *[]string, attrs []xml.Attr) {

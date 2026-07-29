@@ -107,7 +107,7 @@ e99dc0e684edaa95e8faed03e17f4cffd1de12c9e56f013f7cfefb75882a80ef  icons/brand/pa
 ca101643f9466db4563522b5c6b6f6d5cee4c989f283667126e48cbad9db4b97  icons/brand/paje-icon-tinted-plate-launcher.svg
 440a33509f98354feb0930ff0b256a7f501db1e7dfbf15ba59f873d6767ab00c  icons/brand/paje-icon-tinted-plate-optical.svg
 4404eaa471d28df6d87a73d456ab9f224abc57aa7e5a94a3e83445b9af6786e6  icons/brand/paje-icon-tinted-transparent-optical.svg
-249bad81cff862871be29b2e79eb903aa5c3fc832ba464a81f42134c310c1b6f  icons/brand/sprite.svg
+e0c98a783cf65cf52b0a57cca47b84704499200a7fdb113b751d8f6c5828ba45  icons/brand/sprite.svg
 4c1ed8e9d90d5084d039a0e19414eb70f1e1d72c7188a5a184a87d7ae3845b9c  icons/brand/x9-icon-adaptive-plate-launcher.svg
 3766ac7dcfc89b31311bec8795d2b788f39d0c52dcd70d53e6625a83f8725daf  icons/brand/x9-icon-adaptive-plate-optical.svg
 98ac8f9069dddf94f06752fa2518d8987e45a747d2bc0c8a142d3a4f4fe52523  icons/brand/x9-icon-adaptive-transparent-optical.svg
@@ -189,7 +189,7 @@ ea21ae84ffb2bc44ceed5e2b316c8f7883364433823a504183b5a5a767caff77  icons/ui/heroi
 0ef35fd7972f7d49753b1bd8556bf8d80e7928469449b86feef247631f3cc665  icons/ui/heroicons/16-solid-x-circle.svg
 ff6c5b131ff8a6d7db5c49d810129b5b758ac04f5c40916eb46841e724daea8e  icons/ui/heroicons/16-solid-x-mark.svg
 3feeb62d703521a30d9f8a198f165abaf2cbe165059d0c9828dc576051acd538  icons/ui/heroicons/provenance.json
-6b312ee2cf9f0e91c4621bd4eec348ecaf39cfdc0a00c8ddefdf4d7f8e9f32a5  icons/ui/sprite.svg
+75e282de7a19efba9cf0285b44af0641c1527361f921b7d7f8020efc1f1f0fb7  icons/ui/sprite.svg
 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  licenses/Apache-2.0.txt
 60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985  licenses/heroicons-MIT.txt
 be7351e87230c7f4badfd23c2b4645765f3cf7aa8ba512cc18b47ac7c877631d  platform/android/araihu/res/drawable-xxxhdpi/ic_launcher_foreground.png
@@ -456,7 +456,7 @@ e99dc0e684edaa95e8faed03e17f4cffd1de12c9e56f013f7cfefb75882a80ef  proof/assets/i
 ca101643f9466db4563522b5c6b6f6d5cee4c989f283667126e48cbad9db4b97  proof/assets/icons/brand/paje-icon-tinted-plate-launcher.svg
 440a33509f98354feb0930ff0b256a7f501db1e7dfbf15ba59f873d6767ab00c  proof/assets/icons/brand/paje-icon-tinted-plate-optical.svg
 4404eaa471d28df6d87a73d456ab9f224abc57aa7e5a94a3e83445b9af6786e6  proof/assets/icons/brand/paje-icon-tinted-transparent-optical.svg
-249bad81cff862871be29b2e79eb903aa5c3fc832ba464a81f42134c310c1b6f  proof/assets/icons/brand/sprite.svg
+e0c98a783cf65cf52b0a57cca47b84704499200a7fdb113b751d8f6c5828ba45  proof/assets/icons/brand/sprite.svg
 4c1ed8e9d90d5084d039a0e19414eb70f1e1d72c7188a5a184a87d7ae3845b9c  proof/assets/icons/brand/x9-icon-adaptive-plate-launcher.svg
 3766ac7dcfc89b31311bec8795d2b788f39d0c52dcd70d53e6625a83f8725daf  proof/assets/icons/brand/x9-icon-adaptive-plate-optical.svg
 98ac8f9069dddf94f06752fa2518d8987e45a747d2bc0c8a142d3a4f4fe52523  proof/assets/icons/brand/x9-icon-adaptive-transparent-optical.svg
@@ -538,7 +538,7 @@ ea21ae84ffb2bc44ceed5e2b316c8f7883364433823a504183b5a5a767caff77  proof/assets/i
 0ef35fd7972f7d49753b1bd8556bf8d80e7928469449b86feef247631f3cc665  proof/assets/icons/ui/heroicons/16-solid-x-circle.svg
 ff6c5b131ff8a6d7db5c49d810129b5b758ac04f5c40916eb46841e724daea8e  proof/assets/icons/ui/heroicons/16-solid-x-mark.svg
 3feeb62d703521a30d9f8a198f165abaf2cbe165059d0c9828dc576051acd538  proof/assets/icons/ui/heroicons/provenance.json
-6b312ee2cf9f0e91c4621bd4eec348ecaf39cfdc0a00c8ddefdf4d7f8e9f32a5  proof/assets/icons/ui/sprite.svg
+75e282de7a19efba9cf0285b44af0641c1527361f921b7d7f8020efc1f1f0fb7  proof/assets/icons/ui/sprite.svg
 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  proof/assets/licenses/Apache-2.0.txt
 60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985  proof/assets/licenses/heroicons-MIT.txt
 be7351e87230c7f4badfd23c2b4645765f3cf7aa8ba512cc18b47ac7c877631d  proof/assets/platform/android/araihu/res/drawable-xxxhdpi/ic_launcher_foreground.png

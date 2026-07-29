@@ -41,6 +41,16 @@ type Options struct {
 	ColorBehavior string
 }
 
+// RootPresentation contains safe inheritable paint attributes from an SVG root.
+// These attributes remain meaningful when the document children move beneath a
+// sprite symbol.
+type RootPresentation struct {
+	Fill      string
+	HasFill   bool
+	Stroke    string
+	HasStroke bool
+}
+
 // Document is a validated SVG document.
 type Document struct {
 	root node
@@ -485,6 +495,15 @@ func (d Document) ViewBox() string {
 		}
 	}
 	return ""
+}
+
+// RootPresentation returns the allowlisted root paint attributes in a form
+// suitable for propagation to an SVG symbol. Document sizing and namespaces
+// are intentionally excluded.
+func (d Document) RootPresentation() RootPresentation {
+	fill, hasFill := paintAttribute(d.root, "fill")
+	stroke, hasStroke := paintAttribute(d.root, "stroke")
+	return RootPresentation{Fill: fill, HasFill: hasFill, Stroke: stroke, HasStroke: hasStroke}
 }
 
 // ChildrenXML returns stable markup for validated root children.

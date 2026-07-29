@@ -1,6 +1,7 @@
 package transform
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/xml"
 	"errors"
@@ -68,6 +69,26 @@ func TestBuildBrandCatalogAssetsValidate(t *testing.T) {
 	}
 	if err := catalog.Validate(c); err != nil {
 		t.Fatalf("catalog.Validate(BuildBrand assets): %v", err)
+	}
+}
+
+func TestBuildBrandMonochromeSpriteSymbolsRemainTintable(t *testing.T) {
+	result := mustBuildBrand(t)
+	spriteSVG := result.Files["dist/icons/brand/sprite.svg"]
+	for _, product := range []string{"araihu", "goshtoso", "manja", "paje", "x9"} {
+		want := `<symbol id="` + product + `-icon-monochrome-transparent-optical"`
+		start := bytes.Index(spriteSVG, []byte(want))
+		if start < 0 {
+			t.Fatalf("brand sprite missing %q", want)
+		}
+		end := bytes.IndexByte(spriteSVG[start:], '>')
+		if end < 0 {
+			t.Fatalf("brand sprite symbol %q has no closing bracket", want)
+		}
+		tag := spriteSVG[start : start+end+1]
+		if !bytes.Contains(tag, []byte(`fill="currentColor"`)) {
+			t.Errorf("brand sprite symbol tag %s is not runtime tintable", tag)
+		}
 	}
 }
 
