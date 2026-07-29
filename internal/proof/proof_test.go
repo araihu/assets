@@ -2,6 +2,8 @@ package proof
 
 import (
 	"bytes"
+	"encoding/json"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"slices"
@@ -87,6 +89,64 @@ func TestBuildRejectsMissingReferencedDistributionFile(t *testing.T) {
 	}
 }
 
+func TestBuildRejectsCatalogMutatedAfterLoad(t *testing.T) {
+	m := fixtureModel(t)
+	m.Catalog.Assets = append(m.Catalog.Assets, m.Catalog.Assets[0])
+
+	err := Build(m, fixtureDistributionFS(), &bytes.Buffer{})
+	if err == nil || !strings.Contains(err.Error(), "duplicate canonicalName") {
+		t.Fatalf("Build() error = %v, want duplicate canonicalName", err)
+	}
+}
+
+func TestBuildRejectsNonRegularReferencedDistributionFile(t *testing.T) {
+	m := fixtureModel(t)
+	distribution := fixtureDistributionFS()
+	distribution["icons/brand/araihu-icon.svg"] = &fstest.MapFile{Mode: fs.ModeDir}
+
+	err := Build(m, distribution, &bytes.Buffer{})
+	if err == nil || !strings.Contains(err.Error(), "is not regular") {
+		t.Fatalf("Build() error = %v, want non-regular file", err)
+	}
+}
+
+func TestLoadSortsModelDeterministicallyFromPermutedInputs(t *testing.T) {
+	want := loadProduction(t)
+	c := want.Catalog
+	c.Assets = slices.Clone(c.Assets)
+	slices.Reverse(c.Assets)
+	scenarios := slices.Clone(want.Scenarios)
+	slices.Reverse(scenarios)
+	document, err := json.Marshal(struct {
+		Scenarios []Scenario `json:"scenarios"`
+	}{Scenarios: scenarios})
+	if err != nil {
+		t.Fatalf("json.Marshal() error = %v", err)
+	}
+
+	got, err := Load(c, bytes.NewReader(document))
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+	if !slices.IsSortedFunc(got.Catalog.Assets, func(a, b catalog.Asset) int { return strings.Compare(a.CanonicalName, b.CanonicalName) }) {
+		t.Fatal("Catalog assets are not sorted by canonicalName")
+	}
+	if !slices.IsSortedFunc(got.Scenarios, func(a, b Scenario) int { return strings.Compare(a.ID, b.ID) }) {
+		t.Fatal("Scenarios are not sorted by ID")
+	}
+	if !slices.IsSortedFunc(got.Products, func(a, b ProductProof) int { return strings.Compare(a.ID, b.ID) }) {
+		t.Fatal("Products are not sorted by ID")
+	}
+	for _, product := range got.Products {
+		if !slices.IsSortedFunc(product.Assets, func(a, b catalog.Asset) int { return strings.Compare(a.CanonicalName, b.CanonicalName) }) {
+			t.Fatalf("product %q assets are not sorted by canonicalName", product.ID)
+		}
+	}
+	if !slices.IsSorted(got.ExactSizes) {
+		t.Fatalf("ExactSizes are not sorted: %v", got.ExactSizes)
+	}
+}
+
 func TestProductionScenariosCoverLiteral512AndEveryProduct(t *testing.T) {
 	m := loadProduction(t)
 	if !slices.Contains(m.ExactSizes, 512) {
@@ -159,6 +219,13 @@ func fixtureModel(t *testing.T) Model {
 		t.Fatalf("Load() error = %v", err)
 	}
 	return m
+}
+
+func fixtureDistributionFS() fstest.MapFS {
+	return fstest.MapFS{
+		"icons/brand/araihu-icon.svg":           &fstest.MapFile{Data: []byte("svg")},
+		"icons/ui/heroicons/16-solid-check.svg": &fstest.MapFile{Data: []byte("svg")},
+	}
 }
 
 func loadProduction(t *testing.T) Model {

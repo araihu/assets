@@ -68,6 +68,9 @@ func Build(m Model, fsys fs.FS, output io.Writer) error {
 	if fsys == nil {
 		return errors.New("build proof: nil distribution filesystem")
 	}
+	if err := catalog.Validate(m.Catalog); err != nil {
+		return fmt.Errorf("build proof catalog: %w", err)
+	}
 	if _, err := newModel(m.Catalog, m.Scenarios); err != nil {
 		return fmt.Errorf("build proof model: %w", err)
 	}
@@ -97,6 +100,9 @@ func newModel(c catalog.Catalog, scenarios []Scenario) (Model, error) {
 	}
 	catalogCopy := c
 	catalogCopy.Assets = slices.Clone(c.Assets)
+	sort.Slice(catalogCopy.Assets, func(i, j int) bool {
+		return catalogCopy.Assets[i].CanonicalName < catalogCopy.Assets[j].CanonicalName
+	})
 	assets := assetsByName(catalogCopy)
 	products := make(map[string][]catalog.Asset)
 	for _, asset := range catalogCopy.Assets {
