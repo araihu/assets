@@ -1,11 +1,9 @@
-# Arai Hû Assets v0.1.0 core release candidate checklist
+# Arai Hû Assets v0.1.0 release checklist
 
 ## Scope and status
 
-This is an **untagged core release candidate**, not an immutable final release.
-It freezes the catalog, sprites, generated proof, and archives consumed by
-downstream work. No tag, push, merge, deployment, or Goshtoso work is
-authorized by this checklist.
+This checklist records the catalog, sprites, generated proof, archives, and
+cross-repository gates approved for the immutable `v0.1.0` release.
 
 ## Frozen core inputs
 
@@ -37,10 +35,10 @@ authorized by this checklist.
 - [x] P1 added offline `proof --check` validation and archive inclusion for `dist/proof/**`.
 - [x] P1 regenerated both release archives and recorded final P1 SHA-256 values.
 - [x] P1 enabled `make proof-check` in CI and local release verification.
-- [ ] G1 must prove Goshtoso catalog/sprite compatibility from this frozen core input.
-- [ ] W1 must prove public-site compatibility after G1.
-- [ ] Root-owned final review must validate proof, consumer compatibility, final archives,
-  then obtain explicit user approval before tag, push, merge, or deployment.
+- [x] G1 proved Goshtoso catalog/sprite compatibility from this frozen core input.
+- [x] W1 proved public-site compatibility after G1.
+- [x] Root-owned final review validated proof, consumer compatibility, and final archives.
+- [x] The user explicitly approved tag, push, merge, and deployment on 2026-07-29.
 
 ## Final P1 archive rule
 

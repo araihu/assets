@@ -1,15 +1,15 @@
 # Arai Hû Assets
 
-Deterministic identity and interface assets for Arai Hû products. The core
-release candidate is still pending P1: `dist/catalog.json` is the consumer
-contract, but this checkout makes no release or publication claim.
+Deterministic identity and interface assets for Arai Hû products.
+`dist/catalog.json` is the versioned, language-neutral consumer contract for
+the `v0.1.0` release.
 
 ## Current checkout
 
 Requires Go `1.26.5`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
-The managed `dist/` tree is an untagged core RC. Its catalog, generated
+The managed `dist/` tree is the `v0.1.0` distribution. Its catalog, generated
 sprites, catalog-driven proof, and deterministic archives are consumer inputs.
 Use a disposable checkout when regenerating it:
 
@@ -24,10 +24,9 @@ Run `catalog` only after a successful `make generate`, because it validates the
 generated `dist/catalog.json`. `make check` rejects drift across the complete
 managed tree, including `dist/proof`.
 
-## Install after release
+## Install
 
-No `v0.1.0` tag exists yet. After an explicit tag and release are approved,
-install and verify the released module:
+Install and verify the released module:
 
 ```sh
 go install github.com/araihu/assets/cmd/araihu-assets@v0.1.0
@@ -71,7 +70,7 @@ to choose a separate output directory or reconcile the consumer's copy.
 
 ## Catalog and sprites
 
-The core RC `dist/catalog.json` is schema v1, language-neutral metadata for
+The `v0.1.0` `dist/catalog.json` is schema v1, language-neutral metadata for
 generated files only. It records canonical name,
 namespace, variant dimensions,
 `spriteSymbol`, color behavior, license, source label, and SHA-256. Public
@@ -91,7 +90,7 @@ generation is provided by this CLI; consumers own any project-local bindings.
 
 ## Platform files and archives
 
-The core RC build emits individual brand/UI SVGs, web/Android/Apple platform
+The `v0.1.0` build emits individual brand/UI SVGs, web/Android/Apple platform
 packages, catalog, checksums, notices, licenses, the self-contained
 `dist/proof/**` review site, and deterministic `.tar.gz` and `.zip` archives
 under `dist/releases/`. Platform launchers
