@@ -34,6 +34,9 @@ type Dependencies struct {
 // exportAfterEnumerationHook is a test-only cancellation seam.
 var exportAfterEnumerationHook func()
 
+// exportAfterOutputRootHook is a test-only cleanup-ownership seam.
+var exportAfterOutputRootHook func()
+
 // UsageError describes invalid command or flag syntax. Callers map it to exit
 // status 2; all other errors are command execution failures.
 type UsageError struct{ message string }
@@ -214,6 +217,9 @@ func runExport(ctx context.Context, deps Dependencies, args []string, stdout, st
 	if err != nil {
 		removeEmptyOwnedDirectories(owned)
 		return fmt.Errorf("export: create output root %q: %w", *output, err)
+	}
+	if exportAfterOutputRootHook != nil {
+		exportAfterOutputRootHook()
 	}
 	cleanupOwned := true
 	defer func() {
@@ -484,10 +490,15 @@ func rejectSymlinkComponents(root *os.Root, name string) error {
 	return nil
 }
 
+type ownedDirectory struct {
+	path string
+	info fs.FileInfo
+}
+
 // createOutputRoot creates path one component at a time so cancellation can
 // remove only directories created by this invocation. A successful Mkdir is an
-// indivisible boundary; cleanup later removes it only while it remains empty.
-func createOutputRoot(ctx context.Context, output string) ([]string, error) {
+// indivisible boundary; cleanup later requires its observed file identity.
+func createOutputRoot(ctx context.Context, output string) ([]ownedDirectory, error) {
 	absolute, err := filepath.Abs(output)
 	if err != nil {
 		return nil, fmt.Errorf("resolve output root: %w", err)
@@ -495,7 +506,7 @@ func createOutputRoot(ctx context.Context, output string) ([]string, error) {
 	volume := filepath.VolumeName(absolute)
 	current := volume + string(filepath.Separator)
 	tail := strings.TrimPrefix(absolute, volume)
-	var owned []string
+	var owned []ownedDirectory
 	for _, component := range strings.Split(tail, string(filepath.Separator)) {
 		if component == "" {
 			continue
@@ -505,7 +516,14 @@ func createOutputRoot(ctx context.Context, output string) ([]string, error) {
 		}
 		current = filepath.Join(current, component)
 		if err := os.Mkdir(current, 0o755); err == nil {
-			owned = append(owned, current)
+			info, err := os.Lstat(current)
+			if err != nil {
+				return owned, err
+			}
+			if !info.IsDir() {
+				return owned, fmt.Errorf("created output component %q is not a directory", current)
+			}
+			owned = append(owned, ownedDirectory{path: current, info: info})
 		} else if !errors.Is(err, fs.ErrExist) {
 			return owned, err
 		}
@@ -516,9 +534,18 @@ func createOutputRoot(ctx context.Context, output string) ([]string, error) {
 	return owned, nil
 }
 
-func removeEmptyOwnedDirectories(owned []string) {
+// removeEmptyOwnedDirectories removes only an empty directory whose identity
+// still matches the post-Mkdir observation. A replacement before Lstat is left
+// intact. Standard path APIs cannot atomically bind Lstat and Remove, so a
+// replacement after the identity check is an external race beyond this cleanup
+// boundary; nonempty replacements still make Remove fail safely.
+func removeEmptyOwnedDirectories(owned []ownedDirectory) {
 	for index := len(owned) - 1; index >= 0; index-- {
-		_ = os.Remove(owned[index])
+		current, err := os.Lstat(owned[index].path)
+		if err != nil || !current.IsDir() || !os.SameFile(current, owned[index].info) {
+			continue
+		}
+		_ = os.Remove(owned[index].path)
 	}
 }
 

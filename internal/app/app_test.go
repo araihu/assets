@@ -112,6 +112,36 @@ func TestExportCancellationAfterEnumerationLeavesNewOutputAbsent(t *testing.T) {
 	}
 }
 
+func TestExportCancellationDoesNotRemoveReplacementOutputDirectory(t *testing.T) {
+	repo, outputParent := t.TempDir(), t.TempDir()
+	if err := os.Mkdir(filepath.Join(repo, "dist"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(repo, "dist", "release.txt"), []byte("release"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	output := filepath.Join(outputParent, "new-output")
+	ctx, cancel := context.WithCancel(context.Background())
+	exportAfterOutputRootHook = func() {
+		if err := os.Remove(output); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.Mkdir(output, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		cancel()
+	}
+	t.Cleanup(func() { exportAfterOutputRootHook = nil })
+
+	err := Run(ctx, Dependencies{Repo: repo}, []string{"export", "--output", output}, io.Discard, io.Discard)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("Run(export) error = %v, want context canceled", err)
+	}
+	if info, err := os.Lstat(output); err != nil || !info.IsDir() {
+		t.Fatalf("cancelled export removed replacement output %q: %v, %v", output, info, err)
+	}
+}
+
 func copyManifest(t *testing.T, repo, name string) {
 	t.Helper()
 	data, err := os.ReadFile(filepath.Join("..", "..", "manifests", name))
