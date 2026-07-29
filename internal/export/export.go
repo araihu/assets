@@ -13,19 +13,31 @@ import (
 	"strings"
 )
 
+type publishPhase uint8
+
+const (
+	beforeLink publishPhase = iota
+	afterLink
+	beforeExistingVerify
+)
+
 // publishHook is a test-only fault/race injection seam. Production leaves it nil.
-var publishHook func(string, *os.Root) error
+var publishHook func(publishPhase, string, *os.Root) error
 
 type candidate struct {
-	name       string
-	data       []byte
-	temporary  string
-	created    bool
-	targetInfo fs.FileInfo
+	name        string
+	data        []byte
+	temporary   string
+	preexisting bool
+	created     bool
+	stagedInfo  fs.FileInfo
 }
 
-// Copy writes paths from source beneath destination as one operation. Existing
-// identical files are retained; different files are never overwritten.
+// Copy writes paths from source beneath destination as one operation. source
+// must be an immutable or snapshotted fs.FS: generic mutable fs.FS values,
+// including os.DirFS, cannot prevent a symlink TOCTOU race. CopyRoot provides
+// the rooted disk-backed variant. Existing identical files are retained;
+// different files are never overwritten.
 func Copy(source fs.FS, paths []string, destination *os.Root) error {
 	if source == nil {
 		return errors.New("export: source is nil")
@@ -50,6 +62,15 @@ func Copy(source fs.FS, paths []string, destination *os.Root) error {
 		return errors.Join(err, rollback(candidates, destination))
 	}
 	return nil
+}
+
+// CopyRoot copies from a live, rooted source. os.Root confines symlink
+// resolution beneath source even when the source tree changes concurrently.
+func CopyRoot(source *os.Root, paths []string, destination *os.Root) error {
+	if source == nil {
+		return errors.New("export: source root is nil")
+	}
+	return Copy(source.FS(), paths, destination)
 }
 
 func safePaths(paths []string) ([]string, error) {
@@ -100,6 +121,7 @@ func preflight(source fs.FS, paths []string, destination *os.Root) ([]candidate,
 			if !bytes.Equal(current, data) {
 				return nil, fmt.Errorf("export: destination collision at %s", name)
 			}
+			candidates = append(candidates, candidate{name: name, data: data, preexisting: true})
 			continue
 		} else if !errors.Is(err, fs.ErrNotExist) {
 			return nil, fmt.Errorf("export: inspect destination %s: %w", name, err)
@@ -111,6 +133,9 @@ func preflight(source fs.FS, paths []string, destination *os.Root) ([]candidate,
 
 func stage(candidates []candidate, destination *os.Root) (err error) {
 	for index := range candidates {
+		if candidates[index].preexisting {
+			continue
+		}
 		parent := path.Dir(candidates[index].name)
 		if parent != "." {
 			if err := destination.MkdirAll(parent, 0o755); err != nil {
@@ -141,18 +166,51 @@ func stage(candidates []candidate, destination *os.Root) (err error) {
 func publish(candidates []candidate, destination *os.Root) error {
 	for index := range candidates {
 		candidate := &candidates[index]
+		if candidate.preexisting {
+			if publishHook != nil {
+				if err := publishHook(beforeExistingVerify, candidate.name, destination); err != nil {
+					return fmt.Errorf("export: publish hook %s: %w", candidate.name, err)
+				}
+			}
+			info, err := destination.Lstat(candidate.name)
+			if err != nil || !info.Mode().IsRegular() {
+				return fmt.Errorf("export: preexisting destination changed at %s", candidate.name)
+			}
+			current, err := destination.ReadFile(candidate.name)
+			if err != nil || !bytes.Equal(current, candidate.data) {
+				return fmt.Errorf("export: preexisting destination changed at %s", candidate.name)
+			}
+			continue
+		}
+		temporaryInfo, err := destination.Lstat(candidate.temporary)
+		if err != nil || !temporaryInfo.Mode().IsRegular() {
+			return fmt.Errorf("export: staged temporary changed for %s", candidate.name)
+		}
+		candidate.stagedInfo = temporaryInfo
 		if publishHook != nil {
-			if err := publishHook(candidate.name, destination); err != nil {
+			if err := publishHook(beforeLink, candidate.name, destination); err != nil {
 				return fmt.Errorf("export: publish hook %s: %w", candidate.name, err)
 			}
 		}
 		linkErr := destination.Link(candidate.temporary, candidate.name)
 		if linkErr == nil {
+			candidate.created = true
+			if publishHook != nil {
+				if err := publishHook(afterLink, candidate.name, destination); err != nil {
+					return fmt.Errorf("export: publish hook %s: %w", candidate.name, err)
+				}
+			}
 			info, statErr := destination.Lstat(candidate.name)
 			if statErr != nil {
 				return fmt.Errorf("export: inspect published %s: %w", candidate.name, statErr)
 			}
-			candidate.created, candidate.targetInfo = true, info
+			if !os.SameFile(candidate.stagedInfo, info) {
+				return fmt.Errorf("export: published target changed for %s", candidate.name)
+			}
+			current, readErr := destination.ReadFile(candidate.name)
+			if readErr != nil || !bytes.Equal(current, candidate.data) {
+				return fmt.Errorf("export: published target bytes changed for %s", candidate.name)
+			}
 			continue
 		}
 		current, readErr := destination.ReadFile(candidate.name)
@@ -178,7 +236,7 @@ func rollback(candidates []candidate, destination *os.Root) error {
 			continue
 		}
 		current, err := destination.Lstat(candidate.name)
-		if err == nil && os.SameFile(current, candidate.targetInfo) {
+		if err == nil && os.SameFile(current, candidate.stagedInfo) {
 			if err := destination.Remove(candidate.name); err != nil {
 				cleanup = errors.Join(cleanup, fmt.Errorf("export: rollback %s: %w", candidate.name, err))
 			}

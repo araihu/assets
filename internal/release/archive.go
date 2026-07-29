@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"os"
 	"slices"
 	"strings"
 	"time"
@@ -16,12 +17,24 @@ import (
 
 var epoch = time.Unix(0, 0).UTC()
 
-// Archive writes a deterministic gzip-compressed tar archive.
+// Archive writes a deterministic gzip-compressed tar archive. source must be
+// immutable or snapshotted: generic mutable fs.FS values cannot close symlink
+// TOCTOU races. ArchiveRoot provides rooted live-filesystem confinement.
 func Archive(output io.Writer, source fs.FS, paths []string) error {
 	return TarGZ(output, source, paths)
 }
 
-// TarGZ writes a deterministic gzip-compressed tar archive.
+// ArchiveRoot writes an archive from a live, rooted source. os.Root confines
+// symlink resolution beneath source during concurrent filesystem changes.
+func ArchiveRoot(output io.Writer, source *os.Root, paths []string) error {
+	if source == nil {
+		return errors.New("release: source root is nil")
+	}
+	return Archive(output, source.FS(), paths)
+}
+
+// TarGZ writes a deterministic gzip-compressed tar archive. source has the
+// same immutable-or-snapshotted contract as Archive.
 func TarGZ(output io.Writer, source fs.FS, paths []string) error {
 	entries, err := load(source, paths)
 	if err != nil {
@@ -58,7 +71,8 @@ func closeTarGZ(tarWriter *tar.Writer, gzipWriter *gzip.Writer, prior error) err
 	return prior
 }
 
-// ZIP writes a deterministic ZIP archive.
+// ZIP writes a deterministic ZIP archive. source must be immutable or
+// snapshotted; use ZIPRoot for a live disk-backed source.
 func ZIP(output io.Writer, source fs.FS, paths []string) error {
 	entries, err := load(source, paths)
 	if err != nil {
@@ -83,6 +97,14 @@ func ZIP(output io.Writer, source fs.FS, paths []string) error {
 		return fmt.Errorf("release: close ZIP: %w", err)
 	}
 	return nil
+}
+
+// ZIPRoot writes a ZIP archive from a live, rooted source.
+func ZIPRoot(output io.Writer, source *os.Root, paths []string) error {
+	if source == nil {
+		return errors.New("release: source root is nil")
+	}
+	return ZIP(output, source.FS(), paths)
 }
 
 type entry struct {

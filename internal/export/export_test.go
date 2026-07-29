@@ -100,8 +100,8 @@ func TestCopyRollsBackCreatedFilesAfterLateNoReplaceFailure(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer root.Close()
-	publishHook = func(name string, destination *os.Root) error {
-		if name == "z.txt" {
+	publishHook = func(phase publishPhase, name string, destination *os.Root) error {
+		if phase == beforeLink && name == "z.txt" {
 			return destination.WriteFile(name, []byte("racer"), 0o644)
 		}
 		return nil
@@ -116,6 +116,78 @@ func TestCopyRollsBackCreatedFilesAfterLateNoReplaceFailure(t *testing.T) {
 	}
 	if got, err := os.ReadFile(filepath.Join(rootDir, "z.txt")); err != nil || string(got) != "racer" {
 		t.Fatalf("race destination = %q, %v", got, err)
+	}
+}
+
+func TestCopyRejectsTargetReplacementAfterLinkWithoutDeletingIt(t *testing.T) {
+	rootDir := t.TempDir()
+	root, err := os.OpenRoot(rootDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer root.Close()
+	publishHook = func(phase publishPhase, name string, destination *os.Root) error {
+		if phase == afterLink && name == "victim.txt" {
+			if err := destination.Remove(name); err != nil {
+				return err
+			}
+			return destination.WriteFile(name, []byte("attacker"), 0o644)
+		}
+		return nil
+	}
+	t.Cleanup(func() { publishHook = nil })
+	if err := Copy(fstest.MapFS{"victim.txt": &fstest.MapFile{Data: []byte("release")}}, []string{"victim.txt"}, root); err == nil {
+		t.Fatal("Copy returned success after target replacement")
+	}
+	if got, err := os.ReadFile(filepath.Join(rootDir, "victim.txt")); err != nil || string(got) != "attacker" {
+		t.Fatalf("replacement target = %q, %v", got, err)
+	}
+}
+
+func TestCopyRechecksStagedTargetBytesAfterLink(t *testing.T) {
+	rootDir := t.TempDir()
+	root, err := os.OpenRoot(rootDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer root.Close()
+	publishHook = func(phase publishPhase, name string, destination *os.Root) error {
+		if phase == afterLink && name == "victim.txt" {
+			return destination.WriteFile(name, []byte("mutated"), 0o644)
+		}
+		return nil
+	}
+	t.Cleanup(func() { publishHook = nil })
+	if err := Copy(fstest.MapFS{"victim.txt": &fstest.MapFile{Data: []byte("release")}}, []string{"victim.txt"}, root); err == nil {
+		t.Fatal("Copy returned success after staged target mutation")
+	}
+	if _, err := os.Stat(filepath.Join(rootDir, "victim.txt")); !errors.Is(err, fs.ErrNotExist) {
+		t.Fatalf("operation-owned mutated target remains: %v", err)
+	}
+}
+
+func TestCopyRevalidatesPreexistingIdenticalTargetAtPublishBoundary(t *testing.T) {
+	rootDir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(rootDir, "same.txt"), []byte("same"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	root, err := os.OpenRoot(rootDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer root.Close()
+	publishHook = func(phase publishPhase, name string, destination *os.Root) error {
+		if phase == beforeExistingVerify && name == "same.txt" {
+			return destination.WriteFile(name, []byte("mutated"), 0o644)
+		}
+		return nil
+	}
+	t.Cleanup(func() { publishHook = nil })
+	if err := Copy(fstest.MapFS{"same.txt": &fstest.MapFile{Data: []byte("same")}}, []string{"same.txt"}, root); err == nil {
+		t.Fatal("Copy returned success after preexisting target mutation")
+	}
+	if got, err := os.ReadFile(filepath.Join(rootDir, "same.txt")); err != nil || string(got) != "mutated" {
+		t.Fatalf("mutated target = %q, %v", got, err)
 	}
 }
 
@@ -137,5 +209,28 @@ func TestCopyRejectsIntermediateSourceSymlinkAndVolumePath(t *testing.T) {
 	}
 	if err := Copy(fstest.MapFS{"C:/file.txt": &fstest.MapFile{Data: []byte("x")}}, []string{"C:/file.txt"}, root); err == nil {
 		t.Fatal("Copy accepted drive path")
+	}
+}
+
+func TestCopyRootRejectsEscapingSourceSymlink(t *testing.T) {
+	sourceDir, outside, destination := t.TempDir(), t.TempDir(), t.TempDir()
+	if err := os.WriteFile(filepath.Join(outside, "file.txt"), []byte("outside"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(outside, filepath.Join(sourceDir, "link")); err != nil {
+		t.Fatal(err)
+	}
+	source, err := os.OpenRoot(sourceDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer source.Close()
+	target, err := os.OpenRoot(destination)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer target.Close()
+	if err := CopyRoot(source, []string{"link/file.txt"}, target); err == nil {
+		t.Fatal("CopyRoot accepted escaping source symlink")
 	}
 }

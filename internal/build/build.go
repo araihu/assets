@@ -240,11 +240,16 @@ func writeArchives(root string) error {
 	if err := os.MkdirAll(filepath.Join(root, "releases"), 0o755); err != nil {
 		return fmt.Errorf("build: create releases: %w", err)
 	}
+	stageRoot, err := os.OpenRoot(root)
+	if err != nil {
+		return fmt.Errorf("build: open staged root: %w", err)
+	}
+	defer stageRoot.Close()
 	zipFile, err := os.Create(filepath.Join(root, "releases", "araihu-assets-v0.1.0.zip"))
 	if err != nil {
 		return fmt.Errorf("build: create ZIP: %w", err)
 	}
-	if err := release.ZIP(zipFile, os.DirFS(root), paths); err != nil {
+	if err := release.ZIPRoot(zipFile, stageRoot, paths); err != nil {
 		_ = zipFile.Close()
 		return fmt.Errorf("build: create ZIP: %w", err)
 	}
@@ -255,7 +260,7 @@ func writeArchives(root string) error {
 	if err != nil {
 		return fmt.Errorf("build: create tar.gz: %w", err)
 	}
-	if err := release.Archive(tarFile, os.DirFS(root), paths); err != nil {
+	if err := release.ArchiveRoot(tarFile, stageRoot, paths); err != nil {
 		_ = tarFile.Close()
 		return fmt.Errorf("build: create tar.gz: %w", err)
 	}

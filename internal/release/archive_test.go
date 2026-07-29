@@ -81,6 +81,27 @@ func TestArchiveRejectsIntermediateSourceSymlink(t *testing.T) {
 	}
 }
 
+func TestArchiveRootRejectsEscapingSourceSymlink(t *testing.T) {
+	sourceRoot, outside := t.TempDir(), t.TempDir()
+	if err := os.WriteFile(filepath.Join(outside, "file.txt"), []byte("outside"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(outside, filepath.Join(sourceRoot, "link")); err != nil {
+		t.Fatal(err)
+	}
+	root, err := os.OpenRoot(sourceRoot)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer root.Close()
+	if err := ArchiveRoot(io.Discard, root, []string{"link/file.txt"}); err == nil {
+		t.Fatal("ArchiveRoot accepted escaping source symlink")
+	}
+	if err := ZIPRoot(io.Discard, root, []string{"link/file.txt"}); err == nil {
+		t.Fatal("ZIPRoot accepted escaping source symlink")
+	}
+}
+
 func requireTarMetadata(t *testing.T, data []byte, want []string) {
 	t.Helper()
 	gzipReader, err := gzip.NewReader(bytes.NewReader(data))
