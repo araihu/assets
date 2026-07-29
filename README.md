@@ -1,21 +1,41 @@
 # Arai Hû Assets
 
 Deterministic, release-ready identity and interface assets for Arai Hû
-products. The release contract is `dist/catalog.json`; consumers use its
-declared paths, symbols, licenses, and SHA-256 values rather than source-tree
-paths or an identity working revision.
+products. After Task 10, the release contract is `dist/catalog.json`; consumers
+use its declared paths, symbols, licenses, and SHA-256 values rather than
+source-tree paths or an identity working revision.
 
-## Install and verify
+## Current checkout
 
 Requires Go `1.26.5`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
+
+Before Task 10 creates the release candidate, this repository intentionally
+does not contain a published `v0.1.0` catalog or archive. Use a disposable
+checkout when generating the managed `dist/` tree:
+
+```sh
+make generate
+go run ./cmd/araihu-assets catalog
+make check
+make verify
+```
+
+Run `catalog` only after a successful `make generate`, because it validates the
+generated `dist/catalog.json`. In the pre-RC tracking checkout, `make check`
+correctly reports drift instead of replacing the retained V11 proof scaffold.
+
+## Install after release
+
+No `v0.1.0` tag exists yet. After an explicit tag and release are approved,
+install and verify the released module:
 
 ```sh
 go install github.com/araihu/assets/cmd/araihu-assets@v0.1.0
 araihu-assets verify
 ```
 
-For repository work, use the stable Make targets:
+For release-maintenance work, stable Make targets are:
 
 ```sh
 make vendor    # fetch only locked manifest-selected UI sources
@@ -25,10 +45,8 @@ make check     # test, then reject generated-output drift
 make proof-check
 ```
 
-`make check` intentionally reports drift until the release-candidate task
-commits the generated `dist/` tree. It does not publish a replacement. The
-current `make proof-check` remains a V11 calibration gate until P1 replaces it
-with the catalog-driven proof site.
+The current `make proof-check` remains a V11 calibration gate until P1 replaces
+it with the catalog-driven proof site.
 
 ## CLI
 
@@ -51,8 +69,9 @@ to choose a separate output directory or reconcile the consumer's copy.
 
 ## Catalog and sprites
 
-`dist/catalog.json` is schema v1, language-neutral metadata for generated
-files only. It records canonical name, namespace, variant dimensions,
+After Task 10 publishes generated output, `dist/catalog.json` is schema v1,
+language-neutral metadata for generated files only. It records canonical name,
+namespace, variant dimensions,
 `spriteSymbol`, color behavior, license, source label, and SHA-256. Public
 paths do not contain `v11`; `identityRevision: 11` remains metadata.
 
@@ -70,14 +89,14 @@ generation is provided by this CLI; consumers own any project-local bindings.
 
 ## Platform files and archives
 
-The build emits individual brand/UI SVGs, web/Android/Apple platform packages,
-catalog, checksums, notices, licenses, and deterministic `.tar.gz` and `.zip`
-release archives under `dist/releases/`. Platform launchers have their own
-safe-area, raster, and metadata contracts; do not substitute a general SVG for
-a launcher asset.
+The Task 10 release build emits individual brand/UI SVGs, web/Android/Apple
+platform packages, catalog, checksums, notices, licenses, and deterministic
+`.tar.gz` and `.zip` release archives under `dist/releases/`. Platform launchers
+have their own safe-area, raster, and metadata contracts; do not substitute a
+general SVG for a launcher asset.
 
-Release archives and `catalog.json` are the interoperability boundary. They
-remain usable without Go.
+Released archives and `catalog.json` are the interoperability boundary. They
+remain usable without Go once Task 10 has published them.
 
 ## Licensing
 
