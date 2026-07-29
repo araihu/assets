@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/araihu/assets/internal/manifest"
+	"github.com/araihu/assets/internal/svgasset"
 )
 
 func TestSyncDoesNotPublishHashMismatch(t *testing.T) {
@@ -107,6 +108,14 @@ func TestBuildUIProducesDeterministicUIArtifactsOffline(t *testing.T) {
 	icon := first.Files["icons/ui/heroicons/16-solid-check.svg"]
 	if !bytes.Contains(icon, []byte(`fill="currentColor"`)) || bytes.Contains(icon, []byte(`width="16"`)) {
 		t.Fatalf("normalized icon = %s", icon)
+	}
+	for path, svg := range first.Files {
+		if !strings.HasSuffix(path, ".svg") || path == "icons/ui/sprite.svg" {
+			continue
+		}
+		if _, err := svgasset.Parse(svg); err != nil {
+			t.Errorf("generated %s did not reparse: %v", path, err)
+		}
 	}
 	if !bytes.Contains(first.Files["icons/ui/sprite.svg"], []byte(`id="hi-16-solid-check"`)) {
 		t.Fatal("sprite omits hi-16-solid-check")

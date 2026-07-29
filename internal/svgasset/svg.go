@@ -30,7 +30,8 @@ var (
 	visualElements = map[string]bool{
 		"circle": true, "ellipse": true, "line": true, "path": true, "polygon": true, "polyline": true, "rect": true, "use": true,
 	}
-	mixedCaseAttributes = map[string]struct{}{
+	generatedAdaptiveStyle = regexp.MustCompile(`^<style>@media \(prefers-color-scheme: dark\) \{:root \{--araihu-logo-auto-surface: #[0-9a-f]{6};--araihu-logo-auto-ink: #[0-9a-f]{6};--araihu-logo-auto-signal: #[0-9a-f]{6};\}\}</style>`)
+	mixedCaseAttributes    = map[string]struct{}{
 		"clipPathUnits": {}, "gradientTransform": {}, "gradientUnits": {}, "markerHeight": {}, "markerUnits": {}, "markerWidth": {}, "preserveAspectRatio": {}, "refX": {}, "refY": {}, "viewBox": {},
 	}
 )
@@ -133,6 +134,27 @@ func Parse(input []byte) (Document, error) {
 		return Document{}, err
 	}
 	return Document{root: *root}, nil
+}
+
+// ParseGenerated accepts a normal safe SVG or the sole stylesheet contract
+// emitted for the generated adaptive brand variants. It never accepts a
+// stylesheet supplied by an arbitrary source SVG.
+func ParseGenerated(input []byte) (Document, error) {
+	doc, err := Parse(input)
+	if err == nil {
+		return doc, nil
+	}
+	rootEnd := bytes.IndexByte(input, '>')
+	if rootEnd < 0 || bytes.Count(input, []byte("<style")) != 1 {
+		return Document{}, err
+	}
+	body := input[rootEnd+1:]
+	style := generatedAdaptiveStyle.Find(body)
+	if style == nil {
+		return Document{}, err
+	}
+	plain := append(append([]byte(nil), input[:rootEnd+1]...), body[len(style):]...)
+	return Parse(plain)
 }
 
 func validateElementName(name string) error {

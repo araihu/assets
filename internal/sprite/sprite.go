@@ -62,7 +62,7 @@ func Build(entries []Entry) ([]byte, error) {
 	}
 
 	var out bytes.Buffer
-	out.WriteString(`<svg xmlns="http://www.w3.org/2000/svg" style="display:none">`)
+	out.WriteString(`<svg xmlns="http://www.w3.org/2000/svg">`)
 	for i, entry := range ordered {
 		doc := documents[i]
 		out.WriteString(`<symbol id="`)

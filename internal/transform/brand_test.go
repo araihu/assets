@@ -13,6 +13,7 @@ import (
 
 	"github.com/araihu/assets/internal/catalog"
 	"github.com/araihu/assets/internal/manifest"
+	"github.com/araihu/assets/internal/sprite"
 	"github.com/araihu/assets/internal/svgasset"
 )
 
@@ -93,6 +94,14 @@ func TestBuildBrandAdaptivePreservesApprovedSchemeBehavior(t *testing.T) {
 	if _, err := svgasset.Parse(adaptive); err == nil {
 		t.Fatal("generic SVG parser accepted generated adaptive stylesheet")
 	}
+	brand := testManifest(t)
+	palettes, err := declaredPalettes(brand.Palettes)
+	if err != nil {
+		t.Fatalf("declaredPalettes(): %v", err)
+	}
+	if _, err := validateAdaptiveSVG(adaptive, adaptiveStyle(palettes["dark"])); err != nil {
+		t.Fatalf("validateAdaptiveSVG(): %v", err)
+	}
 	asset := findAsset(t, result, "araihu-icon-adaptive-transparent-optical")
 	if asset.SpriteSymbol != "" {
 		t.Fatalf("adaptive SpriteSymbol = %q, want individual-only", asset.SpriteSymbol)
@@ -112,9 +121,75 @@ func TestBuildBrandAdaptiveAssignsEveryVisibleGeometrySemanticPaint(t *testing.T
 	}
 }
 
+func TestBuildBrandUsesDeclaredPaletteValues(t *testing.T) {
+	brand := testManifest(t)
+	brand.Palettes["light"].Colors["ink"] = "#010203"
+	result, err := BuildBrand(os.DirFS(filepath.Join("..", "..")), brand)
+	if err != nil {
+		t.Fatalf("BuildBrand(): %v", err)
+	}
+	for _, path := range []string{
+		"dist/icons/brand/araihu-icon-light-transparent-optical.svg",
+		"dist/icons/brand/araihu-icon-adaptive-transparent-optical.svg",
+	} {
+		if !strings.Contains(string(result.Files[path]), "#010203") {
+			t.Errorf("%s does not contain the declared light ink color", path)
+		}
+	}
+}
+
+func TestBuildBrandRejectsMalformedDeclaredPalette(t *testing.T) {
+	brand := testManifest(t)
+	delete(brand.Palettes["dark"].Colors, "ink")
+	if _, err := BuildBrand(os.DirFS(filepath.Join("..", "..")), brand); err == nil || !strings.Contains(err.Error(), "palette") {
+		t.Fatalf("BuildBrand() error = %v, want palette validation failure", err)
+	}
+}
+
+func TestBuildBrandReparsesEveryGeneratedSVG(t *testing.T) {
+	result := mustBuildBrand(t)
+	brand := testManifest(t)
+	palettes, err := declaredPalettes(brand.Palettes)
+	if err != nil {
+		t.Fatalf("declaredPalettes(): %v", err)
+	}
+	for path, svg := range result.Files {
+		if strings.Contains(path, "-adaptive-") || strings.Contains(path, "/adaptive-") {
+			if _, err := validateAdaptiveSVG(svg, adaptiveStyle(palettes["dark"])); err != nil {
+				t.Errorf("validate adaptive %s: %v", path, err)
+			}
+			continue
+		}
+		if path == "dist/icons/brand/sprite.svg" {
+			if _, err := sprite.Build(result.SpriteEntries); err != nil {
+				t.Errorf("rebuild sprite %s: %v", path, err)
+			}
+			continue
+		}
+		if _, err := svgasset.Parse(svg); err != nil {
+			t.Errorf("parse generated %s: %v", path, err)
+		}
+	}
+}
+
+func TestValidateAdaptiveSVGRejectsArbitraryStyles(t *testing.T) {
+	result := mustBuildBrand(t)
+	brand := testManifest(t)
+	palettes, err := declaredPalettes(brand.Palettes)
+	if err != nil {
+		t.Fatalf("declaredPalettes(): %v", err)
+	}
+	style := adaptiveStyle(palettes["dark"])
+	adaptive := result.Files["dist/icons/brand/araihu-icon-adaptive-transparent-optical.svg"]
+	unsafe := []byte(strings.Replace(string(adaptive), style, `<style>path { fill: red; }</style>`, 1))
+	if _, err := validateAdaptiveSVG(unsafe, style); err == nil {
+		t.Fatal("validateAdaptiveSVG() accepted arbitrary stylesheet")
+	}
+}
+
 func TestApplyAdaptivePalettePreservesNonPaintingContexts(t *testing.T) {
 	input := []byte(`<svg viewBox="0 0 16 16"><defs><path d="M1 1h1v1z"/></defs><clipPath><path d="M2 2h1v1z"/></clipPath><mask><path d="M3 3h1v1z"/></mask><path d="M4 4h1v1z"/><path fill="none" stroke="#07111f" d="M5 5h1v1z"/><g fill="none" stroke="#07111f"><path d="M6 6h1v1z"/></g></svg>`)
-	output, err := applyAdaptivePalette(input)
+	output, err := applyAdaptivePalette(input, palette{surface: "#f3f2e9", ink: "#07111f", signal: "#c7ff4a"})
 	if err != nil {
 		t.Fatalf("applyAdaptivePalette(): %v", err)
 	}

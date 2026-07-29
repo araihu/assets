@@ -5,12 +5,22 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/araihu/assets/internal/app"
 )
 
 func main() {
-	os.Exit(runMain(context.Background(), app.Dependencies{}, os.Args[1:], os.Stdout, os.Stderr))
+	ctx, stop := signalContext(context.Background())
+	defer stop()
+	os.Exit(runMain(ctx, app.Dependencies{}, os.Args[1:], os.Stdout, os.Stderr))
+}
+
+var notifyContext = signal.NotifyContext
+
+func signalContext(parent context.Context) (context.Context, context.CancelFunc) {
+	return notifyContext(parent, os.Interrupt, syscall.SIGTERM)
 }
 
 // runMain is process-free so exit behavior remains directly testable.

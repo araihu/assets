@@ -17,6 +17,7 @@ import (
 	"strings"
 
 	"github.com/araihu/assets/internal/catalog"
+	"github.com/araihu/assets/internal/svgasset"
 )
 
 const (
@@ -181,8 +182,9 @@ func validateIcons(icons []BrandIcon) ([]BrandIcon, error) {
 			"light": icon.LightSVG, "dark": icon.DarkSVG, "tinted": icon.TintedSVG, "grayscale": icon.GrayscaleSVG,
 			"monochrome": icon.MonochromeSVG, "adaptive": icon.AdaptiveSVG, "launcher": icon.LauncherSVG,
 		} {
-			if viewBoxOf(svg) == "" {
-				return nil, fmt.Errorf("platform: %s SVG for %s must have a root viewBox", name, icon.Product)
+			document, err := svgasset.ParseGenerated(svg)
+			if err != nil || document.ViewBox() == "" {
+				return nil, fmt.Errorf("platform: %s SVG for %s must be a safe generated SVG", name, icon.Product)
 			}
 		}
 		byProduct[icon.Product] = icon

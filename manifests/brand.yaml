@@ -5,8 +5,6 @@ products:
     display_name: Arai Hu
     aliases: []
     sources:
-      v11:
-        root: dist/v11/web/araihu
       original:
         icon-background: source/brand/original/araihu-icon-background.svg
         icon-transparent: source/brand/original/araihu-icon-transparent.svg
@@ -21,8 +19,6 @@ products:
     display_name: Goshtoso
     aliases: []
     sources:
-      v11:
-        root: dist/v11/web/goshtoso
       original:
         icon-background: source/brand/original/goshtoso-icon-background.svg
         icon-transparent: source/brand/original/goshtoso-icon-transparent.svg
@@ -37,8 +33,6 @@ products:
     display_name: Manja
     aliases: []
     sources:
-      v11:
-        root: dist/v11/web/manja
       original:
         icon-background: source/brand/original/manja-icon-background.svg
         icon-transparent: source/brand/original/manja-icon-transparent.svg
@@ -53,8 +47,6 @@ products:
     display_name: Paje
     aliases: []
     sources:
-      v11:
-        root: dist/v11/web/paje
       original:
         icon-background: source/brand/original/paje-icon-background.svg
         icon-transparent: source/brand/original/paje-icon-transparent.svg
@@ -70,8 +62,6 @@ products:
     aliases:
       - xisnove
     sources:
-      v11:
-        root: dist/v11/web/x9
       original:
         icon-background: source/brand/original/x9-icon-background.svg
         icon-transparent: source/brand/original/x9-icon-transparent.svg
@@ -83,13 +73,30 @@ products:
       logo-background: e0576e55837d759fa14407d8092f5c78aa715e9542bb5943a4d14cda81994344
       logo-transparent: 7fcb30796a70c98e28a38a9a91e80a006f1766cac0996c717198ebeeea96e880
 palettes:
-  araihu:
-    name: araihu
+  light:
+    name: light
     colors:
-      horizon: "#07111f"
-      sky: "#31588f"
-      cloud: "#d5ddeb"
+      surface: "#f3f2e9"
+      ink: "#07111f"
       signal: "#c7ff4a"
+  dark:
+    name: dark
+    colors:
+      surface: "#07111f"
+      ink: "#f3f2e9"
+      signal: "#c7ff4a"
+  grayscale:
+    name: grayscale
+    colors:
+      surface: "#e6e6e6"
+      ink: "#202020"
+      signal: "#707070"
+  tinted:
+    name: tinted
+    colors:
+      surface: "#d5ddeb"
+      ink: "#31588f"
+      signal: "#07111f"
 recipes:
   - name: icon-adaptive-transparent-optical
     artwork: icon

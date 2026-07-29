@@ -85,6 +85,27 @@ func TestBrandRequiresPinnedOriginalSourceHashes(t *testing.T) {
 	}
 }
 
+func TestBrandRejectsNonOriginalSourcesAndIncompletePalettes(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		mutate func(*Brand)
+	}{
+		{"stale source root", func(m *Brand) { m.Products[0].Sources["v11"] = map[string]string{"root": "dist/v11/web/araihu"} }},
+		{"undeclared palette color", func(m *Brand) { delete(m.Palettes["light"].Colors, "ink") }},
+		{"unexpected palette", func(m *Brand) {
+			m.Palettes["extra"] = Palette{Name: "extra", Colors: map[string]string{"surface": "#000000", "ink": "#ffffff", "signal": "#123456"}}
+		}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			m := validBrand(t)
+			tc.mutate(&m)
+			if err := m.Validate(); err == nil {
+				t.Fatal("Validate() error = nil")
+			}
+		})
+	}
+}
+
 func TestBrandRequiresExactApprovedRecipeMatrix(t *testing.T) {
 	m := validBrand(t)
 	if got, want := len(m.Recipes), 24; got != want {

@@ -1,18 +1,17 @@
 # Arai Hû Assets
 
-Deterministic, release-ready identity and interface assets for Arai Hû
-products. After Task 10, the release contract is `dist/catalog.json`; consumers
-use its declared paths, symbols, licenses, and SHA-256 values rather than
-source-tree paths or an identity working revision.
+Deterministic identity and interface assets for Arai Hû products. The core
+release candidate is still pending P1: `dist/catalog.json` is the consumer
+contract, but this checkout makes no release or publication claim.
 
 ## Current checkout
 
 Requires Go `1.26.5`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
-Before Task 10 creates the release candidate, this repository intentionally
-does not contain a published `v0.1.0` catalog or archive. Use a disposable
-checkout when generating the managed `dist/` tree:
+The managed `dist/` tree is an untagged core RC. Its catalog and generated
+sprites are consumer inputs; P1 must add the catalog-driven proof output and
+regenerate the final archives. Use a disposable checkout when regenerating it:
 
 ```sh
 make generate
@@ -22,8 +21,8 @@ make verify
 ```
 
 Run `catalog` only after a successful `make generate`, because it validates the
-generated `dist/catalog.json`. In the pre-RC tracking checkout, `make check`
-correctly reports drift instead of replacing the retained V11 proof scaffold.
+generated `dist/catalog.json`. `make check` rejects drift and never replaces
+the retired V11 proof scaffold.
 
 ## Install after release
 
@@ -69,8 +68,8 @@ to choose a separate output directory or reconcile the consumer's copy.
 
 ## Catalog and sprites
 
-After Task 10 publishes generated output, `dist/catalog.json` is schema v1,
-language-neutral metadata for generated files only. It records canonical name,
+The core RC `dist/catalog.json` is schema v1, language-neutral metadata for
+generated files only. It records canonical name,
 namespace, variant dimensions,
 `spriteSymbol`, color behavior, license, source label, and SHA-256. Public
 paths do not contain `v11`; `identityRevision: 11` remains metadata.
@@ -89,14 +88,14 @@ generation is provided by this CLI; consumers own any project-local bindings.
 
 ## Platform files and archives
 
-The Task 10 release build emits individual brand/UI SVGs, web/Android/Apple
-platform packages, catalog, checksums, notices, licenses, and deterministic
-`.tar.gz` and `.zip` release archives under `dist/releases/`. Platform launchers
+The core RC build emits individual brand/UI SVGs, web/Android/Apple platform
+packages, catalog, checksums, notices, licenses, and provisional deterministic
+`.tar.gz` and `.zip` archives under `dist/releases/`. Platform launchers
 have their own safe-area, raster, and metadata contracts; do not substitute a
 general SVG for a launcher asset.
 
-Released archives and `catalog.json` are the interoperability boundary. They
-remain usable without Go once Task 10 has published them.
+The catalog is the current interoperability boundary. Archives remain
+provisional until P1 completes the proof and final-archive work.
 
 ## Licensing
 
@@ -118,7 +117,6 @@ reviews, screenshots, and exported PDFs live in Git history; see
 including Goshtoso's generic sprite boundary and catalog-first local binding
 generation, is documented in [docs/integration](docs/integration/).
 
-The temporary V11 calibration scaffold remains only for the pre-P1
-`proof-check` gate. P1 replaces it with generated `dist/proof` output after the
-release-candidate catalog is available; it must not become a public consumer
-path or a second source of truth.
+The temporary V11 calibration scaffold remains only for historical reference.
+P1 replaces its `proof-check` gate with generated `dist/proof`; it must not
+become a public consumer path or a second source of truth.

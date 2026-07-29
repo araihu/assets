@@ -44,16 +44,7 @@ var (
 		"paje/logo":     "525.286 99.476 985.121 332.227",
 		"x9/logo":       "209.911 48.626 1620.856 410.636",
 	}
-
-	palettes = map[string]palette{
-		"light":     {surface: "#f3f2e9", ink: "#07111f", signal: "#c7ff4a"},
-		"dark":      {surface: "#07111f", ink: "#f3f2e9", signal: "#c7ff4a"},
-		"grayscale": {surface: "#e6e6e6", ink: "#202020", signal: "#707070"},
-		"tinted":    {surface: "#d5ddeb", ink: "#31588f", signal: "#07111f"},
-	}
 )
-
-const adaptiveStyle = `<style>@media (prefers-color-scheme: dark) {:root {--araihu-logo-auto-surface: #07111f;--araihu-logo-auto-ink: #f3f2e9;--araihu-logo-auto-signal: #c7ff4a;}}</style>`
 
 type palette struct{ surface, ink, signal string }
 
@@ -69,10 +60,14 @@ func BuildBrand(fsys fs.FS, brand manifest.Brand) (Result, error) {
 	if err := brand.Validate(); err != nil {
 		return Result{}, fmt.Errorf("brand manifest: %w", err)
 	}
+	palettes, err := declaredPalettes(brand.Palettes)
+	if err != nil {
+		return Result{}, err
+	}
 	result := Result{Files: make(map[string][]byte)}
 	for _, product := range brand.Products {
 		for _, recipe := range brand.Recipes {
-			variant, err := buildVariant(fsys, product, recipe)
+			variant, err := buildVariant(fsys, product, recipe, palettes)
 			if err != nil {
 				return Result{}, err
 			}
@@ -102,7 +97,7 @@ type builtVariant struct {
 	asset catalog.Asset
 }
 
-func buildVariant(fsys fs.FS, product manifest.Product, recipe manifest.BrandRecipe) (builtVariant, error) {
+func buildVariant(fsys fs.FS, product manifest.Product, recipe manifest.BrandRecipe, palettes map[string]palette) (builtVariant, error) {
 	sourceKind := recipe.Artwork + "-transparent"
 	if recipe.Surface == "plate" {
 		sourceKind = recipe.Artwork + "-background"
@@ -122,12 +117,12 @@ func buildVariant(fsys fs.FS, product manifest.Product, recipe manifest.BrandRec
 		return builtVariant{}, err
 	}
 	if recipe.Appearance == "adaptive" {
-		prepared, err = applyAdaptivePalette(prepared)
+		prepared, err = applyAdaptivePalette(prepared, palettes["light"])
 		if err != nil {
 			return builtVariant{}, fmt.Errorf("semanticize adaptive %s: %w", sourcePath, err)
 		}
 	} else if recipe.Appearance != "monochrome" {
-		prepared, err = applyPalette(prepared, recipe.Appearance)
+		prepared, err = applyPalette(prepared, recipe.Appearance, palettes)
 		if err != nil {
 			return builtVariant{}, err
 		}
@@ -142,7 +137,13 @@ func buildVariant(fsys fs.FS, product manifest.Product, recipe manifest.BrandRec
 	}
 
 	if recipe.Appearance == "adaptive" {
-		normalized = injectAdaptiveStyle(normalized)
+		style := adaptiveStyle(palettes["dark"])
+		normalized = injectAdaptiveStyle(normalized, style)
+		if _, err := validateAdaptiveSVG(normalized, style); err != nil {
+			return builtVariant{}, fmt.Errorf("validate adaptive %s: %w", sourcePath, err)
+		}
+	} else if _, err := svgasset.Parse(normalized); err != nil {
+		return builtVariant{}, fmt.Errorf("validate generated %s: %w", sourcePath, err)
 	}
 
 	canonical := strings.Join([]string{product.ID, recipe.Artwork, recipe.Appearance, recipe.Surface, recipe.Framing}, "-")
@@ -209,7 +210,7 @@ func launcherViewBox(optical string) string {
 	return fmt.Sprintf("%.6f %.6f %.6f %.6f", x, y, expanded, expanded)
 }
 
-func applyPalette(svg []byte, appearance string) ([]byte, error) {
+func applyPalette(svg []byte, appearance string, palettes map[string]palette) ([]byte, error) {
 	p, ok := palettes[appearance]
 	if !ok {
 		return nil, fmt.Errorf("missing semantic palette %q", appearance)
@@ -220,11 +221,11 @@ func applyPalette(svg []byte, appearance string) ([]byte, error) {
 	}), nil
 }
 
-func applyAdaptivePalette(svg []byte) ([]byte, error) {
+func applyAdaptivePalette(svg []byte, light palette) ([]byte, error) {
 	decoder := xml.NewDecoder(bytes.NewReader(svg))
 	var output bytes.Buffer
 	encoder := xml.NewEncoder(&output)
-	defaultFill := adaptivePaint("ink")
+	defaultFill := adaptivePaint("ink", light)
 	type state struct {
 		excluded bool
 		fill     string
@@ -258,13 +259,13 @@ func applyAdaptivePalette(svg []byte) ([]byte, error) {
 				case "fill":
 					hasFill = true
 					if !current.excluded && hexColor.MatchString(attr.Value) {
-						attr.Value = adaptivePaint(colorRole(attr.Value))
+						attr.Value = adaptivePaint(colorRole(attr.Value), light)
 					}
 					current.fill = attr.Value
 				case "stroke":
 					hasStroke = true
 					if !current.excluded && hexColor.MatchString(attr.Value) {
-						attr.Value = adaptivePaint(colorRole(attr.Value))
+						attr.Value = adaptivePaint(colorRole(attr.Value), light)
 					}
 					current.stroke = attr.Value
 				}
@@ -294,8 +295,8 @@ func applyAdaptivePalette(svg []byte) ([]byte, error) {
 	}
 }
 
-func adaptivePaint(role string) string {
-	fallback := palettes["light"].color(role)
+func adaptivePaint(role string, light palette) string {
+	fallback := light.color(role)
 	return fmt.Sprintf("var(--araihu-logo-%s, var(--araihu-logo-auto-%s, %s))", role, role, fallback)
 }
 
@@ -316,16 +317,61 @@ func paintIsNone(value string) bool {
 	return strings.EqualFold(strings.TrimSpace(value), "none")
 }
 
-func injectAdaptiveStyle(svg []byte) []byte {
+func injectAdaptiveStyle(svg []byte, style string) []byte {
 	rootEnd := strings.IndexByte(string(svg), '>')
 	if rootEnd < 0 {
 		return svg
 	}
-	result := make([]byte, 0, len(svg)+len(adaptiveStyle))
+	result := make([]byte, 0, len(svg)+len(style))
 	result = append(result, svg[:rootEnd+1]...)
-	result = append(result, adaptiveStyle...)
+	result = append(result, style...)
 	result = append(result, svg[rootEnd+1:]...)
 	return result
+}
+
+func declaredPalettes(declared map[string]manifest.Palette) (map[string]palette, error) {
+	result := make(map[string]palette, 4)
+	for _, name := range []string{"light", "dark", "grayscale", "tinted"} {
+		entry, ok := declared[name]
+		if !ok || entry.Name != name {
+			return nil, fmt.Errorf("brand palette %q is required", name)
+		}
+		colors := entry.Colors
+		p := palette{surface: colors["surface"], ink: colors["ink"], signal: colors["signal"]}
+		if !hexColor.MatchString(p.surface) || !hexColor.MatchString(p.ink) || !hexColor.MatchString(p.signal) || len(colors) != 3 {
+			return nil, fmt.Errorf("brand palette %q must declare only surface, ink, and signal hex colors", name)
+		}
+		result[name] = p
+	}
+	if len(declared) != len(result) {
+		return nil, errors.New("brand manifest has unexpected palettes")
+	}
+	return result, nil
+}
+
+func adaptiveStyle(dark palette) string {
+	return fmt.Sprintf(`<style>@media (prefers-color-scheme: dark) {:root {--araihu-logo-auto-surface: %s;--araihu-logo-auto-ink: %s;--araihu-logo-auto-signal: %s;}}</style>`, dark.surface, dark.ink, dark.signal)
+}
+
+// validateAdaptiveSVG permits only this generator's exact, palette-derived
+// stylesheet. Arbitrary source styles remain forbidden by svgasset.Parse.
+func validateAdaptiveSVG(svg []byte, style string) (svgasset.Document, error) {
+	rootEnd := bytes.IndexByte(svg, '>')
+	if rootEnd < 0 || bytes.Count(svg, []byte("<style")) != 1 {
+		return svgasset.Document{}, errors.New("adaptive SVG has invalid stylesheet placement")
+	}
+	if !bytes.HasPrefix(svg[rootEnd+1:], []byte(style)) {
+		return svgasset.Document{}, errors.New("adaptive SVG stylesheet differs from generated contract")
+	}
+	plain := append(append([]byte(nil), svg[:rootEnd+1]...), svg[rootEnd+1+len(style):]...)
+	doc, err := svgasset.ParseGenerated(svg)
+	if err != nil {
+		return svgasset.Document{}, err
+	}
+	if !bytes.Equal(injectAdaptiveStyle(plain, style), svg) {
+		return svgasset.Document{}, errors.New("adaptive SVG has noncanonical stylesheet injection")
+	}
+	return doc, nil
 }
 
 func (p palette) colorFor(value string) string {

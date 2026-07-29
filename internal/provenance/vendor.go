@@ -214,6 +214,9 @@ func BuildUI(fsys fs.FS, ui manifest.UI) (Result, error) {
 		if err != nil {
 			return Result{}, fmt.Errorf("build ui: normalize %s: %w", icon.Path, err)
 		}
+		if _, err := svgasset.Parse(normalized); err != nil {
+			return Result{}, fmt.Errorf("build ui: validate generated %s: %w", icon.Path, err)
+		}
 		name := canonicalName(icon.Path)
 		outputPath := "icons/ui/heroicons/" + name + ".svg"
 		symbol := "hi-" + name

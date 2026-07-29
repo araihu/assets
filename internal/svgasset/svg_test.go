@@ -46,6 +46,17 @@ func TestParseRejectsUnsafeOrAmbiguousSVG(t *testing.T) {
 	}
 }
 
+func TestParseGeneratedPermitsOnlyAdaptiveGeneratorStyle(t *testing.T) {
+	safe := []byte(`<svg viewBox="0 0 16 16"><style>@media (prefers-color-scheme: dark) {:root {--araihu-logo-auto-surface: #07111f;--araihu-logo-auto-ink: #f3f2e9;--araihu-logo-auto-signal: #c7ff4a;}}</style><path fill="var(--araihu-logo-ink, var(--araihu-logo-auto-ink, #07111f))" d="M0 0h1v1z"/></svg>`)
+	if _, err := ParseGenerated(safe); err != nil {
+		t.Fatalf("ParseGenerated(safe): %v", err)
+	}
+	unsafe := []byte(strings.Replace(string(safe), `@media (prefers-color-scheme: dark) {:root {--araihu-logo-auto-surface: #07111f;--araihu-logo-auto-ink: #f3f2e9;--araihu-logo-auto-signal: #c7ff4a;}}`, `path { fill: red; }`, 1))
+	if _, err := ParseGenerated(unsafe); err == nil {
+		t.Fatal("ParseGenerated() accepted an arbitrary stylesheet")
+	}
+}
+
 func TestNormalizeMaintainsPaintRoles(t *testing.T) {
 	tests := []struct {
 		name  string

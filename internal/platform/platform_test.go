@@ -150,6 +150,11 @@ func TestBuildRejectsInvalidInputsAndBadRasterOutput(t *testing.T) {
 	if _, err := Build(context.Background(), fakeRasterizer{}, icons); err == nil {
 		t.Fatal("Build accepted missing static SVG")
 	}
+	icons = testIcons()
+	icons[0].AdaptiveSVG = []byte(`<svg viewBox="0 0 108 108"><style>path { fill: red; }</style><path d="M21 21h66v66"/></svg>`)
+	if _, err := Build(context.Background(), fakeRasterizer{}, icons); err == nil {
+		t.Fatal("Build accepted arbitrary adaptive stylesheet")
+	}
 	if _, err := Build(context.Background(), badRasterizer{}, testIcons()); err == nil {
 		t.Fatal("Build accepted invalid raster output")
 	}
@@ -281,10 +286,10 @@ func testIcons() []BrandIcon {
 			Product:       product,
 			LightSVG:      []byte(`<svg viewBox="0 0 108 108"><path d="M21 21h66v66"/></svg>`),
 			DarkSVG:       []byte(`<svg viewBox="0 0 108 108"><path d="M21 21h66v66"/></svg>`),
-			TintedSVG:     []byte(`<svg viewBox="0 0 108 108"><!-- tint-source --><path d="M21 21h66v66"/></svg>`),
-			GrayscaleSVG:  []byte(`<svg viewBox="0 0 108 108"><!-- grayscale-source --><path d="M21 21h66v66"/></svg>`),
+			TintedSVG:     []byte(`<svg viewBox="0 0 108 108"><path id="tint-source" d="M21 21h66v66"/></svg>`),
+			GrayscaleSVG:  []byte(`<svg viewBox="0 0 108 108"><path id="grayscale-source" d="M21 21h66v66"/></svg>`),
 			MonochromeSVG: []byte(`<svg viewBox="0 0 108 108"><path d="M21 21h66v66"/></svg>`),
-			AdaptiveSVG:   []byte(`<svg viewBox="0 0 108 108"><!-- adaptive-only-marker --></svg>`),
+			AdaptiveSVG:   []byte(`<svg viewBox="0 0 108 108"><path id="adaptive-only-marker" d="M21 21h66v66"/></svg>`),
 			LauncherSVG:   []byte(`<svg viewBox="0 0 108 108"><path d="M21 21h66v66"/></svg>`),
 		})
 	}

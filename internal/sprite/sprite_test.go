@@ -14,7 +14,7 @@ func TestBuildSortsSymbolsAndProducesStableSprite(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Build() error = %v", err)
 	}
-	want := []byte("<svg xmlns=\"http://www.w3.org/2000/svg\" style=\"display:none\"><symbol id=\"a-first\" viewBox=\"0 0 16 16\"><path d=\"M1 1h1v1z\"></path></symbol><symbol id=\"z-last\" viewBox=\"0 0 16 16\"><path d=\"M9 9h1v1z\"></path></symbol></svg>\n")
+	want := []byte("<svg xmlns=\"http://www.w3.org/2000/svg\"><symbol id=\"a-first\" viewBox=\"0 0 16 16\"><path d=\"M1 1h1v1z\"></path></symbol><symbol id=\"z-last\" viewBox=\"0 0 16 16\"><path d=\"M9 9h1v1z\"></path></symbol></svg>\n")
 	if !bytes.Equal(got, want) {
 		t.Fatalf("Build() = %s\nwant %s", got, want)
 	}

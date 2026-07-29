@@ -23,6 +23,7 @@ const (
 var (
 	lowerKebab       = regexp.MustCompile(`^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$`)
 	lowerSHA256      = regexp.MustCompile(`^[0-9a-f]{64}$`)
+	lowerHexColor    = regexp.MustCompile(`^#[0-9a-f]{6}$`)
 	expectedProducts = map[string]string{
 		"araihu": "Arai Hu", "goshtoso": "Goshtoso", "manja": "Manja", "paje": "Paje", "x9": "X9",
 	}
@@ -223,8 +224,8 @@ func validateAliases(product Product) error {
 }
 
 func validateProductSources(product Product) error {
-	if len(product.Sources) == 0 {
-		return fmt.Errorf("product %q has no sources", product.ID)
+	if len(product.Sources) != 1 {
+		return fmt.Errorf("product %q must declare only original source provenance", product.ID)
 	}
 	for source, files := range product.Sources {
 		if !lowerKebab.MatchString(source) {
@@ -261,15 +262,18 @@ func validateProductSources(product Product) error {
 }
 
 func validatePalettes(palettes map[string]Palette) error {
-	if len(palettes) == 0 {
-		return errors.New("brand palettes are empty")
+	required := []string{"light", "dark", "grayscale", "tinted"}
+	if len(palettes) != len(required) {
+		return fmt.Errorf("brand palettes = %d, want %d", len(palettes), len(required))
 	}
-	for id, palette := range palettes {
-		if !lowerKebab.MatchString(id) || !lowerKebab.MatchString(palette.Name) || len(palette.Colors) == 0 {
+	for _, id := range required {
+		palette, ok := palettes[id]
+		if !ok || palette.Name != id || len(palette.Colors) != 3 {
 			return fmt.Errorf("invalid palette %q", id)
 		}
-		for color, value := range palette.Colors {
-			if !lowerKebab.MatchString(color) || !strings.HasPrefix(value, "#") {
+		for _, color := range []string{"surface", "ink", "signal"} {
+			value, ok := palette.Colors[color]
+			if !ok || !lowerHexColor.MatchString(value) {
 				return fmt.Errorf("invalid palette color %q in %q", color, id)
 			}
 		}
