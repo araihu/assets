@@ -4,8 +4,10 @@ import (
 	"archive/tar"
 	"bytes"
 	"compress/gzip"
+	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"io"
 	"os"
 	"path/filepath"
@@ -30,6 +32,26 @@ func TestRunFailurePreservesPublishedDist(t *testing.T) {
 	}
 	if got, err := os.ReadFile(filepath.Join(repo, "dist", "sentinel.txt")); err != nil || string(got) != "keep" {
 		t.Fatalf("failed build changed published dist: %q, %v", got, err)
+	}
+}
+
+func TestRunContextCancellationBeforePublishPreservesDist(t *testing.T) {
+	repo := testRepo(t)
+	mustWrite(t, filepath.Join(repo, "dist", "sentinel.txt"), []byte("keep"))
+	ctx, cancel := context.WithCancel(context.Background())
+	buildHook = func(phase buildPhase) {
+		if phase == beforePublish {
+			cancel()
+		}
+	}
+	t.Cleanup(func() { buildHook = nil })
+
+	err := RunContext(ctx, repo, testInputs([]byte("asset")))
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("RunContext() error = %v, want context canceled", err)
+	}
+	if got, err := os.ReadFile(filepath.Join(repo, "dist", "sentinel.txt")); err != nil || string(got) != "keep" {
+		t.Fatalf("cancelled build changed published dist: %q, %v", got, err)
 	}
 }
 

@@ -79,11 +79,12 @@ func runVendor(ctx context.Context, deps Dependencies, args []string, stdout, st
 	if err := contextError("vendor", ctx); err != nil {
 		return err
 	}
-	repo, err := repository(deps)
+	_, repoRoot, err := openRepository(deps)
 	if err != nil {
 		return commandError("vendor", err)
 	}
-	ui, err := manifest.LoadUI(os.DirFS(repo), "manifests/icons-ui.yaml")
+	defer repoRoot.Close()
+	ui, err := manifest.LoadUI(repoRoot.FS(), "manifests/icons-ui.yaml")
 	if err != nil {
 		return fmt.Errorf("vendor: manifest manifests/icons-ui.yaml: %w", err)
 	}
@@ -95,11 +96,8 @@ func runVendor(ctx context.Context, deps Dependencies, args []string, stdout, st
 		if err := contextError("vendor", ctx); err != nil {
 			return err
 		}
-		path := filepath.Join(repo, "vendor", "icons", "ui", source.Name, source.Version)
-		if err := os.MkdirAll(path, 0o755); err != nil {
-			return fmt.Errorf("vendor: create rooted vendor path %q: %w", path, err)
-		}
-		root, err := os.OpenRoot(path)
+		path := "vendor/icons/ui/" + source.Name + "/" + source.Version
+		root, err := managedRoot(repoRoot, path, true)
 		if err != nil {
 			return fmt.Errorf("vendor: open rooted vendor path %q: %w", path, err)
 		}
@@ -126,18 +124,23 @@ func runBuild(ctx context.Context, deps Dependencies, args []string, stdout, std
 	if err := contextError("build", ctx); err != nil {
 		return err
 	}
-	inputs, repo, err := inputs(ctx, deps)
+	repo, repoRoot, err := openRepository(deps)
+	if err != nil {
+		return commandError("build", err)
+	}
+	defer repoRoot.Close()
+	inputs, err := inputs(ctx, repoRoot, deps)
 	if err != nil {
 		return commandError("build", err)
 	}
 	if *check {
-		if err := build.Check(repo, inputs); err != nil {
+		if err := build.CheckContext(ctx, repo, inputs); err != nil {
 			return fmt.Errorf("build: check: %w", err)
 		}
 		fmt.Fprintln(stdout, "build: dist matches deterministic offline output")
 		return nil
 	}
-	if err := build.Run(repo, inputs); err != nil {
+	if err := build.RunContext(ctx, repo, inputs); err != nil {
 		return fmt.Errorf("build: publish: %w", err)
 	}
 	if *offline {
@@ -156,11 +159,16 @@ func runVerify(ctx context.Context, deps Dependencies, args []string, stdout, st
 	if err := contextError("verify", ctx); err != nil {
 		return err
 	}
-	inputs, repo, err := inputs(ctx, deps)
+	repo, repoRoot, err := openRepository(deps)
 	if err != nil {
 		return commandError("verify", err)
 	}
-	if err := build.Check(repo, inputs); err != nil {
+	defer repoRoot.Close()
+	inputs, err := inputs(ctx, repoRoot, deps)
+	if err != nil {
+		return commandError("verify", err)
+	}
+	if err := build.CheckContext(ctx, repo, inputs); err != nil {
 		return fmt.Errorf("verify: reproducibility rule failed: %w", err)
 	}
 	fmt.Fprintln(stdout, "verify: manifests, pinned inputs, generated artifacts, catalog, and dist are valid")
@@ -179,11 +187,12 @@ func runExport(ctx context.Context, deps Dependencies, args []string, stdout, st
 	if err := contextError("export", ctx); err != nil {
 		return err
 	}
-	repo, err := repository(deps)
+	_, repoRoot, err := openRepository(deps)
 	if err != nil {
 		return commandError("export", err)
 	}
-	source, err := os.OpenRoot(filepath.Join(repo, "dist"))
+	defer repoRoot.Close()
+	source, err := managedRoot(repoRoot, "dist", false)
 	if err != nil {
 		return fmt.Errorf("export: open live dist root: %w", err)
 	}
@@ -200,7 +209,7 @@ func runExport(ctx context.Context, deps Dependencies, args []string, stdout, st
 		return fmt.Errorf("export: open output root %q: %w", *output, err)
 	}
 	defer destination.Close()
-	if err := assetexport.CopyRoot(source, paths, destination); err != nil {
+	if err := assetexport.CopyRootContext(ctx, source, paths, destination); err != nil {
 		return fmt.Errorf("export: copy live dist into output root %q: %w", *output, err)
 	}
 	fmt.Fprintf(stdout, "export: copied %d release files\n", len(paths))
@@ -215,11 +224,12 @@ func runCatalog(ctx context.Context, deps Dependencies, args []string, stdout, s
 	if err := contextError("catalog", ctx); err != nil {
 		return err
 	}
-	repo, err := repository(deps)
+	_, repoRoot, err := openRepository(deps)
 	if err != nil {
 		return commandError("catalog", err)
 	}
-	root, err := os.OpenRoot(filepath.Join(repo, "dist"))
+	defer repoRoot.Close()
+	root, err := managedRoot(repoRoot, "dist", false)
 	if err != nil {
 		return fmt.Errorf("catalog: open live dist root: %w", err)
 	}
@@ -245,37 +255,33 @@ func runCatalog(ctx context.Context, deps Dependencies, args []string, stdout, s
 	return nil
 }
 
-func inputs(ctx context.Context, deps Dependencies) (build.Inputs, string, error) {
+func inputs(ctx context.Context, repoRoot *os.Root, deps Dependencies) (build.Inputs, error) {
 	if err := ctx.Err(); err != nil {
-		return build.Inputs{}, "", err
+		return build.Inputs{}, err
 	}
-	repo, err := repository(deps)
-	if err != nil {
-		return build.Inputs{}, "", err
-	}
-	files := os.DirFS(repo)
+	files := repoRoot.FS()
 	brandManifest, err := manifest.LoadBrand(files, "manifests/brand.yaml")
 	if err != nil {
-		return build.Inputs{}, "", fmt.Errorf("manifest manifests/brand.yaml: %w", err)
+		return build.Inputs{}, fmt.Errorf("manifest manifests/brand.yaml: %w", err)
 	}
 	uiManifest, err := manifest.LoadUI(files, "manifests/icons-ui.yaml")
 	if err != nil {
-		return build.Inputs{}, "", fmt.Errorf("manifest manifests/icons-ui.yaml: %w", err)
+		return build.Inputs{}, fmt.Errorf("manifest manifests/icons-ui.yaml: %w", err)
 	}
 	brand, err := transform.BuildBrand(files, brandManifest)
 	if err != nil {
-		return build.Inputs{}, "", fmt.Errorf("brand generator: %w", err)
+		return build.Inputs{}, fmt.Errorf("brand generator: %w", err)
 	}
 	if err := ctx.Err(); err != nil {
-		return build.Inputs{}, "", err
+		return build.Inputs{}, err
 	}
 	ui, err := provenance.BuildUI(files, uiManifest)
 	if err != nil {
-		return build.Inputs{}, "", fmt.Errorf("ui generator: %w", err)
+		return build.Inputs{}, fmt.Errorf("ui generator: %w", err)
 	}
 	icons, err := platformIcons(brand)
 	if err != nil {
-		return build.Inputs{}, "", err
+		return build.Inputs{}, err
 	}
 	rasterizer := deps.Rasterizer
 	if rasterizer == nil {
@@ -283,9 +289,9 @@ func inputs(ctx context.Context, deps Dependencies) (build.Inputs, string, error
 	}
 	platformFiles, err := platform.Build(ctx, rasterizer, icons)
 	if err != nil {
-		return build.Inputs{}, "", fmt.Errorf("platform generator: %w", err)
+		return build.Inputs{}, fmt.Errorf("platform generator: %w", err)
 	}
-	return build.Inputs{Brand: brand, UI: ui, Platform: platformFiles}, repo, nil
+	return build.Inputs{Brand: brand, UI: ui, Platform: platformFiles}, nil
 }
 
 func platformIcons(brand transform.Result) ([]platform.BrandIcon, error) {
@@ -388,6 +394,70 @@ func repository(deps Dependencies) (string, error) {
 		return "", fmt.Errorf("repository %q is not a directory", repo)
 	}
 	return repo, nil
+}
+
+// openRepository opens the caller-selected repository once. Every managed
+// child directory is subsequently opened relative to this trusted root.
+func openRepository(deps Dependencies) (string, *os.Root, error) {
+	repo, err := repository(deps)
+	if err != nil {
+		return "", nil, err
+	}
+	root, err := os.OpenRoot(repo)
+	if err != nil {
+		return "", nil, fmt.Errorf("open repository root %q: %w", repo, err)
+	}
+	return repo, root, nil
+}
+
+func managedRoot(repoRoot *os.Root, name string, create bool) (*os.Root, error) {
+	if repoRoot == nil {
+		return nil, errors.New("repository root is nil")
+	}
+	if !fs.ValidPath(name) || strings.Contains(name, `\`) || strings.Contains(strings.Split(name, "/")[0], ":") {
+		return nil, fmt.Errorf("invalid managed path %q", name)
+	}
+	if err := rejectSymlinkComponents(repoRoot, name); err != nil {
+		return nil, err
+	}
+	if create {
+		if err := repoRoot.MkdirAll(name, 0o755); err != nil {
+			return nil, fmt.Errorf("create managed path %q: %w", name, err)
+		}
+		if err := rejectSymlinkComponents(repoRoot, name); err != nil {
+			return nil, err
+		}
+	}
+	root, err := repoRoot.OpenRoot(name)
+	if err != nil {
+		return nil, fmt.Errorf("open managed path %q: %w", name, err)
+	}
+	return root, nil
+}
+
+func rejectSymlinkComponents(root *os.Root, name string) error {
+	current := ""
+	for _, component := range strings.Split(name, "/") {
+		if current == "" {
+			current = component
+		} else {
+			current += "/" + component
+		}
+		info, err := root.Lstat(current)
+		if errors.Is(err, fs.ErrNotExist) {
+			return nil
+		}
+		if err != nil {
+			return fmt.Errorf("inspect managed path %q: %w", current, err)
+		}
+		if info.Mode()&fs.ModeSymlink != 0 {
+			return fmt.Errorf("managed path %q has symbolic-link component %q", name, current)
+		}
+		if !info.IsDir() {
+			return fmt.Errorf("managed path %q component %q is not a directory", name, current)
+		}
+	}
+	return nil
 }
 
 func newFlagSet(name string, stderr io.Writer, usage string) *flag.FlagSet {

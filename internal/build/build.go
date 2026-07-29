@@ -4,6 +4,7 @@ package build
 
 import (
 	"bytes"
+	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
@@ -42,14 +43,33 @@ type Inputs struct {
 	Platform platform.Result
 }
 
+type buildPhase uint8
+
+const (
+	beforeStage buildPhase = iota
+	beforePublish
+)
+
+// buildHook is a test-only cancellation seam. Production leaves it nil.
+var buildHook func(buildPhase)
+
 // Run stages, validates, archives, and publishes the managed dist tree.
 func Run(repo string, input Inputs) error {
-	stage, err := stage(repo, input)
+	return RunContext(context.Background(), repo, input)
+}
+
+// RunContext stages and publishes only while ctx remains active. Once the
+// final rename publishes dist, that atomic operation is indivisible.
+func RunContext(ctx context.Context, repo string, input Inputs) error {
+	stage, err := stage(ctx, repo, input)
 	if err != nil {
 		return err
 	}
 	defer os.RemoveAll(stage)
-	if err := publish(repo, stage); err != nil {
+	if err := checkpoint(ctx, beforePublish); err != nil {
+		return err
+	}
+	if err := publishContext(ctx, repo, stage); err != nil {
 		return err
 	}
 	return nil
@@ -58,19 +78,27 @@ func Run(repo string, input Inputs) error {
 // Check regenerates into a sibling temporary tree and requires exact path and
 // byte equality with the already published managed dist tree.
 func Check(repo string, input Inputs) error {
-	stage, err := stage(repo, input)
+	return CheckContext(context.Background(), repo, input)
+}
+
+// CheckContext regenerates into a temporary sibling tree without publishing.
+func CheckContext(ctx context.Context, repo string, input Inputs) error {
+	stage, err := stage(ctx, repo, input)
 	if err != nil {
 		return err
 	}
 	defer os.RemoveAll(stage)
 	actual := filepath.Join(repo, "dist")
-	if err := compareTrees(stage, actual); err != nil {
+	if err := compareTrees(ctx, stage, actual); err != nil {
 		return fmt.Errorf("build: dist differs from generated output: %w", err)
 	}
 	return nil
 }
 
-func stage(repo string, input Inputs) (string, error) {
+func stage(ctx context.Context, repo string, input Inputs) (string, error) {
+	if err := checkpoint(ctx, beforeStage); err != nil {
+		return "", err
+	}
 	if strings.TrimSpace(repo) == "" {
 		return "", errors.New("build: repository path is empty")
 	}
@@ -85,30 +113,33 @@ func stage(repo string, input Inputs) (string, error) {
 			_ = os.RemoveAll(stage)
 		}
 	}()
-	files, err := assembledFiles(repo, input)
+	files, err := assembledFiles(ctx, repo, input)
 	if err != nil {
 		return "", err
 	}
-	if err := writeFiles(stage, files); err != nil {
+	if err := writeFiles(ctx, stage, files); err != nil {
 		return "", err
 	}
-	if err := validateCatalog(stage); err != nil {
+	if err := validateCatalog(ctx, stage); err != nil {
 		return "", err
 	}
-	if err := writeChecksums(stage); err != nil {
+	if err := writeChecksums(ctx, stage); err != nil {
 		return "", err
 	}
-	if err := writeArchives(stage); err != nil {
+	if err := writeArchives(ctx, stage); err != nil {
 		return "", err
 	}
 	failed = false
 	return stage, nil
 }
 
-func assembledFiles(repo string, input Inputs) (map[string][]byte, error) {
+func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string][]byte, error) {
 	files := make(map[string][]byte, len(input.Brand.Files)+len(input.UI.Files)+len(input.Platform.Files)+4)
 	for _, group := range []map[string][]byte{input.Brand.Files, input.UI.Files, input.Platform.Files} {
 		for sourceName, data := range group {
+			if err := checkContext(ctx); err != nil {
+				return nil, err
+			}
 			name, err := normalizeInputPath(sourceName)
 			if err != nil {
 				return nil, err
@@ -168,13 +199,16 @@ func catalogBytes(assets []catalog.Asset, files map[string][]byte) ([]byte, erro
 	return output.Bytes(), nil
 }
 
-func writeFiles(root string, files map[string][]byte) error {
+func writeFiles(ctx context.Context, root string, files map[string][]byte) error {
 	paths := make([]string, 0, len(files))
 	for name := range files {
 		paths = append(paths, name)
 	}
 	slices.Sort(paths)
 	for _, name := range paths {
+		if err := checkContext(ctx); err != nil {
+			return err
+		}
 		target := filepath.Join(root, filepath.FromSlash(name))
 		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
 			return fmt.Errorf("build: create directory for %s: %w", name, err)
@@ -186,7 +220,7 @@ func writeFiles(root string, files map[string][]byte) error {
 	return nil
 }
 
-func validateCatalog(root string) error {
+func validateCatalog(ctx context.Context, root string) error {
 	data, err := os.ReadFile(filepath.Join(root, "catalog.json"))
 	if err != nil {
 		return fmt.Errorf("build: read catalog: %w", err)
@@ -196,6 +230,9 @@ func validateCatalog(root string) error {
 		return fmt.Errorf("build: decode catalog: %w", err)
 	}
 	for _, asset := range c.Assets {
+		if err := checkContext(ctx); err != nil {
+			return err
+		}
 		data, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(asset.Path)))
 		if err != nil {
 			return fmt.Errorf("build: read catalog artifact %s: %w", asset.Path, err)
@@ -208,13 +245,16 @@ func validateCatalog(root string) error {
 	return nil
 }
 
-func writeChecksums(root string) error {
-	paths, err := filesUnder(root)
+func writeChecksums(ctx context.Context, root string) error {
+	paths, err := filesUnder(ctx, root)
 	if err != nil {
 		return err
 	}
 	var output strings.Builder
 	for _, name := range paths {
+		if err := checkContext(ctx); err != nil {
+			return err
+		}
 		if name == "checksums.txt" || strings.HasPrefix(name, "releases/") {
 			continue
 		}
@@ -231,8 +271,8 @@ func writeChecksums(root string) error {
 	return nil
 }
 
-func writeArchives(root string) error {
-	paths, err := filesUnder(root)
+func writeArchives(ctx context.Context, root string) error {
+	paths, err := filesUnder(ctx, root)
 	if err != nil {
 		return err
 	}
@@ -245,6 +285,9 @@ func writeArchives(root string) error {
 		return fmt.Errorf("build: open staged root: %w", err)
 	}
 	defer stageRoot.Close()
+	if err := checkContext(ctx); err != nil {
+		return err
+	}
 	zipFile, err := os.Create(filepath.Join(root, "releases", "araihu-assets-v0.1.0.zip"))
 	if err != nil {
 		return fmt.Errorf("build: create ZIP: %w", err)
@@ -255,6 +298,9 @@ func writeArchives(root string) error {
 	}
 	if err := zipFile.Close(); err != nil {
 		return fmt.Errorf("build: close ZIP: %w", err)
+	}
+	if err := checkContext(ctx); err != nil {
+		return err
 	}
 	tarFile, err := os.Create(filepath.Join(root, "releases", "araihu-assets-v0.1.0.tar.gz"))
 	if err != nil {
@@ -267,13 +313,19 @@ func writeArchives(root string) error {
 	if err := tarFile.Close(); err != nil {
 		return fmt.Errorf("build: close tar.gz: %w", err)
 	}
+	if err := checkContext(ctx); err != nil {
+		return err
+	}
 	return nil
 }
 
-func filesUnder(root string) ([]string, error) {
+func filesUnder(ctx context.Context, root string) ([]string, error) {
 	var paths []string
 	err := filepath.WalkDir(root, func(name string, entry fs.DirEntry, err error) error {
 		if err != nil {
+			return err
+		}
+		if err := checkContext(ctx); err != nil {
 			return err
 		}
 		if name == root {
@@ -302,7 +354,10 @@ func filesUnder(root string) ([]string, error) {
 	return paths, nil
 }
 
-func publish(repo, stage string) error {
+func publishContext(ctx context.Context, repo, stage string) error {
+	if err := checkContext(ctx); err != nil {
+		return err
+	}
 	dist := filepath.Join(repo, "dist")
 	info, err := os.Lstat(dist)
 	if err != nil && !errors.Is(err, fs.ErrNotExist) {
@@ -312,14 +367,26 @@ func publish(repo, stage string) error {
 		return errors.New("build: dist must be a real directory")
 	}
 	if errors.Is(err, fs.ErrNotExist) {
+		if err := checkContext(ctx); err != nil {
+			return err
+		}
 		if err := os.Rename(stage, dist); err != nil {
 			return fmt.Errorf("build: publish dist: %w", err)
 		}
 		return nil
 	}
 	backup := stage + ".previous"
+	if err := checkContext(ctx); err != nil {
+		return err
+	}
 	if err := os.Rename(dist, backup); err != nil {
 		return fmt.Errorf("build: preserve prior dist: %w", err)
+	}
+	if err := checkContext(ctx); err != nil {
+		if restoreErr := os.Rename(backup, dist); restoreErr != nil {
+			return fmt.Errorf("build: context canceled before publication; restore prior dist: %v", restoreErr)
+		}
+		return err
 	}
 	if err := os.Rename(stage, dist); err != nil {
 		if restoreErr := os.Rename(backup, dist); restoreErr != nil {
@@ -333,12 +400,12 @@ func publish(repo, stage string) error {
 	return nil
 }
 
-func compareTrees(wantRoot, gotRoot string) error {
-	want, err := filesUnder(wantRoot)
+func compareTrees(ctx context.Context, wantRoot, gotRoot string) error {
+	want, err := filesUnder(ctx, wantRoot)
 	if err != nil {
 		return fmt.Errorf("inspect generated tree: %w", err)
 	}
-	got, err := filesUnder(gotRoot)
+	got, err := filesUnder(ctx, gotRoot)
 	if err != nil {
 		return fmt.Errorf("inspect published tree: %w", err)
 	}
@@ -346,6 +413,9 @@ func compareTrees(wantRoot, gotRoot string) error {
 		return fmt.Errorf("paths = %q, want %q", got, want)
 	}
 	for _, name := range want {
+		if err := checkContext(ctx); err != nil {
+			return err
+		}
 		expected, err := os.ReadFile(filepath.Join(wantRoot, filepath.FromSlash(name)))
 		if err != nil {
 			return err
@@ -357,6 +427,20 @@ func compareTrees(wantRoot, gotRoot string) error {
 		if !bytes.Equal(expected, actual) {
 			return fmt.Errorf("bytes differ for %s", name)
 		}
+	}
+	return nil
+}
+
+func checkpoint(ctx context.Context, phase buildPhase) error {
+	if buildHook != nil {
+		buildHook(phase)
+	}
+	return checkContext(ctx)
+}
+
+func checkContext(ctx context.Context) error {
+	if err := ctx.Err(); err != nil {
+		return fmt.Errorf("build: %w", err)
 	}
 	return nil
 }

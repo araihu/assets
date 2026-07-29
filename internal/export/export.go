@@ -3,6 +3,7 @@ package export
 
 import (
 	"bytes"
+	"context"
 	"crypto/rand"
 	"errors"
 	"fmt"
@@ -39,26 +40,36 @@ type candidate struct {
 // the rooted disk-backed variant. Existing identical files are retained;
 // different files are never overwritten.
 func Copy(source fs.FS, paths []string, destination *os.Root) error {
+	return CopyContext(context.Background(), source, paths, destination)
+}
+
+// CopyContext writes paths only while ctx remains active. Cancellation before
+// publication leaves destination files absent; a completed no-replace link is
+// an indivisible publication boundary.
+func CopyContext(ctx context.Context, source fs.FS, paths []string, destination *os.Root) error {
 	if source == nil {
 		return errors.New("export: source is nil")
 	}
 	if destination == nil {
 		return errors.New("export: destination root is nil")
 	}
+	if err := checkContext(ctx); err != nil {
+		return err
+	}
 	ordered, err := safePaths(paths)
 	if err != nil {
 		return err
 	}
-	candidates, err := preflight(source, ordered, destination)
+	candidates, err := preflight(ctx, source, ordered, destination)
 	if err != nil {
 		return err
 	}
-	if err := stage(candidates, destination); err != nil {
+	if err := stage(ctx, candidates, destination); err != nil {
 		cleanupTemporary(candidates, destination)
 		return err
 	}
 	defer cleanupTemporary(candidates, destination)
-	if err := publish(candidates, destination); err != nil {
+	if err := publish(ctx, candidates, destination); err != nil {
 		return errors.Join(err, rollback(candidates, destination))
 	}
 	return nil
@@ -67,10 +78,15 @@ func Copy(source fs.FS, paths []string, destination *os.Root) error {
 // CopyRoot copies from a live, rooted source. os.Root confines symlink
 // resolution beneath source even when the source tree changes concurrently.
 func CopyRoot(source *os.Root, paths []string, destination *os.Root) error {
+	return CopyRootContext(context.Background(), source, paths, destination)
+}
+
+// CopyRootContext copies from a live rooted source with cancellation checks.
+func CopyRootContext(ctx context.Context, source *os.Root, paths []string, destination *os.Root) error {
 	if source == nil {
 		return errors.New("export: source root is nil")
 	}
-	return Copy(source.FS(), paths, destination)
+	return CopyContext(ctx, source.FS(), paths, destination)
 }
 
 func safePaths(paths []string) ([]string, error) {
@@ -91,9 +107,12 @@ func validPath(name string) bool {
 	return name != "." && fs.ValidPath(name) && !strings.Contains(name, `\`) && !strings.Contains(strings.Split(name, "/")[0], ":")
 }
 
-func preflight(source fs.FS, paths []string, destination *os.Root) ([]candidate, error) {
+func preflight(ctx context.Context, source fs.FS, paths []string, destination *os.Root) ([]candidate, error) {
 	candidates := make([]candidate, 0, len(paths))
 	for _, name := range paths {
+		if err := checkContext(ctx); err != nil {
+			return nil, err
+		}
 		if linked, err := sourceSymlink(source, name); err != nil {
 			return nil, fmt.Errorf("export: inspect source %s: %w", name, err)
 		} else if linked {
@@ -131,8 +150,11 @@ func preflight(source fs.FS, paths []string, destination *os.Root) ([]candidate,
 	return candidates, nil
 }
 
-func stage(candidates []candidate, destination *os.Root) (err error) {
+func stage(ctx context.Context, candidates []candidate, destination *os.Root) (err error) {
 	for index := range candidates {
+		if err := checkContext(ctx); err != nil {
+			return err
+		}
 		if candidates[index].preexisting {
 			continue
 		}
@@ -163,14 +185,20 @@ func stage(candidates []candidate, destination *os.Root) (err error) {
 	return nil
 }
 
-func publish(candidates []candidate, destination *os.Root) error {
+func publish(ctx context.Context, candidates []candidate, destination *os.Root) error {
 	for index := range candidates {
+		if err := checkContext(ctx); err != nil {
+			return err
+		}
 		candidate := &candidates[index]
 		if candidate.preexisting {
 			if publishHook != nil {
 				if err := publishHook(beforeExistingVerify, candidate.name, destination); err != nil {
 					return fmt.Errorf("export: publish hook %s: %w", candidate.name, err)
 				}
+			}
+			if err := checkContext(ctx); err != nil {
+				return err
 			}
 			info, err := destination.Lstat(candidate.name)
 			if err != nil || !info.Mode().IsRegular() {
@@ -191,6 +219,9 @@ func publish(candidates []candidate, destination *os.Root) error {
 			if err := publishHook(beforeLink, candidate.name, destination); err != nil {
 				return fmt.Errorf("export: publish hook %s: %w", candidate.name, err)
 			}
+		}
+		if err := checkContext(ctx); err != nil {
+			return err
 		}
 		linkErr := destination.Link(candidate.temporary, candidate.name)
 		if linkErr == nil {
@@ -224,6 +255,13 @@ func publish(candidates []candidate, destination *os.Root) error {
 			return fmt.Errorf("export: publish %s: %w", candidate.name, linkErr)
 		}
 		return fmt.Errorf("export: destination collision at %s", candidate.name)
+	}
+	return nil
+}
+
+func checkContext(ctx context.Context) error {
+	if err := ctx.Err(); err != nil {
+		return fmt.Errorf("export: %w", err)
 	}
 	return nil
 }

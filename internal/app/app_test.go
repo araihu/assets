@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -46,5 +48,57 @@ func TestRunHonorsCancelledContextBeforeWork(t *testing.T) {
 	err := Run(ctx, Dependencies{}, []string{"build", "--offline"}, io.Discard, io.Discard)
 	if err == nil || !strings.Contains(err.Error(), "build: context canceled") {
 		t.Fatalf("Run(cancelled build) error = %v", err)
+	}
+}
+
+func TestVendorRejectsSymlinkedManagedVersionDirectory(t *testing.T) {
+	repo, outside := t.TempDir(), t.TempDir()
+	copyManifest(t, repo, "icons-ui.yaml")
+	managed := filepath.Join(repo, "vendor", "icons", "ui", "heroicons")
+	if err := os.MkdirAll(managed, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(outside, filepath.Join(managed, "v2.2.0")); err != nil {
+		t.Fatal(err)
+	}
+	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"vendor"}, io.Discard, io.Discard)
+	if err == nil || !strings.Contains(err.Error(), "symbolic-link component") {
+		t.Fatalf("Run(vendor) error = %v, want managed symlink rejection", err)
+	}
+	if entries, err := os.ReadDir(outside); err != nil || len(entries) != 0 {
+		t.Fatalf("vendor wrote outside root: %v, %v", entries, err)
+	}
+}
+
+func TestExportAndCatalogRejectSymlinkedDist(t *testing.T) {
+	repo, outside, output := t.TempDir(), t.TempDir(), t.TempDir()
+	if err := os.WriteFile(filepath.Join(outside, "catalog.json"), []byte(`{"not":"catalog"}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(outside, filepath.Join(repo, "dist")); err != nil {
+		t.Fatal(err)
+	}
+	for _, args := range [][]string{{"export", "--output", output}, {"catalog"}} {
+		err := Run(context.Background(), Dependencies{Repo: repo}, args, io.Discard, io.Discard)
+		if err == nil || !strings.Contains(err.Error(), "symbolic-link component") {
+			t.Fatalf("Run(%q) error = %v, want managed symlink rejection", args, err)
+		}
+	}
+	if entries, err := os.ReadDir(output); err != nil || len(entries) != 0 {
+		t.Fatalf("export used outside dist: %v, %v", entries, err)
+	}
+}
+
+func copyManifest(t *testing.T, repo, name string) {
+	t.Helper()
+	data, err := os.ReadFile(filepath.Join("..", "..", "manifests", name))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(repo, "manifests"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(repo, "manifests", name), data, 0o644); err != nil {
+		t.Fatal(err)
 	}
 }

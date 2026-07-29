@@ -1,6 +1,7 @@
 package export
 
 import (
+	"context"
 	"errors"
 	"io/fs"
 	"os"
@@ -232,5 +233,38 @@ func TestCopyRootRejectsEscapingSourceSymlink(t *testing.T) {
 	defer target.Close()
 	if err := CopyRoot(source, []string{"link/file.txt"}, target); err == nil {
 		t.Fatal("CopyRoot accepted escaping source symlink")
+	}
+}
+
+func TestCopyRootContextCancellationBeforePublishPreservesDestination(t *testing.T) {
+	sourceDir, destinationDir := t.TempDir(), t.TempDir()
+	if err := os.WriteFile(filepath.Join(sourceDir, "release.txt"), []byte("release"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	source, err := os.OpenRoot(sourceDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer source.Close()
+	destination, err := os.OpenRoot(destinationDir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer destination.Close()
+	ctx, cancel := context.WithCancel(context.Background())
+	publishHook = func(phase publishPhase, name string, destination *os.Root) error {
+		if phase == beforeLink && name == "release.txt" {
+			cancel()
+		}
+		return nil
+	}
+	t.Cleanup(func() { publishHook = nil })
+
+	err = CopyRootContext(ctx, source, []string{"release.txt"}, destination)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("CopyRootContext() error = %v, want context canceled", err)
+	}
+	if _, err := os.Stat(filepath.Join(destinationDir, "release.txt")); !errors.Is(err, fs.ErrNotExist) {
+		t.Fatalf("cancelled export published release.txt: %v", err)
 	}
 }
