@@ -55,6 +55,10 @@ func TestParseGeneratedPermitsOnlyAdaptiveGeneratorStyle(t *testing.T) {
 	if _, err := ParseGenerated(unsafe); err == nil {
 		t.Fatal("ParseGenerated() accepted an arbitrary stylesheet")
 	}
+	missing := []byte(strings.Replace(string(safe), `<path fill="var(--araihu-logo-ink, var(--araihu-logo-auto-ink, #07111f))" d="M0 0h1v1z"/>`, `<use href="#missing"/>`, 1))
+	if _, err := ParseGenerated(missing); err == nil || !strings.Contains(err.Error(), "has no target") {
+		t.Fatalf("ParseGenerated(missing reference) error = %v, want unresolved reference", err)
+	}
 }
 
 func TestParseResolvesLocalReferencesAfterFullDocument(t *testing.T) {
