@@ -65,6 +65,26 @@ func TestLoadManifests(t *testing.T) {
 	}
 }
 
+func TestBrandRequiresPinnedOriginalSourceHashes(t *testing.T) {
+	m := validBrand(t)
+	if got, want := len(m.Products), 5; got != want {
+		t.Fatalf("products = %d, want %d", got, want)
+	}
+	for _, product := range m.Products {
+		if got, want := len(product.Sources["original"]), 4; got != want {
+			t.Errorf("%s original sources = %d, want %d", product.ID, got, want)
+		}
+		if got, want := len(product.SourceHashes), 4; got != want {
+			t.Errorf("%s source hashes = %d, want %d", product.ID, got, want)
+		}
+		for kind, source := range product.Sources["original"] {
+			if source == "" || product.SourceHashes[kind] == "" {
+				t.Errorf("%s %s missing pinned source or hash", product.ID, kind)
+			}
+		}
+	}
+}
+
 func TestLoadRejectsUnknownFields(t *testing.T) {
 	root := os.DirFS("testdata")
 	if _, err := LoadBrand(root, "brand-unknown.yaml"); err == nil {

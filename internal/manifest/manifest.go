@@ -55,10 +55,11 @@ type Brand struct {
 
 // Product identifies one published product identity.
 type Product struct {
-	ID          string                       `yaml:"id"`
-	DisplayName string                       `yaml:"display_name"`
-	Aliases     []string                     `yaml:"aliases"`
-	Sources     map[string]map[string]string `yaml:"sources"`
+	ID           string                       `yaml:"id"`
+	DisplayName  string                       `yaml:"display_name"`
+	Aliases      []string                     `yaml:"aliases"`
+	Sources      map[string]map[string]string `yaml:"sources"`
+	SourceHashes map[string]string            `yaml:"source_hashes"`
 }
 
 // Palette holds a named color vocabulary.
@@ -235,6 +236,24 @@ func validateProductSources(product Product) error {
 			if !lowerKebab.MatchString(kind) || !fs.ValidPath(path) {
 				return fmt.Errorf("invalid source entry %q=%q for product %q", kind, path, product.ID)
 			}
+		}
+	}
+	original, ok := product.Sources["original"]
+	if !ok || len(original) != 4 {
+		return fmt.Errorf("product %q must declare four original sources", product.ID)
+	}
+	if len(product.SourceHashes) != len(original) {
+		return fmt.Errorf("product %q source_hashes = %d, want %d", product.ID, len(product.SourceHashes), len(original))
+	}
+	for kind := range original {
+		hash, ok := product.SourceHashes[kind]
+		if !ok || !lowerSHA256.MatchString(hash) {
+			return fmt.Errorf("product %q has invalid source hash for %q", product.ID, kind)
+		}
+	}
+	for kind := range product.SourceHashes {
+		if _, ok := original[kind]; !ok {
+			return fmt.Errorf("product %q source hash %q has no original source", product.ID, kind)
 		}
 	}
 	return nil

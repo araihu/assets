@@ -7,24 +7,64 @@ products:
     sources:
       v11:
         root: dist/v11/web/araihu
+      original:
+        icon-background: source/brand/original/araihu-icon-background.svg
+        icon-transparent: source/brand/original/araihu-icon-transparent.svg
+        logo-background: source/brand/original/araihu-logo-background.svg
+        logo-transparent: source/brand/original/araihu-logo-transparent.svg
+    source_hashes:
+      icon-background: 552075f7c264ebfa97d1c000e9bfe6a7507a928cc548b50ee7f83fffca27c08f
+      icon-transparent: eb0f4dbbb01fae346138693c459d474fe9b6424d09e47667590830c7da0ffc3e
+      logo-background: f647a3361a450b7398ffa37b0c28481648fcadb1fd7ec1def593824187ecd7b7
+      logo-transparent: 2099cc1096624ca10e707d5a565f8142b7ba875d148ca288b79a5cc2e61ccf16
   - id: goshtoso
     display_name: Goshtoso
     aliases: []
     sources:
       v11:
         root: dist/v11/web/goshtoso
+      original:
+        icon-background: source/brand/original/goshtoso-icon-background.svg
+        icon-transparent: source/brand/original/goshtoso-icon-transparent.svg
+        logo-background: source/brand/original/goshtoso-logo-background.svg
+        logo-transparent: source/brand/original/goshtoso-logo-transparent.svg
+    source_hashes:
+      icon-background: 371684cf0343d1d062897c25f87af35b073ac98f3d870289487b04e4a8eeb6ab
+      icon-transparent: 4ce7428af26c4eef4c8ba9fad80ea45519ae166a0d4256f52c31ffb85626210e
+      logo-background: c7c89ce7d66e3a46634537f8338e830e4f054c58444cb7b9b9c9ddc99fdc617c
+      logo-transparent: 6aa8e6f50dc7a0437cbf33af658f197dfc056e4c854bd6a29005cb944e7b3577
   - id: manja
     display_name: Manja
     aliases: []
     sources:
       v11:
         root: dist/v11/web/manja
+      original:
+        icon-background: source/brand/original/manja-icon-background.svg
+        icon-transparent: source/brand/original/manja-icon-transparent.svg
+        logo-background: source/brand/original/manja-logo-background.svg
+        logo-transparent: source/brand/original/manja-logo-transparent.svg
+    source_hashes:
+      icon-background: f01ab0cf5c07efa1fa43fc769ee966e81f9253db7890f922c87ce2aa62b5b38c
+      icon-transparent: 6172ecc67580effc04c82745e6b4c7d0ef30e8bc2051074727be2011fa71fb2f
+      logo-background: d7a0f57cbb572995af55e74e279bbc57e2b7a5d3225e1e2c9f2b6aecd4fb7f23
+      logo-transparent: a0fb864be83d2c0e406fe2a53eb49d1a2754faf2d8751fe1fdbf20d4b85c1db4
   - id: paje
     display_name: Paje
     aliases: []
     sources:
       v11:
         root: dist/v11/web/paje
+      original:
+        icon-background: source/brand/original/paje-icon-background.svg
+        icon-transparent: source/brand/original/paje-icon-transparent.svg
+        logo-background: source/brand/original/paje-logo-background.svg
+        logo-transparent: source/brand/original/paje-logo-transparent.svg
+    source_hashes:
+      icon-background: 0644f9189b03d96946dff57fe85dddea6233f349904d6c8a1d6a7835768e9810
+      icon-transparent: a0058946d8cca65af531627e007e2e87a9917bc74b0013b40e1831ebf667c124
+      logo-background: 44af91ecc9427ec720675178cc7dca719d0ce16b7bbed53533061c9fca6f6e60
+      logo-transparent: 04479dee394020a917397ce08a3a5a4b247e58f7a07643f542839ae2370ed8e0
   - id: x9
     display_name: X9
     aliases:
@@ -32,6 +72,16 @@ products:
     sources:
       v11:
         root: dist/v11/web/x9
+      original:
+        icon-background: source/brand/original/x9-icon-background.svg
+        icon-transparent: source/brand/original/x9-icon-transparent.svg
+        logo-background: source/brand/original/x9-logo-background.svg
+        logo-transparent: source/brand/original/x9-logo-transparent.svg
+    source_hashes:
+      icon-background: 64b125f145a38628d870a9bc35f56cb84a6cb2b25bfc09bfbcb86042f703505f
+      icon-transparent: b46e017b569b84f0214ae5073bc2f4c1915e51faeb45563b7655cf01aef41995
+      logo-background: e0576e55837d759fa14407d8092f5c78aa715e9542bb5943a4d14cda81994344
+      logo-transparent: 7fcb30796a70c98e28a38a9a91e80a006f1766cac0996c717198ebeeea96e880
 palettes:
   araihu:
     name: araihu
@@ -41,8 +91,33 @@ palettes:
       cloud: "#d5ddeb"
       signal: "#c7ff4a"
 recipes:
-  - name: app-icon
-    appearance: symbol
-    surface: solid
-    framing: square
+  - name: adaptive
+    appearance: adaptive
+    surface: transparent
+    framing: optical
+    color_behavior: protected
+  - name: light
+    appearance: light
+    surface: plate
+    framing: optical
+    color_behavior: protected
+  - name: dark
+    appearance: dark
+    surface: plate
+    framing: optical
+    color_behavior: protected
+  - name: monochrome
+    appearance: monochrome
+    surface: transparent
+    framing: optical
+    color_behavior: monochrome
+  - name: grayscale
+    appearance: grayscale
+    surface: plate
+    framing: optical
+    color_behavior: protected
+  - name: tinted
+    appearance: tinted
+    surface: plate
+    framing: launcher
     color_behavior: protected
