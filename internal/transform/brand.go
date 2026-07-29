@@ -2,8 +2,12 @@
 package transform
 
 import (
+	"bytes"
 	"crypto/sha256"
+	"encoding/xml"
+	"errors"
 	"fmt"
+	"io"
 	"io/fs"
 	"regexp"
 	"slices"
@@ -26,6 +30,7 @@ var (
 	rootDimensions = regexp.MustCompile(`\s(?:width="(?:1024|2048)"|height="(?:1024|508)")`)
 	rootViewBox    = regexp.MustCompile(`viewBox="[^"]+"`)
 	paint          = regexp.MustCompile(`(?i)(fill|stroke)="(#[0-9a-f]{6})"`)
+	hexColor       = regexp.MustCompile(`(?i)^#[0-9a-f]{6}$`)
 
 	opticalViewBoxes = map[string]string{
 		"araihu/icon":   "262.510 263.185 498.904 498.904",
@@ -117,7 +122,10 @@ func buildVariant(fsys fs.FS, product manifest.Product, recipe manifest.BrandRec
 		return builtVariant{}, err
 	}
 	if recipe.Appearance == "adaptive" {
-		prepared = applyAdaptivePalette(prepared)
+		prepared, err = applyAdaptivePalette(prepared)
+		if err != nil {
+			return builtVariant{}, fmt.Errorf("semanticize adaptive %s: %w", sourcePath, err)
+		}
 	} else if recipe.Appearance != "monochrome" {
 		prepared, err = applyPalette(prepared, recipe.Appearance)
 		if err != nil {
@@ -212,14 +220,100 @@ func applyPalette(svg []byte, appearance string) ([]byte, error) {
 	}), nil
 }
 
-func applyAdaptivePalette(svg []byte) []byte {
-	return paint.ReplaceAllFunc(svg, func(match []byte) []byte {
-		parts := paint.FindSubmatch(match)
-		role := colorRole(string(parts[2]))
-		fallback := palettes["light"].color(role)
-		value := fmt.Sprintf("var(--araihu-logo-%s, var(--araihu-logo-auto-%s, %s))", role, role, fallback)
-		return []byte(string(parts[1]) + `="` + value + `"`)
-	})
+func applyAdaptivePalette(svg []byte) ([]byte, error) {
+	decoder := xml.NewDecoder(bytes.NewReader(svg))
+	var output bytes.Buffer
+	encoder := xml.NewEncoder(&output)
+	defaultFill := adaptivePaint("ink")
+	type state struct {
+		excluded bool
+		fill     string
+		stroke   string
+	}
+	stack := make([]state, 0, 8)
+	for {
+		token, err := decoder.RawToken()
+		if errors.Is(err, io.EOF) {
+			if err := encoder.Flush(); err != nil {
+				return nil, fmt.Errorf("flush adaptive SVG: %w", err)
+			}
+			return output.Bytes(), nil
+		}
+		if err != nil {
+			return nil, fmt.Errorf("decode adaptive SVG: %w", err)
+		}
+		switch token := token.(type) {
+		case xml.StartElement:
+			parent := state{fill: defaultFill, stroke: "none"}
+			if len(stack) != 0 {
+				parent = stack[len(stack)-1]
+			}
+			local := token.Name.Local
+			current := state{excluded: parent.excluded || nonPaintingContext(local), fill: parent.fill, stroke: parent.stroke}
+			hasFill := false
+			hasStroke := false
+			for index := range token.Attr {
+				attr := &token.Attr[index]
+				switch attr.Name.Local {
+				case "fill":
+					hasFill = true
+					if !current.excluded && hexColor.MatchString(attr.Value) {
+						attr.Value = adaptivePaint(colorRole(attr.Value))
+					}
+					current.fill = attr.Value
+				case "stroke":
+					hasStroke = true
+					if !current.excluded && hexColor.MatchString(attr.Value) {
+						attr.Value = adaptivePaint(colorRole(attr.Value))
+					}
+					current.stroke = attr.Value
+				}
+			}
+			if !current.excluded && visualGeometry(local) {
+				if local != "line" && !hasFill {
+					token.Attr = append(token.Attr, xml.Attr{Name: xml.Name{Local: "fill"}, Value: current.fill})
+				}
+				if !hasStroke && !paintIsNone(current.stroke) {
+					token.Attr = append(token.Attr, xml.Attr{Name: xml.Name{Local: "stroke"}, Value: current.stroke})
+				}
+			}
+			stack = append(stack, current)
+			if err := encoder.EncodeToken(token); err != nil {
+				return nil, fmt.Errorf("encode adaptive SVG start: %w", err)
+			}
+		case xml.EndElement:
+			if err := encoder.EncodeToken(token); err != nil {
+				return nil, fmt.Errorf("encode adaptive SVG end: %w", err)
+			}
+			stack = stack[:len(stack)-1]
+		default:
+			if err := encoder.EncodeToken(token); err != nil {
+				return nil, fmt.Errorf("encode adaptive SVG: %w", err)
+			}
+		}
+	}
+}
+
+func adaptivePaint(role string) string {
+	fallback := palettes["light"].color(role)
+	return fmt.Sprintf("var(--araihu-logo-%s, var(--araihu-logo-auto-%s, %s))", role, role, fallback)
+}
+
+func nonPaintingContext(local string) bool {
+	return local == "defs" || local == "clipPath" || local == "mask"
+}
+
+func visualGeometry(local string) bool {
+	switch local {
+	case "circle", "ellipse", "line", "path", "polygon", "polyline", "rect", "use":
+		return true
+	default:
+		return false
+	}
+}
+
+func paintIsNone(value string) bool {
+	return strings.EqualFold(strings.TrimSpace(value), "none")
 }
 
 func injectAdaptiveStyle(svg []byte) []byte {

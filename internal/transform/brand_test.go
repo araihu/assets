@@ -2,6 +2,9 @@ package transform
 
 import (
 	"crypto/sha256"
+	"encoding/xml"
+	"errors"
+	"io"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -99,6 +102,45 @@ func TestBuildBrandAdaptivePreservesApprovedSchemeBehavior(t *testing.T) {
 	}
 }
 
+func TestBuildBrandAdaptiveAssignsEveryVisibleGeometrySemanticPaint(t *testing.T) {
+	result := mustBuildBrand(t)
+	for _, asset := range result.Assets {
+		if asset.Appearance != "adaptive" {
+			continue
+		}
+		assertAdaptiveGeometryPainted(t, asset.CanonicalName, result.Files["dist/"+asset.Path])
+	}
+}
+
+func TestApplyAdaptivePalettePreservesNonPaintingContexts(t *testing.T) {
+	input := []byte(`<svg viewBox="0 0 16 16"><defs><path d="M1 1h1v1z"/></defs><clipPath><path d="M2 2h1v1z"/></clipPath><mask><path d="M3 3h1v1z"/></mask><path d="M4 4h1v1z"/><path fill="none" stroke="#07111f" d="M5 5h1v1z"/><g fill="none" stroke="#07111f"><path d="M6 6h1v1z"/></g></svg>`)
+	output, err := applyAdaptivePalette(input)
+	if err != nil {
+		t.Fatalf("applyAdaptivePalette(): %v", err)
+	}
+	got := string(output)
+	ink := `var(--araihu-logo-ink, var(--araihu-logo-auto-ink, #07111f))`
+	if !strings.Contains(got, `d="M4 4h1v1z" fill="`+ink+`"`) {
+		t.Fatalf("visible implicit-fill path lacks ink role: %s", got)
+	}
+	if !strings.Contains(got, `fill="none" stroke="`+ink+`"`) {
+		t.Fatalf("stroke-only path semantics changed: %s", got)
+	}
+	if !strings.Contains(got, `d="M6 6h1v1z" fill="none" stroke="`+ink+`"`) {
+		t.Fatalf("inherited stroke-only semantics not explicit on geometry: %s", got)
+	}
+	for _, hidden := range []string{"M1 1h1v1z", "M2 2h1v1z", "M3 3h1v1z"} {
+		start := strings.Index(got, `d="`+hidden+`"`)
+		if start < 0 {
+			t.Fatalf("missing hidden geometry %q", hidden)
+		}
+		end := strings.Index(got[start:], ">")
+		if end < 0 || strings.Contains(got[start:start+end], "var(--araihu-logo-") {
+			t.Errorf("non-painting geometry %q received adaptive paint", hidden)
+		}
+	}
+}
+
 func TestBuildBrandDesignedTintDiffersFromGrayscaleAndMonochrome(t *testing.T) {
 	result := mustBuildBrand(t)
 	grayscale := result.Files["dist/icons/brand/araihu-icon-grayscale-plate-optical.svg"]
@@ -171,6 +213,61 @@ func findAsset(t *testing.T, result Result, canonical string) catalog.Asset {
 
 func parseGenerated(svg []byte) (svgasset.Document, error) {
 	return svgasset.Parse(generatedStyle.ReplaceAll(svg, nil))
+}
+
+func assertAdaptiveGeometryPainted(t *testing.T, name string, svg []byte) {
+	t.Helper()
+	decoder := xml.NewDecoder(strings.NewReader(string(generatedStyle.ReplaceAll(svg, nil))))
+	excludedDepth := 0
+	for {
+		token, err := decoder.Token()
+		if errors.Is(err, io.EOF) {
+			return
+		}
+		if err != nil {
+			t.Fatalf("decode adaptive %s: %v", name, err)
+		}
+		switch token := token.(type) {
+		case xml.StartElement:
+			local := token.Name.Local
+			if local == "defs" || local == "clipPath" || local == "mask" {
+				excludedDepth++
+			}
+			if excludedDepth != 0 || !isVisualGeometry(local) {
+				continue
+			}
+			fill, stroke := "", ""
+			for _, attr := range token.Attr {
+				switch attr.Name.Local {
+				case "fill":
+					fill = attr.Value
+				case "stroke":
+					stroke = attr.Value
+				}
+			}
+			if fill == "none" {
+				if !strings.Contains(stroke, "var(--araihu-logo-") {
+					t.Errorf("%s %s fill=none lacks semantic stroke", name, local)
+				}
+			} else if !strings.Contains(fill, "var(--araihu-logo-") && !strings.Contains(stroke, "var(--araihu-logo-") {
+				t.Errorf("%s %s lacks explicit semantic adaptive paint", name, local)
+			}
+		case xml.EndElement:
+			local := token.Name.Local
+			if local == "defs" || local == "clipPath" || local == "mask" {
+				excludedDepth--
+			}
+		}
+	}
+}
+
+func isVisualGeometry(local string) bool {
+	switch local {
+	case "circle", "ellipse", "line", "path", "polygon", "polyline", "rect", "use":
+		return true
+	default:
+		return false
+	}
 }
 
 func TestBuildBrandPromotedSourcesMatchManifestHashes(t *testing.T) {
