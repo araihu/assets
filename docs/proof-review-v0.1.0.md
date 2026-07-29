@@ -13,17 +13,16 @@ returned HTTP 200 from a server rooted at `dist/proof`. JavaScript syntax checks
 cleanly and the proof has no network dependency or `fetch` path.
 
 Root in-app Browser evidence was available at the live `8766` URL: zero broken
-images and zero console warnings or errors. Resetting controls to `all/all/all`
-reported `1114/1114` evidence records; sampled `plate` plus `dark` filtering
-reported `60` records and matching scenario attributes.
+images and zero console warnings or errors. The initial query state reported
+`20/1114` evidence records; resetting controls to `all/all/all` reported
+`1114/1114`. Sampled `plate` plus `dark` filtering reported `60` records and
+matching scenario attributes.
 
 Root's first viewport measurement found document overflow at 375 and 768 CSS
 pixels (`documentElement.scrollWidth = 832`), while 1280 and 1440 matched their
 viewport widths. The proof now constrains outer main, section, grid, rail, and
 table contributions with `min-inline-size: 0` and `max-inline-size: 100%`, while
-retaining internal family, exact-size, master, and table scrolling. Root must
-re-capture the retained 375, 768, 1280, and 1440 screenshots after this fix and
-record the final measurements before release approval.
+retaining internal family, exact-size, master, and table scrolling.
 
 Root then isolated the remaining 375-pixel overflow to the license/provenance
 section (`clientWidth = 343`, `scrollWidth = 817`): long visible source links
@@ -31,6 +30,16 @@ were unbreakable. License and provenance lists and links now use
 `overflow-wrap: anywhere`; the post-fix browser regression is that document
 scroll width equals each viewport at 375, 768, 1280, and 1440 pixels, while the
 named internal rails may still scroll.
+
+| Viewport | Document inner/scroll width | Window scrollX | Broken images | Family figures | Internal scrollers |
+|---:|---:|---:|---:|---:|---:|
+| 375 | 375 / 375 | 0 | 0 | 5 | 7 |
+| 768 | 768 / 768 | 0 | 0 | 5 | 5 |
+| 1280 | 1280 / 1280 | 0 | 0 | 5 | 5 |
+| 1440 | 1440 / 1440 | 0 | 0 | 5 | 5 |
+
+Final root Browser screenshots are retained at
+`review/screenshots/v0.1-proof-{375,768,1280,1440}.png`.
 
 ## Findings and disposition
 
