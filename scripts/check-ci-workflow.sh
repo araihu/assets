@@ -19,6 +19,7 @@ grep -F 'rustup run 1.92.0 rustc --version | grep --fixed-strings "rustc 1.92.0"
 grep -F 'rustup run 1.92.0 cargo install --locked --path "$CARGO_C_SOURCE" --root "$CARGO_C_ROOT"' "$workflow"
 grep -F 'export PATH="$CARGO_C_ROOT/bin:$HOME/.rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH"' "$workflow"
 grep -F 'test "$(command -v cargo-cbuild)" = "$CARGO_C_ROOT/bin/cargo-cbuild"' "$workflow"
+grep -F 'test "$(cargo-cbuild --version)" = "cargo-c 0.10.10+cargo-0.86.0"' "$workflow"
 if grep -F 'cargo +1.92.0 install' "$workflow"; then
   echo 'CI must use rustup run before direct toolchain PATH export' >&2
   exit 1

@@ -79,7 +79,7 @@ jobs:
           rustup run 1.92.0 cargo install --locked --path "$CARGO_C_SOURCE" --root "$CARGO_C_ROOT"
           export PATH="$CARGO_C_ROOT/bin:$HOME/.rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH"
           test "$(command -v cargo-cbuild)" = "$CARGO_C_ROOT/bin/cargo-cbuild"
-          test "$(cargo-cbuild --version)" = "cargo-cbuild 0.10.10+cargo-0.86.0"
+          test "$(cargo-cbuild --version)" = "cargo-c 0.10.10+cargo-0.86.0"
           RSVG_ARCHIVE="${RUNNER_TEMP}/librsvg-${RSVG_VERSION}.tar.xz"
           RSVG_CHECKSUM="${RUNNER_TEMP}/librsvg.sha256"
           curl --fail --location --show-error --silent --retry 3 \
