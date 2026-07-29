@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "release": "v0.1.0",
+  "identityRevision": 11,
+  "assets": [
+    {
+      "canonicalName": "ui-hi-16-solid-check",
+      "namespace": "ui",
+      "path": "icons/ui/heroicons/16-solid-check.svg",
+      "product": "heroicons",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {"viewBox": "0 0 16 16"},
+      "spriteSymbol": "hi-16-solid-check",
+      "colorBehavior": "monochrome",
+      "license": "MIT",
+      "source": "heroicons@v2.2.0",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+  {
+    "canonicalName": "brand-araihu-icon",
+      "namespace": "brand",
+      "path": "icons/brand/araihu-icon.svg",
+      "product": "araihu",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {"viewBox": "0 0 108 108"},
+      "spriteSymbol": "brand-araihu-icon",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms v0.1",
+      "source": "araihu-v11",
+    "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  },
+  {
+    "canonicalName": "platform-web-araihu-icon-maskable-512-png",
+    "namespace": "brand",
+    "path": "platform/web/araihu/icon-maskable-512.png",
+    "product": "araihu",
+    "artwork": "icon",
+    "appearance": "light",
+    "surface": "plate",
+    "framing": "launcher",
+    "format": "png",
+    "dimensions": {
+      "width": 512,
+      "height": 512
+    },
+    "spriteSymbol": "",
+    "colorBehavior": "protected",
+    "license": "Arai Hu Brand Terms v0.1",
+    "source": "platform-generator-v0.1",
+    "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+  }
+]
+}

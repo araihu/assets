@@ -1,0 +1,28 @@
+{
+  "scenarios": [
+    {
+      "id": "araihu-icon-web-navigation",
+      "group": "brand",
+      "asset": "brand-araihu-icon",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [16, 20, 24, 32, 48, 64, 128, 512]
+    },
+    {
+      "id": "heroicons-check-ui-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-check",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [16]
+    }
+  ]
+}

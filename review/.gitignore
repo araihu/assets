@@ -1,5 +1,3 @@
 *.png
 !screenshots/
-!screenshots/*.png
-!screenshots/context/
-!screenshots/context/site-context-current-v10.png
+!screenshots/v0.1-proof-*.png

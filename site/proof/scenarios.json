@@ -1,0 +1,6087 @@
+{
+  "scenarios": [
+    {
+      "id": "araihu-icon-adaptive-plate-launcher-circle",
+      "group": "brand",
+      "asset": "araihu-icon-adaptive-plate-launcher",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "circle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-adaptive-plate-launcher-squircle",
+      "group": "brand",
+      "asset": "araihu-icon-adaptive-plate-launcher",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "squircle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-adaptive-plate-optical-review",
+      "group": "brand",
+      "asset": "araihu-icon-adaptive-plate-optical",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-adaptive-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-icon-adaptive-transparent-optical",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-dark-plate-optical-review",
+      "group": "brand",
+      "asset": "araihu-icon-dark-plate-optical",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-dark-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-icon-dark-transparent-optical",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-grayscale-plate-optical-review",
+      "group": "brand",
+      "asset": "araihu-icon-grayscale-plate-optical",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-grayscale-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-icon-grayscale-transparent-optical",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-light-plate-optical-review",
+      "group": "brand",
+      "asset": "araihu-icon-light-plate-optical",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-light-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-icon-light-transparent-optical",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-monochrome-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-icon-monochrome-transparent-optical",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-tinted-plate-launcher-circle",
+      "group": "brand",
+      "asset": "araihu-icon-tinted-plate-launcher",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "circle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-tinted-plate-launcher-squircle",
+      "group": "brand",
+      "asset": "araihu-icon-tinted-plate-launcher",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "squircle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-tinted-plate-optical-review",
+      "group": "brand",
+      "asset": "araihu-icon-tinted-plate-optical",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-icon-tinted-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-icon-tinted-transparent-optical",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-logo-adaptive-plate-optical-review",
+      "group": "brand",
+      "asset": "araihu-logo-adaptive-plate-optical",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-logo-adaptive-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-logo-adaptive-transparent-optical",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-logo-dark-plate-optical-review",
+      "group": "brand",
+      "asset": "araihu-logo-dark-plate-optical",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-logo-dark-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-logo-dark-transparent-optical",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-logo-grayscale-plate-optical-review",
+      "group": "brand",
+      "asset": "araihu-logo-grayscale-plate-optical",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-logo-grayscale-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-logo-grayscale-transparent-optical",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-logo-light-plate-optical-review",
+      "group": "brand",
+      "asset": "araihu-logo-light-plate-optical",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-logo-light-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-logo-light-transparent-optical",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-logo-monochrome-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-logo-monochrome-transparent-optical",
+      "artwork": "logo",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-logo-tinted-plate-optical-review",
+      "group": "brand",
+      "asset": "araihu-logo-tinted-plate-optical",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "araihu-logo-tinted-transparent-optical-review",
+      "group": "brand",
+      "asset": "araihu-logo-tinted-transparent-optical",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-adaptive-plate-launcher-circle",
+      "group": "brand",
+      "asset": "goshtoso-icon-adaptive-plate-launcher",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "circle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-adaptive-plate-launcher-squircle",
+      "group": "brand",
+      "asset": "goshtoso-icon-adaptive-plate-launcher",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "squircle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-adaptive-plate-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-icon-adaptive-plate-optical",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-adaptive-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-icon-adaptive-transparent-optical",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-dark-plate-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-icon-dark-plate-optical",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-dark-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-icon-dark-transparent-optical",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-grayscale-plate-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-icon-grayscale-plate-optical",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-grayscale-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-icon-grayscale-transparent-optical",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-light-plate-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-icon-light-plate-optical",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-light-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-icon-light-transparent-optical",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-monochrome-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-icon-monochrome-transparent-optical",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-tinted-plate-launcher-circle",
+      "group": "brand",
+      "asset": "goshtoso-icon-tinted-plate-launcher",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "circle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-tinted-plate-launcher-squircle",
+      "group": "brand",
+      "asset": "goshtoso-icon-tinted-plate-launcher",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "squircle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-tinted-plate-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-icon-tinted-plate-optical",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-icon-tinted-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-icon-tinted-transparent-optical",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-logo-adaptive-plate-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-logo-adaptive-plate-optical",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-logo-adaptive-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-logo-adaptive-transparent-optical",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-logo-dark-plate-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-logo-dark-plate-optical",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-logo-dark-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-logo-dark-transparent-optical",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-logo-grayscale-plate-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-logo-grayscale-plate-optical",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-logo-grayscale-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-logo-grayscale-transparent-optical",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-logo-light-plate-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-logo-light-plate-optical",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-logo-light-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-logo-light-transparent-optical",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-logo-monochrome-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-logo-monochrome-transparent-optical",
+      "artwork": "logo",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-logo-tinted-plate-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-logo-tinted-plate-optical",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "goshtoso-logo-tinted-transparent-optical-review",
+      "group": "brand",
+      "asset": "goshtoso-logo-tinted-transparent-optical",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-adaptive-plate-launcher-circle",
+      "group": "brand",
+      "asset": "manja-icon-adaptive-plate-launcher",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "circle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-adaptive-plate-launcher-squircle",
+      "group": "brand",
+      "asset": "manja-icon-adaptive-plate-launcher",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "squircle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-adaptive-plate-optical-review",
+      "group": "brand",
+      "asset": "manja-icon-adaptive-plate-optical",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-adaptive-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-icon-adaptive-transparent-optical",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-dark-plate-optical-review",
+      "group": "brand",
+      "asset": "manja-icon-dark-plate-optical",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-dark-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-icon-dark-transparent-optical",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-grayscale-plate-optical-review",
+      "group": "brand",
+      "asset": "manja-icon-grayscale-plate-optical",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-grayscale-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-icon-grayscale-transparent-optical",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-light-plate-optical-review",
+      "group": "brand",
+      "asset": "manja-icon-light-plate-optical",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-light-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-icon-light-transparent-optical",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-monochrome-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-icon-monochrome-transparent-optical",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-tinted-plate-launcher-circle",
+      "group": "brand",
+      "asset": "manja-icon-tinted-plate-launcher",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "circle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-tinted-plate-launcher-squircle",
+      "group": "brand",
+      "asset": "manja-icon-tinted-plate-launcher",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "squircle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-tinted-plate-optical-review",
+      "group": "brand",
+      "asset": "manja-icon-tinted-plate-optical",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-icon-tinted-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-icon-tinted-transparent-optical",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-logo-adaptive-plate-optical-review",
+      "group": "brand",
+      "asset": "manja-logo-adaptive-plate-optical",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-logo-adaptive-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-logo-adaptive-transparent-optical",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-logo-dark-plate-optical-review",
+      "group": "brand",
+      "asset": "manja-logo-dark-plate-optical",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-logo-dark-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-logo-dark-transparent-optical",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-logo-grayscale-plate-optical-review",
+      "group": "brand",
+      "asset": "manja-logo-grayscale-plate-optical",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-logo-grayscale-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-logo-grayscale-transparent-optical",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-logo-light-plate-optical-review",
+      "group": "brand",
+      "asset": "manja-logo-light-plate-optical",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-logo-light-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-logo-light-transparent-optical",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-logo-monochrome-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-logo-monochrome-transparent-optical",
+      "artwork": "logo",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-logo-tinted-plate-optical-review",
+      "group": "brand",
+      "asset": "manja-logo-tinted-plate-optical",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "manja-logo-tinted-transparent-optical-review",
+      "group": "brand",
+      "asset": "manja-logo-tinted-transparent-optical",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-adaptive-plate-launcher-circle",
+      "group": "brand",
+      "asset": "paje-icon-adaptive-plate-launcher",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "circle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-adaptive-plate-launcher-squircle",
+      "group": "brand",
+      "asset": "paje-icon-adaptive-plate-launcher",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "squircle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-adaptive-plate-optical-review",
+      "group": "brand",
+      "asset": "paje-icon-adaptive-plate-optical",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-adaptive-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-icon-adaptive-transparent-optical",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-dark-plate-optical-review",
+      "group": "brand",
+      "asset": "paje-icon-dark-plate-optical",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-dark-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-icon-dark-transparent-optical",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-grayscale-plate-optical-review",
+      "group": "brand",
+      "asset": "paje-icon-grayscale-plate-optical",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-grayscale-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-icon-grayscale-transparent-optical",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-light-plate-optical-review",
+      "group": "brand",
+      "asset": "paje-icon-light-plate-optical",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-light-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-icon-light-transparent-optical",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-monochrome-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-icon-monochrome-transparent-optical",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-tinted-plate-launcher-circle",
+      "group": "brand",
+      "asset": "paje-icon-tinted-plate-launcher",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "circle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-tinted-plate-launcher-squircle",
+      "group": "brand",
+      "asset": "paje-icon-tinted-plate-launcher",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "squircle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-tinted-plate-optical-review",
+      "group": "brand",
+      "asset": "paje-icon-tinted-plate-optical",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-icon-tinted-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-icon-tinted-transparent-optical",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-logo-adaptive-plate-optical-review",
+      "group": "brand",
+      "asset": "paje-logo-adaptive-plate-optical",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-logo-adaptive-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-logo-adaptive-transparent-optical",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-logo-dark-plate-optical-review",
+      "group": "brand",
+      "asset": "paje-logo-dark-plate-optical",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-logo-dark-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-logo-dark-transparent-optical",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-logo-grayscale-plate-optical-review",
+      "group": "brand",
+      "asset": "paje-logo-grayscale-plate-optical",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-logo-grayscale-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-logo-grayscale-transparent-optical",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-logo-light-plate-optical-review",
+      "group": "brand",
+      "asset": "paje-logo-light-plate-optical",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-logo-light-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-logo-light-transparent-optical",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-logo-monochrome-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-logo-monochrome-transparent-optical",
+      "artwork": "logo",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-logo-tinted-plate-optical-review",
+      "group": "brand",
+      "asset": "paje-logo-tinted-plate-optical",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "paje-logo-tinted-transparent-optical-review",
+      "group": "brand",
+      "asset": "paje-logo-tinted-transparent-optical",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-drawable-xxxhdpi-ic-launcher-foreground-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-drawable-xxxhdpi-ic-launcher-foreground-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-drawable-xxxhdpi-ic-launcher-monochrome-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-drawable-xxxhdpi-ic-launcher-monochrome-png",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-mipmap-hdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-mipmap-hdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-mipmap-hdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-mipmap-hdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-mipmap-mdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-mipmap-mdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-mipmap-mdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-mipmap-mdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-mipmap-xhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-mipmap-xhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-mipmap-xhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-mipmap-xhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-mipmap-xxhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-mipmap-xxhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-mipmap-xxhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-mipmap-xxhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-mipmap-xxxhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-mipmap-xxxhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-araihu-res-mipmap-xxxhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-araihu-res-mipmap-xxxhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-drawable-xxxhdpi-ic-launcher-foreground-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-drawable-xxxhdpi-ic-launcher-foreground-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-drawable-xxxhdpi-ic-launcher-monochrome-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-drawable-xxxhdpi-ic-launcher-monochrome-png",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-mipmap-hdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-mipmap-hdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-mipmap-hdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-mipmap-hdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-mipmap-mdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-mipmap-mdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-mipmap-mdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-mipmap-mdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-mipmap-xhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-mipmap-xhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-mipmap-xhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-mipmap-xhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-mipmap-xxhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-mipmap-xxhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-mipmap-xxhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-mipmap-xxhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-mipmap-xxxhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-mipmap-xxxhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-goshtoso-res-mipmap-xxxhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-goshtoso-res-mipmap-xxxhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-drawable-xxxhdpi-ic-launcher-foreground-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-drawable-xxxhdpi-ic-launcher-foreground-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-drawable-xxxhdpi-ic-launcher-monochrome-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-drawable-xxxhdpi-ic-launcher-monochrome-png",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-mipmap-hdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-mipmap-hdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-mipmap-hdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-mipmap-hdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-mipmap-mdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-mipmap-mdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-mipmap-mdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-mipmap-mdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-mipmap-xhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-mipmap-xhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-mipmap-xhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-mipmap-xhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-mipmap-xxhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-mipmap-xxhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-mipmap-xxhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-mipmap-xxhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-mipmap-xxxhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-mipmap-xxxhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-manja-res-mipmap-xxxhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-manja-res-mipmap-xxxhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-drawable-xxxhdpi-ic-launcher-foreground-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-drawable-xxxhdpi-ic-launcher-foreground-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-drawable-xxxhdpi-ic-launcher-monochrome-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-drawable-xxxhdpi-ic-launcher-monochrome-png",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-mipmap-hdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-mipmap-hdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-mipmap-hdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-mipmap-hdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-mipmap-mdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-mipmap-mdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-mipmap-mdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-mipmap-mdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-mipmap-xhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-mipmap-xhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-mipmap-xhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-mipmap-xhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-mipmap-xxhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-mipmap-xxhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-mipmap-xxhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-mipmap-xxhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-mipmap-xxxhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-mipmap-xxxhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-paje-res-mipmap-xxxhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-paje-res-mipmap-xxxhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-drawable-xxxhdpi-ic-launcher-foreground-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-drawable-xxxhdpi-ic-launcher-foreground-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-drawable-xxxhdpi-ic-launcher-monochrome-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-drawable-xxxhdpi-ic-launcher-monochrome-png",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-mipmap-hdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-mipmap-hdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-mipmap-hdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-mipmap-hdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-mipmap-mdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-mipmap-mdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-mipmap-mdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-mipmap-mdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-mipmap-xhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-mipmap-xhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-mipmap-xhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-mipmap-xhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-mipmap-xxhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-mipmap-xxhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-mipmap-xxhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-mipmap-xxhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-mipmap-xxxhdpi-ic-launcher-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-mipmap-xxxhdpi-ic-launcher-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-android-x9-res-mipmap-xxxhdpi-ic-launcher-round-png-review",
+      "group": "brand",
+      "asset": "platform-android-x9-res-mipmap-xxxhdpi-ic-launcher-round-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-araihu-assets-xcassets-appicon-appiconset-appicon-1024-dark-png-review",
+      "group": "brand",
+      "asset": "platform-apple-araihu-assets-xcassets-appicon-appiconset-appicon-1024-dark-png",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-araihu-assets-xcassets-appicon-appiconset-appicon-1024-png-review",
+      "group": "brand",
+      "asset": "platform-apple-araihu-assets-xcassets-appicon-appiconset-appicon-1024-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-araihu-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png-review",
+      "group": "brand",
+      "asset": "platform-apple-araihu-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-goshtoso-assets-xcassets-appicon-appiconset-appicon-1024-dark-png-review",
+      "group": "brand",
+      "asset": "platform-apple-goshtoso-assets-xcassets-appicon-appiconset-appicon-1024-dark-png",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-goshtoso-assets-xcassets-appicon-appiconset-appicon-1024-png-review",
+      "group": "brand",
+      "asset": "platform-apple-goshtoso-assets-xcassets-appicon-appiconset-appicon-1024-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-goshtoso-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png-review",
+      "group": "brand",
+      "asset": "platform-apple-goshtoso-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-manja-assets-xcassets-appicon-appiconset-appicon-1024-dark-png-review",
+      "group": "brand",
+      "asset": "platform-apple-manja-assets-xcassets-appicon-appiconset-appicon-1024-dark-png",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-manja-assets-xcassets-appicon-appiconset-appicon-1024-png-review",
+      "group": "brand",
+      "asset": "platform-apple-manja-assets-xcassets-appicon-appiconset-appicon-1024-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-manja-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png-review",
+      "group": "brand",
+      "asset": "platform-apple-manja-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-paje-assets-xcassets-appicon-appiconset-appicon-1024-dark-png-review",
+      "group": "brand",
+      "asset": "platform-apple-paje-assets-xcassets-appicon-appiconset-appicon-1024-dark-png",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-paje-assets-xcassets-appicon-appiconset-appicon-1024-png-review",
+      "group": "brand",
+      "asset": "platform-apple-paje-assets-xcassets-appicon-appiconset-appicon-1024-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-paje-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png-review",
+      "group": "brand",
+      "asset": "platform-apple-paje-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-x9-assets-xcassets-appicon-appiconset-appicon-1024-dark-png-review",
+      "group": "brand",
+      "asset": "platform-apple-x9-assets-xcassets-appicon-appiconset-appicon-1024-dark-png",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-x9-assets-xcassets-appicon-appiconset-appicon-1024-png-review",
+      "group": "brand",
+      "asset": "platform-apple-x9-assets-xcassets-appicon-appiconset-appicon-1024-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-apple-x9-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png-review",
+      "group": "brand",
+      "asset": "platform-apple-x9-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-araihu-apple-touch-icon-180-png-review",
+      "group": "brand",
+      "asset": "platform-web-araihu-apple-touch-icon-180-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-araihu-favicon-16-png-review",
+      "group": "brand",
+      "asset": "platform-web-araihu-favicon-16-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-araihu-favicon-32-png-review",
+      "group": "brand",
+      "asset": "platform-web-araihu-favicon-32-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-araihu-favicon-svg-review",
+      "group": "brand",
+      "asset": "platform-web-araihu-favicon-svg",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-araihu-icon-192-png-review",
+      "group": "brand",
+      "asset": "platform-web-araihu-icon-192-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-araihu-icon-512-png-review",
+      "group": "brand",
+      "asset": "platform-web-araihu-icon-512-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-araihu-icon-maskable-192-png-review",
+      "group": "brand",
+      "asset": "platform-web-araihu-icon-maskable-192-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-araihu-icon-maskable-512-png-review",
+      "group": "brand",
+      "asset": "platform-web-araihu-icon-maskable-512-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-goshtoso-apple-touch-icon-180-png-review",
+      "group": "brand",
+      "asset": "platform-web-goshtoso-apple-touch-icon-180-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-goshtoso-favicon-16-png-review",
+      "group": "brand",
+      "asset": "platform-web-goshtoso-favicon-16-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-goshtoso-favicon-32-png-review",
+      "group": "brand",
+      "asset": "platform-web-goshtoso-favicon-32-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-goshtoso-favicon-svg-review",
+      "group": "brand",
+      "asset": "platform-web-goshtoso-favicon-svg",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-goshtoso-icon-192-png-review",
+      "group": "brand",
+      "asset": "platform-web-goshtoso-icon-192-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-goshtoso-icon-512-png-review",
+      "group": "brand",
+      "asset": "platform-web-goshtoso-icon-512-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-goshtoso-icon-maskable-192-png-review",
+      "group": "brand",
+      "asset": "platform-web-goshtoso-icon-maskable-192-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-goshtoso-icon-maskable-512-png-review",
+      "group": "brand",
+      "asset": "platform-web-goshtoso-icon-maskable-512-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-manja-apple-touch-icon-180-png-review",
+      "group": "brand",
+      "asset": "platform-web-manja-apple-touch-icon-180-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-manja-favicon-16-png-review",
+      "group": "brand",
+      "asset": "platform-web-manja-favicon-16-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-manja-favicon-32-png-review",
+      "group": "brand",
+      "asset": "platform-web-manja-favicon-32-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-manja-favicon-svg-review",
+      "group": "brand",
+      "asset": "platform-web-manja-favicon-svg",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-manja-icon-192-png-review",
+      "group": "brand",
+      "asset": "platform-web-manja-icon-192-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-manja-icon-512-png-review",
+      "group": "brand",
+      "asset": "platform-web-manja-icon-512-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-manja-icon-maskable-192-png-review",
+      "group": "brand",
+      "asset": "platform-web-manja-icon-maskable-192-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-manja-icon-maskable-512-png-review",
+      "group": "brand",
+      "asset": "platform-web-manja-icon-maskable-512-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-paje-apple-touch-icon-180-png-review",
+      "group": "brand",
+      "asset": "platform-web-paje-apple-touch-icon-180-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-paje-favicon-16-png-review",
+      "group": "brand",
+      "asset": "platform-web-paje-favicon-16-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-paje-favicon-32-png-review",
+      "group": "brand",
+      "asset": "platform-web-paje-favicon-32-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-paje-favicon-svg-review",
+      "group": "brand",
+      "asset": "platform-web-paje-favicon-svg",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-paje-icon-192-png-review",
+      "group": "brand",
+      "asset": "platform-web-paje-icon-192-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-paje-icon-512-png-review",
+      "group": "brand",
+      "asset": "platform-web-paje-icon-512-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-paje-icon-maskable-192-png-review",
+      "group": "brand",
+      "asset": "platform-web-paje-icon-maskable-192-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-paje-icon-maskable-512-png-review",
+      "group": "brand",
+      "asset": "platform-web-paje-icon-maskable-512-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-x9-apple-touch-icon-180-png-review",
+      "group": "brand",
+      "asset": "platform-web-x9-apple-touch-icon-180-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-x9-favicon-16-png-review",
+      "group": "brand",
+      "asset": "platform-web-x9-favicon-16-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-x9-favicon-32-png-review",
+      "group": "brand",
+      "asset": "platform-web-x9-favicon-32-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-x9-favicon-svg-review",
+      "group": "brand",
+      "asset": "platform-web-x9-favicon-svg",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-x9-icon-192-png-review",
+      "group": "brand",
+      "asset": "platform-web-x9-icon-192-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-x9-icon-512-png-review",
+      "group": "brand",
+      "asset": "platform-web-x9-icon-512-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-x9-icon-maskable-192-png-review",
+      "group": "brand",
+      "asset": "platform-web-x9-icon-maskable-192-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "platform-web-x9-icon-maskable-512-png-review",
+      "group": "brand",
+      "asset": "platform-web-x9-icon-maskable-512-png",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "none",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-adaptive-plate-launcher-circle",
+      "group": "brand",
+      "asset": "x9-icon-adaptive-plate-launcher",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "circle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-adaptive-plate-launcher-squircle",
+      "group": "brand",
+      "asset": "x9-icon-adaptive-plate-launcher",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "squircle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-adaptive-plate-optical-review",
+      "group": "brand",
+      "asset": "x9-icon-adaptive-plate-optical",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-adaptive-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-icon-adaptive-transparent-optical",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-dark-plate-optical-review",
+      "group": "brand",
+      "asset": "x9-icon-dark-plate-optical",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-dark-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-icon-dark-transparent-optical",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-grayscale-plate-optical-review",
+      "group": "brand",
+      "asset": "x9-icon-grayscale-plate-optical",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-grayscale-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-icon-grayscale-transparent-optical",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-light-plate-optical-review",
+      "group": "brand",
+      "asset": "x9-icon-light-plate-optical",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-light-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-icon-light-transparent-optical",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-monochrome-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-icon-monochrome-transparent-optical",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-tinted-plate-launcher-circle",
+      "group": "brand",
+      "asset": "x9-icon-tinted-plate-launcher",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "circle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-tinted-plate-launcher-squircle",
+      "group": "brand",
+      "asset": "x9-icon-tinted-plate-launcher",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "mask": "squircle",
+      "context": "mobile-home-screen",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-tinted-plate-optical-review",
+      "group": "brand",
+      "asset": "x9-icon-tinted-plate-optical",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-icon-tinted-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-icon-tinted-transparent-optical",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-logo-adaptive-plate-optical-review",
+      "group": "brand",
+      "asset": "x9-logo-adaptive-plate-optical",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-logo-adaptive-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-logo-adaptive-transparent-optical",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-logo-dark-plate-optical-review",
+      "group": "brand",
+      "asset": "x9-logo-dark-plate-optical",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-logo-dark-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-logo-dark-transparent-optical",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-logo-grayscale-plate-optical-review",
+      "group": "brand",
+      "asset": "x9-logo-grayscale-plate-optical",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-logo-grayscale-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-logo-grayscale-transparent-optical",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-logo-light-plate-optical-review",
+      "group": "brand",
+      "asset": "x9-logo-light-plate-optical",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-logo-light-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-logo-light-transparent-optical",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-logo-monochrome-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-logo-monochrome-transparent-optical",
+      "artwork": "logo",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-logo-tinted-plate-optical-review",
+      "group": "brand",
+      "asset": "x9-logo-tinted-plate-optical",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "x9-logo-tinted-transparent-optical-review",
+      "group": "brand",
+      "asset": "x9-logo-tinted-transparent-optical",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "web-navigation",
+      "sizes": [
+        16,
+        20,
+        24,
+        32,
+        48,
+        64,
+        128,
+        512
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-arrow-down-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-arrow-down",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-arrow-down-tray-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-arrow-down-tray",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-arrow-path-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-arrow-path",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-arrow-top-right-on-square-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-arrow-top-right-on-square",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-arrow-up-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-arrow-up",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-arrow-uturn-left-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-arrow-uturn-left",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-arrows-up-down-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-arrows-up-down",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-bars-3-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-bars-3",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-bell-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-bell",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-book-open-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-book-open",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-chart-bar-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-chart-bar",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-check-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-check",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-check-circle-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-check-circle",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-chevron-down-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-chevron-down",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-chevron-left-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-chevron-left",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-chevron-right-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-chevron-right",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-clipboard-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-clipboard",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-clipboard-document-list-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-clipboard-document-list",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-clock-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-clock",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-cloud-arrow-up-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-cloud-arrow-up",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-code-bracket-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-code-bracket",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-cog-6-tooth-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-cog-6-tooth",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-cube-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-cube",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-document-duplicate-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-document-duplicate",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-document-text-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-document-text",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-ellipsis-horizontal-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-ellipsis-horizontal",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-ellipsis-vertical-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-ellipsis-vertical",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-exclamation-circle-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-exclamation-circle",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-eye-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-eye",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-eye-slash-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-eye-slash",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-face-smile-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-face-smile",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-folder-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-folder",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-funnel-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-funnel",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-heart-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-heart",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-home-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-home",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-identification-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-identification",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-inbox-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-inbox",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-information-circle-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-information-circle",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-language-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-language",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-link-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-link",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-lock-closed-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-lock-closed",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-magnifying-glass-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-magnifying-glass",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-microphone-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-microphone",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-moon-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-moon",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-paint-brush-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-paint-brush",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-paper-clip-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-paper-clip",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-pause-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-pause",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-pencil-square-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-pencil-square",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-play-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-play",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-plus-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-plus",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-printer-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-printer",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-queue-list-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-queue-list",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-rectangle-group-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-rectangle-group",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-scissors-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-scissors",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-shield-check-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-shield-check",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-sparkles-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-sparkles",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-squares-2x2-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-squares-2x2",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-star-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-star",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-sun-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-sun",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-table-cells-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-table-cells",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-trash-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-trash",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-user-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-user",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-user-circle-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-user-circle",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-users-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-users",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-window-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-window",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-x-circle-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-x-circle",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    },
+    {
+      "id": "ui-hi-16-solid-x-mark-sprite",
+      "group": "ui",
+      "asset": "ui-hi-16-solid-x-mark",
+      "artwork": "icon",
+      "appearance": "default",
+      "surface": "transparent",
+      "framing": "optical",
+      "mask": "none",
+      "context": "ui-sprite",
+      "sizes": [
+        16
+      ]
+    }
+  ]
+}

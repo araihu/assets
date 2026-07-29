@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
-  <title id="title">Manja v3 lane B</title><desc id="desc">An API document boundary containing a hierarchy of paths and operations.</desc>
-  <path d="M38 18H20v92h18M90 18h18v92H90" fill="none" stroke="#07111f" stroke-width="12" stroke-linecap="square"/>
-  <path d="M52 30v68m0-48h24m-24 24h36m-12-24v18" fill="none" stroke="#31588f" stroke-width="10" stroke-linecap="square"/>
-  <path fill="#c7ff4a" d="M80 66h16v16H80Z"/>
-</svg>

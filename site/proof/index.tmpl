@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arai Hû identity proof {{.Release}}</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#proof-main">Skip to proof evidence</a>
+  <header>
+    <p>Catalog-driven identity evidence</p>
+    <h1>Arai Hû asset proof</h1>
+    <p>Release {{.Release}}. Every specimen is bound to a validated catalog asset.</p>
+  </header>
+  <aside class="proof-controls" aria-label="Proof controls">
+    <fieldset>
+      <legend>Product detail</legend>
+      <button type="button" aria-pressed="false" data-product="all">All products</button>
+      {{range .Products}}<button type="button" aria-pressed="false" data-product="{{.ID}}">{{.Name}}</button>{{end}}
+    </fieldset>
+    <fieldset>
+      <legend>Catalog surface</legend>
+      <button type="button" aria-pressed="false" data-mode="all">All surfaces</button>
+      <button type="button" aria-pressed="false" data-mode="transparent">Transparent artwork</button>
+      <button type="button" aria-pressed="false" data-mode="plate">Source plate</button>
+    </fieldset>
+    <fieldset>
+      <legend>Artwork scheme</legend>
+      <button type="button" aria-pressed="false" data-scheme="all">All schemes</button>
+      <button type="button" aria-pressed="false" data-scheme="light">Light artwork</button>
+      <button type="button" aria-pressed="false" data-scheme="dark">Dark artwork</button>
+    </fieldset>
+    <div class="proof-state">
+      <p id="evidence-summary" aria-live="polite">Loading catalog evidence.</p>
+      <button type="button" data-reset>Reset to all products</button>
+    </div>
+  </aside>
+  <main id="proof-main">
+    <section aria-labelledby="family-comparison-title">
+      <div class="section-heading"><p>Always visible baseline</p><h2 id="family-comparison-title">Five-product family comparison</h2></div>
+      <div class="family-comparison" role="list" aria-label="Five-product launcher-master comparison">
+        {{range .Products}}<figure role="listitem"><div class="family-baseline"><img src="{{.Master.URL}}" width="64" height="64" aria-label="{{.Name}} {{.Master.Artwork}}, {{.Master.Variant}}, 64 pixels"></div><figcaption>{{.Name}} / {{.Master.Artwork}} / {{.Master.Variant}} / 64 px</figcaption></figure>{{end}}
+      </div>
+    </section>
+
+    <section aria-labelledby="exact-size-rails-title">
+      <div class="section-heading"><p>Detail evidence</p><h2 id="exact-size-rails-title">Exact-size rails</h2></div>
+      {{- range .BrandScenarios}}
+      <figure data-evidence data-scenario="{{.ID}}" data-proof-product="{{.ProductID}}" data-proof-surface="{{.Surface}}" data-proof-appearance="{{.Appearance}}" data-mask="{{.Mask}}">
+        <figcaption>{{.Product}} {{.Artwork}}, {{.Variant}}, {{.Mask}} mask</figcaption>
+        <div class="exact-size-rail" role="list" aria-label="{{.Product}} {{.Artwork}} exact-size rail">
+          {{$specimen := .}}{{range .Sizes}}{{$size := .}}<figure role="listitem"><div class="exact-specimen">{{if $specimen.IsTransparent}}<div class="stress-samples" aria-label="Transparent contrast stress">{{range $surface := $specimen.StressSurfaces}}<span class="transparent-stress {{$surface}}">{{if ne $specimen.Mask "none"}}<span class="mask-frame mask-{{$specimen.Mask}}">{{end}}<img src="{{$specimen.URL}}" width="{{$size}}" height="{{$size}}" aria-label="{{$specimen.Product}} {{$specimen.Artwork}}, {{$specimen.Variant}}, {{$size}} pixels">{{if ne $specimen.Mask "none"}}</span>{{end}}</span>{{end}}</div>{{else}}{{if ne $specimen.Mask "none"}}<span class="mask-frame mask-{{$specimen.Mask}}">{{end}}<span class="source-plate"><img src="{{$specimen.URL}}" width="{{$size}}" height="{{$size}}" aria-label="{{$specimen.Product}} {{$specimen.Artwork}}, {{$specimen.Variant}}, {{$size}} pixels"></span>{{if ne $specimen.Mask "none"}}</span>{{end}}{{end}}</div><figcaption>{{$size}} px</figcaption></figure>{{end}}
+        </div>
+      </figure>
+      {{- end}}
+    </section>
+
+    <section aria-labelledby="web-contexts-title">
+      <div class="section-heading"><p>Spacing and collision</p><h2 id="web-contexts-title">Web navigation, card, and dashboard</h2></div>
+      {{- range .BrandScenarios}}
+      <article class="web-context" data-evidence data-context="web-navigation" data-proof-product="{{.ProductID}}" data-proof-surface="{{.Surface}}" data-proof-appearance="{{.Appearance}}">
+        <h3>{{.Product}} web specimens</h3>
+        <nav aria-label="{{.Product}} navigation"><span class="browser-dot" aria-hidden="true"></span><img src="{{.URL}}" width="24" height="24" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 24 pixels"><span>Workspace</span><span>Evidence</span><span class="nav-spacer"></span><span>Review</span></nav>
+        <section class="context-card" aria-label="{{.Product}} card context"><img src="{{.URL}}" width="48" height="48" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 48 pixels"><div><strong>{{.Product}}</strong><span>Catalog-bound identity specimen</span></div></section>
+        <section class="dashboard-row" aria-label="{{.Product}} dashboard context"><img src="{{.URL}}" width="32" height="32" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 32 pixels"><span>Latest review evidence</span><span class="status-chip">Verified</span></section>
+      </article>
+      {{- end}}
+    </section>
+
+    <section aria-labelledby="mobile-contexts-title">
+      <div class="section-heading"><p>Mobile placement</p><h2 id="mobile-contexts-title">App bar, notification, tab, home, and store</h2></div>
+      {{- range .BrandScenarios}}
+      <article class="mobile-context" data-evidence data-context="{{.ID}}" data-proof-product="{{.ProductID}}" data-proof-surface="{{.Surface}}" data-proof-appearance="{{.Appearance}}">
+        <h3>{{.Product}} mobile specimens</h3>
+        <div class="phone-shell"><div class="phone-status"><span>9:41</span><span>● ◔</span></div><div class="phone-appbar"><img src="{{.URL}}" width="24" height="24" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 24 pixels"><strong>{{.Product}}</strong><span aria-hidden="true">•••</span></div><div class="notification"><img src="{{.URL}}" width="20" height="20" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 20 pixels"><span>Identity evidence ready</span></div><div class="phone-home"><span class="source-plate"><img src="{{.URL}}" width="64" height="64" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 64 pixels"></span><span>{{.Product}}</span></div><div class="phone-tabs"><span>Overview</span><span><img src="{{.URL}}" width="24" height="24" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 24 pixels">Evidence</span><span>Settings</span></div></div>
+        <div class="store-specimen"><span class="source-plate"><img src="{{.URL}}" width="128" height="128" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 128 pixels"></span><p>Store-scale placement<br><small>128 px source sample</small></p></div>
+      </article>
+      {{- end}}
+    </section>
+
+    <section aria-labelledby="literal-master-title">
+      <div class="section-heading"><p>Literal artifact</p><h2 id="literal-master-title">512 px launcher masters</h2></div>
+      <div class="master-rail" role="list" aria-label="Literal 512-pixel launcher masters">{{range .Products}}<figure role="listitem" data-evidence data-canonical-name="{{.Master.CanonicalName}}" data-proof-product="{{.ID}}" data-proof-surface="{{.Master.Surface}}" data-proof-appearance="{{.Master.Appearance}}"><span class="source-plate"><img src="{{.Master.URL}}" width="512" height="512" aria-label="{{.Name}} {{.Master.Artwork}}, {{.Master.Variant}}, 512 pixels"></span><figcaption>{{.Name}} / {{.Master.Artwork}} / {{.Master.Variant}} / 512 px</figcaption></figure>{{end}}</div>
+    </section>
+
+    <section aria-labelledby="platform-packages-title">
+      <h2 id="platform-packages-title">Platform packages</h2>
+      <ul>{{range .Products}}<li data-evidence data-proof-product="{{.ID}}" data-proof-surface="{{.Master.Surface}}" data-proof-appearance="{{.Master.Appearance}}">{{.Name}}: {{range .Packages}}<a href="{{.URL}}">{{.Kind}}</a> (<a href="{{.ProvenanceURL}}">provenance</a>) {{end}}</li>{{end}}</ul>
+    </section>
+
+    <section aria-labelledby="ui-sprite-rail-title">
+      <h2 id="ui-sprite-rail-title">UI icon sprite rail</h2>
+      <div class="ui-sprite-rail" role="list">{{range .UIScenarios}}<figure role="listitem" data-evidence data-proof-product="all" data-proof-surface="{{.Surface}}" data-proof-appearance="{{.Appearance}}"><svg width="16" height="16" role="img" aria-label="{{.Product}} {{.Artwork}}, {{.Variant}}, 16 pixels"><use href="{{.SpriteURL}}"></use></svg><figcaption>{{.Product}} / {{.Artwork}} / {{.Variant}} / 16 px</figcaption></figure>{{end}}</div>
+    </section>
+
+    <section aria-labelledby="geometry-title">
+      <h2 id="geometry-title">Semantic geometry</h2>
+      <div class="metric-table" tabindex="0">
+        <table aria-label="Normalized SVG art bounds">
+          <caption>Catalog-backed geometry for the selected product evidence.</caption>
+          <thead><tr><th scope="col">Product</th><th scope="col">Asset</th><th scope="col">ViewBox</th><th scope="col">Format</th></tr></thead>
+          <tbody>{{range .Metrics}}<tr data-evidence data-proof-product="{{.ProductID}}" data-proof-surface="{{.Surface}}" data-proof-appearance="{{.Appearance}}"><td>{{.Product}}</td><td>{{.Asset}}</td><td>{{.ViewBox}}</td><td>{{.Format}}</td></tr>{{end}}</tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="findings-title">
+      <h2 id="findings-title">Findings</h2>
+      <p>Review visual balance, mask safety, contextual alignment, and source provenance. Record geometry findings against canonical assets; record presentation findings against proof layout.</p>
+    </section>
+
+    <section aria-labelledby="license-provenance-title">
+      <h2 id="license-provenance-title">License and provenance</h2>
+      <p><a href="{{.NoticeURL}}">Release NOTICE</a>; <a href="{{.ApacheLicenseURL}}">repository Apache-2.0 license</a>.</p>
+      <ul>{{range .Licenses}}<li>{{.Product}} <a href="{{.URL}}">{{.Asset}}</a>: <a href="{{.LicenseURL}}">{{.License}}</a>; <a href="{{.ProvenanceURL}}">{{.Source}}</a></li>{{end}}</ul>
+    </section>
+  </main>
+</body>
+</html>

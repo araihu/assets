@@ -1,85 +1,126 @@
-# Arai Hû assets
+# Arai Hû Assets
 
-Shared, release-ready brand assets for Arai Hû projects.
+Deterministic identity and interface assets for Arai Hû products.
+`dist/catalog.json` is the versioned, language-neutral consumer contract for
+the `v0.1.0` release.
 
-## License and use
+## Current checkout
 
-Unless a more specific notice applies, this repository is licensed under the
-[Apache License 2.0](LICENSE). Projects owned by the Arai Hû GitHub
-organization are expressly authorized to use and redistribute these assets in
-products, documentation, websites, and release artifacts.
+Requires Go `1.26.5`. A supported older local Go installation may select that
+toolchain with `GOTOOLCHAIN=auto`.
 
-Third-party material retains its original license under [LICENSES/](LICENSES/).
-The Apache license does not grant trademark rights or permission to imply Arai
-Hû endorsement or affiliation.
-
-## Logos
-
-- Every product has a full outlined logo, compact mark, reverse mark, and
-  favicon under `logos/`.
-- The family uses a 128-unit constructive grid, rounded 14-unit strokes, and
-  the Arai Hû midnight, cobalt, paper, and lime signal palette.
-- Only Arai Hû uses the charged cloud. Product signs stand alone: composable
-  interface panels for Goshtoso, an open API publication for Manja, a durable
-  route for Pajé, and a three-state monitoring signal for Xisnove.
-
-Each SVG is source-controlled, self-contained, scalable through `viewBox`, and
-suitable for web and documentation use. Canonical wordmarks contain SVG paths,
-not runtime text or a font dependency. Do not add generated or third-party
-artwork without provenance and redistribution authority.
-
-### Adaptive v11
-
-The Recraft-derived v11 family lives under `concepts/v11/`. Each product has
-an icon and horizontal logo, both with adaptive-background and transparent
-variants. Shape geometry comes unchanged from the approved exports under
-`recraft/`; the v11 build assigns every path one semantic color role:
-`surface`, `ink`, or `signal`.
-
-For an external image, use the SVG directly. Its embedded
-`prefers-color-scheme` fallback follows light and dark browser color schemes:
-
-```html
-<img src="/assets/araihu-logo-transparent.svg" alt="Arai Hû">
-```
-
-For an inline SVG in a Goshtoso-based app, load `themes/araihu.css` and keep
-`data-theme="araihu"` plus the usual `.dark` class on `<html>`. The SVG inherits
-`--araihu-logo-surface`, `--araihu-logo-ink`, and `--araihu-logo-signal`, so an
-explicit app theme overrides the operating-system preference.
-
-Regenerate and validate the family with:
+The managed `dist/` tree is the `v0.1.0` distribution. Its catalog, generated
+sprites, catalog-driven proof, and deterministic archives are consumer inputs.
+Use a disposable checkout when regenerating it:
 
 ```sh
-python3 scripts/derive-logo-system-v11.py
-./scripts/validate-logo-system-v11.sh
+make generate
+go run ./cmd/araihu-assets catalog
+make check
+make verify
 ```
 
-## Design review
+Run `catalog` only after a successful `make generate`, because it validates the
+generated `dist/catalog.json`. `make check` rejects drift across the complete
+managed tree, including `dist/proof`.
 
-The promoted v10 construction sources live under `concepts/v10/`; rejected
-directions remain under `concepts/v2/` through `concepts/v9/`. Compare every
-ready version in `review/screenshots/logo-system-all-versions.png`, inspect v10
-at normal, monochrome, and 16 px sizes in
-`review/screenshots/logo-system-v10.png`, and inspect product contexts in
-`review/screenshots/context/site-context-current-v10.png`. Validate canonical
-assets with `scripts/validate-logo-system.sh`. Run the interactive v10 blind
-review at `review/blind-review.html`; its printable A4 form is generated from
-`review/blind-review-print.html` with `scripts/render-blind-review-pdf.sh`.
-The final PDF is under `output/pdf/`; page proofs are retained as
-`review/screenshots/blind-review-v10-page-1.png` and
-`review/screenshots/blind-review-v10-page-2.png` for visual comparison.
+## Install
 
-## Goshtoso theme
+Install and verify the released module:
 
-`themes/araihu.css` is Arai Hû's organization theme for Goshtoso. It is the
-default for every Arai Hû-owned product, site, and demo, while remaining
-separate from Goshtoso's base theme catalogue for external consumers.
-
-Load it after the Goshtoso stylesheet and set the product root to `data-theme="araihu"`. The theme provides daylight and `.dark` token pairs: paper and storm-blue in light mode; black-cloud navy, cobalt, and lime horizon in dark mode.
-
-```html
-<link rel="stylesheet" href="/assets/goshtoso.css">
-<link rel="stylesheet" href="/assets/araihu-theme.css">
-<html data-theme="araihu">
+```sh
+go install github.com/araihu/assets/cmd/araihu-assets@v0.1.0
+araihu-assets verify
 ```
+
+For release-maintenance work, stable Make targets are:
+
+```sh
+make vendor    # fetch only locked manifest-selected UI sources
+make generate  # build offline and atomically replace managed dist/
+make verify    # rebuild offline and compare with dist/
+make check     # test, then reject generated-output drift
+make proof     # atomically regenerate dist/, including dist/proof
+make proof-check # reject generated proof/output drift without writing
+```
+
+`make proof` and `make proof-check` use the same local, catalog-driven builder
+as the managed distribution. They require no network access and never invoke
+the retired V11 scripts.
+
+## CLI
+
+```text
+araihu-assets vendor
+araihu-assets build --offline [--check]
+araihu-assets verify
+araihu-assets proof [--check]
+araihu-assets catalog
+araihu-assets export --output <directory>
+```
+
+`vendor` is the only networked command. All other commands build from the
+manifest, promoted brand masters, and pinned local UI inputs. `catalog`
+strictly validates the published catalog before reporting it.
+
+`export` writes only release files below the selected output directory. It
+rejects traversal, symlinks, invalid paths, and different-byte collisions;
+existing identical files are idempotent. Treat a collision error as a request
+to choose a separate output directory or reconcile the consumer's copy.
+
+## Catalog and sprites
+
+The `v0.1.0` `dist/catalog.json` is schema v1, language-neutral metadata for
+generated files only. It records canonical name,
+namespace, variant dimensions,
+`spriteSymbol`, color behavior, license, source label, and SHA-256. Public
+paths do not contain `v11`; `identityRevision: 11` remains metadata.
+
+Brand marks live in namespace `brand`; Heroicons interface icons live in
+namespace `ui` under source `heroicons`, alias `hi`, release `v2.2.0`. Resolve
+names and paths from the catalog. For SVG entries with a nonempty
+`spriteSymbol`, use the declared symbol from the corresponding generated sprite:
+
+- `dist/icons/brand/sprite.svg`
+- `dist/icons/ui/sprite.svg`
+
+Only catalog entries marked `monochrome` or `tintable` may use `currentColor`.
+Protected brand artwork retains its designed colors. No client-language source
+generation is provided by this CLI; consumers own any project-local bindings.
+
+## Platform files and archives
+
+The `v0.1.0` build emits individual brand/UI SVGs, web/Android/Apple platform
+packages, catalog, checksums, notices, licenses, the self-contained
+`dist/proof/**` review site, and deterministic `.tar.gz` and `.zip` archives
+under `dist/releases/`. Platform launchers
+have their own safe-area, raster, and metadata contracts; do not substitute a
+general SVG for a launcher asset.
+
+The catalog is the current interoperability boundary. Release archives contain
+the complete managed distribution, including all `dist/proof/**` local assets;
+review screenshots and critique files remain outside release membership.
+
+## Licensing
+
+Repository code and documentation are Apache-2.0 unless a more specific notice
+applies. Arai Hû names, logos, and marks are brand assets: preserve notices and
+attribution, do not imply endorsement or affiliation, and obtain permission
+for modification, standalone redistribution, merchandise, or another identity.
+See [NOTICE](NOTICE).
+
+Heroicons are third-party interface icons, licensed under upstream MIT terms;
+their released notice is `dist/licenses/heroicons-MIT.txt`. Do not treat the
+repository Apache license or Arai Hû brand terms as relicensing Heroicons.
+
+## History and integration
+
+The release tree retains one current source of truth. Earlier concept trees,
+reviews, screenshots, and exported PDFs live in Git history; see
+[identity evolution](docs/history/identity-evolution.md). Consumer integration,
+including Goshtoso's generic sprite boundary and catalog-first local binding
+generation, is documented in [docs/integration](docs/integration/).
+
+The temporary V11 calibration scaffold remains only for historical reference.
+Generated `dist/proof` is release evidence, not a public consumer path or a
+second source of truth.

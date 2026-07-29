@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
-  <title id="title">Xisnove reverse mark</title>
-  <desc id="desc">A tall signal derivative of the Arai Hû cloud containing three external health states.</desc>
-  <path d="M34 110C20 110 10 100 10 87s9-23 22-24c2-27 17-47 36-47 21 0 37 22 37 50 9 4 14 12 14 23 0 13-9 22-22 22H86l-8 8-8-8Z" fill="#f3f2e9" />
-  <circle cx="67" cy="39" r="10" fill="#07111f" />
-  <circle cx="67" cy="64" r="10" fill="#c7ff4a" stroke="#f3f2e9" stroke-width="3" />
-  <circle cx="67" cy="89" r="10" fill="#31588f" />
-</svg>

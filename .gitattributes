@@ -1,0 +1,3 @@
+# Preserve upstream Go-module vendor bytes; their historical whitespace is not
+# source formatting owned by this repository.
+vendor/gopkg.in/yaml.v3/** -whitespace

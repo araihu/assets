@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
-  <title id="title">Goshtoso reverse mark</title>
-  <desc id="desc">A wide flowing derivative of the Arai Hû cloud containing four composable modules.</desc>
-  <path d="M22 106C10 106 3 97 3 85s9-22 22-22c6-18 23-30 42-30 20 0 37 12 44 31 9 3 14 11 14 21 0 13-9 22-22 22H88c-8 0-15 3-23 9-8-6-15-9-23-9H22Z" fill="#f3f2e9" />
-  <rect x="42" y="43" width="19" height="19" rx="5" fill="#07111f" />
-  <rect x="67" y="43" width="19" height="19" rx="5" fill="#31588f" />
-  <rect x="42" y="68" width="19" height="19" rx="5" fill="#31588f" />
-  <rect x="67" y="68" width="19" height="19" rx="5" fill="#c7ff4a" />
-</svg>

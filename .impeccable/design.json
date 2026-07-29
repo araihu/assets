@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-28T00:00:00-03:00",
+  "title": "Design System: Arai Hû Asset Calibration Bench",
+  "extensions": {
+    "colorMeta": {
+      "midnight": { "role": "neutral", "displayName": "Black Cloud Midnight", "canonical": "#07111f" },
+      "paper": { "role": "neutral", "displayName": "Rain Paper", "canonical": "#f3f2e9" },
+      "lime-signal": { "role": "primary", "displayName": "Lime Horizon", "canonical": "#c7ff4a" }
+    },
+    "breakpoints": [
+      { "name": "compact", "value": "760px" },
+      { "name": "wide", "value": "1180px" }
+    ],
+    "motion": [
+      { "name": "state", "value": "180ms cubic-bezier(.2,.8,.2,1)", "purpose": "Control and scheme state changes." }
+    ]
+  },
+  "components": [],
+  "narrative": {
+    "northStar": "The Calibration Bench",
+    "overview": "Exact-size device and browser proofs expose optical problems while the interface recedes into paired paper and midnight work surfaces.",
+    "keyCharacteristics": ["exact-size specimens", "visible measurement", "scheme parity", "contextual proof"],
+    "rules": [
+      { "name": "Signal Ration", "body": "Lime indicates current state or a review finding, never ambient ornament.", "section": "colors" }
+    ],
+    "dos": ["Show transparent assets on solid and checker surfaces.", "Keep exact size labels adjacent to specimens."],
+    "donts": ["Judge only from large container-width artwork.", "Compensate for weak geometry with CSS scaling."]
+  }
+}
