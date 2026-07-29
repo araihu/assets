@@ -33,6 +33,14 @@ func TestRunFailurePreservesPublishedDist(t *testing.T) {
 	}
 }
 
+func TestInputPathRejectsDriveAndVolumeAmbiguity(t *testing.T) {
+	for _, name := range []string{"C:/asset.svg", "c:asset.svg", "drive:segment/file.svg", `dir\\asset.svg`} {
+		if _, err := normalizeInputPath(name); err == nil {
+			t.Fatalf("normalizeInputPath accepted %q", name)
+		}
+	}
+}
+
 func TestRunPublishesOnlyManagedDistAndCheckMatchesExactBytes(t *testing.T) {
 	repo := testRepo(t)
 	mustWrite(t, filepath.Join(repo, "dist", "obsolete.txt"), []byte("old"))
@@ -45,6 +53,23 @@ func TestRunPublishesOnlyManagedDistAndCheckMatchesExactBytes(t *testing.T) {
 	}
 	if err := Check(repo, inputs); err != nil {
 		t.Fatalf("Check published output: %v", err)
+	}
+	catalogBytes, err := os.ReadFile(filepath.Join(repo, "dist", "catalog.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	decoded, err := catalog.Decode(bytes.NewReader(catalogBytes))
+	if err != nil {
+		t.Fatal(err)
+	}
+	foundPlatform := false
+	for _, asset := range decoded.Assets {
+		if asset.Path == "platform/web/araihu/favicon.svg" {
+			foundPlatform = true
+		}
+	}
+	if !foundPlatform {
+		t.Fatal("catalog omits platform visual artifact")
 	}
 	mustWrite(t, filepath.Join(repo, "dist", "icons", "brand", "asset.svg"), []byte("changed"))
 	if err := Check(repo, inputs); err == nil {
@@ -98,9 +123,17 @@ func testInputs(data []byte) Inputs {
 			CanonicalName: "araihu-icon-light-transparent-optical", Namespace: "brand", Path: "icons/brand/asset.svg", Product: "araihu", Artwork: "icon", Appearance: "light", Surface: "transparent", Framing: "optical", Format: "svg",
 			Dimensions: catalog.Dimensions{ViewBox: "0 0 1 1"}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "source/brand/original/asset.svg", SHA256: hex.EncodeToString(sum[:]),
 		}}},
-		UI:       provenance.Result{Files: map[string][]byte{"licenses/heroicons-MIT.txt": []byte("MIT\n")}},
-		Platform: platform.Result{Files: map[string][]byte{"dist/platform/web/araihu/favicon.svg": []byte("platform")}},
+		UI: provenance.Result{Files: map[string][]byte{"licenses/heroicons-MIT.txt": []byte("MIT\n")}},
+		Platform: platform.Result{Files: map[string][]byte{"dist/platform/web/araihu/favicon.svg": []byte("platform")}, Assets: []catalog.Asset{{
+			CanonicalName: "platform-web-araihu-favicon-svg", Namespace: "brand", Path: "platform/web/araihu/favicon.svg", Product: "araihu", Artwork: "icon", Appearance: "adaptive", Surface: "transparent", Framing: "optical", Format: "svg",
+			Dimensions: catalog.Dimensions{ViewBox: "0 0 1 1"}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "platform generator v0.1.0", SHA256: hash([]byte("platform")),
+		}}},
 	}
+}
+
+func hash(data []byte) string {
+	sum := sha256.Sum256(data)
+	return hex.EncodeToString(sum[:])
 }
 
 func testRepo(t *testing.T) string {

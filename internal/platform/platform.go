@@ -3,7 +3,9 @@ package platform
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	"encoding/binary"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"image"
@@ -13,6 +15,8 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/araihu/assets/internal/catalog"
 )
 
 const (
@@ -32,8 +36,12 @@ type BrandIcon struct {
 	MonochromeSVG, AdaptiveSVG, LauncherSVG    []byte
 }
 
-// Result holds dist-relative generated files. Caller owns publication.
-type Result struct{ Files map[string][]byte }
+// Result holds generated files and metadata for every published visual asset.
+// Caller owns publication.
+type Result struct {
+	Files  map[string][]byte
+	Assets []catalog.Asset
+}
 
 // Build generates every web, Android, and Apple package in stable path order.
 func Build(ctx context.Context, rasterizer Rasterizer, icons []BrandIcon) (Result, error) {
@@ -53,7 +61,108 @@ func Build(ctx context.Context, rasterizer Rasterizer, icons []BrandIcon) (Resul
 			return Result{}, fmt.Errorf("platform %s: %w", icon.Product, err)
 		}
 	}
+	assets, err := catalogAssets(result.Files)
+	if err != nil {
+		return Result{}, err
+	}
+	result.Assets = assets
 	return result, nil
+}
+
+func catalogAssets(files map[string][]byte) ([]catalog.Asset, error) {
+	paths := make([]string, 0, len(files))
+	for name := range files {
+		if strings.HasSuffix(name, ".svg") || strings.HasSuffix(name, ".png") {
+			paths = append(paths, name)
+		}
+	}
+	slices.Sort(paths)
+	assets := make([]catalog.Asset, 0, len(paths))
+	for _, name := range paths {
+		asset, err := catalogAsset(name, files[name])
+		if err != nil {
+			return nil, err
+		}
+		assets = append(assets, asset)
+	}
+	return assets, nil
+}
+
+func catalogAsset(name string, data []byte) (catalog.Asset, error) {
+	path := strings.TrimPrefix(name, "dist/")
+	parts := strings.Split(path, "/")
+	if len(parts) < 4 || parts[0] != "platform" {
+		return catalog.Asset{}, fmt.Errorf("platform: invalid generated path %q", name)
+	}
+	format := strings.TrimPrefix(strings.ToLower(filepathExt(path)), ".")
+	dimensions := catalog.Dimensions{}
+	switch format {
+	case "svg":
+		dimensions.ViewBox = viewBoxOf(data)
+	case "png":
+		info, err := inspectPNG(data)
+		if err != nil {
+			return catalog.Asset{}, fmt.Errorf("platform: inspect %s: %w", name, err)
+		}
+		dimensions.Width, dimensions.Height = info.width, info.height
+	default:
+		return catalog.Asset{}, fmt.Errorf("platform: unsupported visual format %q", name)
+	}
+	sum := sha256.Sum256(data)
+	return catalog.Asset{
+		CanonicalName: platformCanonicalName(path, format), Namespace: "brand", Path: path, Product: parts[2], Artwork: "icon",
+		Appearance: platformAppearance(path), Surface: platformSurface(path), Framing: platformFraming(path), Format: format, Dimensions: dimensions,
+		ColorBehavior: platformColorBehavior(path), License: "Arai Hu Brand Terms", Source: "platform generator v0.1.0", SHA256: hex.EncodeToString(sum[:]),
+	}, nil
+}
+
+func filepathExt(name string) string {
+	if index := strings.LastIndexByte(name, '.'); index >= 0 {
+		return name[index:]
+	}
+	return ""
+}
+
+func platformCanonicalName(path, format string) string {
+	base := strings.TrimSuffix(strings.ToLower(path), "."+format)
+	base = strings.NewReplacer("/", "-", ".", "-", "_", "-").Replace(base)
+	return base + "-" + format
+}
+
+func platformAppearance(path string) string {
+	switch {
+	case strings.Contains(path, "monochrome"):
+		return "monochrome"
+	case strings.Contains(path, "dark"):
+		return "dark"
+	case strings.Contains(path, "tinted"):
+		return "grayscale"
+	case strings.HasSuffix(path, "favicon.svg"):
+		return "adaptive"
+	default:
+		return "light"
+	}
+}
+
+func platformSurface(path string) string {
+	if strings.HasSuffix(path, "favicon.svg") || strings.Contains(path, "icon-192.png") || strings.Contains(path, "icon-512.png") || strings.Contains(path, "foreground.png") || strings.Contains(path, "monochrome.png") {
+		return "transparent"
+	}
+	return "plate"
+}
+
+func platformFraming(path string) string {
+	if strings.Contains(path, "/android/") || strings.Contains(path, "/apple/") || strings.Contains(path, "maskable") || strings.Contains(path, "apple-touch") {
+		return "launcher"
+	}
+	return "optical"
+}
+
+func platformColorBehavior(path string) string {
+	if strings.Contains(path, "monochrome") {
+		return "monochrome"
+	}
+	return "protected"
 }
 
 func validateIcons(icons []BrandIcon) ([]BrandIcon, error) {

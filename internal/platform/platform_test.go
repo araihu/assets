@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"compress/zlib"
 	"context"
+	"crypto/sha256"
 	"encoding/binary"
+	"encoding/hex"
 	"fmt"
 	"hash/crc32"
 	"image"
@@ -12,6 +14,8 @@ import (
 	"image/png"
 	"strings"
 	"testing"
+
+	"github.com/araihu/assets/internal/catalog"
 )
 
 func TestBuildIncludesAllPlatformContracts(t *testing.T) {
@@ -41,6 +45,38 @@ func TestBuildIncludesAllPlatformContracts(t *testing.T) {
 	api33 := string(result.Files["dist/platform/android/araihu/res/mipmap-anydpi-v33/ic_launcher.xml"])
 	if strings.Contains(api26, "<monochrome") || !strings.Contains(api33, "<monochrome") {
 		t.Fatalf("incorrect Android monochrome API contract")
+	}
+}
+
+func TestBuildCatalogCoversEveryPublishedVisualArtifact(t *testing.T) {
+	result, err := Build(context.Background(), fakeRasterizer{}, testIcons())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := catalog.Validate(catalog.Catalog{SchemaVersion: catalog.SchemaVersion, Release: "v0.1.0", IdentityRevision: 11, Assets: result.Assets}); err != nil {
+		t.Fatalf("platform catalog: %v", err)
+	}
+	assets := make(map[string]catalog.Asset, len(result.Assets))
+	for _, asset := range result.Assets {
+		if _, duplicate := assets[asset.Path]; duplicate {
+			t.Fatalf("duplicate catalog path %q", asset.Path)
+		}
+		assets[asset.Path] = asset
+	}
+	for name, data := range result.Files {
+		path := strings.TrimPrefix(name, "dist/")
+		visual := strings.HasSuffix(path, ".svg") || strings.HasSuffix(path, ".png")
+		asset, found := assets[path]
+		if visual != found {
+			t.Fatalf("catalog presence for %s = %t, want %t", path, found, visual)
+		}
+		if !visual {
+			continue
+		}
+		sum := sha256.Sum256(data)
+		if asset.Product == "" || asset.Artwork != "icon" || asset.SHA256 != hex.EncodeToString(sum[:]) {
+			t.Fatalf("catalog metadata for %s = %#v", path, asset)
+		}
 	}
 }
 

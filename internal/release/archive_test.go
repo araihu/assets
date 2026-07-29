@@ -6,6 +6,8 @@ import (
 	"bytes"
 	"compress/gzip"
 	"io"
+	"os"
+	"path/filepath"
 	"testing"
 	"testing/fstest"
 	"time"
@@ -58,11 +60,24 @@ func TestZIPIsByteDeterministicAndNormalized(t *testing.T) {
 }
 
 func TestArchiveRejectsUnsafeDuplicateAndNonRegularPaths(t *testing.T) {
-	files := fstest.MapFS{"file.txt": &fstest.MapFile{Data: []byte("x")}, "dir": &fstest.MapFile{Mode: 0o755 | 1<<31}}
-	for _, paths := range [][]string{{"../file.txt"}, {`file\\name.txt`}, {"file.txt", "file.txt"}, {"dir"}} {
+	files := fstest.MapFS{"file.txt": &fstest.MapFile{Data: []byte("x")}, "dir": &fstest.MapFile{Mode: 0o755 | 1<<31}, "C:/file.txt": &fstest.MapFile{Data: []byte("x")}}
+	for _, paths := range [][]string{{"../file.txt"}, {`file\\name.txt`}, {"C:/file.txt"}, {"file.txt", "file.txt"}, {"dir"}} {
 		if err := Archive(io.Discard, files, paths); err == nil {
 			t.Fatalf("Archive accepted %q", paths)
 		}
+	}
+}
+
+func TestArchiveRejectsIntermediateSourceSymlink(t *testing.T) {
+	sourceRoot, outside := t.TempDir(), t.TempDir()
+	if err := os.WriteFile(filepath.Join(outside, "file.txt"), []byte("outside"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(outside, filepath.Join(sourceRoot, "link")); err != nil {
+		t.Fatal(err)
+	}
+	if err := Archive(io.Discard, os.DirFS(sourceRoot), []string{"link/file.txt"}); err == nil {
+		t.Fatal("Archive followed intermediate source symlink")
 	}
 }
 

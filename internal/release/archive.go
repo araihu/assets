@@ -126,24 +126,34 @@ func load(source fs.FS, paths []string) ([]entry, error) {
 }
 
 func validPath(name string) bool {
-	return name != "." && fs.ValidPath(name) && !strings.Contains(name, `\`)
+	return name != "." && fs.ValidPath(name) && !strings.Contains(name, `\`) && !strings.Contains(strings.Split(name, "/")[0], ":")
 }
 
 func sourceSymlink(source fs.FS, name string) (bool, error) {
-	parent, base := strings.TrimSuffix(name, "/"), name
-	if slash := strings.LastIndex(parent, "/"); slash >= 0 {
-		parent, base = parent[:slash], parent[slash+1:]
-	} else {
-		parent = "."
-	}
-	entries, err := fs.ReadDir(source, parent)
-	if err != nil {
-		return false, err
-	}
-	for _, candidate := range entries {
-		if candidate.Name() == base {
-			return candidate.Type()&fs.ModeSymlink != 0, nil
+	parent := "."
+	for _, component := range strings.Split(name, "/") {
+		entries, err := fs.ReadDir(source, parent)
+		if err != nil {
+			return false, err
+		}
+		found := false
+		for _, candidate := range entries {
+			if candidate.Name() == component {
+				if candidate.Type()&fs.ModeSymlink != 0 {
+					return true, nil
+				}
+				found = true
+				break
+			}
+		}
+		if !found {
+			return false, fs.ErrNotExist
+		}
+		if parent == "." {
+			parent = component
+		} else {
+			parent += "/" + component
 		}
 	}
-	return false, fs.ErrNotExist
+	return false, nil
 }

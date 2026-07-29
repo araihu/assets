@@ -129,9 +129,10 @@ func assembledFiles(repo string, input Inputs) (map[string][]byte, error) {
 	files["licenses/Apache-2.0.txt"] = license
 	files["NOTICE"] = []byte("Arai Hu Assets " + releaseVersion + "\n\nArai Hu brand assets are subject to Arai Hu Brand Terms.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\n")
 
-	assets := make([]catalog.Asset, 0, len(input.Brand.Assets)+len(input.UI.Assets))
+	assets := make([]catalog.Asset, 0, len(input.Brand.Assets)+len(input.UI.Assets)+len(input.Platform.Assets))
 	assets = append(assets, input.Brand.Assets...)
 	assets = append(assets, input.UI.Assets...)
+	assets = append(assets, input.Platform.Assets...)
 	catalogBytes, err := catalogBytes(assets, files)
 	if err != nil {
 		return nil, err
@@ -142,7 +143,7 @@ func assembledFiles(repo string, input Inputs) (map[string][]byte, error) {
 
 func normalizeInputPath(name string) (string, error) {
 	name = strings.TrimPrefix(name, "dist/")
-	if name == "." || !fs.ValidPath(name) || strings.Contains(name, `\`) {
+	if name == "." || !fs.ValidPath(name) || strings.Contains(name, `\`) || strings.Contains(strings.Split(name, "/")[0], ":") {
 		return "", fmt.Errorf("build: invalid dist-relative path %q", name)
 	}
 	return name, nil
