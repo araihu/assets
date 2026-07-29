@@ -31,12 +31,38 @@ func TestBuildRejectsDuplicateUnsafeAndDocumentLevelSymbols(t *testing.T) {
 		{"duplicate symbol", []Entry{{Symbol: "same", SVG: safe}, {Symbol: "same", SVG: safe}}, "duplicate symbol"},
 		{"invalid symbol", []Entry{{Symbol: `bad\" id=\"owned`, SVG: safe}}, "invalid symbol"},
 		{"unsafe SVG", []Entry{{Symbol: "safe", SVG: []byte(`<svg viewBox="0 0 16 16"><script/></svg>`)}}, "unsafe SVG"},
+		{"CSS-escaped external URL", []Entry{{Symbol: "safe", SVG: []byte(`<svg viewBox="0 0 16 16"><path fill="\75rl(https://evil.invalid/a.svg)" d="M0 0h1v1z"/></svg>`)}}, "unsafe SVG"},
 		{"document level child", []Entry{{Symbol: "safe", SVG: withTitle}}, "unsafe SVG"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			_, err := Build(tc.entries)
 			if err == nil || !strings.Contains(err.Error(), tc.want) {
 				t.Fatalf("Build() error = %v, want %q", err, tc.want)
+			}
+		})
+	}
+}
+
+func TestBuildRejectsIDsDuplicatedAcrossWholeSprite(t *testing.T) {
+	withSharedID := func(id string) []byte {
+		return []byte(`<svg viewBox="0 0 16 16"><path id="` + id + `" d="M0 0h1v1z"/></svg>`)
+	}
+	for _, tc := range []struct {
+		name    string
+		entries []Entry
+	}{
+		{
+			"same child ID in two source documents",
+			[]Entry{{Symbol: "first", SVG: withSharedID("shared")}, {Symbol: "second", SVG: withSharedID("shared")}},
+		},
+		{
+			"child ID collides with symbol ID",
+			[]Entry{{Symbol: "symbol-id", SVG: withSharedID("symbol-id")}},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if _, err := Build(tc.entries); err == nil || !strings.Contains(err.Error(), "duplicate ID") {
+				t.Fatalf("Build() error = %v, want duplicate ID", err)
 			}
 		})
 	}

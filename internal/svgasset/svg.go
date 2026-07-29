@@ -27,6 +27,9 @@ var (
 	documentElements = map[string]struct{}{
 		"desc": {}, "metadata": {}, "title": {},
 	}
+	visualElements = map[string]bool{
+		"circle": true, "ellipse": true, "line": true, "path": true, "polygon": true, "polyline": true, "rect": true, "use": true,
+	}
 	mixedCaseAttributes = map[string]struct{}{
 		"clipPathUnits": {}, "gradientTransform": {}, "gradientUnits": {}, "markerHeight": {}, "markerUnits": {}, "markerWidth": {}, "preserveAspectRatio": {}, "refX": {}, "refY": {}, "viewBox": {},
 	}
@@ -189,6 +192,9 @@ func newNode(element xml.StartElement, isRoot bool, ids map[string]struct{}) (*n
 }
 
 func validateAttributeValue(name, value string) error {
+	if strings.Contains(value, `\`) || strings.Contains(value, "/*") || strings.Contains(value, "*/") {
+		return fmt.Errorf("SVG attribute %q contains forbidden CSS syntax", name)
+	}
 	lower := strings.ToLower(strings.TrimSpace(value))
 	if strings.Contains(lower, "data:") {
 		return fmt.Errorf("SVG attribute %q contains data URL", name)
@@ -273,8 +279,8 @@ func (d Document) Normalize(options Options) ([]byte, error) {
 	}
 	root := cloneNode(d.root)
 	if options.ColorBehavior == "monochrome" || options.ColorBehavior == "tintable" {
-		stripPaint(&root)
-		root.attrs = append(root.attrs, attribute{name: "fill", value: "currentColor"}, attribute{name: "stroke", value: "currentColor"})
+		fill, stroke := paintRoles(root)
+		normalizePaint(&root, fill, stroke)
 	}
 	var out bytes.Buffer
 	writeNode(&out, root)
@@ -308,17 +314,117 @@ func cloneNode(src node) node {
 	return dst
 }
 
-func stripPaint(n *node) {
-	attrs := n.attrs[:0]
+func paintRoles(root node) (bool, bool) {
+	return scanPaintRoles(root, "black", "none", true)
+}
+
+func scanPaintRoles(n node, inheritedFill, inheritedStroke string, visible bool) (bool, bool) {
+	fill, stroke := inheritedFill, inheritedStroke
 	for _, attr := range n.attrs {
-		if attr.name != "fill" && attr.name != "stroke" && attr.name != "color" {
+		switch attr.name {
+		case "fill":
+			fill = attr.value
+		case "stroke":
+			stroke = attr.value
+		}
+	}
+
+	hasFill, hasStroke := false, false
+	if visible && visualElements[n.name] {
+		hasFill = n.name != "line" && !noPaint(fill)
+		hasStroke = !noPaint(stroke)
+	}
+	childVisible := visible && n.name != "defs" && n.name != "clipPath" && n.name != "mask"
+	for _, child := range n.children {
+		childFill, childStroke := scanPaintRoles(child, fill, stroke, childVisible)
+		hasFill = hasFill || childFill
+		hasStroke = hasStroke || childStroke
+	}
+	return hasFill, hasStroke
+}
+
+func normalizePaint(root *node, hasFill, hasStroke bool) {
+	rootFill, rootHasFill := paintAttribute(*root, "fill")
+	rootStroke, rootHasStroke := paintAttribute(*root, "stroke")
+	rootFillNone := !hasFill || (rootHasFill && noPaint(rootFill))
+	rootStrokePaint := rootHasStroke && !noPaint(rootStroke)
+	globalStroke := rootStrokePaint || (hasStroke && !hasFill)
+
+	attrs := nonPaintAttributes(root.attrs)
+	if rootFillNone {
+		attrs = append(attrs, attribute{name: "fill", value: "none"})
+	} else {
+		attrs = append(attrs, attribute{name: "fill", value: "currentColor"})
+	}
+	if globalStroke {
+		attrs = append(attrs, attribute{name: "stroke", value: "currentColor"})
+	}
+	root.attrs = attrs
+	for i := range root.children {
+		normalizePaintNode(&root.children[i], rootFillNone, rootStrokePaint, globalStroke)
+	}
+}
+
+func normalizePaintNode(n *node, parentFillNone, parentStrokePaint, globalStroke bool) {
+	fill, hasFill := paintAttribute(*n, "fill")
+	stroke, hasStroke := paintAttribute(*n, "stroke")
+	fillNone := parentFillNone
+	if hasFill {
+		fillNone = noPaint(fill)
+	}
+	strokePaint := parentStrokePaint
+	if hasStroke {
+		strokePaint = !noPaint(stroke)
+	}
+
+	attrs := make([]attribute, 0, len(n.attrs))
+	for _, attr := range n.attrs {
+		switch attr.name {
+		case "color":
+			continue
+		case "fill":
+			if noPaint(attr.value) {
+				attrs = append(attrs, attr)
+			} else if parentFillNone {
+				attrs = append(attrs, attribute{name: "fill", value: "currentColor"})
+			}
+		case "stroke":
+			if noPaint(attr.value) {
+				attrs = append(attrs, attr)
+			} else if !globalStroke && !parentStrokePaint {
+				attrs = append(attrs, attribute{name: "stroke", value: "currentColor"})
+			}
+		default:
 			attrs = append(attrs, attr)
 		}
 	}
 	n.attrs = attrs
 	for i := range n.children {
-		stripPaint(&n.children[i])
+		normalizePaintNode(&n.children[i], fillNone, strokePaint, globalStroke)
 	}
+}
+
+func paintAttribute(n node, name string) (string, bool) {
+	for _, attr := range n.attrs {
+		if attr.name == name {
+			return attr.value, true
+		}
+	}
+	return "", false
+}
+
+func nonPaintAttributes(attrs []attribute) []attribute {
+	result := make([]attribute, 0, len(attrs)+2)
+	for _, attr := range attrs {
+		if attr.name != "fill" && attr.name != "stroke" && attr.name != "color" {
+			result = append(result, attr)
+		}
+	}
+	return result
+}
+
+func noPaint(value string) bool {
+	return strings.EqualFold(strings.TrimSpace(value), "none")
 }
 
 // ViewBox returns the root SVG viewBox validated by Parse.
@@ -338,6 +444,24 @@ func (d Document) ChildrenXML() []byte {
 		writeNode(&out, child)
 	}
 	return out.Bytes()
+}
+
+// ChildIDs returns stable identifiers that will be emitted beneath a sprite symbol.
+func (d Document) ChildIDs() []string {
+	var ids []string
+	for _, child := range d.root.children {
+		collectIDs(child, &ids)
+	}
+	return ids
+}
+
+func collectIDs(n node, ids *[]string) {
+	if id, ok := paintAttribute(n, "id"); ok {
+		*ids = append(*ids, id)
+	}
+	for _, child := range n.children {
+		collectIDs(child, ids)
+	}
 }
 
 func writeNode(out *bytes.Buffer, n node) {

@@ -35,8 +35,7 @@ func Build(entries []Entry) ([]byte, error) {
 		return 0
 	})
 
-	var out bytes.Buffer
-	out.WriteString(`<svg xmlns="http://www.w3.org/2000/svg" style="display:none">`)
+	ids := make(map[string]struct{}, len(ordered)*2)
 	for i, entry := range ordered {
 		if !symbolName.MatchString(entry.Symbol) {
 			return nil, fmt.Errorf("invalid symbol %q", entry.Symbol)
@@ -44,10 +43,28 @@ func Build(entries []Entry) ([]byte, error) {
 		if i > 0 && ordered[i-1].Symbol == entry.Symbol {
 			return nil, fmt.Errorf("duplicate symbol %q", entry.Symbol)
 		}
+		ids[entry.Symbol] = struct{}{}
+	}
+
+	documents := make([]svgasset.Document, len(ordered))
+	for i, entry := range ordered {
 		doc, err := svgasset.Parse(entry.SVG)
 		if err != nil {
 			return nil, fmt.Errorf("unsafe SVG for symbol %q: %w", entry.Symbol, err)
 		}
+		for _, id := range doc.ChildIDs() {
+			if _, duplicate := ids[id]; duplicate {
+				return nil, fmt.Errorf("duplicate ID %q", id)
+			}
+			ids[id] = struct{}{}
+		}
+		documents[i] = doc
+	}
+
+	var out bytes.Buffer
+	out.WriteString(`<svg xmlns="http://www.w3.org/2000/svg" style="display:none">`)
+	for i, entry := range ordered {
+		doc := documents[i]
 		out.WriteString(`<symbol id="`)
 		out.WriteString(entry.Symbol)
 		out.WriteString(`" viewBox="`)
