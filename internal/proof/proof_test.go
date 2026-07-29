@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strconv"
 	"strings"
@@ -419,6 +420,27 @@ func TestProofAssetsContainRequiredInteractionContracts(t *testing.T) {
 	}
 	if strings.Contains(string(js), "fetch(") {
 		t.Fatal("app.js must not fetch")
+	}
+}
+
+func TestProofAssetsConstrainOuterOverflowWithoutRemovingReviewRails(t *testing.T) {
+	css, err := os.ReadFile(filepath.Join("..", "..", "site", "proof", "styles.css"))
+	if err != nil {
+		t.Fatalf("ReadFile styles.css: %v", err)
+	}
+	for _, selector := range []string{
+		"main", "section", ".family-comparison", ".exact-size-rail, .master-rail, .ui-sprite-rail", ".metric-table",
+	} {
+		pattern := regexp.MustCompile(regexp.QuoteMeta(selector) + `\s*\{[^}]*min-inline-size:\s*0;[^}]*max-inline-size:\s*100%;`)
+		if !pattern.Match(css) {
+			t.Fatalf("%s must constrain its outer inline contribution", selector)
+		}
+	}
+	for _, selector := range []string{".family-comparison", ".exact-size-rail, .master-rail, .ui-sprite-rail", ".metric-table"} {
+		pattern := regexp.MustCompile(regexp.QuoteMeta(selector) + `\s*\{[^}]*overflow-x:\s*auto;`)
+		if !pattern.Match(css) {
+			t.Fatalf("%s must retain internal horizontal review scrolling", selector)
+		}
 	}
 }
 

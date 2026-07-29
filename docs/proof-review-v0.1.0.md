@@ -12,10 +12,18 @@ The document, `styles.css`, `app.js`, and every document-referenced local asset
 returned HTTP 200 from a server rooted at `dist/proof`. JavaScript syntax checks
 cleanly and the proof has no network dependency or `fetch` path.
 
-The in-app Browser binding was unavailable in this review session. Therefore
-the requested 375, 768, 1280, and 1440 CSS-pixel visual/keyboard/zoom passes,
-console observation, and screenshots are not claimed. No screenshot was
-retained: unavailable browser rendering is not review evidence.
+Root in-app Browser evidence was available at the live `8766` URL: zero broken
+images and zero console warnings or errors. Resetting controls to `all/all/all`
+reported `1114/1114` evidence records; sampled `plate` plus `dark` filtering
+reported `60` records and matching scenario attributes.
+
+Root's first viewport measurement found document overflow at 375 and 768 CSS
+pixels (`documentElement.scrollWidth = 832`), while 1280 and 1440 matched their
+viewport widths. The proof now constrains outer main, section, grid, rail, and
+table contributions with `min-inline-size: 0` and `max-inline-size: 100%`, while
+retaining internal family, exact-size, master, and table scrolling. Root must
+re-capture the retained 375, 768, 1280, and 1440 screenshots after this fix and
+record the final measurements before release approval.
 
 ## Findings and disposition
 
@@ -45,6 +53,9 @@ retained: unavailable browser rendering is not review evidence.
 - Fixed: literal 512 specimens stay inside an internal horizontal rail; detail
   grids do not collapse until below 736 CSS pixels; metadata uses `#40566b` on
   paper, exceeding 4.5:1 contrast.
+- Fixed: outer proof containers no longer inherit the large min-content widths
+  of literal specimens; only the intended comparison, exact-size, master, and
+  geometry rails scroll horizontally.
 - Fixed: geometry evidence has a caption and scoped column headers. Web and
   mobile scenes now include enough chrome to inspect padding and collision.
 - Impeccable detector found one proof-layout side-tab accent, which was changed
