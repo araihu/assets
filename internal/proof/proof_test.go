@@ -3,6 +3,8 @@ package proof
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -75,6 +77,17 @@ func TestLoadRejectsMissingProductCoverage(t *testing.T) {
 	_, err := Load(fixtureCatalog(t), strings.NewReader(`{"scenarios":[`+scenarioJSON("brand-araihu-icon", "only", []int{16})+`]}`))
 	if err == nil || !strings.Contains(err.Error(), "missing product coverage") {
 		t.Fatalf("Load() error = %v, want missing product coverage", err)
+	}
+}
+
+func TestLoadRejectsMissingCatalogBackedMaskable512Master(t *testing.T) {
+	c := fixtureCatalog(t)
+	c.Assets = slices.DeleteFunc(c.Assets, func(asset catalog.Asset) bool {
+		return asset.CanonicalName == "platform-web-araihu-icon-maskable-512-png"
+	})
+	_, err := Load(c, strings.NewReader(readFixtureScenarios(t)))
+	if err == nil || !strings.Contains(err.Error(), "maskable 512") {
+		t.Fatalf("Load() error = %v, want missing catalog-backed maskable 512 master", err)
 	}
 }
 
@@ -183,6 +196,25 @@ func TestBuildRejectsMissingUISpriteDistributionFile(t *testing.T) {
 	}
 }
 
+func TestBuildReturnsShortWriteAndWriterError(t *testing.T) {
+	outputFailure := errors.New("output failed")
+	for _, tc := range []struct {
+		name string
+		out  io.Writer
+		want error
+	}{
+		{"short write", shortWriter{}, io.ErrShortWrite},
+		{"writer error", errorWriter{err: outputFailure}, outputFailure},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := Build(fixtureModel(t), fixtureDistributionFS(), tc.out)
+			if !errors.Is(err, tc.want) {
+				t.Fatalf("Build() error = %v, want %v", err, tc.want)
+			}
+		})
+	}
+}
+
 func TestLoadSortsModelDeterministicallyFromPermutedInputs(t *testing.T) {
 	want := loadProduction(t)
 	c := want.Catalog
@@ -271,13 +303,48 @@ func TestBuildAcceptsProductionDistribution(t *testing.T) {
 	}
 }
 
+func TestProductionMasterProofUsesCatalogMaskable512Semantics(t *testing.T) {
+	m := loadProduction(t)
+	var master catalog.Asset
+	for _, platform := range m.Platform {
+		if platform.Product == "araihu" {
+			master = platform.Master
+			break
+		}
+	}
+	if master.CanonicalName != "platform-web-araihu-icon-maskable-512-png" || master.Path != "platform/web/araihu/icon-maskable-512.png" || master.Artwork != "icon" || master.Appearance != "light" || master.Surface != "plate" || master.Framing != "launcher" || master.Dimensions.Width != 512 || master.Dimensions.Height != 512 {
+		t.Fatalf("Arai Hû literal master = %#v, want catalog-backed light plated launcher 512", master)
+	}
+	var output bytes.Buffer
+	if err := Build(m, os.DirFS(filepath.Join("..", "..", "dist")), &output); err != nil {
+		t.Fatalf("Build() error = %v", err)
+	}
+	html := output.String()
+	for _, want := range []string{
+		`src="../platform/web/araihu/icon-maskable-512.png"`,
+		`aria-label="Arai Hû icon, light plate launcher, 512 pixels"`,
+		`data-canonical-name="platform-web-araihu-icon-maskable-512-png"`,
+	} {
+		if !strings.Contains(html, want) {
+			t.Fatalf("production proof missing %q", want)
+		}
+	}
+	if strings.Contains(html, `data-canonical-name="platform-web-araihu-icon-maskable-512-png"><img src="../platform/web/araihu/icon-512.png"`) {
+		t.Fatal("literal master mislabels the transparent optical 512 artifact")
+	}
+}
+
 func TestBuildEmitsSemanticLabelsAndMetricsTable(t *testing.T) {
 	html := buildFixture(t)
 	for _, want := range []string{
 		`<a class="skip-link" href="#proof-main">Skip to proof evidence</a>`,
 		`<table aria-label="Normalized SVG art bounds">`,
 		`aria-label="Arai Hû icon, transparent adaptive optical, 16 pixels"`,
-		`aria-label="Arai Hû mask-safe launcher icon, 512 pixels"`,
+		`aria-label="Arai Hû icon, light plate launcher, 512 pixels"`,
+		`href="../NOTICE"`,
+		`href="../licenses/Apache-2.0.txt"`,
+		`href="../licenses/heroicons-MIT.txt"`,
+		`href="../icons/ui/heroicons/provenance.json"`,
 		`<section aria-labelledby="family-comparison-title">`,
 		`<section aria-labelledby="web-contexts-title">`,
 		`<section aria-labelledby="mobile-contexts-title">`,
@@ -325,15 +392,20 @@ func fixtureCatalog(t *testing.T) catalog.Catalog {
 
 func fixtureModel(t *testing.T) Model {
 	t.Helper()
-	b, err := os.ReadFile("testdata/scenarios.json")
-	if err != nil {
-		t.Fatalf("ReadFile scenario fixture: %v", err)
-	}
-	m, err := Load(fixtureCatalog(t), bytes.NewReader(b))
+	m, err := Load(fixtureCatalog(t), strings.NewReader(readFixtureScenarios(t)))
 	if err != nil {
 		t.Fatalf("Load() error = %v", err)
 	}
 	return m
+}
+
+func readFixtureScenarios(t *testing.T) string {
+	t.Helper()
+	b, err := os.ReadFile("testdata/scenarios.json")
+	if err != nil {
+		t.Fatalf("ReadFile scenario fixture: %v", err)
+	}
+	return string(b)
 }
 
 func buildFixture(t *testing.T) string {
@@ -351,11 +423,24 @@ func fixtureDistributionFS() fstest.MapFS {
 		"icons/ui/heroicons/16-solid-check.svg":                                  &fstest.MapFile{Data: []byte("svg")},
 		"icons/ui/sprite.svg":                                                    &fstest.MapFile{Data: []byte("svg")},
 		"platform/web/araihu/icon-512.png":                                       &fstest.MapFile{Data: []byte("png")},
+		"platform/web/araihu/icon-maskable-512.png":                              &fstest.MapFile{Data: []byte("png")},
 		"platform/web/araihu/manifest-icons.json":                                &fstest.MapFile{Data: []byte("json")},
 		"platform/android/araihu/res/mipmap-anydpi-v26/ic_launcher.xml":          &fstest.MapFile{Data: []byte("xml")},
 		"platform/apple/araihu/Assets.xcassets/AppIcon.appiconset/Contents.json": &fstest.MapFile{Data: []byte("json")},
+		"NOTICE":                             &fstest.MapFile{Data: []byte("notice")},
+		"licenses/Apache-2.0.txt":            &fstest.MapFile{Data: []byte("apache")},
+		"licenses/heroicons-MIT.txt":         &fstest.MapFile{Data: []byte("mit")},
+		"icons/ui/heroicons/provenance.json": &fstest.MapFile{Data: []byte("provenance")},
 	}
 }
+
+type shortWriter struct{}
+
+func (shortWriter) Write(p []byte) (int, error) { return len(p) - 1, nil }
+
+type errorWriter struct{ err error }
+
+func (w errorWriter) Write([]byte) (int, error) { return 0, w.err }
 
 func loadProduction(t *testing.T) Model {
 	t.Helper()

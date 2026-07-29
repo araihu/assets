@@ -32,11 +32,29 @@ type ProductProof struct {
 	Assets []catalog.Asset
 }
 
+// PackageProof is a release-package metadata reference not represented by a
+// catalog asset. Its product, kind, and path are fixed by the proof contract.
+type PackageProof struct {
+	Product        string
+	Kind           string
+	Path           string
+	ProvenancePath string
+}
+
+// PlatformProof binds a product's literal launcher master to catalog metadata
+// and retains strict references to its non-catalog package metadata.
+type PlatformProof struct {
+	Product  string
+	Master   catalog.Asset
+	Packages []PackageProof
+}
+
 // Model is a validated, deterministic proof view model. It deliberately has
 // no HTML or rendering concerns.
 type Model struct {
 	Catalog    catalog.Catalog
 	Products   []ProductProof
+	Platform   []PlatformProof
 	Scenarios  []Scenario
 	ExactSizes []int
 	provenance modelProvenance

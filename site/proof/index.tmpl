@@ -74,12 +74,12 @@
 
     <section aria-labelledby="literal-master-title">
       <h2 id="literal-master-title">Literal 512 master</h2>
-      {{range .Products}}<figure><img src="{{.MasterURL}}" width="512" height="512" aria-label="{{.Name}} mask-safe launcher icon, 512 pixels"><figcaption>{{.Name}} / mask-safe launcher icon / 512 px</figcaption></figure>{{end}}
+      {{range .Products}}<figure data-canonical-name="{{.Master.CanonicalName}}"><img src="{{.Master.URL}}" width="512" height="512" aria-label="{{.Name}} {{.Master.Artwork}}, {{.Master.Variant}}, 512 pixels"><figcaption>{{.Name}} / {{.Master.Artwork}} / {{.Master.Variant}} / 512 px</figcaption></figure>{{end}}
     </section>
 
     <section aria-labelledby="platform-packages-title">
       <h2 id="platform-packages-title">Platform packages</h2>
-      <ul>{{range .Products}}<li>{{.Name}}: <a href="{{.WebPackageURL}}">web manifest</a>, <a href="{{.AndroidURL}}">Android adaptive icon</a>, <a href="{{.AppleURL}}">Apple app icon</a></li>{{end}}</ul>
+      <ul>{{range .Products}}<li>{{.Name}}: {{range .Packages}}<a href="{{.URL}}">{{.Kind}}</a> (<a href="{{.ProvenanceURL}}">provenance</a>) {{end}}</li>{{end}}</ul>
     </section>
 
     <section aria-labelledby="ui-sprite-rail-title">
@@ -102,7 +102,8 @@
 
     <section aria-labelledby="license-provenance-title">
       <h2 id="license-provenance-title">License and provenance</h2>
-      <ul>{{range .Licenses}}<li>{{.Product}} <a href="{{.URL}}">{{.Asset}}</a>: {{.License}}; {{.Source}}</li>{{end}}</ul>
+      <p><a href="{{.NoticeURL}}">Release NOTICE</a>; <a href="{{.ApacheLicenseURL}}">repository Apache-2.0 license</a>.</p>
+      <ul>{{range .Licenses}}<li>{{.Product}} <a href="{{.URL}}">{{.Asset}}</a>: <a href="{{.LicenseURL}}">{{.License}}</a>; <a href="{{.ProvenanceURL}}">{{.Source}}</a></li>{{end}}</ul>
     </section>
   </main>
 </body>
