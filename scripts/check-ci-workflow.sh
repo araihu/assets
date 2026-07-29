@@ -23,8 +23,8 @@ if grep -F 'cargo +1.92.0 install' "$workflow"; then
   echo 'CI must use rustup run before direct toolchain PATH export' >&2
   exit 1
 fi
-install_line=$(rg -n -F 'rustup run 1.92.0 cargo install' "$workflow" | cut -d: -f1)
-path_line=$(rg -n -F 'export PATH="$CARGO_C_ROOT/bin:$HOME/.rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH"' "$workflow" | cut -d: -f1)
+install_line=$(grep -nF 'rustup run 1.92.0 cargo install' "$workflow" | cut -d: -f1)
+path_line=$(grep -nF 'export PATH="$CARGO_C_ROOT/bin:$HOME/.rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH"' "$workflow" | cut -d: -f1)
 test "$install_line" -lt "$path_line"
 grep -F "printf '%s  %s\\n' \"\$RSVG_SHA256\" \"\$RSVG_ARCHIVE\" > \"\$RSVG_CHECKSUM\"" "$workflow"
 
