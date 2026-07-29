@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  # All Go commands run with module network access disabled. `vendor` is the
+  # sole networked CLI command and is deliberately absent from this workflow.
+  GOPROXY: off
+  GOSUMDB: off
+  GONOSUMDB: '*'
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up exact Go toolchain
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v6.0.0
+        with:
+          go-version: '1.26.5'
+          check-latest: false
+          cache: false
+
+      - name: Assert exact Go version
+        shell: bash
+        run: test "$(go version | awk '{print $3}')" = go1.26.5
+
+      - name: Build verified rsvg-convert 2.62.1
+        shell: bash
+        env:
+          RSVG_VERSION: 2.62.1
+          RSVG_SHA256: b41ca84206242fddd826a2bf76348d7cdf52c1050cbfa060b866e81a252145c3
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends \
+            build-essential ca-certificates cargo curl \
+            libglib2.0-dev libcairo2-dev libpango1.0-dev \
+            libgdk-pixbuf-2.0-dev libxml2-dev meson ninja-build pkg-config
+          rustup toolchain install 1.92.0 --profile minimal
+          curl --fail --location --show-error --silent --retry 3 \
+            --output "${RUNNER_TEMP}/librsvg-${RSVG_VERSION}.tar.xz" \
+            "https://download.gnome.org/sources/librsvg/2.62/librsvg-${RSVG_VERSION}.tar.xz"
+          printf '%s  %s\\n' "$RSVG_SHA256" "${RUNNER_TEMP}/librsvg-${RSVG_VERSION}.tar.xz" | sha256sum --check --strict
+          tar --extract --file "${RUNNER_TEMP}/librsvg-${RSVG_VERSION}.tar.xz" --directory "$RUNNER_TEMP"
+          export PATH="$HOME/.rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH"
+          meson setup "${RUNNER_TEMP}/librsvg-build" "${RUNNER_TEMP}/librsvg-${RSVG_VERSION}" \
+            --prefix "${RUNNER_TEMP}/librsvg" --buildtype release \
+            -Ddocs=disabled -Dintrospection=disabled -Dtests=false
+          meson compile -C "${RUNNER_TEMP}/librsvg-build"
+          meson install -C "${RUNNER_TEMP}/librsvg-build"
+          "${RUNNER_TEMP}/librsvg/bin/rsvg-convert" --version | grep --fixed-strings "rsvg-convert version ${RSVG_VERSION}"
+          echo "${RUNNER_TEMP}/librsvg/bin" >> "$GITHUB_PATH"
+
+      - name: Test offline generated-artifact contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          env -u HTTPS_PROXY -u HTTP_PROXY make check
+          go test ./... -count=1
+          go vet ./...
+          make verify
+          make release
+          git diff --exit-code
+
+      # P1 replaces the retired V11 proof with catalog-driven dist/proof and
+      # then makes proof-check plus final archive verification mandatory.

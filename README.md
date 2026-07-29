@@ -81,7 +81,7 @@ names and paths from the catalog. For SVG entries with a nonempty
 `spriteSymbol`, use the declared symbol from the corresponding generated sprite:
 
 - `dist/icons/brand/sprite.svg`
-- `dist/icons/ui/heroicons/sprite.svg`
+- `dist/icons/ui/sprite.svg`
 
 Only catalog entries marked `monochrome` or `tintable` may use `currentColor`.
 Protected brand artwork retains its designed colors. No client-language source
