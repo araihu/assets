@@ -29,6 +29,24 @@ func TestBrandRejectsDuplicateProducts(t *testing.T) {
 	}
 }
 
+func TestBrandRejectsCrossProductAliasCollisions(t *testing.T) {
+	for _, tc := range []struct {
+		name  string
+		alias string
+	}{
+		{name: "alias to alias", alias: "xisnove"},
+		{name: "alias to product id", alias: "x9"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			m := validBrand(t)
+			m.Products[3].Aliases = append(m.Products[3].Aliases, tc.alias)
+			if err := m.Validate(); err == nil {
+				t.Fatal("Validate() error = nil")
+			}
+		})
+	}
+}
+
 func TestLoadManifests(t *testing.T) {
 	root := os.DirFS("../..")
 	brand, err := LoadBrand(root, "manifests/brand.yaml")

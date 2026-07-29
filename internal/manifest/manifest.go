@@ -157,6 +157,7 @@ func (brand Brand) Validate() error {
 		return fmt.Errorf("brand identity_revision = %d, want 11", brand.IdentityRevision)
 	}
 	seenProducts := make(map[string]struct{}, len(brand.Products))
+	identifiers := make(map[string]string, len(brand.Products)*2)
 	for _, product := range brand.Products {
 		if !lowerKebab.MatchString(product.ID) {
 			return fmt.Errorf("invalid product id %q", product.ID)
@@ -168,11 +169,21 @@ func (brand Brand) Validate() error {
 		if _, ok := expectedProducts[product.ID]; !ok {
 			return fmt.Errorf("unknown product %q", product.ID)
 		}
+		if owner, ok := identifiers[product.ID]; ok {
+			return fmt.Errorf("duplicate identifier %q: product %q conflicts with %s", product.ID, product.ID, owner)
+		}
+		identifiers[product.ID] = fmt.Sprintf("product %q", product.ID)
 		if strings.TrimSpace(product.DisplayName) == "" {
 			return fmt.Errorf("product %q display_name is empty", product.ID)
 		}
 		if err := validateAliases(product); err != nil {
 			return err
+		}
+		for _, alias := range product.Aliases {
+			if owner, ok := identifiers[alias]; ok {
+				return fmt.Errorf("duplicate identifier %q: alias for product %q conflicts with %s", alias, product.ID, owner)
+			}
+			identifiers[alias] = fmt.Sprintf("alias for product %q", product.ID)
 		}
 		if err := validateProductSources(product); err != nil {
 			return err
