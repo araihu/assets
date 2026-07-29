@@ -91,33 +91,147 @@ palettes:
       cloud: "#d5ddeb"
       signal: "#c7ff4a"
 recipes:
-  - name: adaptive
+  - name: icon-adaptive-transparent-optical
+    artwork: icon
     appearance: adaptive
     surface: transparent
     framing: optical
     color_behavior: protected
-  - name: light
+  - name: icon-adaptive-plate-optical
+    artwork: icon
+    appearance: adaptive
+    surface: plate
+    framing: optical
+    color_behavior: protected
+  - name: icon-light-transparent-optical
+    artwork: icon
+    appearance: light
+    surface: transparent
+    framing: optical
+    color_behavior: protected
+  - name: icon-light-plate-optical
+    artwork: icon
     appearance: light
     surface: plate
     framing: optical
     color_behavior: protected
-  - name: dark
+  - name: icon-dark-transparent-optical
+    artwork: icon
+    appearance: dark
+    surface: transparent
+    framing: optical
+    color_behavior: protected
+  - name: icon-dark-plate-optical
+    artwork: icon
     appearance: dark
     surface: plate
     framing: optical
     color_behavior: protected
-  - name: monochrome
+  - name: icon-monochrome-transparent-optical
+    artwork: icon
     appearance: monochrome
     surface: transparent
     framing: optical
     color_behavior: monochrome
-  - name: grayscale
+  - name: icon-grayscale-transparent-optical
+    artwork: icon
+    appearance: grayscale
+    surface: transparent
+    framing: optical
+    color_behavior: protected
+  - name: icon-grayscale-plate-optical
+    artwork: icon
     appearance: grayscale
     surface: plate
     framing: optical
     color_behavior: protected
-  - name: tinted
+  - name: icon-tinted-transparent-optical
+    artwork: icon
+    appearance: tinted
+    surface: transparent
+    framing: optical
+    color_behavior: protected
+  - name: icon-tinted-plate-optical
+    artwork: icon
+    appearance: tinted
+    surface: plate
+    framing: optical
+    color_behavior: protected
+  - name: icon-adaptive-plate-launcher
+    artwork: icon
+    appearance: adaptive
+    surface: plate
+    framing: launcher
+    color_behavior: protected
+  - name: icon-tinted-plate-launcher
+    artwork: icon
     appearance: tinted
     surface: plate
     framing: launcher
+    color_behavior: protected
+  - name: logo-adaptive-transparent-optical
+    artwork: logo
+    appearance: adaptive
+    surface: transparent
+    framing: optical
+    color_behavior: protected
+  - name: logo-adaptive-plate-optical
+    artwork: logo
+    appearance: adaptive
+    surface: plate
+    framing: optical
+    color_behavior: protected
+  - name: logo-light-transparent-optical
+    artwork: logo
+    appearance: light
+    surface: transparent
+    framing: optical
+    color_behavior: protected
+  - name: logo-light-plate-optical
+    artwork: logo
+    appearance: light
+    surface: plate
+    framing: optical
+    color_behavior: protected
+  - name: logo-dark-transparent-optical
+    artwork: logo
+    appearance: dark
+    surface: transparent
+    framing: optical
+    color_behavior: protected
+  - name: logo-dark-plate-optical
+    artwork: logo
+    appearance: dark
+    surface: plate
+    framing: optical
+    color_behavior: protected
+  - name: logo-monochrome-transparent-optical
+    artwork: logo
+    appearance: monochrome
+    surface: transparent
+    framing: optical
+    color_behavior: monochrome
+  - name: logo-grayscale-transparent-optical
+    artwork: logo
+    appearance: grayscale
+    surface: transparent
+    framing: optical
+    color_behavior: protected
+  - name: logo-grayscale-plate-optical
+    artwork: logo
+    appearance: grayscale
+    surface: plate
+    framing: optical
+    color_behavior: protected
+  - name: logo-tinted-transparent-optical
+    artwork: logo
+    appearance: tinted
+    surface: transparent
+    framing: optical
+    color_behavior: protected
+  - name: logo-tinted-plate-optical
+    artwork: logo
+    appearance: tinted
+    surface: plate
+    framing: optical
     color_behavior: protected

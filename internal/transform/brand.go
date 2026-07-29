@@ -41,19 +41,16 @@ var (
 	}
 
 	palettes = map[string]palette{
-		"adaptive":  {surface: "#f3f2e9", ink: "#07111f", signal: "#c7ff4a"},
 		"light":     {surface: "#f3f2e9", ink: "#07111f", signal: "#c7ff4a"},
 		"dark":      {surface: "#07111f", ink: "#f3f2e9", signal: "#c7ff4a"},
 		"grayscale": {surface: "#e6e6e6", ink: "#202020", signal: "#707070"},
-		"tinted":    {surface: "#e6e6e6", ink: "#202020", signal: "#707070"},
+		"tinted":    {surface: "#d5ddeb", ink: "#31588f", signal: "#07111f"},
 	}
 )
 
-type palette struct{ surface, ink, signal string }
+const adaptiveStyle = `<style>@media (prefers-color-scheme: dark) {:root {--araihu-logo-auto-surface: #07111f;--araihu-logo-auto-ink: #f3f2e9;--araihu-logo-auto-signal: #c7ff4a;}}</style>`
 
-type recipe struct {
-	artwork, appearance, surface, framing, colorBehavior string
-}
+type palette struct{ surface, ink, signal string }
 
 // Result contains all generated SVG files and catalog/sprite records for a brand build.
 type Result struct {
@@ -69,7 +66,7 @@ func BuildBrand(fsys fs.FS, brand manifest.Brand) (Result, error) {
 	}
 	result := Result{Files: make(map[string][]byte)}
 	for _, product := range brand.Products {
-		for _, recipe := range productRecipes() {
+		for _, recipe := range brand.Recipes {
 			variant, err := buildVariant(fsys, product, recipe)
 			if err != nil {
 				return Result{}, err
@@ -79,7 +76,9 @@ func BuildBrand(fsys fs.FS, brand manifest.Brand) (Result, error) {
 			}
 			result.Files[variant.path] = variant.svg
 			result.Assets = append(result.Assets, variant.asset)
-			result.SpriteEntries = append(result.SpriteEntries, sprite.Entry{Symbol: variant.asset.SpriteSymbol, SVG: variant.svg})
+			if variant.asset.SpriteSymbol != "" {
+				result.SpriteEntries = append(result.SpriteEntries, sprite.Entry{Symbol: variant.asset.SpriteSymbol, SVG: variant.svg})
+			}
 		}
 	}
 	slices.SortFunc(result.Assets, func(a, b catalog.Asset) int { return strings.Compare(a.CanonicalName, b.CanonicalName) })
@@ -92,45 +91,16 @@ func BuildBrand(fsys fs.FS, brand manifest.Brand) (Result, error) {
 	return result, nil
 }
 
-func productRecipes() []recipe {
-	return []recipe{
-		{artwork: "icon", appearance: "adaptive", surface: "transparent", framing: "optical", colorBehavior: "protected"},
-		{artwork: "icon", appearance: "adaptive", surface: "plate", framing: "optical", colorBehavior: "protected"},
-		{artwork: "icon", appearance: "light", surface: "transparent", framing: "optical", colorBehavior: "protected"},
-		{artwork: "icon", appearance: "light", surface: "plate", framing: "optical", colorBehavior: "protected"},
-		{artwork: "icon", appearance: "dark", surface: "transparent", framing: "optical", colorBehavior: "protected"},
-		{artwork: "icon", appearance: "dark", surface: "plate", framing: "optical", colorBehavior: "protected"},
-		{artwork: "icon", appearance: "monochrome", surface: "transparent", framing: "optical", colorBehavior: "monochrome"},
-		{artwork: "icon", appearance: "grayscale", surface: "transparent", framing: "optical", colorBehavior: "protected"},
-		{artwork: "icon", appearance: "grayscale", surface: "plate", framing: "optical", colorBehavior: "protected"},
-		{artwork: "icon", appearance: "tinted", surface: "transparent", framing: "optical", colorBehavior: "protected"},
-		{artwork: "icon", appearance: "tinted", surface: "plate", framing: "optical", colorBehavior: "protected"},
-		{artwork: "icon", appearance: "adaptive", surface: "plate", framing: "launcher", colorBehavior: "protected"},
-		{artwork: "icon", appearance: "tinted", surface: "plate", framing: "launcher", colorBehavior: "protected"},
-		{artwork: "logo", appearance: "adaptive", surface: "transparent", framing: "optical", colorBehavior: "protected"},
-		{artwork: "logo", appearance: "adaptive", surface: "plate", framing: "optical", colorBehavior: "protected"},
-		{artwork: "logo", appearance: "light", surface: "transparent", framing: "optical", colorBehavior: "protected"},
-		{artwork: "logo", appearance: "light", surface: "plate", framing: "optical", colorBehavior: "protected"},
-		{artwork: "logo", appearance: "dark", surface: "transparent", framing: "optical", colorBehavior: "protected"},
-		{artwork: "logo", appearance: "dark", surface: "plate", framing: "optical", colorBehavior: "protected"},
-		{artwork: "logo", appearance: "monochrome", surface: "transparent", framing: "optical", colorBehavior: "monochrome"},
-		{artwork: "logo", appearance: "grayscale", surface: "transparent", framing: "optical", colorBehavior: "protected"},
-		{artwork: "logo", appearance: "grayscale", surface: "plate", framing: "optical", colorBehavior: "protected"},
-		{artwork: "logo", appearance: "tinted", surface: "transparent", framing: "optical", colorBehavior: "protected"},
-		{artwork: "logo", appearance: "tinted", surface: "plate", framing: "optical", colorBehavior: "protected"},
-	}
-}
-
 type builtVariant struct {
 	path  string
 	svg   []byte
 	asset catalog.Asset
 }
 
-func buildVariant(fsys fs.FS, product manifest.Product, recipe recipe) (builtVariant, error) {
-	sourceKind := recipe.artwork + "-transparent"
-	if recipe.surface == "plate" {
-		sourceKind = recipe.artwork + "-background"
+func buildVariant(fsys fs.FS, product manifest.Product, recipe manifest.BrandRecipe) (builtVariant, error) {
+	sourceKind := recipe.Artwork + "-transparent"
+	if recipe.Surface == "plate" {
+		sourceKind = recipe.Artwork + "-background"
 	}
 	sourcePath := product.Sources["original"][sourceKind]
 	source, err := fs.ReadFile(fsys, sourcePath)
@@ -142,12 +112,14 @@ func buildVariant(fsys fs.FS, product manifest.Product, recipe recipe) (builtVar
 	}
 
 	prepared := stripRootDimensions(source)
-	prepared, err = setViewBox(prepared, product.ID, recipe.artwork, recipe.surface, recipe.framing)
+	prepared, err = setViewBox(prepared, product.ID, recipe.Artwork, recipe.Surface, recipe.Framing)
 	if err != nil {
 		return builtVariant{}, err
 	}
-	if recipe.appearance != "monochrome" {
-		prepared, err = applyPalette(prepared, recipe.appearance)
+	if recipe.Appearance == "adaptive" {
+		prepared = applyAdaptivePalette(prepared)
+	} else if recipe.Appearance != "monochrome" {
+		prepared, err = applyPalette(prepared, recipe.Appearance)
 		if err != nil {
 			return builtVariant{}, err
 		}
@@ -156,26 +128,34 @@ func buildVariant(fsys fs.FS, product manifest.Product, recipe recipe) (builtVar
 	if err != nil {
 		return builtVariant{}, fmt.Errorf("parse %s: %w", sourcePath, err)
 	}
-	normalized, err := doc.Normalize(svgasset.Options{ColorBehavior: recipe.colorBehavior})
+	normalized, err := doc.Normalize(svgasset.Options{ColorBehavior: recipe.ColorBehavior})
 	if err != nil {
 		return builtVariant{}, fmt.Errorf("normalize %s: %w", sourcePath, err)
 	}
 
-	canonical := strings.Join([]string{product.ID, recipe.artwork, recipe.appearance, recipe.surface, recipe.framing}, "-")
+	if recipe.Appearance == "adaptive" {
+		normalized = injectAdaptiveStyle(normalized)
+	}
+
+	canonical := strings.Join([]string{product.ID, recipe.Artwork, recipe.Appearance, recipe.Surface, recipe.Framing}, "-")
 	path := variantPath(product.ID, recipe)
 	viewBox := svgassetViewBox(normalized)
+	spriteSymbol := canonical
+	if recipe.Appearance == "adaptive" {
+		spriteSymbol = ""
+	}
 	asset := catalog.Asset{
 		CanonicalName: canonical, Namespace: "brand", Path: strings.TrimPrefix(path, "dist/"), Product: product.ID,
-		Artwork: recipe.artwork, Appearance: recipe.appearance, Surface: recipe.surface, Framing: recipe.framing,
-		Format: "svg", Dimensions: catalog.Dimensions{ViewBox: viewBox}, SpriteSymbol: canonical,
-		ColorBehavior: recipe.colorBehavior, License: brandLicense, Source: sourcePath + "#sha256=" + product.SourceHashes[sourceKind], SHA256: fmtHash(sha256.Sum256(normalized)),
+		Artwork: recipe.Artwork, Appearance: recipe.Appearance, Surface: recipe.Surface, Framing: recipe.Framing,
+		Format: "svg", Dimensions: catalog.Dimensions{ViewBox: viewBox}, SpriteSymbol: spriteSymbol,
+		ColorBehavior: recipe.ColorBehavior, License: brandLicense, Source: sourcePath + "#sha256=" + product.SourceHashes[sourceKind], SHA256: fmtHash(sha256.Sum256(normalized)),
 	}
 	return builtVariant{path: path, svg: normalized, asset: asset}, nil
 }
 
-func variantPath(product string, recipe recipe) string {
-	name := recipe.appearance + "-" + recipe.surface + "-" + recipe.framing + ".svg"
-	if recipe.artwork == "icon" {
+func variantPath(product string, recipe manifest.BrandRecipe) string {
+	name := recipe.Appearance + "-" + recipe.Surface + "-" + recipe.Framing + ".svg"
+	if recipe.Artwork == "icon" {
 		return "dist/icons/brand/" + product + "-icon-" + name
 	}
 	return "dist/brand/" + product + "/logo/" + name
@@ -232,17 +212,54 @@ func applyPalette(svg []byte, appearance string) ([]byte, error) {
 	}), nil
 }
 
+func applyAdaptivePalette(svg []byte) []byte {
+	return paint.ReplaceAllFunc(svg, func(match []byte) []byte {
+		parts := paint.FindSubmatch(match)
+		role := colorRole(string(parts[2]))
+		fallback := palettes["light"].color(role)
+		value := fmt.Sprintf("var(--araihu-logo-%s, var(--araihu-logo-auto-%s, %s))", role, role, fallback)
+		return []byte(string(parts[1]) + `="` + value + `"`)
+	})
+}
+
+func injectAdaptiveStyle(svg []byte) []byte {
+	rootEnd := strings.IndexByte(string(svg), '>')
+	if rootEnd < 0 {
+		return svg
+	}
+	result := make([]byte, 0, len(svg)+len(adaptiveStyle))
+	result = append(result, svg[:rootEnd+1]...)
+	result = append(result, adaptiveStyle...)
+	result = append(result, svg[rootEnd+1:]...)
+	return result
+}
+
 func (p palette) colorFor(value string) string {
+	return p.color(colorRole(value))
+}
+
+func (p palette) color(role string) string {
+	switch role {
+	case "signal":
+		return p.signal
+	case "surface":
+		return p.surface
+	default:
+		return p.ink
+	}
+}
+
+func colorRole(value string) string {
 	value = strings.TrimPrefix(strings.ToLower(value), "#")
 	var r, g, b uint8
 	_, _ = fmt.Sscanf(value, "%02x%02x%02x", &r, &g, &b)
 	if r > 150 && g > 180 && b < 140 {
-		return p.signal
+		return "signal"
 	}
 	if r > 150 && g > 150 && b > 150 {
-		return p.surface
+		return "surface"
 	}
-	return p.ink
+	return "ink"
 }
 
 func svgassetViewBox(svg []byte) string {

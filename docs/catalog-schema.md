@@ -52,7 +52,9 @@ and optional `viewBox`. SVG entries require a four-number `viewBox` with
 positive width and height. PNG entries require width and height and omit
 `viewBox`.
 
-SVG entries require a unique lower-kebab `spriteSymbol`; PNG entries have an
+SVG entries may have a unique lower-kebab `spriteSymbol`. An empty value means
+the SVG is available only through its individual `path` and is not present in a
+sprite; consumers must not synthesize a symbol name. PNG entries always have an
 empty `spriteSymbol`. `colorBehavior` is one of `protected`, `monochrome`, or
 `tintable`. Only `monochrome` and `tintable` entries may inherit `currentColor`;
 `protected` entries must retain their designed colors.

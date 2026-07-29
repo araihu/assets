@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/araihu/assets/internal/catalog"
 	"github.com/araihu/assets/internal/manifest"
 	"github.com/araihu/assets/internal/svgasset"
 )
@@ -23,7 +24,8 @@ func TestBuildBrandProducesCompleteDeclaredMatrix(t *testing.T) {
 	if got, want := len(result.Assets), products*variantsPerProduct; got != want {
 		t.Fatalf("BuildBrand() catalog assets = %d, want %d", got, want)
 	}
-	if got, want := len(result.SpriteEntries), products*variantsPerProduct; got != want {
+	const adaptiveVariantsPerProduct = 5
+	if got, want := len(result.SpriteEntries), products*(variantsPerProduct-adaptiveVariantsPerProduct); got != want {
 		t.Fatalf("BuildBrand() sprite entries = %d, want %d", got, want)
 	}
 
@@ -47,6 +49,82 @@ func TestBuildBrandProducesCompleteDeclaredMatrix(t *testing.T) {
 	}
 }
 
+func TestBuildBrandRejectsRecipeManifestDrift(t *testing.T) {
+	brand := testManifest(t)
+	brand.Recipes = brand.Recipes[1:]
+	if _, err := BuildBrand(os.DirFS(filepath.Join("..", "..")), brand); err == nil || !strings.Contains(err.Error(), "recipe") {
+		t.Fatalf("BuildBrand() error = %v, want recipe matrix failure", err)
+	}
+}
+
+func TestBuildBrandCatalogAssetsValidate(t *testing.T) {
+	result := mustBuildBrand(t)
+	c := catalog.Catalog{
+		SchemaVersion: catalog.SchemaVersion, Release: "v0.1.0", IdentityRevision: 11, Assets: result.Assets,
+	}
+	if err := catalog.Validate(c); err != nil {
+		t.Fatalf("catalog.Validate(BuildBrand assets): %v", err)
+	}
+}
+
+func TestBuildBrandAdaptivePreservesApprovedSchemeBehavior(t *testing.T) {
+	result := mustBuildBrand(t)
+	adaptivePath := "dist/icons/brand/araihu-icon-adaptive-transparent-optical.svg"
+	lightPath := "dist/icons/brand/araihu-icon-light-transparent-optical.svg"
+	adaptive := result.Files[adaptivePath]
+	light := result.Files[lightPath]
+	if string(adaptive) == string(light) {
+		t.Fatal("adaptive and light SVGs are byte-identical")
+	}
+	for _, want := range []string{
+		`<style>`,
+		`@media (prefers-color-scheme: dark)`,
+		`--araihu-logo-auto-surface: #07111f`,
+		`--araihu-logo-auto-ink: #f3f2e9`,
+		`var(--araihu-logo-ink, var(--araihu-logo-auto-ink, #07111f))`,
+	} {
+		if !strings.Contains(string(adaptive), want) {
+			t.Errorf("adaptive SVG missing %q", want)
+		}
+	}
+	if _, err := svgasset.Parse(adaptive); err == nil {
+		t.Fatal("generic SVG parser accepted generated adaptive stylesheet")
+	}
+	asset := findAsset(t, result, "araihu-icon-adaptive-transparent-optical")
+	if asset.SpriteSymbol != "" {
+		t.Fatalf("adaptive SpriteSymbol = %q, want individual-only", asset.SpriteSymbol)
+	}
+	if strings.Contains(string(result.Files["dist/icons/brand/sprite.svg"]), "araihu-icon-adaptive-transparent-optical") {
+		t.Fatal("adaptive individual-only asset leaked into sprite")
+	}
+}
+
+func TestBuildBrandDesignedTintDiffersFromGrayscaleAndMonochrome(t *testing.T) {
+	result := mustBuildBrand(t)
+	grayscale := result.Files["dist/icons/brand/araihu-icon-grayscale-plate-optical.svg"]
+	tinted := result.Files["dist/icons/brand/araihu-icon-tinted-plate-optical.svg"]
+	monochrome := result.Files["dist/icons/brand/araihu-icon-monochrome-transparent-optical.svg"]
+	if string(grayscale) == string(tinted) {
+		t.Fatal("grayscale and designed tint SVGs are byte-identical")
+	}
+	for _, want := range []string{`#e6e6e6`, `#202020`, `#707070`} {
+		if !strings.Contains(string(grayscale), want) {
+			t.Errorf("grayscale SVG missing %s", want)
+		}
+	}
+	for _, want := range []string{`#d5ddeb`, `#31588f`, `#07111f`} {
+		if !strings.Contains(string(tinted), want) {
+			t.Errorf("designed tint SVG missing %s", want)
+		}
+	}
+	if strings.Contains(string(tinted), "currentColor") {
+		t.Fatal("designed tint became runtime-tintable")
+	}
+	if !strings.Contains(string(monochrome), "currentColor") {
+		t.Fatal("monochrome SVG is not runtime-tintable")
+	}
+}
+
 func TestBuildBrandPreservesEveryPathGeometry(t *testing.T) {
 	result := mustBuildBrand(t)
 	for _, product := range testManifest(t).Products {
@@ -67,7 +145,7 @@ func TestBuildBrandPreservesEveryPathGeometry(t *testing.T) {
 					}
 					path := "dist/" + asset.Path
 					generated := result.Files[path]
-					generatedDoc, err := svgasset.Parse(generated)
+					generatedDoc, err := parseGenerated(generated)
 					if err != nil {
 						t.Fatalf("Parse(%q): %v", path, err)
 					}
@@ -78,6 +156,21 @@ func TestBuildBrandPreservesEveryPathGeometry(t *testing.T) {
 			}
 		}
 	}
+}
+
+func findAsset(t *testing.T, result Result, canonical string) catalog.Asset {
+	t.Helper()
+	for _, asset := range result.Assets {
+		if asset.CanonicalName == canonical {
+			return asset
+		}
+	}
+	t.Fatalf("missing catalog asset %q", canonical)
+	return catalog.Asset{}
+}
+
+func parseGenerated(svg []byte) (svgasset.Document, error) {
+	return svgasset.Parse(generatedStyle.ReplaceAll(svg, nil))
 }
 
 func TestBuildBrandPromotedSourcesMatchManifestHashes(t *testing.T) {
@@ -125,3 +218,4 @@ func normalizedSource(svg []byte) []byte {
 }
 
 var testRootDimensions = regexp.MustCompile(`<svg((?:\s+(?:xmlns|width|height|viewBox)="[^"]+")*)>`)
+var generatedStyle = regexp.MustCompile(`(?s)<style>.*?</style>`)

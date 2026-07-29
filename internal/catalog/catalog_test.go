@@ -22,6 +22,7 @@ func TestValidateRejectsInvalidCatalogEntries(t *testing.T) {
 		fn   func(*Catalog)
 	}{
 		{"duplicate sprite symbol", func(c *Catalog) { c.Assets[1].SpriteSymbol = c.Assets[0].SpriteSymbol }},
+		{"invalid sprite symbol", func(c *Catalog) { c.Assets[0].SpriteSymbol = "Invalid Symbol" }},
 		{"source path", func(c *Catalog) { c.Assets[0].Path = "source/brand/original/araihu.svg" }},
 		{"non artifact path", func(c *Catalog) { c.Assets[0].Path = "dist/icons/brand/araihu.svg" }},
 		{"windows traversal path", func(c *Catalog) { c.Assets[0].Path = `icons/..\..\escape.svg` }},
@@ -46,6 +47,14 @@ func TestValidateRequiresIdentityRevision11(t *testing.T) {
 	c.IdentityRevision = 10
 	if err := Validate(c); err == nil || !strings.Contains(err.Error(), "identityRevision") {
 		t.Fatalf("Validate() error = %v, want identityRevision", err)
+	}
+}
+
+func TestValidateAllowsIndividualOnlySVG(t *testing.T) {
+	c := validCatalog(t)
+	c.Assets[0].SpriteSymbol = ""
+	if err := Validate(c); err != nil {
+		t.Fatalf("Validate() individual-only SVG error = %v", err)
 	}
 }
 

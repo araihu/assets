@@ -71,6 +71,7 @@ type Palette struct {
 // BrandRecipe declares how a brand asset is composed.
 type BrandRecipe struct {
 	Name          string `yaml:"name"`
+	Artwork       string `yaml:"artwork"`
 	Appearance    string `yaml:"appearance"`
 	Surface       string `yaml:"surface"`
 	Framing       string `yaml:"framing"`
@@ -277,20 +278,85 @@ func validatePalettes(palettes map[string]Palette) error {
 }
 
 func validateRecipes(recipes []BrandRecipe) error {
-	if len(recipes) == 0 {
-		return errors.New("brand recipes are empty")
+	expected := approvedBrandRecipes()
+	if len(recipes) != len(expected) {
+		return fmt.Errorf("brand recipe matrix = %d, want %d", len(recipes), len(expected))
 	}
-	seen := make(map[string]struct{}, len(recipes))
+	seenNames := make(map[string]struct{}, len(recipes))
+	seenTuples := make(map[string]struct{}, len(recipes))
 	for _, recipe := range recipes {
-		if !lowerKebab.MatchString(recipe.Name) || strings.TrimSpace(recipe.Appearance) == "" || strings.TrimSpace(recipe.Surface) == "" || strings.TrimSpace(recipe.Framing) == "" || strings.TrimSpace(recipe.ColorBehavior) == "" {
+		if !lowerKebab.MatchString(recipe.Name) || !allowedValue(recipe.Artwork, "icon", "logo") || !allowedValue(recipe.Appearance, "adaptive", "light", "dark", "monochrome", "grayscale", "tinted") || !allowedValue(recipe.Surface, "transparent", "plate") || !allowedValue(recipe.Framing, "optical", "launcher") || !allowedValue(recipe.ColorBehavior, "protected", "monochrome") {
 			return fmt.Errorf("invalid recipe %q", recipe.Name)
 		}
-		if _, ok := seen[recipe.Name]; ok {
+		if _, ok := seenNames[recipe.Name]; ok {
 			return fmt.Errorf("duplicate recipe %q", recipe.Name)
 		}
-		seen[recipe.Name] = struct{}{}
+		seenNames[recipe.Name] = struct{}{}
+		tuple := recipeTuple(recipe)
+		if _, ok := seenTuples[tuple]; ok {
+			return fmt.Errorf("duplicate recipe tuple %q", tuple)
+		}
+		seenTuples[tuple] = struct{}{}
+		want, ok := expected[recipe.Name]
+		if !ok || recipe != want {
+			return fmt.Errorf("recipe %q is outside approved matrix", recipe.Name)
+		}
+	}
+	for name := range expected {
+		if _, ok := seenNames[name]; !ok {
+			return fmt.Errorf("missing required recipe %q", name)
+		}
 	}
 	return nil
+}
+
+func allowedValue(value string, allowed ...string) bool {
+	return slices.Contains(allowed, value)
+}
+
+func recipeTuple(recipe BrandRecipe) string {
+	return strings.Join([]string{recipe.Artwork, recipe.Appearance, recipe.Surface, recipe.Framing, recipe.ColorBehavior}, "/")
+}
+
+func approvedBrandRecipes() map[string]BrandRecipe {
+	recipes := []BrandRecipe{
+		brandRecipe("icon", "adaptive", "transparent", "optical", "protected"),
+		brandRecipe("icon", "adaptive", "plate", "optical", "protected"),
+		brandRecipe("icon", "light", "transparent", "optical", "protected"),
+		brandRecipe("icon", "light", "plate", "optical", "protected"),
+		brandRecipe("icon", "dark", "transparent", "optical", "protected"),
+		brandRecipe("icon", "dark", "plate", "optical", "protected"),
+		brandRecipe("icon", "monochrome", "transparent", "optical", "monochrome"),
+		brandRecipe("icon", "grayscale", "transparent", "optical", "protected"),
+		brandRecipe("icon", "grayscale", "plate", "optical", "protected"),
+		brandRecipe("icon", "tinted", "transparent", "optical", "protected"),
+		brandRecipe("icon", "tinted", "plate", "optical", "protected"),
+		brandRecipe("icon", "adaptive", "plate", "launcher", "protected"),
+		brandRecipe("icon", "tinted", "plate", "launcher", "protected"),
+		brandRecipe("logo", "adaptive", "transparent", "optical", "protected"),
+		brandRecipe("logo", "adaptive", "plate", "optical", "protected"),
+		brandRecipe("logo", "light", "transparent", "optical", "protected"),
+		brandRecipe("logo", "light", "plate", "optical", "protected"),
+		brandRecipe("logo", "dark", "transparent", "optical", "protected"),
+		brandRecipe("logo", "dark", "plate", "optical", "protected"),
+		brandRecipe("logo", "monochrome", "transparent", "optical", "monochrome"),
+		brandRecipe("logo", "grayscale", "transparent", "optical", "protected"),
+		brandRecipe("logo", "grayscale", "plate", "optical", "protected"),
+		brandRecipe("logo", "tinted", "transparent", "optical", "protected"),
+		brandRecipe("logo", "tinted", "plate", "optical", "protected"),
+	}
+	result := make(map[string]BrandRecipe, len(recipes))
+	for _, recipe := range recipes {
+		result[recipe.Name] = recipe
+	}
+	return result
+}
+
+func brandRecipe(artwork, appearance, surface, framing, colorBehavior string) BrandRecipe {
+	return BrandRecipe{
+		Name: strings.Join([]string{artwork, appearance, surface, framing}, "-"), Artwork: artwork,
+		Appearance: appearance, Surface: surface, Framing: framing, ColorBehavior: colorBehavior,
+	}
 }
 
 // Validate checks that a UI manifest is an exact, immutable Heroicons v2.2.0 lock.

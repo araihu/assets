@@ -85,6 +85,35 @@ func TestBrandRequiresPinnedOriginalSourceHashes(t *testing.T) {
 	}
 }
 
+func TestBrandRequiresExactApprovedRecipeMatrix(t *testing.T) {
+	m := validBrand(t)
+	if got, want := len(m.Recipes), 24; got != want {
+		t.Fatalf("recipes = %d, want %d", got, want)
+	}
+
+	for _, tc := range []struct {
+		name   string
+		mutate func(*Brand)
+	}{
+		{"missing recipe", func(m *Brand) { m.Recipes = m.Recipes[1:] }},
+		{"unknown artwork", func(m *Brand) { m.Recipes[0].Artwork = "wordmark" }},
+		{"unknown appearance", func(m *Brand) { m.Recipes[0].Appearance = "rainbow" }},
+		{"unknown surface", func(m *Brand) { m.Recipes[0].Surface = "canvas" }},
+		{"unknown framing", func(m *Brand) { m.Recipes[0].Framing = "poster" }},
+		{"wrong color behavior", func(m *Brand) { m.Recipes[0].ColorBehavior = "tintable" }},
+		{"duplicate tuple", func(m *Brand) { m.Recipes[1] = m.Recipes[0] }},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			candidate := m
+			candidate.Recipes = append([]BrandRecipe(nil), m.Recipes...)
+			tc.mutate(&candidate)
+			if err := candidate.Validate(); err == nil || !contains(err.Error(), "recipe") {
+				t.Fatalf("Validate() error = %v, want recipe failure", err)
+			}
+		})
+	}
+}
+
 func TestLoadRejectsUnknownFields(t *testing.T) {
 	root := os.DirFS("testdata")
 	if _, err := LoadBrand(root, "brand-unknown.yaml"); err == nil {

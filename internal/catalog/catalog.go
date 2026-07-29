@@ -160,7 +160,7 @@ func validateAsset(asset Asset) error {
 		return err
 	}
 	if asset.Format == "svg" {
-		if !lowerKebab.MatchString(asset.SpriteSymbol) {
+		if asset.SpriteSymbol != "" && !lowerKebab.MatchString(asset.SpriteSymbol) {
 			return fmt.Errorf("invalid spriteSymbol %q", asset.SpriteSymbol)
 		}
 	} else if asset.SpriteSymbol != "" {
