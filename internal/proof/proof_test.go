@@ -4,10 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/fs"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"slices"
 	"strconv"
@@ -304,6 +307,20 @@ func TestBuildAcceptsProductionDistribution(t *testing.T) {
 	}
 }
 
+func TestProductionProofMatchesTrackedDist(t *testing.T) {
+	repo := filepath.Clean(filepath.Join("..", ".."))
+	generated := t.TempDir()
+	copyProductionRepository(t, repo, generated)
+
+	command := exec.Command("go", "run", "./cmd/araihu-assets", "proof")
+	command.Dir = generated
+	command.Env = append(os.Environ(), "GOPROXY=off")
+	if output, err := command.CombinedOutput(); err != nil {
+		t.Fatalf("generate production proof: %v\n%s", err, output)
+	}
+	requireDirectoriesEqual(t, filepath.Join(repo, "dist", "proof"), filepath.Join(generated, "dist", "proof"))
+}
+
 func TestProductionMasterProofUsesCatalogMaskable512Semantics(t *testing.T) {
 	m := loadProduction(t)
 	var master catalog.Asset
@@ -567,6 +584,80 @@ func loadProduction(t *testing.T) Model {
 		t.Fatalf("Load() error = %v", err)
 	}
 	return m
+}
+
+func copyProductionRepository(t *testing.T, source, destination string) {
+	t.Helper()
+	if err := filepath.WalkDir(source, func(name string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		relative, err := filepath.Rel(source, name)
+		if err != nil {
+			return err
+		}
+		if relative == ".git" || relative == ".impeccable" || strings.HasPrefix(relative, ".git"+string(filepath.Separator)) || strings.HasPrefix(relative, ".impeccable"+string(filepath.Separator)) {
+			if entry.IsDir() {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		target := filepath.Join(destination, relative)
+		if entry.IsDir() {
+			return os.MkdirAll(target, 0o755)
+		}
+		data, err := os.ReadFile(name)
+		if err != nil {
+			return err
+		}
+		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
+			return err
+		}
+		return os.WriteFile(target, data, 0o644)
+	}); err != nil {
+		t.Fatalf("copy production repository: %v", err)
+	}
+}
+
+func requireDirectoriesEqual(t *testing.T, wantRoot, gotRoot string) {
+	t.Helper()
+	want, err := proofTree(wantRoot)
+	if err != nil {
+		t.Fatalf("read expected proof tree: %v", err)
+	}
+	got, err := proofTree(gotRoot)
+	if err != nil {
+		t.Fatalf("read generated proof tree: %v", err)
+	}
+	if !reflect.DeepEqual(want, got) {
+		t.Fatalf("generated proof tree differs: want %d files, got %d", len(want), len(got))
+	}
+}
+
+func proofTree(root string) (map[string][]byte, error) {
+	files := make(map[string][]byte)
+	err := filepath.WalkDir(root, func(name string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		if !entry.Type().IsRegular() {
+			return fmt.Errorf("non-regular proof file %q", name)
+		}
+		relative, err := filepath.Rel(root, name)
+		if err != nil {
+			return err
+		}
+		data, err := os.ReadFile(name)
+		if err != nil {
+			return err
+		}
+		files[filepath.ToSlash(relative)] = data
+		return nil
+	})
+	return files, err
 }
 
 func scenarioJSON(asset, id string, sizes []int) string {

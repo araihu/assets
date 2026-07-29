@@ -102,11 +102,9 @@ jobs:
         run: |
           set -euo pipefail
           env -u HTTPS_PROXY -u HTTP_PROXY make check
+          env -u HTTPS_PROXY -u HTTP_PROXY make proof-check
           go test ./... -count=1
           go vet ./...
           make verify
           make release
           git diff --exit-code
-
-      # P1 replaces the retired V11 proof with catalog-driven dist/proof and
-      # then makes proof-check plus final archive verification mandatory.

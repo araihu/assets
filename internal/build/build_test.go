@@ -2,12 +2,14 @@ package build
 
 import (
 	"archive/tar"
+	"archive/zip"
 	"bytes"
 	"compress/gzip"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -211,6 +213,57 @@ func TestRunWritesSortedChecksumsAndDeterministicReleaseMembership(t *testing.T)
 	requireArchiveMembers(t, firstArchive, []string{"NOTICE", "catalog.json", "checksums.txt", "icons/brand/asset.svg", "licenses/Apache-2.0.txt", "licenses/heroicons-MIT.txt", "platform/web/araihu/favicon.svg", "proof/app.js", "proof/styles.css"})
 }
 
+func TestProductionReleaseArchivesIncludeExactProofTree(t *testing.T) {
+	dist := filepath.Join("..", "..", "dist")
+	want := releaseIncludeList(t, dist)
+	proof := releaseIncludeList(t, filepath.Join(dist, "proof"))
+	for _, name := range []string{"index.html", "styles.css", "app.js"} {
+		if !slices.Contains(proof, name) {
+			t.Fatalf("tracked dist/proof omits required file %q", name)
+		}
+	}
+	localAssets := 0
+	for _, name := range proof {
+		if strings.HasPrefix(name, "assets/") {
+			localAssets++
+		}
+	}
+	if localAssets == 0 {
+		t.Fatal("tracked dist/proof omits local copied assets")
+	}
+	if len(proof) < 4 {
+		t.Fatalf("tracked dist/proof has %d files, want local proof assets", len(proof))
+	}
+
+	for _, tc := range []struct {
+		name    string
+		archive string
+		members func(t *testing.T, archive string) []string
+	}{
+		{"tar.gz", filepath.Join(dist, "releases", "araihu-assets-v0.1.0.tar.gz"), tarArchiveMembers},
+		{"zip", filepath.Join(dist, "releases", "araihu-assets-v0.1.0.zip"), zipArchiveMembers},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			got := tc.members(t, tc.archive)
+			if !slices.Equal(got, want) {
+				t.Fatalf("release include-list differs: got %d members, want %d", len(got), len(want))
+			}
+			for _, name := range proof {
+				if !slices.Contains(got, "proof/"+name) {
+					t.Fatalf("release archive omits dist/proof/%s", name)
+				}
+			}
+			for _, forbidden := range []string{"review/screenshots/", ".impeccable/critique/"} {
+				for _, name := range got {
+					if strings.HasPrefix(name, forbidden) {
+						t.Fatalf("release archive contains excluded review artifact %q", name)
+					}
+				}
+			}
+		})
+	}
+}
+
 func testInputs(_ []byte) Inputs {
 	data := []byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`)
 	sum := sha256.Sum256(data)
@@ -299,4 +352,75 @@ func requireArchiveMembers(t *testing.T, data []byte, want []string) {
 			t.Fatalf("archive members = %q, want %q", got, want)
 		}
 	}
+}
+
+func releaseIncludeList(t *testing.T, root string) []string {
+	t.Helper()
+	files := make([]string, 0)
+	if err := filepath.WalkDir(root, func(name string, entry os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		if !entry.Type().IsRegular() {
+			return fmt.Errorf("non-regular release file %q", name)
+		}
+		relative, err := filepath.Rel(root, name)
+		if err != nil {
+			return err
+		}
+		relative = filepath.ToSlash(relative)
+		if strings.HasPrefix(relative, "releases/") {
+			return nil
+		}
+		files = append(files, relative)
+		return nil
+	}); err != nil {
+		t.Fatalf("list release files: %v", err)
+	}
+	slices.Sort(files)
+	return files
+}
+
+func tarArchiveMembers(t *testing.T, archive string) []string {
+	t.Helper()
+	file, err := os.Open(archive)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = file.Close() })
+	reader, err := gzip.NewReader(file)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = reader.Close() })
+	members := make([]string, 0)
+	entries := tar.NewReader(reader)
+	for {
+		header, err := entries.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+		members = append(members, header.Name)
+	}
+	return members
+}
+
+func zipArchiveMembers(t *testing.T, archive string) []string {
+	t.Helper()
+	reader, err := zip.OpenReader(archive)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = reader.Close() })
+	members := make([]string, 0, len(reader.File))
+	for _, file := range reader.File {
+		members = append(members, file.Name)
+	}
+	return members
 }

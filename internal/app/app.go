@@ -58,7 +58,7 @@ func Run(ctx context.Context, deps Dependencies, args []string, stdout, stderr i
 		stderr = io.Discard
 	}
 	if len(args) == 0 {
-		return usagef("usage: araihu-assets <vendor|build|verify|export|catalog>")
+		return usagef("usage: araihu-assets <vendor|build|verify|proof|export|catalog>")
 	}
 
 	switch args[0] {
@@ -68,13 +68,47 @@ func Run(ctx context.Context, deps Dependencies, args []string, stdout, stderr i
 		return runBuild(ctx, deps, args[1:], stdout, stderr)
 	case "verify":
 		return runVerify(ctx, deps, args[1:], stdout, stderr)
+	case "proof":
+		return runProof(ctx, deps, args[1:], stdout, stderr)
 	case "export":
 		return runExport(ctx, deps, args[1:], stdout, stderr)
 	case "catalog":
 		return runCatalog(ctx, deps, args[1:], stdout, stderr)
 	default:
-		return usagef("unknown command %q; expected vendor, build, verify, export, or catalog", args[0])
+		return usagef("unknown command %q; expected vendor, build, verify, proof, export, or catalog", args[0])
 	}
+}
+
+func runProof(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {
+	flags := newFlagSet("proof", stderr, "usage: araihu-assets proof [--check]")
+	check := flags.Bool("check", false, "check generated proof drift without writing")
+	if err := parse(flags, args); err != nil {
+		return usagef("proof: %v", err)
+	}
+	if err := contextError("proof", ctx); err != nil {
+		return err
+	}
+	repo, repoRoot, err := openRepository(deps)
+	if err != nil {
+		return commandError("proof", err)
+	}
+	defer repoRoot.Close()
+	inputs, err := inputs(ctx, repoRoot, deps)
+	if err != nil {
+		return commandError("proof", err)
+	}
+	if *check {
+		if err := build.CheckContext(ctx, repo, inputs); err != nil {
+			return fmt.Errorf("proof: check: %w", err)
+		}
+		fmt.Fprintln(stdout, "proof: dist/proof matches deterministic offline output")
+		return nil
+	}
+	if err := build.RunContext(ctx, repo, inputs); err != nil {
+		return fmt.Errorf("proof: publish: %w", err)
+	}
+	fmt.Fprintln(stdout, "proof: published deterministic offline output")
+	return nil
 }
 
 func runVendor(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {

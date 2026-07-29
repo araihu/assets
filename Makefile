@@ -16,12 +16,12 @@ check: test
 	go run ./cmd/araihu-assets build --offline --check
 
 proof:
-	go run ./cmd/araihu-assets build --offline
+	go run ./cmd/araihu-assets proof
 
-proof-check: proof
+proof-check:
+	go run ./cmd/araihu-assets proof --check
 
-# release validates only local release artifacts. Legacy V11 proof remains an
-# explicit proof-check target until P1 migrates it to the generated proof.
-# It never creates tags or pushes.
-release: check
+# release validates only local release artifacts and generated proof. It never
+# creates tags or pushes.
+release: check proof-check
 	go run ./cmd/araihu-assets catalog

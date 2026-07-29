@@ -9,9 +9,9 @@ contract, but this checkout makes no release or publication claim.
 Requires Go `1.26.5`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
-The managed `dist/` tree is an untagged core RC. Its catalog and generated
-sprites are consumer inputs; P1 must add the catalog-driven proof output and
-regenerate the final archives. Use a disposable checkout when regenerating it:
+The managed `dist/` tree is an untagged core RC. Its catalog, generated
+sprites, catalog-driven proof, and deterministic archives are consumer inputs.
+Use a disposable checkout when regenerating it:
 
 ```sh
 make generate
@@ -21,8 +21,8 @@ make verify
 ```
 
 Run `catalog` only after a successful `make generate`, because it validates the
-generated `dist/catalog.json`. `make check` rejects drift and never replaces
-the retired V11 proof scaffold.
+generated `dist/catalog.json`. `make check` rejects drift across the complete
+managed tree, including `dist/proof`.
 
 ## Install after release
 
@@ -41,12 +41,13 @@ make vendor    # fetch only locked manifest-selected UI sources
 make generate  # build offline and atomically replace managed dist/
 make verify    # rebuild offline and compare with dist/
 make check     # test, then reject generated-output drift
+make proof     # atomically regenerate dist/, including dist/proof
+make proof-check # reject generated proof/output drift without writing
 ```
 
-The legacy `make proof-check` target remains for retired V11 diagnostics, but
-intentionally does not pass in this core RC because its inputs are not part of
-managed `dist/`. P1 replaces it with catalog-driven `dist/proof` validation
-before final archive verification.
+`make proof` and `make proof-check` use the same local, catalog-driven builder
+as the managed distribution. They require no network access and never invoke
+the retired V11 scripts.
 
 ## CLI
 
@@ -54,6 +55,7 @@ before final archive verification.
 araihu-assets vendor
 araihu-assets build --offline [--check]
 araihu-assets verify
+araihu-assets proof [--check]
 araihu-assets catalog
 araihu-assets export --output <directory>
 ```
@@ -90,13 +92,15 @@ generation is provided by this CLI; consumers own any project-local bindings.
 ## Platform files and archives
 
 The core RC build emits individual brand/UI SVGs, web/Android/Apple platform
-packages, catalog, checksums, notices, licenses, and provisional deterministic
-`.tar.gz` and `.zip` archives under `dist/releases/`. Platform launchers
+packages, catalog, checksums, notices, licenses, the self-contained
+`dist/proof/**` review site, and deterministic `.tar.gz` and `.zip` archives
+under `dist/releases/`. Platform launchers
 have their own safe-area, raster, and metadata contracts; do not substitute a
 general SVG for a launcher asset.
 
-The catalog is the current interoperability boundary. Archives remain
-provisional until P1 completes the proof and final-archive work.
+The catalog is the current interoperability boundary. Release archives contain
+the complete managed distribution, including all `dist/proof/**` local assets;
+review screenshots and critique files remain outside release membership.
 
 ## Licensing
 
@@ -119,5 +123,5 @@ including Goshtoso's generic sprite boundary and catalog-first local binding
 generation, is documented in [docs/integration](docs/integration/).
 
 The temporary V11 calibration scaffold remains only for historical reference.
-P1 replaces its `proof-check` gate with generated `dist/proof`; it must not
-become a public consumer path or a second source of truth.
+Generated `dist/proof` is release evidence, not a public consumer path or a
+second source of truth.
