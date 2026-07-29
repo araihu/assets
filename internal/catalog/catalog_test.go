@@ -162,6 +162,7 @@ func TestValidatePatchCompatibilityAllowsOnlyAdditions(t *testing.T) {
 		fn   func(*Catalog)
 	}{
 		{"removal", func(c *Catalog) { c.Assets = c.Assets[1:] }},
+		{"rename", func(c *Catalog) { c.Assets[0].CanonicalName = "ui-hi-16-solid-check-renamed" }},
 		{"symbol change", func(c *Catalog) { c.Assets[0].SpriteSymbol = "changed" }},
 		{"semantic change", func(c *Catalog) { c.Assets[1].ColorBehavior = "monochrome" }},
 	} {
