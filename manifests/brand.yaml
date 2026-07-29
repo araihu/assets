@@ -1,0 +1,48 @@
+schema_version: 1
+identity_revision: 11
+products:
+  - id: araihu
+    display_name: Arai Hu
+    aliases: []
+    sources:
+      v11:
+        root: dist/v11/web/araihu
+  - id: goshtoso
+    display_name: Goshtoso
+    aliases: []
+    sources:
+      v11:
+        root: dist/v11/web/goshtoso
+  - id: manja
+    display_name: Manja
+    aliases: []
+    sources:
+      v11:
+        root: dist/v11/web/manja
+  - id: paje
+    display_name: Paje
+    aliases: []
+    sources:
+      v11:
+        root: dist/v11/web/paje
+  - id: x9
+    display_name: X9
+    aliases:
+      - xisnove
+    sources:
+      v11:
+        root: dist/v11/web/x9
+palettes:
+  araihu:
+    name: araihu
+    colors:
+      horizon: "#07111f"
+      sky: "#31588f"
+      cloud: "#d5ddeb"
+      signal: "#c7ff4a"
+recipes:
+  - name: app-icon
+    appearance: symbol
+    surface: solid
+    framing: square
+    color_behavior: protected
