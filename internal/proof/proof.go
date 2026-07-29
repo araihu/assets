@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"reflect"
 	"regexp"
 	"slices"
 	"sort"
@@ -65,14 +66,13 @@ func Build(m Model, fsys fs.FS, output io.Writer) error {
 	if output == nil {
 		return errors.New("build proof: nil writer")
 	}
+	canonical, err := validatedCanonicalModel(m)
+	if err != nil {
+		return fmt.Errorf("build proof model: %w", err)
+	}
+	m = canonical
 	if fsys == nil {
 		return errors.New("build proof: nil distribution filesystem")
-	}
-	if err := catalog.Validate(m.Catalog); err != nil {
-		return fmt.Errorf("build proof catalog: %w", err)
-	}
-	if _, err := newModel(m.Catalog, m.Scenarios); err != nil {
-		return fmt.Errorf("build proof model: %w", err)
 	}
 
 	assets := assetsByName(m.Catalog)
@@ -92,6 +92,31 @@ func Build(m Model, fsys fs.FS, output io.Writer) error {
 		}
 	}
 	return nil
+}
+
+func validatedCanonicalModel(m Model) (Model, error) {
+	if err := catalog.Validate(m.Catalog); err != nil {
+		return Model{}, fmt.Errorf("validate catalog: %w", err)
+	}
+	canonical, err := newModel(m.Catalog, m.Scenarios)
+	if err != nil {
+		return Model{}, err
+	}
+	for _, field := range []struct {
+		name string
+		got  any
+		want any
+	}{
+		{"Catalog", m.Catalog, canonical.Catalog},
+		{"Products", m.Products, canonical.Products},
+		{"Scenarios", m.Scenarios, canonical.Scenarios},
+		{"ExactSizes", m.ExactSizes, canonical.ExactSizes},
+	} {
+		if !reflect.DeepEqual(field.got, field.want) {
+			return Model{}, fmt.Errorf("noncanonical %s: does not match catalog/scenario-derived model", field.name)
+		}
+	}
+	return canonical, nil
 }
 
 func newModel(c catalog.Catalog, scenarios []Scenario) (Model, error) {

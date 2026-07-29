@@ -99,6 +99,33 @@ func TestBuildRejectsCatalogMutatedAfterLoad(t *testing.T) {
 	}
 }
 
+func TestBuildRejectsNoncanonicalDerivedModel(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		field  string
+		mutate func(*Model)
+	}{
+		{"nil products", "Products", func(m *Model) { m.Products = nil }},
+		{"nil exact sizes", "ExactSizes", func(m *Model) { m.ExactSizes = nil }},
+		{"reversed catalog assets", "Catalog", func(m *Model) { slices.Reverse(m.Catalog.Assets) }},
+		{"reversed scenarios", "Scenarios", func(m *Model) { slices.Reverse(m.Scenarios) }},
+		{"altered product proof", "Products", func(m *Model) {
+			m.Products[0].Assets = slices.Clone(m.Products[0].Assets)
+			m.Products[0].Assets[0].Path = "icons/brand/altered.svg"
+		}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			m := fixtureModel(t)
+			tc.mutate(&m)
+
+			err := Build(m, fixtureDistributionFS(), &bytes.Buffer{})
+			if err == nil || !strings.Contains(err.Error(), "noncanonical "+tc.field) {
+				t.Fatalf("Build() error = %v, want noncanonical %s", err, tc.field)
+			}
+		})
+	}
+}
+
 func TestBuildRejectsNonRegularReferencedDistributionFile(t *testing.T) {
 	m := fixtureModel(t)
 	distribution := fixtureDistributionFS()
