@@ -16,6 +16,8 @@
 - Add no third-party Go runtime dependency.
 - Generic component API contains no Arai Hû product names.
 - Default Heroicons constants have values equal to canonical `hi-*` sprite symbols.
+- Generated Heroicons metadata is enumerable and drives the demo showcase; the
+  demo never duplicates it in a handwritten list.
 - Blank label or `Decorative: true` is decorative; a nonblank label with `Decorative: false` is an image.
 - Do not force fill/stroke on the root SVG; compatible sprite content inherits CSS `color` itself.
 - Never hand-edit `*_templ.go`, generated skill references, or generated CSS.
@@ -79,7 +81,12 @@ func Generate(c Catalog, opts Options) ([]byte, error)
 func Run(args []string, stdout, stderr io.Writer) error
 ```
 
-Use the exact assets JSON tags. Reject unsupported schema, empty/duplicate names or symbols, identifier collisions, non-SVG/non-sprite selections, and incompatible color behavior. Sort by canonical name then symbol; emit `go/format` source and source catalog hash comment. `-check` compares bytes without writing.
+Use the exact assets JSON tags. Reject unsupported schema, empty/duplicate names
+or symbols, identifier collisions, non-SVG/non-sprite selections, and
+incompatible color behavior. Sort by canonical name then symbol; emit
+`go/format` constants plus deterministic `Glyphs []Glyph` metadata containing
+Go name, canonical name, and typed symbol. Include the source catalog hash
+comment. `-check` compares bytes without writing.
 
 - [ ] **Step 4: Pass, tidy, and commit**
 
@@ -142,7 +149,10 @@ git commit -m "feat(icon): render accessible sprite symbols"
 
 **Files:** Add bundled sprite/license/names/tests; modify `assets/embed.go` and asset handler tests.
 
-**Interfaces:** Produce `heroicons.SpriteURL = "/assets/icons/heroicons.svg"` and constants such as `Icon16SolidAcademicCap icon.Symbol = "hi-16-solid-academic-cap"`.
+**Interfaces:** Produce `heroicons.SpriteURL = "/assets/icons/heroicons.svg"`,
+constants such as `Icon16SolidCheck icon.Symbol = "hi-16-solid-check"`, and
+`heroicons.Glyphs []Glyph`, where each glyph contains Go name, canonical name,
+and typed symbol.
 
 - [ ] **Step 1: Copy only ledger-verified release files**
 
@@ -173,11 +183,18 @@ git add assets/icons assets/embed.go assets/*test.go components/icon/heroicons i
 git commit -m "feat(icon): bundle typed Heroicons defaults"
 ```
 
-### Task 4: Add demo, catalog, attribution, and documentation
+### Task 4: Add icon showcase, option modal, catalog, and documentation
 
-**Files:** Create icon demo source/generated file; modify demo registry, component catalog/tests, attribution source/generated file, README, `docs/USAGE.md`, and `.agents/skills/using-goshtoso/SKILL.md` plus generated compatibility reference.
+**Files:** Create icon demo source/generated file and focused showcase tests;
+modify demo registry, component catalog/tests, attribution source/generated
+file, README, `docs/USAGE.md`, and `.agents/skills/using-goshtoso/SKILL.md` plus
+generated compatibility reference.
 
-**Interfaces:** Demo shows external/inline-document, accessible/decorative, size, and current-color-through-CSS variants.
+**Interfaces:** Demo renders every `heroicons.Glyphs` entry in a responsive
+1/3/6-column card grid. Clicking a card opens a modal whose `Size`, `Label`,
+`Decorative`, and `RootClass` controls map directly to `icon.Config`. Selected
+glyph, default sprite URL, and external mode fill the remaining fields. Copy
+action emits compilable Go reflecting current values.
 
 - [ ] **Step 1: Write failing catalog registration test**
 
@@ -189,15 +206,43 @@ func TestCatalogContainsIconInDisplaySection(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Build the demo with existing component conventions**
+- [ ] **Step 2: Write the failing showcase tests**
 
-Use one preview and code block per variant. Demonstrate `color` inheritance without root fill overrides. Attribution names Heroicons, MIT, bundled sprite path, and retained notice.
+```go
+func TestShowcaseRendersEveryGlyphAndResponsiveGrid(t *testing.T) {
+	html := renderShowcase(t)
+	require.Equal(t, len(heroicons.Glyphs), strings.Count(html, `data-icon-card=`))
+	require.Contains(t, html, `grid-cols-1 sm:grid-cols-3 xl:grid-cols-6`)
+}
+func TestCodeExampleReflectsSelectedOptions(t *testing.T) {
+	got := iconExample(heroicons.Glyphs[0], icon.Config{Size: icon.SizeLG, Label: "Search", RootClass: "text-accent"})
+	require.Contains(t, got, `Size: icon.SizeLG`)
+	require.Contains(t, got, `Label: "Search"`)
+	require.Contains(t, got, `RootClass: "text-accent"`)
+}
+```
 
-- [ ] **Step 3: Document generic and generated usage**
+- [ ] **Step 3: Build the generated showcase and modal**
+
+Use `heroicons.Glyphs` as the sole card source. Cards show the glyph and Go
+constant name in `grid-cols-1 sm:grid-cols-3 xl:grid-cols-6`. The existing
+Goshtoso modal owns focus and escape behavior; local Alpine state owns selected
+glyph and editable parameters. The copy button follows the existing local
+clipboard pattern, announces copied state, and copies compilable
+`icon.Icon(icon.Config{...})` code with meaningful nonzero options,
+`heroicons.SpriteURL`, and the selected typed constant.
+
+- [ ] **Step 4: Build supporting demos and attribution**
+
+Demonstrate decorative/accessibly labelled icons, all sizes, and `color`
+inheritance without root fill overrides. Attribution names Heroicons, MIT,
+bundled sprite path, and retained notice.
+
+- [ ] **Step 5: Document generic and generated usage**
 
 Document same-origin external sprite expectation, inline-document mode, label/decorative invariant, project-local generator example, catalog schema rejection, and absence of Arai Hû names from Goshtoso.
 
-- [ ] **Step 4: Regenerate and commit**
+- [ ] **Step 6: Regenerate and commit**
 
 ```bash
 templ generate
@@ -223,6 +268,9 @@ func TestIcon(t *testing.T) {
 	requireAttribute(t, page, `[data-variant="accessible"] svg`, "role", "img")
 	requireAttribute(t, page, `[data-variant="decorative"] svg`, "aria-hidden", "true")
 	requireSymbolPaintsCurrentColor(t, page, `[data-variant="current-color"]`)
+	requireResponsiveIconGrid(t, page, 1, 3, 6)
+	openIconCard(t, page, "Icon16SolidMagnifyingGlass")
+	setIconOptionsAndRequireCopiedCode(t, page, "lg", "Search", false, "text-accent")
 	requireNoConsoleErrors(t, page)
 }
 ```
