@@ -262,16 +262,20 @@ func resolveCampaign(ctx context.Context, deps Dependencies, date campaigns.Date
 }
 
 type campaignReleaseSnapshot struct {
-	Catalog   catalog.Catalog
-	Themes    themes.Catalog
+	Catalog catalog.Catalog
+	Themes  themes.Catalog
+	// Campaigns belongs to immutable release provenance. Resolution uses the
+	// strict live source manifest captured in campaignSnapshot instead.
 	Campaigns campaigns.Manifest
 	Runtime   []byte
 }
 
 type campaignSnapshot struct {
-	Default  channels.Default
-	Latest   campaignReleaseSnapshot
-	Promoted campaignReleaseSnapshot
+	Default         channels.Default
+	Campaigns       campaigns.Manifest
+	Latest          campaignReleaseSnapshot
+	Promoted        campaignReleaseSnapshot
+	PublishedLatest []byte
 }
 
 func campaignDocuments(ctx context.Context, deps Dependencies, date campaigns.Date) (channels.Document, channels.Document, []byte, []byte, error) {
@@ -282,12 +286,12 @@ func campaignDocuments(ctx context.Context, deps Dependencies, date campaigns.Da
 	if campaignAfterSnapshotHook != nil {
 		campaignAfterSnapshotHook()
 	}
-	currentInput := campaignInputFor(snapshot.Default, snapshot.Promoted, date, false)
+	currentInput := campaignInputFor(snapshot.Default, snapshot.Promoted, snapshot.Campaigns, date)
 	current, err := channels.Resolve(currentInput)
 	if err != nil {
 		return channels.Document{}, channels.Document{}, nil, nil, fmt.Errorf("campaigns: resolve current: %w", err)
 	}
-	defaultInput := campaignInputFor(snapshot.Default, snapshot.Promoted, date, true)
+	defaultInput := campaignInputFor(snapshot.Default, snapshot.Promoted, campaigns.Manifest{SchemaVersion: 1}, date)
 	baseline, err := channels.Resolve(defaultInput)
 	if err != nil {
 		return channels.Document{}, channels.Document{}, nil, nil, fmt.Errorf("campaigns: resolve default: %w", err)
@@ -295,26 +299,25 @@ func campaignDocuments(ctx context.Context, deps Dependencies, date campaigns.Da
 	latestPromotion := snapshot.Default
 	latestPromotion.Release = snapshot.Latest.Catalog.Release
 	latestPromotion.Theme = latestTheme(snapshot.Latest.Themes, snapshot.Default.Theme)
-	latestInput := campaignInputFor(latestPromotion, snapshot.Latest, date, true)
-	latest, err := channels.Resolve(latestInput)
-	if err != nil {
-		return channels.Document{}, channels.Document{}, nil, nil, fmt.Errorf("campaigns: resolve latest: %w", err)
-	}
-	latestJSON, err := channels.Encode(latest)
-	if err != nil {
-		return channels.Document{}, channels.Document{}, nil, nil, fmt.Errorf("campaigns: encode latest channel: %w", err)
+	latestJSON := append([]byte(nil), snapshot.PublishedLatest...)
+	if len(latestJSON) == 0 {
+		latestInput := campaignInputFor(latestPromotion, snapshot.Latest, campaigns.Manifest{SchemaVersion: 1}, date)
+		latest, err := channels.Resolve(latestInput)
+		if err != nil {
+			return channels.Document{}, channels.Document{}, nil, nil, fmt.Errorf("campaigns: resolve latest: %w", err)
+		}
+		latestJSON, err = channels.Encode(latest)
+		if err != nil {
+			return channels.Document{}, channels.Document{}, nil, nil, fmt.Errorf("campaigns: encode latest channel: %w", err)
+		}
 	}
 	if err := contextError("campaigns", ctx); err != nil {
 		return channels.Document{}, channels.Document{}, nil, nil, err
 	}
-	return current, baseline, latestJSON, append([]byte(nil), snapshot.Latest.Runtime...), nil
+	return current, baseline, latestJSON, append([]byte(nil), snapshot.Promoted.Runtime...), nil
 }
 
-func campaignInputFor(defaultPromotion channels.Default, release campaignReleaseSnapshot, date campaigns.Date, baseline bool) channels.Input {
-	calendar := release.Campaigns
-	if baseline {
-		calendar.Campaigns = nil
-	}
+func campaignInputFor(defaultPromotion channels.Default, release campaignReleaseSnapshot, calendar campaigns.Manifest, date campaigns.Date) channels.Input {
 	return channels.Input{Date: date, Default: defaultPromotion, Catalog: release.Catalog, Themes: release.Themes, Campaigns: calendar, PublicRoot: assetsPublicRoot}
 }
 
@@ -345,16 +348,30 @@ func loadCampaignSnapshot(ctx context.Context, deps Dependencies) (campaignSnaps
 	if err != nil {
 		return campaignSnapshot{}, fmt.Errorf("campaigns: manifest manifests/default.yaml: %w", err)
 	}
-	if _, err := campaigns.Load(repoRoot.FS(), "manifests/campaigns.yaml"); err != nil {
+	liveCampaigns, err := campaigns.Load(repoRoot.FS(), "manifests/campaigns.yaml")
+	if err != nil {
 		return campaignSnapshot{}, fmt.Errorf("campaigns: manifest manifests/campaigns.yaml: %w", err)
 	}
-	latest, err := loadCampaignRelease(ctx, repoRoot, "dist", true)
+	latestPath := "dist"
+	if _, err := repoRoot.Lstat("releases/latest"); err == nil {
+		latestPath = "releases/latest"
+	} else if !errors.Is(err, fs.ErrNotExist) {
+		return campaignSnapshot{}, fmt.Errorf("campaigns: inspect published latest release snapshot: %w", err)
+	}
+	latest, err := loadCampaignRelease(ctx, repoRoot, latestPath)
 	if err != nil {
 		return campaignSnapshot{}, err
 	}
+	var publishedLatest []byte
+	if latestPath != "dist" {
+		publishedLatest, err = loadPublishedLatest(ctx, repoRoot, latestPath, latest.Catalog.Release)
+		if err != nil {
+			return campaignSnapshot{}, err
+		}
+	}
 	promoted := latest
 	if defaultPromotion.Release != latest.Catalog.Release {
-		promoted, err = loadCampaignRelease(ctx, repoRoot, "releases/"+defaultPromotion.Release, false)
+		promoted, err = loadCampaignRelease(ctx, repoRoot, "releases/"+defaultPromotion.Release)
 		if err != nil {
 			return campaignSnapshot{}, fmt.Errorf("campaigns: load promoted release snapshot %q: %w", defaultPromotion.Release, err)
 		}
@@ -362,10 +379,10 @@ func loadCampaignSnapshot(ctx context.Context, deps Dependencies) (campaignSnaps
 	if err := contextError("campaigns", ctx); err != nil {
 		return campaignSnapshot{}, err
 	}
-	return campaignSnapshot{Default: defaultPromotion, Latest: latest, Promoted: promoted}, nil
+	return campaignSnapshot{Default: defaultPromotion, Campaigns: liveCampaigns, Latest: latest, Promoted: promoted, PublishedLatest: publishedLatest}, nil
 }
 
-func loadCampaignRelease(ctx context.Context, repoRoot *os.Root, path string, includeRuntime bool) (campaignReleaseSnapshot, error) {
+func loadCampaignRelease(ctx context.Context, repoRoot *os.Root, path string) (campaignReleaseSnapshot, error) {
 	releaseRoot, err := managedRoot(repoRoot, path, false)
 	if err != nil {
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: open release snapshot %q: %w", path, err)
@@ -407,12 +424,6 @@ func loadCampaignRelease(ctx context.Context, repoRoot *os.Root, path string, in
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: decode release snapshot %q campaigns.json: %w", path, err)
 	}
 	snapshot := campaignReleaseSnapshot{Catalog: assetCatalog, Themes: themeCatalog, Campaigns: campaignManifest}
-	if !includeRuntime {
-		if err := validateCapturedRelease(releaseDocument, snapshot, catalogJSON, themesJSON, campaignsJSON); err != nil {
-			return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: validate captured release snapshot %q: %w", path, err)
-		}
-		return snapshot, nil
-	}
 	runtime, err := readCapturedRegularFile(ctx, releaseRoot, "campaign/v1.js")
 	if err != nil {
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: read release snapshot %q campaign/v1.js: %w", path, err)
@@ -422,6 +433,33 @@ func loadCampaignRelease(ctx context.Context, repoRoot *os.Root, path string, in
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: validate captured release snapshot %q: %w", path, err)
 	}
 	return snapshot, nil
+}
+
+func loadPublishedLatest(ctx context.Context, repoRoot *os.Root, path, release string) ([]byte, error) {
+	root, err := managedRoot(repoRoot, path, false)
+	if err != nil {
+		return nil, fmt.Errorf("campaigns: open published latest snapshot %q: %w", path, err)
+	}
+	defer root.Close()
+	data, err := readCapturedRegularFile(ctx, root, "latest.json")
+	if err != nil {
+		return nil, fmt.Errorf("campaigns: read published latest snapshot %q latest.json: %w", path, err)
+	}
+	var document channels.Document
+	if err := decodeOneJSON(data, &document); err != nil {
+		return nil, fmt.Errorf("campaigns: decode published latest snapshot %q latest.json: %w", path, err)
+	}
+	canonical, err := channels.Encode(document)
+	if err != nil {
+		return nil, fmt.Errorf("campaigns: validate published latest snapshot %q latest.json: %w", path, err)
+	}
+	if document.Release != release || document.Source != "default" || document.Campaign != nil {
+		return nil, fmt.Errorf("campaigns: published latest snapshot %q does not identify release %q baseline", path, release)
+	}
+	if !bytes.Equal(data, canonical) {
+		return nil, fmt.Errorf("campaigns: published latest snapshot %q latest.json is not canonical", path)
+	}
+	return append([]byte(nil), data...), nil
 }
 
 func decodeThemeCatalog(data []byte) (themes.Catalog, error) {

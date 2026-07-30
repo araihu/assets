@@ -278,6 +278,55 @@ func TestCampaignPublishSeparatesLatestFromPromotedDefault(t *testing.T) {
 	}
 }
 
+func TestCampaignPublishUsesLiveCampaignManifestForCurrent(t *testing.T) {
+	repo := campaignFixtureRepo(t)
+	manifestPath := filepath.Join(repo, "manifests", "campaigns.yaml")
+	disabled, err := os.ReadFile(manifestPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	publishCurrent := func(name string) []byte {
+		t.Helper()
+		output := filepath.Join(t.TempDir(), name)
+		if err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-08-01", "--output", output}, io.Discard, io.Discard); err != nil {
+			t.Fatal(err)
+		}
+		current, err := os.ReadFile(filepath.Join(output, "releases", "current.json"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		return current
+	}
+
+	disabledCurrent := publishCurrent("disabled")
+	enabled := bytes.Replace(disabled, []byte("enabled: false"), []byte("enabled: true"), 1)
+	if err := os.WriteFile(manifestPath, enabled, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	enabledCurrent := publishCurrent("enabled")
+	if bytes.Equal(disabledCurrent, enabledCurrent) || !bytes.Contains(enabledCurrent, []byte(`"source": "campaign"`)) {
+		t.Fatalf("live enable did not change current channel\ndisabled=%s\nenabled=%s", disabledCurrent, enabledCurrent)
+	}
+
+	edited := bytes.Replace(enabled, []byte("theme: araihu-signal-night"), []byte("theme: araihu"), 1)
+	if err := os.WriteFile(manifestPath, edited, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	editedCurrent := publishCurrent("edited")
+	if bytes.Equal(enabledCurrent, editedCurrent) || !bytes.Contains(editedCurrent, []byte(`"id": "araihu"`)) {
+		t.Fatalf("live edit did not change current channel\nenabled=%s\nedited=%s", enabledCurrent, editedCurrent)
+	}
+
+	if err := os.WriteFile(manifestPath, disabled, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	disabledAgain := publishCurrent("disabled-again")
+	if !bytes.Equal(disabledCurrent, disabledAgain) {
+		t.Fatalf("live disable did not restore current channel\nfirst=%s\nagain=%s", disabledCurrent, disabledAgain)
+	}
+}
+
 func TestCampaignPublishRejectsSymlinkedPromotedSnapshotMembers(t *testing.T) {
 	for _, name := range []string{".", "release.json", "catalog.json", "themes.json", "campaigns.json"} {
 		t.Run(name, func(t *testing.T) {
@@ -420,14 +469,64 @@ func TestCampaignPublishUsesOneCapturedSnapshot(t *testing.T) {
 		name    string
 		release string
 	}{
-		{name: "current.json", release: "v0.1.0"},
-		{name: "default.json", release: "v0.1.0"},
+		{name: "current.json", release: "v0.1.1"},
+		{name: "default.json", release: "v0.1.1"},
 		{name: "latest.json", release: "v0.1.1"},
 	} {
 		data, err := os.ReadFile(filepath.Join(output, "releases", want.name))
 		if err != nil || !strings.Contains(string(data), `"release": "`+want.release+`"`) {
 			t.Fatalf("%s = %q, %v", want.name, data, err)
 		}
+	}
+}
+
+func TestCampaignPublishUsesPublishedLatestChannelAndPromotedRuntime(t *testing.T) {
+	repo := campaignFixtureRepo(t)
+	seed := filepath.Join(t.TempDir(), "seed")
+	if err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-08-01", "--output", seed}, io.Discard, io.Discard); err != nil {
+		t.Fatal(err)
+	}
+	publishedLatest, err := os.ReadFile(filepath.Join(seed, "releases", "latest.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	publishedRuntime, err := os.ReadFile(filepath.Join(repo, "dist", "campaign", "v1.js"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	publishedRoot := filepath.Join(repo, "releases", "latest")
+	for _, name := range []string{"release.json", "catalog.json", "themes.json", "campaigns.json", "campaign/v1.js"} {
+		data, err := os.ReadFile(filepath.Join(repo, "dist", filepath.FromSlash(name)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		target := filepath.Join(publishedRoot, filepath.FromSlash(name))
+		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(target, data, 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := os.WriteFile(filepath.Join(publishedRoot, "latest.json"), publishedLatest, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(repo, "dist", "campaign", "v1.js"), []byte("untagged main runtime"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	output := filepath.Join(t.TempDir(), "published")
+	if err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-08-01", "--output", output}, io.Discard, io.Discard); err != nil {
+		t.Fatal(err)
+	}
+	gotLatest, err := os.ReadFile(filepath.Join(output, "releases", "latest.json"))
+	if err != nil || !bytes.Equal(gotLatest, publishedLatest) {
+		t.Fatalf("latest = %q, %v", gotLatest, err)
+	}
+	gotRuntime, err := os.ReadFile(filepath.Join(output, "campaign", "v1.js"))
+	if err != nil || !bytes.Equal(gotRuntime, publishedRuntime) {
+		t.Fatalf("runtime = %q, %v", gotRuntime, err)
 	}
 }
 
@@ -555,10 +654,6 @@ func campaignFixtureRepo(t *testing.T) string {
 		"dist/campaigns.json",
 		"dist/release.json",
 		"dist/campaign/v1.js",
-		"releases/v0.1.0/catalog.json",
-		"releases/v0.1.0/themes.json",
-		"releases/v0.1.0/campaigns.json",
-		"releases/v0.1.0/release.json",
 	} {
 		data, err := os.ReadFile(filepath.Join(fixtureRepo(t), filepath.FromSlash(name)))
 		if err != nil {
@@ -583,7 +678,7 @@ func promotedSnapshotFixture(t *testing.T) string {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(defaultManifest, bytes.ReplaceAll(data, []byte("v0.1.0"), []byte("v0.0.9")), 0o644); err != nil {
+	if err := os.WriteFile(defaultManifest, bytes.ReplaceAll(data, []byte("v0.1.1"), []byte("v0.0.9")), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	files := fstest.MapFS{}
@@ -591,13 +686,17 @@ func promotedSnapshotFixture(t *testing.T) string {
 	if err := os.MkdirAll(snapshot, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	for _, name := range []string{"catalog.json", "themes.json", "campaigns.json"} {
+	for _, name := range []string{"catalog.json", "themes.json", "campaigns.json", "campaign/v1.js"} {
 		data, err := os.ReadFile(filepath.Join(repo, "dist", name))
 		if err != nil {
 			t.Fatal(err)
 		}
 		data = bytes.ReplaceAll(data, []byte("v0.1.1"), []byte("v0.0.9"))
-		if err := os.WriteFile(filepath.Join(snapshot, name), data, 0o644); err != nil {
+		target := filepath.Join(snapshot, filepath.FromSlash(name))
+		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(target, data, 0o644); err != nil {
 			t.Fatal(err)
 		}
 		if name == "catalog.json" {

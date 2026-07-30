@@ -94,7 +94,7 @@ func TestResolveInitialPromotion(t *testing.T) {
 	if err != nil {
 		t.Fatalf("campaigns.Load() error = %v", err)
 	}
-	snapshot := "releases/" + defaultPromotion.Release
+	snapshot := "dist"
 	catalogFile, err := root.Open(snapshot + "/catalog.json")
 	if err != nil {
 		t.Fatal(err)
