@@ -1,0 +1,17 @@
+schema_version: 1
+campaigns:
+  - id: signal-night-proof-2026
+    enabled: false
+    starts_on: 2026-08-01
+    ends_on: 2026-08-02
+    theme: araihu-signal-night
+    toggle:
+      enabled_icon:
+        asset: ui-hi-16-solid-sparkles
+        mode: sprite
+      disabled_icon:
+        asset: ui-hi-16-solid-moon
+        mode: sprite
+    brand:
+      logo: araihu-logo-tinted-transparent-optical
+      icon: araihu-icon-tinted-transparent-optical
