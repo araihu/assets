@@ -309,10 +309,11 @@ func resolveBrandAsset(root *url.URL, release string, assets map[string]catalog.
 
 func parsePublicRoot(raw string) (*url.URL, error) {
 	root, err := url.Parse(raw)
-	if err != nil || root.Scheme != "https" || root.Host == "" || root.User != nil || root.RawQuery != "" || root.Fragment != "" || (root.Path != "" && root.Path != "/") {
+	if err != nil || root.Scheme != "https" || root.Host == "" || root.User != nil || root.RawQuery != "" || root.ForceQuery || root.Fragment != "" || (root.Path != "" && root.Path != "/") {
 		return nil, fmt.Errorf("public root %q must be an HTTPS origin", raw)
 	}
 	root.Path = ""
+	root.ForceQuery = false
 	return root, nil
 }
 

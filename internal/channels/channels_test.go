@@ -40,6 +40,14 @@ func TestResolveRejectsMissingCatalogReference(t *testing.T) {
 	}
 }
 
+func TestResolveRejectsPublicRootWithEmptyQuery(t *testing.T) {
+	input := fixtureInput(t)
+	input.PublicRoot = "https://araihu.example?"
+	if _, err := Resolve(input); err == nil || !strings.Contains(err.Error(), "HTTPS origin") {
+		t.Fatalf("Resolve() error = %v", err)
+	}
+}
+
 func TestLoadDefaultRejectsUnknownFieldsAndMultipleDocuments(t *testing.T) {
 	for _, raw := range []string{
 		"schema_version: 1\nrelease: v0.1.0\ntheme: araihu\nextra: true\n",
