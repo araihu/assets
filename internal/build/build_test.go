@@ -23,6 +23,7 @@ import (
 	"github.com/araihu/assets/internal/catalog"
 	"github.com/araihu/assets/internal/platform"
 	"github.com/araihu/assets/internal/provenance"
+	"github.com/araihu/assets/internal/releaseinfo"
 	"github.com/araihu/assets/internal/releasemeta"
 	"github.com/araihu/assets/internal/themes"
 	"github.com/araihu/assets/internal/transform"
@@ -92,7 +93,7 @@ func TestRunPublishesReleaseInventoryBeforeChecksumsAndArchives(t *testing.T) {
 	if err != nil || !bytes.Contains(checksums, []byte("  release.json\n")) {
 		t.Fatalf("checksums = %q, %v", checksums, err)
 	}
-	members := tarArchiveMembers(t, filepath.Join(repo, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
+	members := tarArchiveMembers(t, filepath.Join(repo, "dist", "releases", releaseinfo.ArchiveName("tar.gz")))
 	for _, name := range []string{"catalog.json", "themes.json", "campaigns.json", "release.json", "checksums.txt"} {
 		if !slices.Contains(members, name) {
 			t.Fatalf("archive omits %s: %q", name, members)
@@ -100,7 +101,7 @@ func TestRunPublishesReleaseInventoryBeforeChecksumsAndArchives(t *testing.T) {
 	}
 }
 
-func TestRunEmitsConsistentV011ReleaseFields(t *testing.T) {
+func TestRunEmitsConsistentV012ReleaseFields(t *testing.T) {
 	repo := testRepo(t)
 	if err := Run(repo, testInputs([]byte("asset"))); err != nil {
 		t.Fatal(err)
@@ -131,7 +132,7 @@ func TestRunEmitsConsistentV011ReleaseFields(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	const wantRelease = "v0.1.1"
+	const wantRelease = "v0.1.2"
 	for name, got := range map[string]string{
 		"catalog":  assetCatalog.Release,
 		"themes":   themeCatalog.Release,
@@ -196,7 +197,7 @@ func TestRunPublishesCapturedCampaignRuntimeInInventoryChecksumsAndArchive(t *te
 	if !bytes.Contains(checksums, []byte(hash(captured)+"  campaign/v1.js\n")) {
 		t.Fatalf("checksums omit captured campaign/v1.js: %s", checksums)
 	}
-	members := tarArchiveMembers(t, filepath.Join(repo, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
+	members := tarArchiveMembers(t, filepath.Join(repo, "dist", "releases", releaseinfo.ArchiveName("tar.gz")))
 	if !slices.Contains(members, "campaign/v1.js") {
 		t.Fatalf("release archive omits campaign/v1.js: %q", members)
 	}
@@ -377,11 +378,11 @@ func TestRunWritesSortedChecksumsAndDeterministicReleaseMembership(t *testing.T)
 			t.Fatalf("invalid checksum line %q", checksum)
 		}
 	}
-	firstArchive, err := os.ReadFile(filepath.Join(first, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
+	firstArchive, err := os.ReadFile(filepath.Join(first, "dist", "releases", releaseinfo.ArchiveName("tar.gz")))
 	if err != nil {
 		t.Fatal(err)
 	}
-	secondArchive, err := os.ReadFile(filepath.Join(second, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
+	secondArchive, err := os.ReadFile(filepath.Join(second, "dist", "releases", releaseinfo.ArchiveName("tar.gz")))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -418,8 +419,8 @@ func TestProductionReleaseArchivesIncludeExactProofTree(t *testing.T) {
 		archive string
 		members func(t *testing.T, archive string) []string
 	}{
-		{"tar.gz", filepath.Join(dist, "releases", "araihu-assets-v0.1.1.tar.gz"), tarArchiveMembers},
-		{"zip", filepath.Join(dist, "releases", "araihu-assets-v0.1.1.zip"), zipArchiveMembers},
+		{"tar.gz", filepath.Join(dist, "releases", releaseinfo.ArchiveName("tar.gz")), tarArchiveMembers},
+		{"zip", filepath.Join(dist, "releases", releaseinfo.ArchiveName("zip")), zipArchiveMembers},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			got := tc.members(t, tc.archive)
