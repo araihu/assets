@@ -21,8 +21,39 @@ import (
 	"github.com/araihu/assets/internal/catalog"
 	"github.com/araihu/assets/internal/platform"
 	"github.com/araihu/assets/internal/provenance"
+	"github.com/araihu/assets/internal/themes"
 	"github.com/araihu/assets/internal/transform"
 )
+
+func TestRunPublishesCapturedThemeCatalog(t *testing.T) {
+	repo := testRepo(t)
+	inputs := testInputs([]byte("asset"))
+	css := []byte("[data-theme=\"araihu\"] { --color-surface: #f3f2e9; }\n")
+	inputs.Themes = themes.Manifest{SchemaVersion: 1, TokenContract: "goshtoso-theme-v1", Themes: []themes.Theme{{ID: "araihu", CSSPath: "themes/araihu.css"}}}
+	inputs.ThemeCSS = map[string][]byte{"themes/araihu.css": css}
+
+	if err := Run(repo, inputs); err != nil {
+		t.Fatal(err)
+	}
+	gotCSS, err := os.ReadFile(filepath.Join(repo, "dist", "themes", "araihu.css"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(gotCSS, css) {
+		t.Fatalf("published CSS = %q, want %q", gotCSS, css)
+	}
+	gotCatalog, err := os.ReadFile(filepath.Join(repo, "dist", "themes.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(gotCatalog, []byte(`"sha256": "`+hash(css)+`"`)) {
+		t.Fatalf("themes catalog misses captured CSS hash: %s", gotCatalog)
+	}
+	mustWrite(t, filepath.Join(repo, "themes", "araihu.css"), []byte("live source changed"))
+	if err := Check(repo, inputs); err != nil {
+		t.Fatalf("Check() reread live CSS source: %v", err)
+	}
+}
 
 func TestRunFailurePreservesPublishedDist(t *testing.T) {
 	repo := testRepo(t)

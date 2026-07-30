@@ -23,6 +23,7 @@ import (
 	"github.com/araihu/assets/internal/release"
 	"github.com/araihu/assets/internal/sprite"
 	"github.com/araihu/assets/internal/svgasset"
+	"github.com/araihu/assets/internal/themes"
 	"github.com/araihu/assets/internal/transform"
 )
 
@@ -34,12 +35,14 @@ const (
 )
 
 var generatedPaths = map[string]struct{}{
-	"catalog.json":     {},
-	"checksums.txt":    {},
-	"NOTICE":           {},
-	"proof/index.html": {},
-	"proof/styles.css": {},
-	"proof/app.js":     {},
+	"catalog.json":      {},
+	"checksums.txt":     {},
+	"NOTICE":            {},
+	"proof/index.html":  {},
+	"proof/styles.css":  {},
+	"proof/app.js":      {},
+	"themes.json":       {},
+	"themes/araihu.css": {},
 }
 
 // Inputs are fully generated, offline artifacts from approved generators.
@@ -48,6 +51,10 @@ type Inputs struct {
 	Brand    transform.Result
 	UI       provenance.Result
 	Platform platform.Result
+	Themes   themes.Manifest
+	// ThemeCSS holds stylesheet bytes captured by the caller before build.
+	// Build never rereads source paths while staging or publishing a release.
+	ThemeCSS map[string][]byte
 }
 
 type buildPhase uint8
@@ -173,7 +180,17 @@ func validateGeneratedSVGs(ctx context.Context, root string) error {
 }
 
 func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string][]byte, error) {
-	files := make(map[string][]byte, len(input.Brand.Files)+len(input.UI.Files)+len(input.Platform.Files)+4)
+	themesPresent := input.Themes.SchemaVersion != 0 || input.Themes.TokenContract != "" || len(input.Themes.Themes) != 0 || len(input.ThemeCSS) != 0
+	themePaths := map[string]struct{}{}
+	if themesPresent {
+		if err := input.Themes.Validate(); err != nil {
+			return nil, fmt.Errorf("build: validate themes manifest: %w", err)
+		}
+		for _, theme := range input.Themes.Themes {
+			themePaths[theme.CSSPath] = struct{}{}
+		}
+	}
+	files := make(map[string][]byte, len(input.Brand.Files)+len(input.UI.Files)+len(input.Platform.Files)+len(themePaths)+5)
 	for _, group := range []map[string][]byte{input.Brand.Files, input.UI.Files, input.Platform.Files} {
 		for sourceName, data := range group {
 			if err := checkContext(ctx); err != nil {
@@ -183,7 +200,8 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 			if err != nil {
 				return nil, err
 			}
-			if _, reserved := generatedPaths[name]; reserved || strings.HasPrefix(name, "releases/") {
+			_, themePath := themePaths[name]
+			if _, reserved := generatedPaths[name]; reserved || themePath || strings.HasPrefix(name, "releases/") {
 				return nil, fmt.Errorf("build: input attempts to own generated path %q", name)
 			}
 			if _, exists := files[name]; exists {
@@ -204,6 +222,16 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 	}
 	for name, data := range proofFiles {
 		files[name] = data
+	}
+	if themesPresent {
+		themeFiles, themeCatalog, err := assembleThemes(input.Themes, input.ThemeCSS)
+		if err != nil {
+			return nil, err
+		}
+		for name, data := range themeFiles {
+			files[name] = data
+		}
+		files["themes.json"] = themeCatalog
 	}
 
 	assets := make([]catalog.Asset, 0, len(input.Brand.Assets)+len(input.UI.Assets)+len(input.Platform.Assets))
@@ -234,6 +262,36 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 		files["proof/index.html"] = proofPage
 	}
 	return files, nil
+}
+
+func assembleThemes(manifest themes.Manifest, source map[string][]byte) (map[string][]byte, []byte, error) {
+	if len(source) != len(manifest.Themes) {
+		return nil, nil, errors.New("build: theme CSS inputs do not match manifest")
+	}
+	published := manifest
+	published.Themes = slices.Clone(manifest.Themes)
+	files := make(map[string][]byte, len(manifest.Themes))
+	for i, theme := range published.Themes {
+		data, ok := source[theme.CSSPath]
+		if !ok {
+			return nil, nil, fmt.Errorf("build: missing captured CSS for theme %q", theme.ID)
+		}
+		copy := append([]byte(nil), data...)
+		sum := sha256.Sum256(copy)
+		theme.TokenContract = published.TokenContract
+		theme.SHA256 = hex.EncodeToString(sum[:])
+		published.Themes[i] = theme
+		files[theme.CSSPath] = copy
+	}
+	catalog, err := published.Catalog(releaseVersion)
+	if err != nil {
+		return nil, nil, fmt.Errorf("build: create themes catalog: %w", err)
+	}
+	encoded, err := themes.Encode(catalog)
+	if err != nil {
+		return nil, nil, fmt.Errorf("build: encode themes catalog: %w", err)
+	}
+	return files, encoded, nil
 }
 
 func proofDocument(repo string, files map[string][]byte) ([]byte, error) {

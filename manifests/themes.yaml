@@ -1,0 +1,7 @@
+schema_version: 1
+token_contract: goshtoso-theme-v1
+themes:
+  - id: araihu
+    css_path: themes/araihu.css
+  - id: araihu-signal-night
+    css_path: themes/araihu-signal-night.css

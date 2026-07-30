@@ -9,7 +9,24 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"testing/fstest"
 )
+
+func TestThemeInputsCaptureStylesheets(t *testing.T) {
+	manifest, css, err := themeInputs(fstest.MapFS{
+		"manifests/themes.yaml": {Data: []byte("schema_version: 1\ntoken_contract: goshtoso-theme-v1\nthemes:\n  - id: araihu\n    css_path: themes/araihu.css\n")},
+		"themes/araihu.css":     {Data: []byte("[data-theme=\"araihu\"] {}\n")},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := manifest.Themes[0].ID; got != "araihu" {
+		t.Fatalf("theme ID = %q", got)
+	}
+	if got := string(css["themes/araihu.css"]); got != "[data-theme=\"araihu\"] {}\n" {
+		t.Fatalf("captured CSS = %q", got)
+	}
+}
 
 func TestRunRejectsClientCodegen(t *testing.T) {
 	for _, args := range [][]string{{"codegen", "go"}, {"generate", "--language", "go"}} {

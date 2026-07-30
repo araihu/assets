@@ -19,6 +19,7 @@ import (
 	"github.com/araihu/assets/internal/manifest"
 	"github.com/araihu/assets/internal/platform"
 	"github.com/araihu/assets/internal/provenance"
+	"github.com/araihu/assets/internal/themes"
 	"github.com/araihu/assets/internal/transform"
 )
 
@@ -357,7 +358,27 @@ func inputs(ctx context.Context, repoRoot *os.Root, deps Dependencies) (build.In
 	if err != nil {
 		return build.Inputs{}, fmt.Errorf("platform generator: %w", err)
 	}
-	return build.Inputs{Brand: brand, UI: ui, Platform: platformFiles}, nil
+	themeManifest, themeCSS, err := themeInputs(files)
+	if err != nil {
+		return build.Inputs{}, err
+	}
+	return build.Inputs{Brand: brand, UI: ui, Platform: platformFiles, Themes: themeManifest, ThemeCSS: themeCSS}, nil
+}
+
+func themeInputs(files fs.FS) (themes.Manifest, map[string][]byte, error) {
+	manifest, err := themes.Load(files, "manifests/themes.yaml")
+	if err != nil {
+		return themes.Manifest{}, nil, fmt.Errorf("manifest manifests/themes.yaml: %w", err)
+	}
+	css := make(map[string][]byte, len(manifest.Themes))
+	for _, theme := range manifest.Themes {
+		data, err := fs.ReadFile(files, theme.CSSPath)
+		if err != nil {
+			return themes.Manifest{}, nil, fmt.Errorf("theme %q stylesheet %s: %w", theme.ID, theme.CSSPath, err)
+		}
+		css[theme.CSSPath] = append([]byte(nil), data...)
+	}
+	return manifest, css, nil
 }
 
 func platformIcons(brand transform.Result) ([]platform.BrandIcon, error) {
