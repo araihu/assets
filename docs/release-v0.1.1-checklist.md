@@ -22,10 +22,9 @@ Integration review must accept the immutable bundle before any publication step.
 - [x] Current catalog: schema v1, release `v0.1.1`, identity revision 11,
   302 assets (235 brand, 67 UI).
 - [x] `release.json`: schema v1, runtime version 1, 710 inventoried files.
-- [x] `releases/v0.1.0/` retains the four captured immutable channel inputs
-  (`release.json`, `catalog.json`, `themes.json`, `campaigns.json`) from this
-  checkout's v0.1.0 history. Default/current remain stable on v0.1.0 while a
-  later release only advances `latest`.
+- [x] `v0.1.1` is the first channel-capable promoted default. No synthetic
+  `releases/v0.1.0/` snapshot exists; immutable `v0.1.0` is never retrofitted
+  with release contracts absent from its published bytes.
 
 Archive SHA-256:
 
@@ -47,10 +46,9 @@ Archive SHA-256:
 
 - [x] Ran `campaigns publish --date 2026-10-31` twice into separate `mktemp -d`
   outputs. Recursive SHA-256 manifests matched exactly: four files.
-- [x] Output hashes: `campaign/v1.js`
+- [x] Output hashes after promoting `v0.1.1`: `campaign/v1.js`
   `a936193b4fed8120e6cb3423f19d3e2ddb0ba32266dc4e5f02a98f5261853709`;
-  `releases/default.json` and `releases/current.json`
-  `670c7e613eb7b15b7110f7fbc95f923193b1e5c3259ce048c2c8e5323ae4ae07`;
+  `releases/default.json`, `releases/current.json`, and
   `releases/latest.json`
   `8bab7b3817378b5aa2aa6512fa70f536ec888c289dbc2d9f9e09bcf62d56db0d`.
 - [x] Both validated temporary directories were removed after comparison.
