@@ -104,6 +104,8 @@ mutate_and_reject "clobbering release upload" .github/workflows/release.yml \
   'gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY"' 'gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY" --clobber'
 mutate_and_reject "release metadata renamed as latest channel" .github/workflows/release.yml \
   'go run ./cmd/araihu-assets campaigns publish --date "$CHANNEL_DATE" --output "$channel_candidate"' 'install -m 0644 dist/release.json "$latest/latest.json"'
+mutate_and_reject "release uses untagged dist as promoted snapshot" .github/workflows/release.yml \
+  'gh release download "$default_release"' 'cp -R dist "$default_root"'
 mutate_and_reject "release omits fallback consumer fan-out" .github/workflows/release.yml \
   'uses: ./.github/workflows/release-fanout.yml' 'uses: ./.github/workflows/missing-fanout.yml'
 mutate_and_reject "manual fan-out disabled" .github/workflows/release-fanout.yml \
