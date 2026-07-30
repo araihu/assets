@@ -51,6 +51,40 @@ class FakeElement extends FakeEventTarget {
     this.parentNode = null;
   }
 
+  set src(value) {
+    this.attributes.set("src", String(value));
+    if (this.fixture.resourceLoads) {
+      this.fixture.resourceLoads.push({ node: this, url: String(value), crossOrigin: this.getAttribute("crossorigin") });
+    }
+  }
+
+  get src() {
+    return this.getAttribute("src");
+  }
+
+  set href(value) {
+    this.attributes.set("href", String(value));
+    if (this.fixture.resourceLoads) {
+      this.fixture.resourceLoads.push({ node: this, url: String(value), crossOrigin: this.getAttribute("crossorigin") });
+    }
+  }
+
+  get href() {
+    return this.getAttribute("href");
+  }
+
+  set crossOrigin(value) {
+    if (value === null || value === undefined) {
+      this.attributes.delete("crossorigin");
+    } else {
+      this.attributes.set("crossorigin", String(value));
+    }
+  }
+
+  get crossOrigin() {
+    return this.getAttribute("crossorigin");
+  }
+
   set innerHTML(_) {
     throw new Error("runtime must not use innerHTML");
   }
@@ -81,6 +115,10 @@ class FakeElement extends FakeEventTarget {
 
   getAttribute(name) {
     return this.attributes.has(name) ? this.attributes.get(name) : null;
+  }
+
+  hasAttribute(name) {
+    return this.attributes.has(name);
   }
 
   removeAttribute(name) {
@@ -233,6 +271,7 @@ function runtimeFixture(options = {}) {
     mutations: [],
     observers: [],
     queries: [],
+    resourceLoads: [],
     rootState: {
       theme: options.theme || "minimal",
       themeSource: options.themeSource || "default",
@@ -256,6 +295,10 @@ function runtimeFixture(options = {}) {
   fixture.brandLogo.src = fixture.baselineLogo;
   fixture.brandIcon = new FakeElement("link", fixture);
   fixture.brandIcon.href = fixture.baselineIcon;
+  if (options.baselineCrossOrigin !== undefined) {
+    fixture.brandLogo.setAttribute("crossorigin", options.baselineCrossOrigin);
+    fixture.brandIcon.setAttribute("crossorigin", options.baselineCrossOrigin);
+  }
   fixture.toggle = new FakeElement("button", fixture);
   fixture.toggle.hidden = true;
   fixture.toggleIcon = new FakeElement("span", fixture);
@@ -417,12 +460,13 @@ function runtimeFixture(options = {}) {
           text: async () => '<svg xmlns="http://www.w3.org/2000/svg"><symbol id="hi-16-solid-sparkles" viewBox="0 0 16 16"><path d="M1 1h14v14z"/></symbol><symbol id="not-selected"><script/></symbol></svg>',
         };
       }
+      const channelDocument = clone(fixture.channel);
       if (fixture.channelGate) {
         await fixture.channelGate.promise;
       }
       return {
         ok: true,
-        json: async () => clone(fixture.channel),
+        json: async () => clone(channelDocument),
       };
     },
   };
@@ -600,7 +644,7 @@ test("campaign applies direct assets, selected sprite, anonymous requests, and b
   assert.equal(svg.localName, "svg");
   assert.equal(svg.children.length, 1);
   assert.equal(svg.children[0].localName, "path");
-  assert.deepEqual(fixture.fetches.map((request) => request.init.credentials), ["omit", "omit"]);
+  assert.equal(fixture.fetches.every((request) => request.init.credentials === "omit"), true);
   assert.equal(fixture.styles[0].crossOrigin, "anonymous");
   assert.equal(fixture.images.every((image) => image.crossOrigin === "anonymous"), true);
   assert.equal(fixture.queries.every((selector) => [
@@ -632,6 +676,30 @@ test("active campaign toggle restores baseline and persists campaign-specific op
   assert.equal(fixture.toggleIcon.children[0].crossOrigin, "anonymous");
   assert.equal(fixture.toggleIcon.children[0].src, activeCampaign.campaign.toggle.disabledIcon.url);
   assert.equal(fixture.events.at(-1).type, "araihu:campaign:restored");
+});
+
+test("brand CORS attribute presence and value restore exactly before baseline URLs", async (t) => {
+  for (const [name, baselineCrossOrigin, expected] of [
+    ["absent", undefined, null],
+    ["empty", "", ""],
+    ["anonymous", "anonymous", "anonymous"],
+  ]) {
+    await t.test(name, async () => {
+      const fixture = runtimeFixture({ baselineCrossOrigin });
+      await fixture.start();
+      fixture.clickToggle();
+      await new Promise((resolve) => setImmediate(resolve));
+
+      assert.equal(fixture.brandLogo.getAttribute("crossorigin"), expected);
+      assert.equal(fixture.brandIcon.getAttribute("crossorigin"), expected);
+      const logoRestore = fixture.resourceLoads.filter((load) =>
+        load.node === fixture.brandLogo && load.url === fixture.baselineLogo).at(-1);
+      const iconRestore = fixture.resourceLoads.filter((load) =>
+        load.node === fixture.brandIcon && load.url === fixture.baselineIcon).at(-1);
+      assert.equal(logoRestore.crossOrigin, expected);
+      assert.equal(iconRestore.crossOrigin, expected);
+    });
+  }
 });
 
 test("storage write and remove exceptions expose only fixed toggle error codes", async (t) => {
@@ -730,19 +798,54 @@ test("expired channel restores active campaign baseline", async () => {
 test("runtime source restoration does not trigger a second channel refresh", async () => {
   const fixture = runtimeFixture();
   await fixture.start();
+  const before = fixture.fetches.filter((request) => request.url.endsWith("/current")).length;
   fixture.delayedObserver = true;
   fixture.channel = clone(defaultChannel);
   await fixture.refresh();
   await new Promise((resolve) => setImmediate(resolve));
   await new Promise((resolve) => setImmediate(resolve));
 
-  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, 2);
+  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, before + 1);
   assert.equal(fixture.rootState.themeSource, "default");
+});
+
+test("refresh during active refresh performs a newer fetch and applies its state", async () => {
+  const fixture = runtimeFixture();
+  await fixture.start();
+  const before = fixture.fetches.filter((request) => request.url.endsWith("/current")).length;
+  fixture.deferChannel();
+  fixture.channel = clone(activeCampaign);
+  const firstRefresh = fixture.refresh();
+  await new Promise((resolve) => setImmediate(resolve));
+  fixture.channel = clone(defaultChannel);
+  const newerRefresh = fixture.refresh();
+  fixture.resolveChannel();
+  await Promise.all([firstRefresh, newerRefresh]);
+
+  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, before + 2);
+  assert.equal(fixture.rootState.themeSource, "default");
+  assert.equal(fixture.rootState.campaign, undefined);
+});
+
+test("two sequential toggle intents restore then reapply campaign", async () => {
+  const fixture = runtimeFixture();
+  await fixture.start();
+  fixture.clickToggle();
+  fixture.clickToggle();
+  await new Promise((resolve) => setImmediate(resolve));
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.equal(fixture.rootState.themeSource, "campaign");
+  assert.equal(fixture.rootState.campaign, "halloween-2026");
+  assert.equal(fixture.storage.has("araihu.assets.campaign.v1.optout.halloween-2026"), false);
+  assert.equal(fixture.events.filter((event) => event.type === "araihu:campaign:restored").length, 1);
+  assert.equal(fixture.events.filter((event) => event.type === "araihu:campaign:applied").length, 2);
 });
 
 test("refresh requested during toggle runs afterward and applies latest channel", async () => {
   const fixture = runtimeFixture();
   await fixture.start();
+  const before = fixture.fetches.filter((request) => request.url.endsWith("/current")).length;
   fixture.deferToggleImage();
   fixture.clickToggle();
   fixture.channel = clone(activeCampaign);
@@ -755,13 +858,14 @@ test("refresh requested during toggle runs afterward and applies latest channel"
   assert.equal(fixture.rootState.themeSource, "default");
   assert.equal(fixture.rootState.campaign, undefined);
   assert.equal(fixture.storage.get("araihu.assets.campaign.v1.optout.halloween-2026"), "1");
-  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, 2);
+  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, before + 2);
   assert.equal(fixture.events.some((event) => event.detail.code === "toggle-failed"), false);
 });
 
 test("toggle requested during refresh runs after refreshed state", async () => {
   const fixture = runtimeFixture();
   await fixture.start();
+  const before = fixture.fetches.filter((request) => request.url.endsWith("/current")).length;
   fixture.deferChannel();
   const refresh = fixture.refresh();
   await new Promise((resolve) => setImmediate(resolve));
@@ -772,12 +876,13 @@ test("toggle requested during refresh runs after refreshed state", async () => {
 
   assert.equal(fixture.rootState.themeSource, "campaign-opt-out");
   assert.equal(fixture.storage.get("araihu.assets.campaign.v1.optout.halloween-2026"), "1");
-  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, 2);
+  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, before + 1);
 });
 
 test("alternating queued intents preserve their serialized order", async () => {
   const fixture = runtimeFixture();
   await fixture.start();
+  const before = fixture.fetches.filter((request) => request.url.endsWith("/current")).length;
   fixture.deferChannel();
   const activeRefresh = fixture.refresh();
   await new Promise((resolve) => setImmediate(resolve));
@@ -790,7 +895,7 @@ test("alternating queued intents preserve their serialized order", async () => {
 
   assert.equal(fixture.rootState.themeSource, "campaign");
   assert.equal(fixture.storage.has("araihu.assets.campaign.v1.optout.halloween-2026"), false);
-  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, 3);
+  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, before + 2);
 });
 
 test("preference selected during toggle preload cancels opt-out mutation", async () => {

@@ -221,15 +221,30 @@
     };
   }
 
+  function captureCrossOrigin(node) {
+    return {
+      present: node.hasAttribute("crossorigin"),
+      value: node.getAttribute("crossorigin")
+    };
+  }
+
+  function restoreCrossOrigin(node, captured) {
+    if (captured.present) {
+      node.setAttribute("crossorigin", captured.value);
+    } else {
+      node.removeAttribute("crossorigin");
+    }
+  }
+
   function captureBaseline() {
     var hooks = brandHooks();
     return {
       theme: root.getAttribute("data-theme"),
       source: root.getAttribute("data-theme-source") || "default",
       logos: hooks.logos.map(function (node) { return node.src; }),
-      logoCrossOrigins: hooks.logos.map(function (node) { return node.crossOrigin || null; }),
+      logoCrossOrigins: hooks.logos.map(captureCrossOrigin),
       icons: hooks.icons.map(function (node) { return node.href; }),
-      iconCrossOrigins: hooks.icons.map(function (node) { return node.crossOrigin || null; }),
+      iconCrossOrigins: hooks.icons.map(captureCrossOrigin),
       toggleHidden: hooks.toggles.map(function (node) { return node.hidden; }),
       togglePressed: hooks.toggles.map(function (node) { return node.getAttribute("aria-pressed"); }),
       toggleChildren: hooks.toggleIcons.map(function (node) {
@@ -255,19 +270,11 @@
   function restoreBrand(baseline) {
     var hooks = brandHooks();
     hooks.logos.forEach(function (node, index) {
-      if (baseline.logoCrossOrigins[index] === null) {
-        node.removeAttribute("crossorigin");
-      } else {
-        node.crossOrigin = baseline.logoCrossOrigins[index];
-      }
+      restoreCrossOrigin(node, baseline.logoCrossOrigins[index]);
       node.src = baseline.logos[index];
     });
     hooks.icons.forEach(function (node, index) {
-      if (baseline.iconCrossOrigins[index] === null) {
-        node.removeAttribute("crossorigin");
-      } else {
-        node.crossOrigin = baseline.iconCrossOrigins[index];
-      }
+      restoreCrossOrigin(node, baseline.iconCrossOrigins[index]);
       node.href = baseline.icons[index];
     });
   }
@@ -609,13 +616,6 @@
   }
 
   function enqueueOperation(kind, operation, fallbackCode) {
-    if (activeOperation && activeOperation.kind === kind && pendingOperations.length === 0) {
-      return activeOperation.promise;
-    }
-    var lastPending = pendingOperations[pendingOperations.length - 1];
-    if (lastPending && lastPending.kind === kind) {
-      return lastPending.promise;
-    }
     var resolveOperation;
     var promise = new Promise(function (resolve) {
       resolveOperation = resolve;
