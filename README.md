@@ -82,6 +82,16 @@ standard output and writes nothing else. `campaigns publish` writes only
 history. Existing identical channel bytes are idempotent, while different-byte
 collisions fail without overwriting consumer output.
 
+`dist/` is the newest built release snapshot and therefore supplies
+`latest.json` plus the stable runtime. `manifests/default.yaml` independently
+selects the promoted baseline for `default.json` and `current.json`. When that
+promotion names an older release, provide its immutable offline snapshot at
+`releases/<semver>/` with `release.json`, `catalog.json`, `themes.json`, and
+`campaigns.json`. `release.json` hashes the captured inputs, so a concurrent
+mutation is rejected instead of mixing generations. The command never fetches
+that snapshot. A new `dist/` release changes only
+`latest.json`; it cannot implicitly move `default.json` or `current.json`.
+
 ## Catalog and sprites
 
 The `v0.1.0` `dist/catalog.json` is schema v1, language-neutral metadata for

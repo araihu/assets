@@ -54,6 +54,20 @@ func (d Date) MarshalJSON() ([]byte, error) {
 	return json.Marshal(d.String())
 }
 
+// UnmarshalJSON accepts only one canonical YYYY-MM-DD calendar date.
+func (d *Date) UnmarshalJSON(data []byte) error {
+	var raw string
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return errors.New("campaign date must use YYYY-MM-DD")
+	}
+	parsed, err := ParseDate(raw)
+	if err != nil {
+		return err
+	}
+	*d = parsed
+	return nil
+}
+
 // String returns the canonical YYYY-MM-DD representation.
 func (d Date) String() string { return d.Format(dateLayout) }
 

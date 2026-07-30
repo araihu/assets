@@ -1,6 +1,7 @@
 package campaigns
 
 import (
+	"encoding/json"
 	"os"
 	"strings"
 	"testing"
@@ -47,6 +48,19 @@ func TestParseDateRejectsTimeAndNonCanonicalDate(t *testing.T) {
 	}
 	if got, want := date.String(), "2026-08-01"; got != want || date.Location().String() != "UTC" {
 		t.Fatalf("ParseDate() = %q in %s, want %q UTC", got, date.Location(), want)
+	}
+}
+
+func TestDateUnmarshalJSONAcceptsOnlyCanonicalDate(t *testing.T) {
+	var date Date
+	if err := json.Unmarshal([]byte(`"2026-08-01"`), &date); err != nil {
+		t.Fatalf("Unmarshal() error = %v", err)
+	}
+	if got := date.String(); got != "2026-08-01" {
+		t.Fatalf("Unmarshal() = %q", got)
+	}
+	if err := json.Unmarshal([]byte(`"2026-8-01"`), &date); err == nil {
+		t.Fatal("Unmarshal() accepted non-canonical date")
 	}
 }
 

@@ -4,6 +4,7 @@ package app
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -24,6 +25,7 @@ import (
 	"github.com/araihu/assets/internal/manifest"
 	"github.com/araihu/assets/internal/platform"
 	"github.com/araihu/assets/internal/provenance"
+	"github.com/araihu/assets/internal/releasemeta"
 	"github.com/araihu/assets/internal/themes"
 	"github.com/araihu/assets/internal/transform"
 )
@@ -45,6 +47,9 @@ var exportAfterOutputRootHook func()
 
 // campaignAfterOutputRootHook is a test-only cleanup-ownership seam.
 var campaignAfterOutputRootHook func()
+
+// campaignAfterSnapshotHook is a test-only source-snapshot seam.
+var campaignAfterSnapshotHook func()
 
 const (
 	assetsPublicRoot      = "https://araihu.com"
@@ -184,11 +189,7 @@ func runCampaignPublish(ctx context.Context, deps Dependencies, args []string, s
 	if strings.TrimSpace(*output) == "" {
 		return usagef("campaigns publish: --output is required")
 	}
-	current, err := resolveCampaign(ctx, deps, date)
-	if err != nil {
-		return err
-	}
-	baseline, err := resolveDefaultCampaign(ctx, deps, date)
+	current, baseline, latest, runtime, err := campaignDocuments(ctx, deps, date)
 	if err != nil {
 		return err
 	}
@@ -200,47 +201,40 @@ func runCampaignPublish(ctx context.Context, deps Dependencies, args []string, s
 	if err != nil {
 		return fmt.Errorf("campaigns publish: encode default channel: %w", err)
 	}
-	runtime, err := campaignRuntime(ctx, deps)
-	if err != nil {
-		return err
-	}
 	if err := contextError("campaigns publish", ctx); err != nil {
 		return err
 	}
-	owned, err := createOutputRoot(ctx, *output)
+	published, err := openCampaignOutput(ctx, *output)
 	if err != nil {
-		removeEmptyOwnedDirectories(owned)
 		return fmt.Errorf("campaigns publish: create output root %q: %w", *output, err)
 	}
+	cleanupOutput := true
+	defer func() {
+		if cleanupOutput {
+			published.cleanup()
+		} else {
+			published.close()
+		}
+	}()
 	if campaignAfterOutputRootHook != nil {
 		campaignAfterOutputRootHook()
 	}
-	cleanupOwned := true
-	defer func() {
-		if cleanupOwned {
-			removeEmptyOwnedDirectories(owned)
-		} else {
-			closeOwnedDirectories(owned)
-		}
-	}()
 	if err := contextError("campaigns publish", ctx); err != nil {
 		return err
 	}
-	destination, err := os.OpenRoot(*output)
-	if err != nil {
-		return fmt.Errorf("campaigns publish: open output root %q: %w", *output, err)
+	if err := published.verifyPath(); err != nil {
+		return fmt.Errorf("campaigns publish: output root %q changed: %w", *output, err)
 	}
-	defer destination.Close()
 	files := fstest.MapFS{
 		"campaign/v1.js":        {Data: runtime},
 		"releases/current.json": {Data: currentJSON},
 		"releases/default.json": {Data: baselineJSON},
-		"releases/latest.json":  {Data: baselineJSON},
+		"releases/latest.json":  {Data: latest},
 	}
-	if err := assetexport.CopyContext(ctx, files, []string{"campaign/v1.js", "releases/latest.json", "releases/default.json", "releases/current.json"}, destination); err != nil {
+	if err := assetexport.CopyContext(ctx, files, []string{"campaign/v1.js", "releases/latest.json", "releases/default.json", "releases/current.json"}, published.root); err != nil {
 		return fmt.Errorf("campaigns publish: write channel output %q: %w", *output, err)
 	}
-	cleanupOwned = false
+	cleanupOutput = false
 	fmt.Fprintln(stdout, "campaigns: published latest, default, current, and runtime channels")
 	return nil
 }
@@ -257,118 +251,242 @@ func requiredCampaignDate(command, raw string) (campaigns.Date, error) {
 }
 
 func resolveCampaign(ctx context.Context, deps Dependencies, date campaigns.Date) (channels.Document, error) {
-	input, err := campaignInput(ctx, deps, date)
-	if err != nil {
-		return channels.Document{}, err
-	}
-	document, err := channels.Resolve(input)
-	if err != nil {
-		return channels.Document{}, fmt.Errorf("campaigns: resolve: %w", err)
-	}
-	if err := contextError("campaigns", ctx); err != nil {
-		return channels.Document{}, err
-	}
-	return document, nil
+	current, _, _, _, err := campaignDocuments(ctx, deps, date)
+	return current, err
 }
 
-func resolveDefaultCampaign(ctx context.Context, deps Dependencies, date campaigns.Date) (channels.Document, error) {
-	input, err := campaignInput(ctx, deps, date)
-	if err != nil {
-		return channels.Document{}, err
-	}
-	input.Campaigns.Campaigns = nil
-	document, err := channels.Resolve(input)
-	if err != nil {
-		return channels.Document{}, fmt.Errorf("campaigns: resolve default: %w", err)
-	}
-	if err := contextError("campaigns", ctx); err != nil {
-		return channels.Document{}, err
-	}
-	return document, nil
+type campaignReleaseSnapshot struct {
+	Catalog   catalog.Catalog
+	Themes    themes.Catalog
+	Campaigns campaigns.Manifest
+	Runtime   []byte
 }
 
-func campaignInput(ctx context.Context, deps Dependencies, date campaigns.Date) (channels.Input, error) {
+type campaignSnapshot struct {
+	Default  channels.Default
+	Latest   campaignReleaseSnapshot
+	Promoted campaignReleaseSnapshot
+}
+
+func campaignDocuments(ctx context.Context, deps Dependencies, date campaigns.Date) (channels.Document, channels.Document, []byte, []byte, error) {
+	snapshot, err := loadCampaignSnapshot(ctx, deps)
+	if err != nil {
+		return channels.Document{}, channels.Document{}, nil, nil, err
+	}
+	if campaignAfterSnapshotHook != nil {
+		campaignAfterSnapshotHook()
+	}
+	currentInput := campaignInputFor(snapshot.Default, snapshot.Promoted, date, false)
+	current, err := channels.Resolve(currentInput)
+	if err != nil {
+		return channels.Document{}, channels.Document{}, nil, nil, fmt.Errorf("campaigns: resolve current: %w", err)
+	}
+	defaultInput := campaignInputFor(snapshot.Default, snapshot.Promoted, date, true)
+	baseline, err := channels.Resolve(defaultInput)
+	if err != nil {
+		return channels.Document{}, channels.Document{}, nil, nil, fmt.Errorf("campaigns: resolve default: %w", err)
+	}
+	latestPromotion := snapshot.Default
+	latestPromotion.Release = snapshot.Latest.Catalog.Release
+	latestPromotion.Theme = latestTheme(snapshot.Latest.Themes, snapshot.Default.Theme)
+	latestInput := campaignInputFor(latestPromotion, snapshot.Latest, date, true)
+	latest, err := channels.Resolve(latestInput)
+	if err != nil {
+		return channels.Document{}, channels.Document{}, nil, nil, fmt.Errorf("campaigns: resolve latest: %w", err)
+	}
+	latestJSON, err := channels.Encode(latest)
+	if err != nil {
+		return channels.Document{}, channels.Document{}, nil, nil, fmt.Errorf("campaigns: encode latest channel: %w", err)
+	}
 	if err := contextError("campaigns", ctx); err != nil {
-		return channels.Input{}, err
+		return channels.Document{}, channels.Document{}, nil, nil, err
+	}
+	return current, baseline, latestJSON, append([]byte(nil), snapshot.Latest.Runtime...), nil
+}
+
+func campaignInputFor(defaultPromotion channels.Default, release campaignReleaseSnapshot, date campaigns.Date, baseline bool) channels.Input {
+	calendar := release.Campaigns
+	if baseline {
+		calendar.Campaigns = nil
+	}
+	return channels.Input{Date: date, Default: defaultPromotion, Catalog: release.Catalog, Themes: release.Themes, Campaigns: calendar, PublicRoot: assetsPublicRoot}
+}
+
+func latestTheme(catalog themes.Catalog, preferred string) string {
+	for _, theme := range catalog.Themes {
+		if theme.ID == preferred {
+			return preferred
+		}
+	}
+	values := slices.Clone(catalog.Themes)
+	slices.SortFunc(values, func(a, b themes.CatalogTheme) int { return strings.Compare(a.ID, b.ID) })
+	if len(values) == 0 {
+		return ""
+	}
+	return values[0].ID
+}
+
+func loadCampaignSnapshot(ctx context.Context, deps Dependencies) (campaignSnapshot, error) {
+	if err := contextError("campaigns", ctx); err != nil {
+		return campaignSnapshot{}, err
 	}
 	_, repoRoot, err := openRepository(deps)
 	if err != nil {
-		return channels.Input{}, commandError("campaigns", err)
+		return campaignSnapshot{}, commandError("campaigns", err)
 	}
 	defer repoRoot.Close()
 	defaultPromotion, err := channels.LoadDefault(repoRoot.FS(), "manifests/default.yaml")
 	if err != nil {
-		return channels.Input{}, fmt.Errorf("campaigns: manifest manifests/default.yaml: %w", err)
+		return campaignSnapshot{}, fmt.Errorf("campaigns: manifest manifests/default.yaml: %w", err)
 	}
-	campaignManifest, err := campaigns.Load(repoRoot.FS(), "manifests/campaigns.yaml")
-	if err != nil {
-		return channels.Input{}, fmt.Errorf("campaigns: manifest manifests/campaigns.yaml: %w", err)
+	if _, err := campaigns.Load(repoRoot.FS(), "manifests/campaigns.yaml"); err != nil {
+		return campaignSnapshot{}, fmt.Errorf("campaigns: manifest manifests/campaigns.yaml: %w", err)
 	}
-	dist, err := managedRoot(repoRoot, "dist", false)
+	latest, err := loadCampaignRelease(repoRoot, "dist", true)
 	if err != nil {
-		return channels.Input{}, fmt.Errorf("campaigns: open live dist root: %w", err)
+		return campaignSnapshot{}, err
 	}
-	defer dist.Close()
-	catalogJSON, err := dist.ReadFile("catalog.json")
+	promoted := latest
+	if defaultPromotion.Release != latest.Catalog.Release {
+		promoted, err = loadCampaignRelease(repoRoot, "releases/"+defaultPromotion.Release, false)
+		if err != nil {
+			return campaignSnapshot{}, fmt.Errorf("campaigns: load promoted release snapshot %q: %w", defaultPromotion.Release, err)
+		}
+	}
+	if err := contextError("campaigns", ctx); err != nil {
+		return campaignSnapshot{}, err
+	}
+	return campaignSnapshot{Default: defaultPromotion, Latest: latest, Promoted: promoted}, nil
+}
+
+func loadCampaignRelease(repoRoot *os.Root, path string, includeRuntime bool) (campaignReleaseSnapshot, error) {
+	releaseRoot, err := managedRoot(repoRoot, path, false)
 	if err != nil {
-		return channels.Input{}, fmt.Errorf("campaigns: read live dist catalog.json: %w", err)
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: open release snapshot %q: %w", path, err)
+	}
+	defer releaseRoot.Close()
+	releaseJSON, err := releaseRoot.ReadFile("release.json")
+	if err != nil {
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: read release snapshot %q release.json: %w", path, err)
+	}
+	var releaseDocument releasemeta.Document
+	if err := decodeOneJSON(releaseJSON, &releaseDocument); err != nil {
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: decode release snapshot %q release.json: %w", path, err)
+	}
+	if err := releaseDocument.Validate(); err != nil {
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: validate release snapshot %q release.json: %w", path, err)
+	}
+	catalogJSON, err := releaseRoot.ReadFile("catalog.json")
+	if err != nil {
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: read release snapshot %q catalog.json: %w", path, err)
 	}
 	assetCatalog, err := catalog.Decode(bytes.NewReader(catalogJSON))
 	if err != nil {
-		return channels.Input{}, fmt.Errorf("campaigns: validate live dist catalog.json: %w", err)
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: validate release snapshot %q catalog.json: %w", path, err)
 	}
-	themesJSON, err := dist.ReadFile("themes.json")
+	themesJSON, err := releaseRoot.ReadFile("themes.json")
 	if err != nil {
-		return channels.Input{}, fmt.Errorf("campaigns: read live dist themes.json: %w", err)
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: read release snapshot %q themes.json: %w", path, err)
 	}
-	var themeCatalog themes.Catalog
-	decoder := json.NewDecoder(bytes.NewReader(themesJSON))
+	themeCatalog, err := decodeThemeCatalog(themesJSON)
+	if err != nil {
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: decode release snapshot %q themes.json: %w", path, err)
+	}
+	campaignsJSON, err := releaseRoot.ReadFile("campaigns.json")
+	if err != nil {
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: read release snapshot %q campaigns.json: %w", path, err)
+	}
+	campaignManifest, err := decodeCampaignManifest(campaignsJSON)
+	if err != nil {
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: decode release snapshot %q campaigns.json: %w", path, err)
+	}
+	snapshot := campaignReleaseSnapshot{Catalog: assetCatalog, Themes: themeCatalog, Campaigns: campaignManifest}
+	if !includeRuntime {
+		if err := validateCapturedRelease(releaseDocument, snapshot, catalogJSON, themesJSON, campaignsJSON); err != nil {
+			return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: validate captured release snapshot %q: %w", path, err)
+		}
+		return snapshot, nil
+	}
+	info, err := releaseRoot.Lstat("campaign/v1.js")
+	if err != nil {
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: inspect release snapshot %q campaign/v1.js: %w", path, err)
+	}
+	if info.Mode()&fs.ModeSymlink != 0 || !info.Mode().IsRegular() {
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: release snapshot %q campaign/v1.js is not a regular file", path)
+	}
+	runtime, err := releaseRoot.ReadFile("campaign/v1.js")
+	if err != nil {
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: read release snapshot %q campaign/v1.js: %w", path, err)
+	}
+	snapshot.Runtime = append([]byte(nil), runtime...)
+	if err := validateCapturedRelease(releaseDocument, snapshot, catalogJSON, themesJSON, campaignsJSON); err != nil {
+		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: validate captured release snapshot %q: %w", path, err)
+	}
+	return snapshot, nil
+}
+
+func decodeThemeCatalog(data []byte) (themes.Catalog, error) {
+	var catalog themes.Catalog
+	if err := decodeOneJSON(data, &catalog); err != nil {
+		return themes.Catalog{}, err
+	}
+	return catalog, nil
+}
+
+func decodeCampaignManifest(data []byte) (campaigns.Manifest, error) {
+	var manifest campaigns.Manifest
+	if err := decodeOneJSON(data, &manifest); err != nil {
+		return campaigns.Manifest{}, err
+	}
+	if err := manifest.Validate(); err != nil {
+		return campaigns.Manifest{}, err
+	}
+	return manifest, nil
+}
+
+func decodeOneJSON(data []byte, target any) error {
+	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	if err := decoder.Decode(&themeCatalog); err != nil {
-		return channels.Input{}, fmt.Errorf("campaigns: decode live dist themes.json: %w", err)
+	if err := decoder.Decode(target); err != nil {
+		return err
 	}
 	var extra any
 	if err := decoder.Decode(&extra); !errors.Is(err, io.EOF) {
 		if err == nil {
-			return channels.Input{}, errors.New("campaigns: decode live dist themes.json: multiple JSON values")
+			return errors.New("multiple JSON values")
 		}
-		return channels.Input{}, fmt.Errorf("campaigns: decode live dist themes.json: %w", err)
+		return err
 	}
-	if err := contextError("campaigns", ctx); err != nil {
-		return channels.Input{}, err
-	}
-	return channels.Input{Date: date, Default: defaultPromotion, Catalog: assetCatalog, Themes: themeCatalog, Campaigns: campaignManifest, PublicRoot: assetsPublicRoot}, nil
+	return nil
 }
 
-func campaignRuntime(ctx context.Context, deps Dependencies) ([]byte, error) {
-	if err := contextError("campaigns", ctx); err != nil {
-		return nil, err
+func validateCapturedRelease(document releasemeta.Document, snapshot campaignReleaseSnapshot, catalogJSON, themesJSON, campaignsJSON []byte) error {
+	if document.Release != snapshot.Catalog.Release || document.Release != snapshot.Themes.Release {
+		return fmt.Errorf("release %q does not match captured contracts", document.Release)
 	}
-	_, repoRoot, err := openRepository(deps)
-	if err != nil {
-		return nil, commandError("campaigns", err)
+	files := map[string][]byte{
+		"catalog.json":   catalogJSON,
+		"themes.json":    themesJSON,
+		"campaigns.json": campaignsJSON,
 	}
-	defer repoRoot.Close()
-	dist, err := managedRoot(repoRoot, "dist", false)
-	if err != nil {
-		return nil, fmt.Errorf("campaigns: open live dist root: %w", err)
+	if snapshot.Runtime != nil {
+		files["campaign/v1.js"] = snapshot.Runtime
 	}
-	defer dist.Close()
-	info, err := dist.Lstat("campaign/v1.js")
-	if err != nil {
-		return nil, fmt.Errorf("campaigns: inspect live dist campaign/v1.js: %w", err)
+	indexed := make(map[string]releasemeta.File, len(document.Files))
+	for _, file := range document.Files {
+		indexed[file.Path] = file
 	}
-	if info.Mode()&fs.ModeSymlink != 0 || !info.Mode().IsRegular() {
-		return nil, errors.New("campaigns: live dist campaign/v1.js is not a regular file")
+	for name, data := range files {
+		file, found := indexed[name]
+		if !found {
+			return fmt.Errorf("release inventory does not contain %q", name)
+		}
+		sum := sha256.Sum256(data)
+		if file.Size != int64(len(data)) || file.SHA256 != fmt.Sprintf("%x", sum) {
+			return fmt.Errorf("release inventory mismatch for %q", name)
+		}
 	}
-	runtime, err := dist.ReadFile("campaign/v1.js")
-	if err != nil {
-		return nil, fmt.Errorf("campaigns: read live dist campaign/v1.js: %w", err)
-	}
-	if err := contextError("campaigns", ctx); err != nil {
-		return nil, err
-	}
-	return runtime, nil
+	return nil
 }
 
 func runProof(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {
@@ -846,6 +964,148 @@ type ownedDirectory struct {
 	path   string
 	info   fs.FileInfo
 	handle *os.File
+}
+
+// campaignOutput is an output root anchored by an os.Root descriptor. The
+// lexical path is retained only to detect replacement before publishing; all
+// writes use root and therefore cannot be redirected by a later rename.
+type campaignOutput struct {
+	path  string
+	info  fs.FileInfo
+	root  *os.Root
+	owned []ownedDirectory
+}
+
+func openCampaignOutput(ctx context.Context, output string) (_ *campaignOutput, err error) {
+	absolute, err := campaignOutputPath(output)
+	if err != nil {
+		return nil, fmt.Errorf("resolve output root: %w", err)
+	}
+	volume := filepath.VolumeName(absolute)
+	anchor := volume + string(filepath.Separator)
+	root, err := os.OpenRoot(anchor)
+	if err != nil {
+		return nil, fmt.Errorf("open output anchor %q: %w", anchor, err)
+	}
+	result := &campaignOutput{path: absolute, root: root}
+	defer func() {
+		if err != nil {
+			result.cleanup()
+		}
+	}()
+
+	tail := strings.TrimPrefix(absolute, volume)
+	currentPath := anchor
+	for _, component := range strings.Split(tail, string(filepath.Separator)) {
+		if component == "" {
+			continue
+		}
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
+		currentPath = filepath.Join(currentPath, component)
+		info, statErr := root.Lstat(component)
+		if errors.Is(statErr, fs.ErrNotExist) {
+			created := false
+			if err := root.Mkdir(component, 0o755); err == nil {
+				created = true
+			} else if !errors.Is(err, fs.ErrExist) {
+				return nil, fmt.Errorf("create output component %q: %w", currentPath, err)
+			}
+			info, statErr = root.Lstat(component)
+			if created && statErr == nil {
+				handle, openErr := root.Open(component)
+				if openErr != nil {
+					return nil, fmt.Errorf("open created output component %q: %w", currentPath, openErr)
+				}
+				ownedInfo, infoErr := handle.Stat()
+				if infoErr != nil {
+					_ = handle.Close()
+					return nil, fmt.Errorf("inspect created output component %q: %w", currentPath, infoErr)
+				}
+				result.owned = append(result.owned, ownedDirectory{path: currentPath, info: ownedInfo, handle: handle})
+			}
+		}
+		if statErr != nil {
+			return nil, fmt.Errorf("inspect output component %q: %w", currentPath, statErr)
+		}
+		if info.Mode()&fs.ModeSymlink != 0 {
+			return nil, fmt.Errorf("output path %q has symbolic-link component %q", absolute, currentPath)
+		}
+		if !info.IsDir() {
+			return nil, fmt.Errorf("output path %q component %q is not a directory", absolute, currentPath)
+		}
+		next, openErr := root.OpenRoot(component)
+		if openErr != nil {
+			return nil, fmt.Errorf("open output component %q: %w", currentPath, openErr)
+		}
+		openedInfo, infoErr := next.Stat(".")
+		currentInfo, currentErr := root.Lstat(component)
+		if infoErr != nil || currentErr != nil || currentInfo.Mode()&fs.ModeSymlink != 0 || !os.SameFile(info, currentInfo) || !os.SameFile(info, openedInfo) {
+			_ = next.Close()
+			return nil, fmt.Errorf("output component %q changed while opening", currentPath)
+		}
+		_ = root.Close()
+		root = next
+		result.root = root
+		result.info = info
+	}
+	if result.info == nil {
+		return nil, errors.New("output root is empty")
+	}
+	return result, nil
+}
+
+// campaignOutputPath canonicalizes only the process temp-directory prefix.
+// macOS exposes that trusted prefix through /var even though its real path is
+// /private/var; custom output components remain lexical and are rejected if
+// they are symlinks.
+func campaignOutputPath(output string) (string, error) {
+	absolute, err := filepath.Abs(output)
+	if err != nil {
+		return "", err
+	}
+	temporary := os.TempDir()
+	relative, err := filepath.Rel(temporary, absolute)
+	if err != nil || strings.HasPrefix(relative, ".."+string(filepath.Separator)) || relative == ".." {
+		return absolute, nil
+	}
+	resolved, err := filepath.EvalSymlinks(temporary)
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(resolved, relative), nil
+}
+
+func (output *campaignOutput) verifyPath() error {
+	current, err := os.Lstat(output.path)
+	if err != nil {
+		return err
+	}
+	if current.Mode()&fs.ModeSymlink != 0 || !current.IsDir() || !os.SameFile(current, output.info) {
+		return errors.New("output root replacement detected")
+	}
+	return nil
+}
+
+func (output *campaignOutput) cleanup() {
+	if output == nil {
+		return
+	}
+	if output.root != nil {
+		_ = output.root.Close()
+	}
+	removeEmptyOwnedDirectories(output.owned)
+}
+
+func (output *campaignOutput) close() {
+	if output == nil {
+		return
+	}
+	if output.root != nil {
+		_ = output.root.Close()
+	}
+	closeOwnedDirectories(output.owned)
 }
 
 // createOutputRoot creates path one component at a time so cancellation can
