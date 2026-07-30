@@ -1,0 +1,197 @@
+name: Release assets
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+env:
+  GOPROXY: off
+  GOSUMDB: off
+  GONOSUMDB: '*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Check out exact tag
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.ref }}
+          persist-credentials: false
+
+      - name: Set up exact Go toolchain
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version: '1.26.5'
+          check-latest: false
+          cache: false
+
+      - name: Assert exact tag and Go version
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git tag --points-at HEAD --list "$GITHUB_REF_NAME")" = "$GITHUB_REF_NAME"
+          test "$(go version | awk '{print $3}')" = go1.26.5
+
+      - name: Build verified rsvg-convert 2.62.1
+        shell: bash
+        env:
+          RSVG_VERSION: 2.62.1
+          RSVG_SHA256: b41ca84206242fddd826a2bf76348d7cdf52c1050cbfa060b866e81a252145c3
+          CARGO_C_VERSION: 0.10.10
+          CARGO_C_SOURCE_SHA256: da2101c5bee6c4bc0d62785c7b79d74a22dd566f93f0530b70d82531d4340b80
+          CARGO_C_LOCK_SHA256: 3d9107cb39d4d3c3503eed03fd668f8c24ad94d2a836f7e8c31f782c31b4a548
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends \
+            build-essential ca-certificates curl \
+            libglib2.0-dev libcairo2-dev libpango1.0-dev libssl-dev \
+            libgdk-pixbuf-2.0-dev libxml2-dev meson ninja-build pkg-config
+          command -v rustup
+          rustup toolchain install 1.92.0 --profile minimal
+          CARGO_C_ARCHIVE="${RUNNER_TEMP}/cargo-c-v${CARGO_C_VERSION}.tar.gz"
+          CARGO_C_LOCK="${RUNNER_TEMP}/cargo-c-v${CARGO_C_VERSION}.lock"
+          CARGO_C_CHECKSUM="${RUNNER_TEMP}/cargo-c.sha256"
+          CARGO_C_LOCK_CHECKSUM="${RUNNER_TEMP}/cargo-c.lock.sha256"
+          CARGO_C_ROOT="${RUNNER_TEMP}/cargo-c-root"
+          CARGO_C_SOURCE="${RUNNER_TEMP}/cargo-c-${CARGO_C_VERSION}"
+          curl --fail --location --show-error --silent --retry 3 \
+            --output "$CARGO_C_ARCHIVE" \
+            "https://github.com/lu-zero/cargo-c/archive/refs/tags/v${CARGO_C_VERSION}.tar.gz"
+          curl --fail --location --show-error --silent --retry 3 \
+            --output "$CARGO_C_LOCK" \
+            "https://github.com/lu-zero/cargo-c/releases/download/v${CARGO_C_VERSION}/Cargo.lock"
+          printf '%s  %s\n' "$CARGO_C_SOURCE_SHA256" "$CARGO_C_ARCHIVE" > "$CARGO_C_CHECKSUM"
+          printf '%s  %s\n' "$CARGO_C_LOCK_SHA256" "$CARGO_C_LOCK" > "$CARGO_C_LOCK_CHECKSUM"
+          sha256sum --check --strict "$CARGO_C_CHECKSUM"
+          sha256sum --check --strict "$CARGO_C_LOCK_CHECKSUM"
+          tar --extract --gzip --file "$CARGO_C_ARCHIVE" --directory "$RUNNER_TEMP"
+          install -m 0644 "$CARGO_C_LOCK" "$CARGO_C_SOURCE/Cargo.lock"
+          rustup run 1.92.0 rustc --version | grep --fixed-strings "rustc 1.92.0"
+          rustup run 1.92.0 cargo install --locked --path "$CARGO_C_SOURCE" --root "$CARGO_C_ROOT"
+          export PATH="$CARGO_C_ROOT/bin:$HOME/.rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH"
+          test "$(command -v cargo-cbuild)" = "$CARGO_C_ROOT/bin/cargo-cbuild"
+          test "$(cargo-cbuild --version)" = "cargo-c 0.10.10+cargo-0.86.0"
+          RSVG_ARCHIVE="${RUNNER_TEMP}/librsvg-${RSVG_VERSION}.tar.xz"
+          RSVG_CHECKSUM="${RUNNER_TEMP}/librsvg.sha256"
+          curl --fail --location --show-error --silent --retry 3 \
+            --output "$RSVG_ARCHIVE" \
+            "https://download.gnome.org/sources/librsvg/2.62/librsvg-${RSVG_VERSION}.tar.xz"
+          printf '%s  %s\n' "$RSVG_SHA256" "$RSVG_ARCHIVE" > "$RSVG_CHECKSUM"
+          sha256sum --check --strict "$RSVG_CHECKSUM"
+          tar --extract --file "$RSVG_ARCHIVE" --directory "$RUNNER_TEMP"
+          meson setup "${RUNNER_TEMP}/librsvg-build" "${RUNNER_TEMP}/librsvg-${RSVG_VERSION}" \
+            --prefix "${RUNNER_TEMP}/librsvg" --buildtype release \
+            -Ddocs=disabled -Dintrospection=disabled -Dtests=false
+          meson compile -C "${RUNNER_TEMP}/librsvg-build"
+          meson install -C "${RUNNER_TEMP}/librsvg-build"
+          "${RUNNER_TEMP}/librsvg/bin/rsvg-convert" --version | grep --fixed-strings "rsvg-convert version ${RSVG_VERSION}"
+          echo "${RUNNER_TEMP}/librsvg/bin" >> "$GITHUB_PATH"
+
+      - name: Run complete offline release gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          env -u HTTPS_PROXY -u HTTP_PROXY make check
+          env -u HTTPS_PROXY -u HTTP_PROXY make proof-check
+          go test ./... -count=1
+          go vet ./...
+          make verify
+          make release
+          git diff --exit-code
+          (cd dist && sha256sum --check --strict checksums.txt)
+
+      - name: Verify archives and stage immutable bundles
+        id: release
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="$GITHUB_REF_NAME"
+          built_tag=$(ruby -rjson -e 'puts JSON.parse(File.read("dist/release.json")).fetch("release")')
+          test "$built_tag" = "$tag"
+          archive_base="araihu-assets-${tag}"
+          tar_archive="dist/releases/${archive_base}.tar.gz"
+          zip_archive="dist/releases/${archive_base}.zip"
+          test -f "$tar_archive"
+          test -f "$zip_archive"
+
+          tar_root="${RUNNER_TEMP}/verify-tar"
+          zip_root="${RUNNER_TEMP}/verify-zip"
+          mkdir -p "$tar_root" "$zip_root"
+          tar --extract --gzip --file "$tar_archive" --directory "$tar_root"
+          unzip -q "$zip_archive" -d "$zip_root"
+          (cd "$tar_root" && sha256sum --check --strict checksums.txt)
+          (cd "$zip_root" && sha256sum --check --strict checksums.txt)
+
+          bundle="${RUNNER_TEMP}/release-bundle"
+          latest="${RUNNER_TEMP}/latest-candidate"
+          mkdir -p "$bundle" "$latest"
+          install -m 0644 "$tar_archive" "$bundle/${archive_base}.tar.gz"
+          install -m 0644 "$zip_archive" "$bundle/${archive_base}.zip"
+          install -m 0644 dist/release.json "$bundle/release.json"
+          install -m 0644 dist/checksums.txt "$bundle/checksums.txt"
+          (cd "$bundle" && sha256sum "${archive_base}.tar.gz" "${archive_base}.zip" release.json checksums.txt > SHA256SUMS)
+          (cd "$bundle" && sha256sum --check --strict SHA256SUMS)
+          install -m 0644 dist/release.json "$latest/latest.json"
+
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "bundle=$bundle" >> "$GITHUB_OUTPUT"
+          echo "latest=$latest" >> "$GITHUB_OUTPUT"
+
+      - name: Create or safely update matching GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUNDLE: ${{ steps.release.outputs.bundle }}
+          TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          assets=(
+            "$BUNDLE/araihu-assets-${TAG}.tar.gz"
+            "$BUNDLE/araihu-assets-${TAG}.zip"
+            "$BUNDLE/release.json"
+            "$BUNDLE/checksums.txt"
+            "$BUNDLE/SHA256SUMS"
+          )
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            existing="${RUNNER_TEMP}/existing-release"
+            mkdir -p "$existing"
+            for asset in "${assets[@]}"; do
+              name=$(basename "$asset")
+              if gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern "$name" --dir "$existing" >/dev/null 2>&1; then
+                cmp --silent "$asset" "$existing/$name" || {
+                  echo "GitHub Release asset differs: $name" >&2
+                  exit 1
+                }
+              else
+                gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY"
+              fi
+            done
+          else
+            gh release create "$TAG" "${assets[@]}" --repo "$GITHUB_REPOSITORY" \
+              --verify-tag --title "$TAG" --generate-notes
+          fi
+
+      - name: Publish immutable release-bundle artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: release-bundle-${{ steps.release.outputs.tag }}
+          path: ${{ steps.release.outputs.bundle }}
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+      - name: Publish latest candidate separately
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: latest-candidate-${{ steps.release.outputs.tag }}
+          path: ${{ steps.release.outputs.latest }}
+          if-no-files-found: error
+          retention-days: 90

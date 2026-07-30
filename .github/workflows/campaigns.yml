@@ -1,0 +1,239 @@
+name: Resolve campaign channels
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: UTC date override in YYYY-MM-DD form
+        required: false
+        type: string
+  push:
+    branches: [main]
+    paths:
+      - manifests/campaigns.yaml
+      - manifests/default.yaml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: assets-channel-deployment
+  cancel-in-progress: false
+
+env:
+  GOPROXY: off
+  GOSUMDB: off
+  GONOSUMDB: '*'
+
+jobs:
+  resolve:
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up exact Go toolchain
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version: '1.26.5'
+          check-latest: false
+          cache: false
+
+      - name: Resolve UTC date
+        id: date
+        shell: bash
+        env:
+          REQUESTED_DATE: ${{ inputs.date }}
+        run: |
+          set -euo pipefail
+          if [[ -n "$REQUESTED_DATE" ]]; then
+            resolved=$(REQUESTED_DATE="$REQUESTED_DATE" ruby -rdate -e '
+              raw = ENV.fetch("REQUESTED_DATE")
+              parsed = Date.iso8601(raw)
+              abort "date must use YYYY-MM-DD" unless parsed.iso8601 == raw
+              puts raw
+            ')
+          else
+            resolved=$(date -u +%F)
+          fi
+          echo "date=$resolved" >> "$GITHUB_OUTPUT"
+
+      - name: Materialize promoted release snapshot
+        id: release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          default_release=$(ruby -ryaml -e 'puts YAML.safe_load(File.read("manifests/default.yaml")).fetch("release")')
+          latest_release=$(ruby -rjson -e 'puts JSON.parse(File.read("dist/release.json")).fetch("release")')
+          archive_name="araihu-assets-${default_release}.tar.gz"
+
+          if [[ "$default_release" == "$latest_release" ]]; then
+            archive_path="dist/releases/$archive_name"
+            test -f "$archive_path"
+            release_sha256=$(sha256sum "$archive_path" | awk '{print $1}')
+          else
+            download="${RUNNER_TEMP}/promoted-release"
+            extract="${RUNNER_TEMP}/promoted-release-extract"
+            mkdir -p "$download" "$extract" "releases/${default_release}"
+            gh release download "$default_release" --repo "$GITHUB_REPOSITORY" \
+              --pattern "$archive_name" --dir "$download"
+            gh release download "$default_release" --repo "$GITHUB_REPOSITORY" \
+              --pattern SHA256SUMS --dir "$download"
+            release_sha256=$(awk -v name="$archive_name" '$2 == name { print $1 }' "$download/SHA256SUMS")
+            test "$(printf '%s' "$release_sha256" | wc -c)" -eq 64
+            printf '%s  %s\n' "$release_sha256" "$download/$archive_name" > "$download/archive.sha256"
+            sha256sum --check --strict "$download/archive.sha256"
+            tar --list --gzip --file "$download/$archive_name" > "$download/archive.members"
+            ruby -e '
+              File.readlines(ARGV.fetch(0), chomp: true).each do |path|
+                components = path.split("/", -1)
+                abort "unsafe release archive member: #{path.inspect}" if
+                  path.empty? || path.start_with?("/") || path.include?("\\") ||
+                  components.include?("") || components.include?(".") || components.include?("..")
+              end
+            ' "$download/archive.members"
+            tar --list --verbose --gzip --file "$download/$archive_name" |
+              awk 'substr($1, 1, 1) != "-" { exit 1 }'
+            tar --extract --gzip --file "$download/$archive_name" --directory "$extract"
+            for contract in release.json catalog.json themes.json campaigns.json; do
+              test -f "$extract/$contract"
+              test ! -L "$extract/$contract"
+            done
+            install -m 0644 "$extract/release.json" "releases/${default_release}/release.json"
+            install -m 0644 "$extract/catalog.json" "releases/${default_release}/catalog.json"
+            install -m 0644 "$extract/themes.json" "releases/${default_release}/themes.json"
+            install -m 0644 "$extract/campaigns.json" "releases/${default_release}/campaigns.json"
+          fi
+
+          echo "release=$default_release" >> "$GITHUB_OUTPUT"
+          echo "release_sha256=$release_sha256" >> "$GITHUB_OUTPUT"
+          echo "release_url=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/download/${default_release}/${archive_name}" >> "$GITHUB_OUTPUT"
+
+      - name: Build deterministic channel bundle and compare accepted digest
+        id: channel
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESOLUTION_DATE: ${{ steps.date.outputs.date }}
+        run: |
+          set -euo pipefail
+          test "$(go version | awk '{print $3}')" = go1.26.5
+          go run ./cmd/araihu-assets themes validate
+          go run ./cmd/araihu-assets campaigns validate
+          bundle="${RUNNER_TEMP}/channel-bundle"
+          go run ./cmd/araihu-assets campaigns publish --date "$RESOLUTION_DATE" --output "$bundle"
+          channel_digest=$(ruby -rjson -e '
+            digest = JSON.parse(File.read(ARGV.fetch(0))).fetch("digest")
+            abort "invalid channel digest" unless digest.match?(/\A[0-9a-f]{64}\z/)
+            puts digest
+          ' "$bundle/releases/current.json")
+          accepted_name="accepted-channel-${channel_digest}"
+          accepted_count=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/${GITHUB_REPOSITORY}/actions/artifacts?name=${accepted_name}&per_page=1" \
+            --jq '.total_count')
+          if [[ "$accepted_count" -gt 0 ]]; then
+            changed=false
+            echo "Channel digest already accepted: $channel_digest"
+          else
+            changed=true
+          fi
+          echo "bundle=$bundle" >> "$GITHUB_OUTPUT"
+          echo "digest=$channel_digest" >> "$GITHUB_OUTPUT"
+          echo "accepted_name=$accepted_name" >> "$GITHUB_OUTPUT"
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+
+      - name: Upload changed immutable channel bundle
+        id: changed
+        if: steps.channel.outputs.changed == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: channel-${{ steps.channel.outputs.digest }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ steps.channel.outputs.bundle }}
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 90
+
+      - name: Mint selected-repository dispatch token
+        id: app-token
+        if: steps.channel.outputs.changed == 'true'
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.AHAIRU_APP_ID }}
+          private-key: ${{ secrets.AHAIRU_APP_PRIVATE_KEY }}
+          owner: ${{ vars.AHAIRU_OWNER }}
+          repositories: ${{ vars.AHAIRU_REPOSITORY }}
+          permission-contents: write
+
+      - name: Dispatch Ahairu with immutable artifacts
+        if: steps.channel.outputs.changed == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          AHAIRU_OWNER: ${{ vars.AHAIRU_OWNER }}
+          AHAIRU_REPOSITORY: ${{ vars.AHAIRU_REPOSITORY }}
+          CHANNEL_ARTIFACT_ID: ${{ steps.changed.outputs.artifact-id }}
+          CHANNEL_ARTIFACT_URL: ${{ steps.changed.outputs.artifact-url }}
+          CHANNEL_ARTIFACT_SHA256: ${{ steps.changed.outputs.artifact-digest }}
+          CHANNEL_DIGEST: ${{ steps.channel.outputs.digest }}
+          RELEASE: ${{ steps.release.outputs.release }}
+          RELEASE_URL: ${{ steps.release.outputs.release_url }}
+          RELEASE_SHA256: ${{ steps.release.outputs.release_sha256 }}
+          RESOLUTION_DATE: ${{ steps.date.outputs.date }}
+        run: |
+          set -euo pipefail
+          payload="${RUNNER_TEMP}/dispatch.json"
+          ruby -rjson -e '
+            payload = {
+              event_type: "araihu-assets-released",
+              client_payload: {
+                assets_repository: ENV.fetch("GITHUB_REPOSITORY"),
+                assets_revision: ENV.fetch("GITHUB_SHA"),
+                release: ENV.fetch("RELEASE"),
+                release_url: ENV.fetch("RELEASE_URL"),
+                release_sha256: ENV.fetch("RELEASE_SHA256"),
+                channel_artifact_id: ENV.fetch("CHANNEL_ARTIFACT_ID"),
+                channel_artifact_url: ENV.fetch("CHANNEL_ARTIFACT_URL"),
+                channel_artifact_sha256: ENV.fetch("CHANNEL_ARTIFACT_SHA256"),
+                channel_digest: ENV.fetch("CHANNEL_DIGEST"),
+                resolution_date: ENV.fetch("RESOLUTION_DATE")
+              }
+            }
+            File.write(ARGV.fetch(0), JSON.generate(payload))
+          ' "$payload"
+          gh api --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/dispatches" \
+            --input "$payload"
+
+          accepted="${RUNNER_TEMP}/accepted-channel"
+          mkdir -p "$accepted"
+          ruby -rjson -e '
+            record = {
+              channelDigest: ENV.fetch("CHANNEL_DIGEST"),
+              channelArtifactId: ENV.fetch("CHANNEL_ARTIFACT_ID"),
+              channelArtifactSha256: ENV.fetch("CHANNEL_ARTIFACT_SHA256")
+            }
+            File.write(File.join(ARGV.fetch(0), "accepted.json"), JSON.pretty_generate(record) + "\n")
+          ' "$accepted"
+          echo "accepted=$accepted" >> "$GITHUB_OUTPUT"
+
+      - name: Record accepted channel digest
+        if: steps.channel.outputs.changed == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: accepted-channel-${{ steps.channel.outputs.digest }}
+          path: ${{ runner.temp }}/accepted-channel
+          if-no-files-found: error
+          retention-days: 90
