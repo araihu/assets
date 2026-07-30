@@ -22,6 +22,9 @@ var (
 	releaseTag = regexp.MustCompile(`^v(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-(?:(?:0|[1-9][0-9]*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9][0-9]*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$`)
 )
 
+// publicBundleAfterPreflight is a test-only race seam. Production leaves it nil.
+var publicBundleAfterPreflight func()
+
 // Archive writes a deterministic gzip-compressed tar archive. source must be
 // immutable or snapshotted: generic mutable fs.FS values cannot close symlink
 // TOCTOU races. ArchiveRoot provides rooted live-filesystem confinement.
@@ -132,42 +135,105 @@ func PublicBundle(ctx context.Context, destination *os.Root, releaseID string, s
 		return err
 	}
 	base := "releases/" + releaseID
-	if err := ensureDirectory(destination, base); err != nil {
-		return fmt.Errorf("release: create public bundle root: %w", err)
-	}
 	for _, entry := range entries {
 		if err := ctx.Err(); err != nil {
 			return err
 		}
-		target := base + "/" + entry.name
-		if err := ensureDirectory(destination, strings.TrimSuffix(target, "/"+pathBase(entry.name))); err != nil {
-			return fmt.Errorf("release: create directory for %s: %w", entry.name, err)
+		if err := inspectPublicMember(destination, publicMemberPath(base, entry.name), entry.data); err != nil {
+			return err
 		}
-		info, err := destination.Lstat(target)
-		if errors.Is(err, fs.ErrNotExist) {
-			if err := destination.WriteFile(target, entry.data, 0o644); err != nil {
-				return fmt.Errorf("release: write public member %s: %w", entry.name, err)
-			}
-			continue
+	}
+	if publicBundleAfterPreflight != nil {
+		publicBundleAfterPreflight()
+	}
+	createdFiles := make([]string, 0, len(entries))
+	createdDirectories := make([]string, 0, len(entries)+1)
+	for _, entry := range entries {
+		if err := ctx.Err(); err != nil {
+			return rollbackPublicBundle(destination, createdFiles, createdDirectories, err)
+		}
+		target := publicMemberPath(base, entry.name)
+		created, err := writePublicMember(destination, target, entry.data, &createdDirectories)
+		if created {
+			createdFiles = append(createdFiles, target)
 		}
 		if err != nil {
-			return fmt.Errorf("release: inspect public member %s: %w", entry.name, err)
-		}
-		if info.Mode()&fs.ModeSymlink != 0 || !info.Mode().IsRegular() {
-			return fmt.Errorf("release: non-regular collision %s", entry.name)
-		}
-		existing, err := destination.ReadFile(target)
-		if err != nil {
-			return fmt.Errorf("release: read public member %s: %w", entry.name, err)
-		}
-		if !slices.Equal(existing, entry.data) {
-			return fmt.Errorf("release: collision at %s", target)
+			return rollbackPublicBundle(destination, createdFiles, createdDirectories, err)
 		}
 	}
 	return nil
 }
 
-func ensureDirectory(root *os.Root, name string) error {
+func publicMemberPath(base, name string) string { return base + "/" + name }
+
+func writePublicMember(root *os.Root, target string, data []byte, createdDirectories *[]string) (bool, error) {
+	if err := ensureDirectory(root, memberDirectory(target), createdDirectories); err != nil {
+		return false, fmt.Errorf("release: create directory for %s: %w", target, err)
+	}
+	file, err := root.OpenFile(target, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o644)
+	if errors.Is(err, fs.ErrExist) {
+		return false, inspectPublicMember(root, target, data)
+	}
+	if err != nil {
+		return false, fmt.Errorf("release: create public member %s: %w", target, err)
+	}
+	if _, err := file.Write(data); err != nil {
+		_ = file.Close()
+		return true, fmt.Errorf("release: write public member %s: %w", target, err)
+	}
+	if err := file.Close(); err != nil {
+		return true, fmt.Errorf("release: close public member %s: %w", target, err)
+	}
+	return true, nil
+}
+
+func inspectPublicMember(root *os.Root, target string, data []byte) error {
+	if err := inspectExistingDirectories(root, memberDirectory(target)); err != nil {
+		return err
+	}
+	info, err := root.Lstat(target)
+	if errors.Is(err, fs.ErrNotExist) {
+		return nil
+	}
+	if err != nil {
+		return fmt.Errorf("release: inspect public member %s: %w", target, err)
+	}
+	if info.Mode()&fs.ModeSymlink != 0 || !info.Mode().IsRegular() {
+		return fmt.Errorf("release: non-regular collision %s", target)
+	}
+	existing, err := root.ReadFile(target)
+	if err != nil {
+		return fmt.Errorf("release: read public member %s: %w", target, err)
+	}
+	if !slices.Equal(existing, data) {
+		return fmt.Errorf("release: collision at %s", target)
+	}
+	return nil
+}
+
+func inspectExistingDirectories(root *os.Root, name string) error {
+	current := ""
+	for _, component := range strings.Split(name, "/") {
+		if current == "" {
+			current = component
+		} else {
+			current += "/" + component
+		}
+		info, err := root.Lstat(current)
+		if errors.Is(err, fs.ErrNotExist) {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+		if info.Mode()&fs.ModeSymlink != 0 || !info.IsDir() {
+			return fmt.Errorf("release: non-directory path %s", current)
+		}
+	}
+	return nil
+}
+
+func ensureDirectory(root *os.Root, name string, created *[]string) error {
 	if name == "." || name == "" {
 		return nil
 	}
@@ -180,7 +246,9 @@ func ensureDirectory(root *os.Root, name string) error {
 		}
 		info, err := root.Lstat(current)
 		if errors.Is(err, fs.ErrNotExist) {
-			if err := root.Mkdir(current, 0o755); err != nil && !errors.Is(err, fs.ErrExist) {
+			if err := root.Mkdir(current, 0o755); err == nil {
+				*created = append(*created, current)
+			} else if !errors.Is(err, fs.ErrExist) {
 				return err
 			}
 			info, err = root.Lstat(current)
@@ -195,9 +263,29 @@ func ensureDirectory(root *os.Root, name string) error {
 	return nil
 }
 
-func pathBase(name string) string {
-	parts := strings.Split(name, "/")
-	return parts[len(parts)-1]
+func rollbackPublicBundle(root *os.Root, files, directories []string, prior error) error {
+	var rollbackErr error
+	for index := len(files) - 1; index >= 0; index-- {
+		if err := root.Remove(files[index]); err != nil && !errors.Is(err, fs.ErrNotExist) && rollbackErr == nil {
+			rollbackErr = err
+		}
+	}
+	for index := len(directories) - 1; index >= 0; index-- {
+		if err := root.Remove(directories[index]); err != nil && !errors.Is(err, fs.ErrNotExist) && rollbackErr == nil {
+			rollbackErr = err
+		}
+	}
+	if rollbackErr != nil {
+		return fmt.Errorf("%w; rollback public bundle: %v", prior, rollbackErr)
+	}
+	return prior
+}
+
+func memberDirectory(name string) string {
+	if index := strings.LastIndex(name, "/"); index >= 0 {
+		return name[:index]
+	}
+	return ""
 }
 
 func validReleaseID(releaseID string) bool {
@@ -258,7 +346,11 @@ func sourceSymlink(source fs.FS, name string) (bool, error) {
 		found := false
 		for _, candidate := range entries {
 			if candidate.Name() == component {
-				if candidate.Type()&fs.ModeSymlink != 0 {
+				info, err := candidate.Info()
+				if err != nil {
+					return false, err
+				}
+				if info.Mode()&fs.ModeSymlink != 0 {
 					return true, nil
 				}
 				found = true

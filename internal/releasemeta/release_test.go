@@ -1,6 +1,7 @@
 package releasemeta
 
 import (
+	"io/fs"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -45,6 +46,26 @@ func TestBuildRejectsReleaseSelfHashAndUnsafeFiles(t *testing.T) {
 	}
 }
 
+func TestBuildRejectsSingleBackslashAndMaskedSymlink(t *testing.T) {
+	files := fixtureFiles()
+	files[`icons\logo.svg`] = &fstest.MapFile{Data: []byte("backslash")}
+	if _, err := Build(Input{Release: "v0.1.1", IdentityRevision: 11, RuntimeVersion: 1, Files: files}); err == nil || !strings.Contains(err.Error(), "invalid file path") {
+		t.Fatalf("Build() error = %v", err)
+	}
+
+	files = fixtureFiles()
+	files["hidden"] = &fstest.MapFile{Data: []byte("link"), Mode: fs.ModeSymlink}
+	if _, err := Build(Input{Release: "v0.1.1", IdentityRevision: 11, RuntimeVersion: 1, Files: maskedTypeFS{files}}); err == nil || !strings.Contains(err.Error(), "symbolic link") {
+		t.Fatalf("Build() error = %v", err)
+	}
+
+	files = fixtureFiles()
+	files["special"] = &fstest.MapFile{Data: []byte("pipe"), Mode: fs.ModeNamedPipe}
+	if _, err := Build(Input{Release: "v0.1.1", IdentityRevision: 11, RuntimeVersion: 1, Files: maskedTypeFS{files}}); err == nil || !strings.Contains(err.Error(), "non-regular") {
+		t.Fatalf("Build() error = %v", err)
+	}
+}
+
 func TestEncodeCanonicalizesSortedInventory(t *testing.T) {
 	document, err := Build(Input{Release: "v0.1.1", IdentityRevision: 11, RuntimeVersion: 1, Files: fixtureFiles()})
 	if err != nil {
@@ -67,3 +88,20 @@ func fixtureFiles() fstest.MapFS {
 		"icons/logo.svg": {Data: []byte("logo")},
 	}
 }
+
+type maskedTypeFS struct{ fs.FS }
+
+func (filesystem maskedTypeFS) ReadDir(name string) ([]fs.DirEntry, error) {
+	entries, err := fs.ReadDir(filesystem.FS, name)
+	if err != nil {
+		return nil, err
+	}
+	for index, entry := range entries {
+		entries[index] = maskedTypeEntry{entry}
+	}
+	return entries, nil
+}
+
+type maskedTypeEntry struct{ fs.DirEntry }
+
+func (maskedTypeEntry) Type() fs.FileMode { return 0 }

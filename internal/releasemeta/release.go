@@ -75,13 +75,17 @@ func Build(input Input) (Document, error) {
 		if !validPath(path) {
 			return fmt.Errorf("invalid file path %q", path)
 		}
-		if entry.Type()&fs.ModeSymlink != 0 {
+		info, err := entry.Info()
+		if err != nil {
+			return fmt.Errorf("inspect %s: %w", path, err)
+		}
+		if info.Mode()&fs.ModeSymlink != 0 {
 			return fmt.Errorf("symbolic link %s", path)
 		}
-		if entry.IsDir() {
+		if info.IsDir() {
 			return nil
 		}
-		if !entry.Type().IsRegular() {
+		if !info.Mode().IsRegular() {
 			return fmt.Errorf("non-regular file %s", path)
 		}
 		if path == "release.json" {
@@ -181,7 +185,7 @@ func Encode(document Document) ([]byte, error) {
 }
 
 func validPath(path string) bool {
-	return path != "." && fs.ValidPath(path) && !strings.Contains(path, `\\`) && !strings.Contains(strings.Split(path, "/")[0], ":")
+	return path != "." && fs.ValidPath(path) && !strings.Contains(path, `\`) && !strings.Contains(strings.Split(path, "/")[0], ":")
 }
 
 func compareFiles(a, b File) int { return compareFilePaths(a.Path, b.Path) }

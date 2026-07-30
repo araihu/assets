@@ -7,6 +7,7 @@ import (
 	"compress/gzip"
 	"context"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -31,6 +32,58 @@ func TestPublicBundleRejectsDifferentByteCollision(t *testing.T) {
 	err = PublicBundle(context.Background(), root, "v0.1.1", fstest.MapFS{"catalog.json": {Data: []byte("new")}}, []string{"catalog.json"})
 	if err == nil || !strings.Contains(err.Error(), "collision") {
 		t.Fatalf("assemble error = %v", err)
+	}
+}
+
+func TestPublicBundlePreflightsCollisionBeforePublishing(t *testing.T) {
+	destination := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(destination, "releases", "v0.1.1"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(destination, "releases", "v0.1.1", "z-collision.txt"), []byte("old"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	root, err := os.OpenRoot(destination)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer root.Close()
+	err = PublicBundle(context.Background(), root, "v0.1.1", fstest.MapFS{
+		"a-new.txt":       {Data: []byte("new")},
+		"z-collision.txt": {Data: []byte("different")},
+	}, []string{"a-new.txt", "z-collision.txt"})
+	if err == nil || !strings.Contains(err.Error(), "collision") {
+		t.Fatalf("PublicBundle() error = %v", err)
+	}
+	if _, err := os.Lstat(filepath.Join(destination, "releases", "v0.1.1", "a-new.txt")); !os.IsNotExist(err) {
+		t.Fatalf("partial public member = %v", err)
+	}
+}
+
+func TestPublicBundleRejectsConcurrentCollisionAndRollsBack(t *testing.T) {
+	destination := t.TempDir()
+	root, err := os.OpenRoot(destination)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer root.Close()
+	publicBundleAfterPreflight = func() {
+		mustWrite(t, filepath.Join(destination, "releases", "v0.1.1", "z-raced.txt"), []byte("raced"))
+	}
+	t.Cleanup(func() { publicBundleAfterPreflight = nil })
+	err = PublicBundle(context.Background(), root, "v0.1.1", fstest.MapFS{
+		"a-created.txt": {Data: []byte("created")},
+		"z-raced.txt":   {Data: []byte("wanted")},
+	}, []string{"a-created.txt", "z-raced.txt"})
+	if err == nil || !strings.Contains(err.Error(), "collision") {
+		t.Fatalf("PublicBundle() error = %v", err)
+	}
+	if _, err := os.Lstat(filepath.Join(destination, "releases", "v0.1.1", "a-created.txt")); !os.IsNotExist(err) {
+		t.Fatalf("rolled back member = %v", err)
+	}
+	got, err := os.ReadFile(filepath.Join(destination, "releases", "v0.1.1", "z-raced.txt"))
+	if err != nil || string(got) != "raced" {
+		t.Fatalf("concurrent member = %q, %v", got, err)
 	}
 }
 
@@ -69,6 +122,25 @@ func TestPublicBundleRejectsDestinationSymlink(t *testing.T) {
 	err = PublicBundle(context.Background(), root, "v0.1.1", fstest.MapFS{"catalog.json": {Data: []byte("new")}}, []string{"catalog.json"})
 	if err == nil || !strings.Contains(err.Error(), "non-regular") {
 		t.Fatalf("assemble error = %v", err)
+	}
+}
+
+func TestPublicBundleRejectsMaskedSourceSymlink(t *testing.T) {
+	destination := t.TempDir()
+	root, err := os.OpenRoot(destination)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer root.Close()
+	source := fstest.MapFS{"hidden": {Data: []byte("link"), Mode: fs.ModeSymlink}}
+	err = PublicBundle(context.Background(), root, "v0.1.1", maskedTypeFS{source}, []string{"hidden"})
+	if err == nil || !strings.Contains(err.Error(), "symbolic link") {
+		t.Fatalf("PublicBundle() error = %v", err)
+	}
+	source = fstest.MapFS{"special": {Data: []byte("pipe"), Mode: fs.ModeNamedPipe}}
+	err = PublicBundle(context.Background(), root, "v0.1.1", maskedTypeFS{source}, []string{"special"})
+	if err == nil || !strings.Contains(err.Error(), "non-regular") {
+		t.Fatalf("PublicBundle() error = %v", err)
 	}
 }
 
@@ -199,3 +271,30 @@ func equalStrings(got, want []string) bool {
 	}
 	return true
 }
+
+func mustWrite(t *testing.T, name string, data []byte) {
+	t.Helper()
+	if err := os.MkdirAll(filepath.Dir(name), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(name, data, 0o644); err != nil {
+		t.Fatal(err)
+	}
+}
+
+type maskedTypeFS struct{ fs.FS }
+
+func (filesystem maskedTypeFS) ReadDir(name string) ([]fs.DirEntry, error) {
+	entries, err := fs.ReadDir(filesystem.FS, name)
+	if err != nil {
+		return nil, err
+	}
+	for index, entry := range entries {
+		entries[index] = maskedTypeEntry{entry}
+	}
+	return entries, nil
+}
+
+type maskedTypeEntry struct{ fs.DirEntry }
+
+func (maskedTypeEntry) Type() fs.FileMode { return 0 }
