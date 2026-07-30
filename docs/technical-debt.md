@@ -45,3 +45,15 @@ their severity.
 Revisit this list after v0.1.1 deployment evidence is stable, or sooner if a
 consumer exposes a rendering, validation, or compatibility failure tied to an
 item above.
+
+## v0.1.2 integration follow-up
+
+- Add a release-consumer updater for `goshtoso-getting-started`; it currently
+  tracks Goshtoso and Go directly but has no workflow to refresh its vendored
+  Arai Hû theme or fallback assets.
+- Define cumulative-release retention for downstream bundles before promoting
+  a newer default channel. Existing applications may still embed an older
+  immutable release path even after the channel pointer changes.
+- Keep the compact campaign dispatch envelope (`state.ref` and `state.path`)
+  covered by an API-level fixture; GitHub repository dispatch accepts at most
+  ten client-payload properties.
