@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -66,6 +67,140 @@ func TestRunHonorsCancelledContextBeforeWork(t *testing.T) {
 	err := Run(ctx, Dependencies{}, []string{"build", "--offline"}, io.Discard, io.Discard)
 	if err == nil || !strings.Contains(err.Error(), "build: context canceled") {
 		t.Fatalf("Run(cancelled build) error = %v", err)
+	}
+}
+
+func TestThemesValidateAndCampaignResolveUseStrictOfflineInputs(t *testing.T) {
+	repo := fixtureRepo(t)
+	for _, args := range [][]string{{"themes", "validate"}, {"campaigns", "validate"}} {
+		var stdout, stderr bytes.Buffer
+		if err := Run(context.Background(), Dependencies{Repo: repo}, args, &stdout, &stderr); err != nil {
+			t.Fatalf("Run(%q) error = %v", args, err)
+		}
+		if stdout.Len() == 0 || stderr.Len() != 0 {
+			t.Fatalf("Run(%q) stdout=%q stderr=%q", args, stdout.String(), stderr.String())
+		}
+	}
+
+	var stdout, stderr bytes.Buffer
+	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "resolve", "--date", "2026-10-31"}, &stdout, &stderr)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(stdout.String(), `"schemaVersion": 1`) || stderr.Len() != 0 {
+		t.Fatalf("stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+}
+
+func TestThemeAndCampaignCommandsRejectInvalidArguments(t *testing.T) {
+	for _, args := range [][]string{
+		{"themes"},
+		{"themes", "validate", "extra"},
+		{"campaigns"},
+		{"campaigns", "unknown"},
+		{"campaigns", "resolve"},
+		{"campaigns", "resolve", "--date", "2026-2-03"},
+		{"campaigns", "resolve", "--date", "2026-02-03", "extra"},
+		{"campaigns", "publish", "--date", "2026-02-03"},
+		{"campaigns", "publish", "--output", "out"},
+		{"campaigns", "publish", "--date", "2026-02-03", "--output", "out", "extra"},
+	} {
+		var stderr bytes.Buffer
+		err := Run(context.Background(), Dependencies{}, args, io.Discard, &stderr)
+		if err == nil || !IsUsage(err) {
+			t.Fatalf("Run(%q) error = %v, want usage error", args, err)
+		}
+	}
+}
+
+func TestCampaignPublishWritesOnlyChannelsAndAcceptsIdenticalOutput(t *testing.T) {
+	output := filepath.Join(t.TempDir(), "channel-output")
+	args := []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}
+	for range 2 {
+		if err := Run(context.Background(), Dependencies{Repo: fixtureRepo(t)}, args, io.Discard, io.Discard); err != nil {
+			t.Fatalf("Run(%q) error = %v", args, err)
+		}
+	}
+	var paths []string
+	err := filepath.WalkDir(output, func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		relative, err := filepath.Rel(output, path)
+		if err != nil {
+			return err
+		}
+		paths = append(paths, filepath.ToSlash(relative))
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := strings.Join(paths, ",")
+	want := "campaign/v1.js,releases/current.json,releases/default.json,releases/latest.json"
+	if got != want {
+		t.Fatalf("published paths = %q, want %q", got, want)
+	}
+}
+
+func TestCampaignPublishPreflightsDifferentByteCollision(t *testing.T) {
+	output := t.TempDir()
+	name := filepath.Join(output, "releases", "current.json")
+	if err := os.MkdirAll(filepath.Dir(name), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(name, []byte("old"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	err := Run(context.Background(), Dependencies{Repo: fixtureRepo(t)}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard)
+	if err == nil || !strings.Contains(err.Error(), "collision") {
+		t.Fatalf("Run(publish) error = %v, want collision", err)
+	}
+	if got, err := os.ReadFile(name); err != nil || string(got) != "old" {
+		t.Fatalf("collision target = %q, %v", got, err)
+	}
+	if _, err := os.Stat(filepath.Join(output, "campaign", "v1.js")); !errors.Is(err, fs.ErrNotExist) {
+		t.Fatalf("partial channel output = %v", err)
+	}
+}
+
+func TestCampaignPublishCancellationPreservesReplacementOutput(t *testing.T) {
+	parent := t.TempDir()
+	output := filepath.Join(parent, "new-output")
+	ctx, cancel := context.WithCancel(context.Background())
+	campaignAfterOutputRootHook = func() {
+		if err := os.Remove(output); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.Mkdir(output, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		cancel()
+	}
+	t.Cleanup(func() { campaignAfterOutputRootHook = nil })
+	err := Run(ctx, Dependencies{Repo: fixtureRepo(t)}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("Run(publish) error = %v, want context canceled", err)
+	}
+	if info, err := os.Lstat(output); err != nil || !info.IsDir() {
+		t.Fatalf("cancelled publish removed replacement output %q: %v, %v", output, info, err)
+	}
+}
+
+func TestCampaignPublishPreservesUnownedOutputPath(t *testing.T) {
+	output := filepath.Join(t.TempDir(), "unowned")
+	if err := os.WriteFile(output, []byte("do not remove"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	err := Run(context.Background(), Dependencies{Repo: fixtureRepo(t)}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard)
+	if err == nil {
+		t.Fatal("Run(publish) accepted regular-file output root")
+	}
+	if got, err := os.ReadFile(output); err != nil || string(got) != "do not remove" {
+		t.Fatalf("unowned output = %q, %v", got, err)
 	}
 }
 
@@ -171,4 +306,13 @@ func copyManifest(t *testing.T, repo, name string) {
 	if err := os.WriteFile(filepath.Join(repo, "manifests", name), data, 0o644); err != nil {
 		t.Fatal(err)
 	}
+}
+
+func fixtureRepo(t *testing.T) string {
+	t.Helper()
+	repo, err := filepath.Abs(filepath.Join("..", ".."))
+	if err != nil {
+		t.Fatal(err)
+	}
+	return repo
 }

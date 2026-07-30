@@ -42,6 +42,8 @@ make verify    # rebuild offline and compare with dist/
 make check     # test, then reject generated-output drift
 make proof     # atomically regenerate dist/, including dist/proof
 make proof-check # reject generated proof/output drift without writing
+make themes-check # validate source theme manifest and stylesheets offline
+make campaigns-check # validate campaign references and resolve a fixed UTC date
 ```
 
 `make proof` and `make proof-check` use the same local, catalog-driven builder
@@ -57,6 +59,10 @@ araihu-assets verify
 araihu-assets proof [--check]
 araihu-assets catalog
 araihu-assets export --output <directory>
+araihu-assets themes validate
+araihu-assets campaigns validate
+araihu-assets campaigns resolve --date YYYY-MM-DD
+araihu-assets campaigns publish --date YYYY-MM-DD --output <directory>
 ```
 
 `vendor` is the only networked command. All other commands build from the
@@ -67,6 +73,14 @@ strictly validates the published catalog before reporting it.
 rejects traversal, symlinks, invalid paths, and different-byte collisions;
 existing identical files are idempotent. Treat a collision error as a request
 to choose a separate output directory or reconcile the consumer's copy.
+
+`themes validate`, `campaigns validate`, and `campaigns resolve` are offline
+and credential-free. `resolve` writes one canonical channel JSON document to
+standard output and writes nothing else. `campaigns publish` writes only
+`releases/latest.json`, `releases/default.json`, `releases/current.json`, and
+`campaign/v1.js` below its output root; it never creates immutable release
+history. Existing identical channel bytes are idempotent, while different-byte
+collisions fail without overwriting consumer output.
 
 ## Catalog and sprites
 

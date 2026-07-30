@@ -16,6 +16,12 @@ func TestRunMainMapsUsageToExitTwo(t *testing.T) {
 	}
 }
 
+func TestRunMainMapsCampaignUsageToExitTwo(t *testing.T) {
+	if got := runMain(context.Background(), app.Dependencies{}, []string{"campaigns", "resolve"}, &bytes.Buffer{}, &bytes.Buffer{}); got != 2 {
+		t.Fatalf("runMain() = %d, want 2", got)
+	}
+}
+
 func TestSignalContextWiresInterruptAndSIGTERM(t *testing.T) {
 	original := notifyContext
 	t.Cleanup(func() { notifyContext = original })

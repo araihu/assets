@@ -2,7 +2,9 @@
 package app
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
@@ -12,10 +14,12 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"testing/fstest"
 
 	"github.com/araihu/assets/internal/build"
 	"github.com/araihu/assets/internal/campaigns"
 	"github.com/araihu/assets/internal/catalog"
+	"github.com/araihu/assets/internal/channels"
 	assetexport "github.com/araihu/assets/internal/export"
 	"github.com/araihu/assets/internal/manifest"
 	"github.com/araihu/assets/internal/platform"
@@ -39,6 +43,14 @@ var exportAfterEnumerationHook func()
 // exportAfterOutputRootHook is a test-only cleanup-ownership seam.
 var exportAfterOutputRootHook func()
 
+// campaignAfterOutputRootHook is a test-only cleanup-ownership seam.
+var campaignAfterOutputRootHook func()
+
+const (
+	assetsPublicRoot      = "https://araihu.com"
+	validationCampaignDay = "1970-01-01"
+)
+
 // UsageError describes invalid command or flag syntax. Callers map it to exit
 // status 2; all other errors are command execution failures.
 type UsageError struct{ message string }
@@ -60,7 +72,7 @@ func Run(ctx context.Context, deps Dependencies, args []string, stdout, stderr i
 		stderr = io.Discard
 	}
 	if len(args) == 0 {
-		return usagef("usage: araihu-assets <vendor|build|verify|proof|export|catalog>")
+		return usagef("usage: araihu-assets <vendor|build|verify|proof|export|catalog|themes|campaigns>")
 	}
 
 	switch args[0] {
@@ -76,9 +88,287 @@ func Run(ctx context.Context, deps Dependencies, args []string, stdout, stderr i
 		return runExport(ctx, deps, args[1:], stdout, stderr)
 	case "catalog":
 		return runCatalog(ctx, deps, args[1:], stdout, stderr)
+	case "themes":
+		return runThemes(ctx, deps, args[1:], stdout, stderr)
+	case "campaigns":
+		return runCampaigns(ctx, deps, args[1:], stdout, stderr)
 	default:
-		return usagef("unknown command %q; expected vendor, build, verify, proof, export, or catalog", args[0])
+		return usagef("unknown command %q; expected vendor, build, verify, proof, export, catalog, themes, or campaigns", args[0])
 	}
+}
+
+func runThemes(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {
+	if len(args) != 1 || args[0] != "validate" {
+		return usagef("usage: araihu-assets themes validate")
+	}
+	if err := contextError("themes", ctx); err != nil {
+		return err
+	}
+	_, repoRoot, err := openRepository(deps)
+	if err != nil {
+		return commandError("themes", err)
+	}
+	defer repoRoot.Close()
+	if _, _, err := themeInputs(repoRoot.FS()); err != nil {
+		return commandError("themes", err)
+	}
+	if err := contextError("themes", ctx); err != nil {
+		return err
+	}
+	fmt.Fprintln(stdout, "themes: manifests/themes.yaml and referenced stylesheets are valid")
+	return nil
+}
+
+func runCampaigns(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {
+	if len(args) == 0 {
+		return usagef("usage: araihu-assets campaigns <validate|resolve|publish>")
+	}
+	switch args[0] {
+	case "validate":
+		if len(args) != 1 {
+			return usagef("usage: araihu-assets campaigns validate")
+		}
+		date, err := campaigns.ParseDate(validationCampaignDay)
+		if err != nil {
+			return commandError("campaigns", err)
+		}
+		if _, err := resolveCampaign(ctx, deps, date); err != nil {
+			return err
+		}
+		fmt.Fprintln(stdout, "campaigns: manifests/campaigns.yaml and release references are valid")
+		return nil
+	case "resolve":
+		return runCampaignResolve(ctx, deps, args[1:], stdout, stderr)
+	case "publish":
+		return runCampaignPublish(ctx, deps, args[1:], stdout, stderr)
+	default:
+		return usagef("campaigns: unknown command %q; expected validate, resolve, or publish", args[0])
+	}
+}
+
+func runCampaignResolve(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {
+	flags := newFlagSet("campaigns resolve", stderr, "usage: araihu-assets campaigns resolve --date YYYY-MM-DD")
+	rawDate := flags.String("date", "", "UTC campaign date in YYYY-MM-DD form")
+	if err := parse(flags, args); err != nil {
+		return usagef("campaigns resolve: %v", err)
+	}
+	date, err := requiredCampaignDate("campaigns resolve", *rawDate)
+	if err != nil {
+		return err
+	}
+	document, err := resolveCampaign(ctx, deps, date)
+	if err != nil {
+		return err
+	}
+	encoded, err := channels.Encode(document)
+	if err != nil {
+		return fmt.Errorf("campaigns resolve: encode channel document: %w", err)
+	}
+	if _, err := stdout.Write(encoded); err != nil {
+		return fmt.Errorf("campaigns resolve: write stdout: %w", err)
+	}
+	return nil
+}
+
+func runCampaignPublish(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {
+	flags := newFlagSet("campaigns publish", stderr, "usage: araihu-assets campaigns publish --date YYYY-MM-DD --output <directory>")
+	rawDate := flags.String("date", "", "UTC campaign date in YYYY-MM-DD form")
+	output := flags.String("output", "", "consumer-controlled channel output directory")
+	if err := parse(flags, args); err != nil {
+		return usagef("campaigns publish: %v", err)
+	}
+	date, err := requiredCampaignDate("campaigns publish", *rawDate)
+	if err != nil {
+		return err
+	}
+	if strings.TrimSpace(*output) == "" {
+		return usagef("campaigns publish: --output is required")
+	}
+	current, err := resolveCampaign(ctx, deps, date)
+	if err != nil {
+		return err
+	}
+	baseline, err := resolveDefaultCampaign(ctx, deps, date)
+	if err != nil {
+		return err
+	}
+	currentJSON, err := channels.Encode(current)
+	if err != nil {
+		return fmt.Errorf("campaigns publish: encode current channel: %w", err)
+	}
+	baselineJSON, err := channels.Encode(baseline)
+	if err != nil {
+		return fmt.Errorf("campaigns publish: encode default channel: %w", err)
+	}
+	runtime, err := campaignRuntime(ctx, deps)
+	if err != nil {
+		return err
+	}
+	if err := contextError("campaigns publish", ctx); err != nil {
+		return err
+	}
+	owned, err := createOutputRoot(ctx, *output)
+	if err != nil {
+		removeEmptyOwnedDirectories(owned)
+		return fmt.Errorf("campaigns publish: create output root %q: %w", *output, err)
+	}
+	if campaignAfterOutputRootHook != nil {
+		campaignAfterOutputRootHook()
+	}
+	cleanupOwned := true
+	defer func() {
+		if cleanupOwned {
+			removeEmptyOwnedDirectories(owned)
+		} else {
+			closeOwnedDirectories(owned)
+		}
+	}()
+	if err := contextError("campaigns publish", ctx); err != nil {
+		return err
+	}
+	destination, err := os.OpenRoot(*output)
+	if err != nil {
+		return fmt.Errorf("campaigns publish: open output root %q: %w", *output, err)
+	}
+	defer destination.Close()
+	files := fstest.MapFS{
+		"campaign/v1.js":        {Data: runtime},
+		"releases/current.json": {Data: currentJSON},
+		"releases/default.json": {Data: baselineJSON},
+		"releases/latest.json":  {Data: baselineJSON},
+	}
+	if err := assetexport.CopyContext(ctx, files, []string{"campaign/v1.js", "releases/latest.json", "releases/default.json", "releases/current.json"}, destination); err != nil {
+		return fmt.Errorf("campaigns publish: write channel output %q: %w", *output, err)
+	}
+	cleanupOwned = false
+	fmt.Fprintln(stdout, "campaigns: published latest, default, current, and runtime channels")
+	return nil
+}
+
+func requiredCampaignDate(command, raw string) (campaigns.Date, error) {
+	if strings.TrimSpace(raw) == "" {
+		return campaigns.Date{}, usagef("%s: --date is required", command)
+	}
+	date, err := campaigns.ParseDate(raw)
+	if err != nil {
+		return campaigns.Date{}, usagef("%s: %v", command, err)
+	}
+	return date, nil
+}
+
+func resolveCampaign(ctx context.Context, deps Dependencies, date campaigns.Date) (channels.Document, error) {
+	input, err := campaignInput(ctx, deps, date)
+	if err != nil {
+		return channels.Document{}, err
+	}
+	document, err := channels.Resolve(input)
+	if err != nil {
+		return channels.Document{}, fmt.Errorf("campaigns: resolve: %w", err)
+	}
+	if err := contextError("campaigns", ctx); err != nil {
+		return channels.Document{}, err
+	}
+	return document, nil
+}
+
+func resolveDefaultCampaign(ctx context.Context, deps Dependencies, date campaigns.Date) (channels.Document, error) {
+	input, err := campaignInput(ctx, deps, date)
+	if err != nil {
+		return channels.Document{}, err
+	}
+	input.Campaigns.Campaigns = nil
+	document, err := channels.Resolve(input)
+	if err != nil {
+		return channels.Document{}, fmt.Errorf("campaigns: resolve default: %w", err)
+	}
+	if err := contextError("campaigns", ctx); err != nil {
+		return channels.Document{}, err
+	}
+	return document, nil
+}
+
+func campaignInput(ctx context.Context, deps Dependencies, date campaigns.Date) (channels.Input, error) {
+	if err := contextError("campaigns", ctx); err != nil {
+		return channels.Input{}, err
+	}
+	_, repoRoot, err := openRepository(deps)
+	if err != nil {
+		return channels.Input{}, commandError("campaigns", err)
+	}
+	defer repoRoot.Close()
+	defaultPromotion, err := channels.LoadDefault(repoRoot.FS(), "manifests/default.yaml")
+	if err != nil {
+		return channels.Input{}, fmt.Errorf("campaigns: manifest manifests/default.yaml: %w", err)
+	}
+	campaignManifest, err := campaigns.Load(repoRoot.FS(), "manifests/campaigns.yaml")
+	if err != nil {
+		return channels.Input{}, fmt.Errorf("campaigns: manifest manifests/campaigns.yaml: %w", err)
+	}
+	dist, err := managedRoot(repoRoot, "dist", false)
+	if err != nil {
+		return channels.Input{}, fmt.Errorf("campaigns: open live dist root: %w", err)
+	}
+	defer dist.Close()
+	catalogJSON, err := dist.ReadFile("catalog.json")
+	if err != nil {
+		return channels.Input{}, fmt.Errorf("campaigns: read live dist catalog.json: %w", err)
+	}
+	assetCatalog, err := catalog.Decode(bytes.NewReader(catalogJSON))
+	if err != nil {
+		return channels.Input{}, fmt.Errorf("campaigns: validate live dist catalog.json: %w", err)
+	}
+	themesJSON, err := dist.ReadFile("themes.json")
+	if err != nil {
+		return channels.Input{}, fmt.Errorf("campaigns: read live dist themes.json: %w", err)
+	}
+	var themeCatalog themes.Catalog
+	decoder := json.NewDecoder(bytes.NewReader(themesJSON))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&themeCatalog); err != nil {
+		return channels.Input{}, fmt.Errorf("campaigns: decode live dist themes.json: %w", err)
+	}
+	var extra any
+	if err := decoder.Decode(&extra); !errors.Is(err, io.EOF) {
+		if err == nil {
+			return channels.Input{}, errors.New("campaigns: decode live dist themes.json: multiple JSON values")
+		}
+		return channels.Input{}, fmt.Errorf("campaigns: decode live dist themes.json: %w", err)
+	}
+	if err := contextError("campaigns", ctx); err != nil {
+		return channels.Input{}, err
+	}
+	return channels.Input{Date: date, Default: defaultPromotion, Catalog: assetCatalog, Themes: themeCatalog, Campaigns: campaignManifest, PublicRoot: assetsPublicRoot}, nil
+}
+
+func campaignRuntime(ctx context.Context, deps Dependencies) ([]byte, error) {
+	if err := contextError("campaigns", ctx); err != nil {
+		return nil, err
+	}
+	_, repoRoot, err := openRepository(deps)
+	if err != nil {
+		return nil, commandError("campaigns", err)
+	}
+	defer repoRoot.Close()
+	dist, err := managedRoot(repoRoot, "dist", false)
+	if err != nil {
+		return nil, fmt.Errorf("campaigns: open live dist root: %w", err)
+	}
+	defer dist.Close()
+	info, err := dist.Lstat("campaign/v1.js")
+	if err != nil {
+		return nil, fmt.Errorf("campaigns: inspect live dist campaign/v1.js: %w", err)
+	}
+	if info.Mode()&fs.ModeSymlink != 0 || !info.Mode().IsRegular() {
+		return nil, errors.New("campaigns: live dist campaign/v1.js is not a regular file")
+	}
+	runtime, err := dist.ReadFile("campaign/v1.js")
+	if err != nil {
+		return nil, fmt.Errorf("campaigns: read live dist campaign/v1.js: %w", err)
+	}
+	if err := contextError("campaigns", ctx); err != nil {
+		return nil, err
+	}
+	return runtime, nil
 }
 
 func runProof(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {
