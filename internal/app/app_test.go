@@ -74,19 +74,24 @@ func TestRunHonorsCancelledContextBeforeWork(t *testing.T) {
 }
 
 func TestThemesValidateAndCampaignResolveUseStrictOfflineInputs(t *testing.T) {
-	repo := fixtureRepo(t)
-	for _, args := range [][]string{{"themes", "validate"}, {"campaigns", "validate"}} {
+	for _, command := range []struct {
+		repo string
+		args []string
+	}{
+		{repo: fixtureRepo(t), args: []string{"themes", "validate"}},
+		{repo: campaignFixtureRepo(t), args: []string{"campaigns", "validate"}},
+	} {
 		var stdout, stderr bytes.Buffer
-		if err := Run(context.Background(), Dependencies{Repo: repo}, args, &stdout, &stderr); err != nil {
-			t.Fatalf("Run(%q) error = %v", args, err)
+		if err := Run(context.Background(), Dependencies{Repo: command.repo}, command.args, &stdout, &stderr); err != nil {
+			t.Fatalf("Run(%q) error = %v", command.args, err)
 		}
 		if stdout.Len() == 0 || stderr.Len() != 0 {
-			t.Fatalf("Run(%q) stdout=%q stderr=%q", args, stdout.String(), stderr.String())
+			t.Fatalf("Run(%q) stdout=%q stderr=%q", command.args, stdout.String(), stderr.String())
 		}
 	}
 
 	var stdout, stderr bytes.Buffer
-	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "resolve", "--date", "2026-10-31"}, &stdout, &stderr)
+	err := Run(context.Background(), Dependencies{Repo: campaignFixtureRepo(t)}, []string{"campaigns", "resolve", "--date", "2026-10-31"}, &stdout, &stderr)
 	if err != nil {
 		t.Fatal(err)
 	}
