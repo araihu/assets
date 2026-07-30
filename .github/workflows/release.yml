@@ -137,14 +137,23 @@ jobs:
 
           bundle="${RUNNER_TEMP}/release-bundle"
           latest="${RUNNER_TEMP}/latest-candidate"
+          channel_candidate="${RUNNER_TEMP}/release-channel-candidate"
           mkdir -p "$bundle" "$latest"
+          CHANNEL_DATE=1970-01-01
+          go run ./cmd/araihu-assets campaigns publish --date "$CHANNEL_DATE" --output "$channel_candidate"
+          ruby -rjson -e '
+            document = JSON.parse(File.read(ARGV.fetch(0)))
+            abort "latest release mismatch" unless document.fetch("release") == ARGV.fetch(1)
+            abort "latest must resolve a baseline" unless document.fetch("source") == "default" && !document.key?("campaign")
+          ' "$channel_candidate/releases/latest.json" "$tag"
           install -m 0644 "$tar_archive" "$bundle/${archive_base}.tar.gz"
           install -m 0644 "$zip_archive" "$bundle/${archive_base}.zip"
           install -m 0644 dist/release.json "$bundle/release.json"
           install -m 0644 dist/checksums.txt "$bundle/checksums.txt"
-          (cd "$bundle" && sha256sum "${archive_base}.tar.gz" "${archive_base}.zip" release.json checksums.txt > SHA256SUMS)
+          install -m 0644 "$channel_candidate/releases/latest.json" "$bundle/latest.json"
+          (cd "$bundle" && sha256sum "${archive_base}.tar.gz" "${archive_base}.zip" release.json latest.json checksums.txt > SHA256SUMS)
           (cd "$bundle" && sha256sum --check --strict SHA256SUMS)
-          install -m 0644 dist/release.json "$latest/latest.json"
+          install -m 0644 "$channel_candidate/releases/latest.json" "$latest/latest.json"
 
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           echo "bundle=$bundle" >> "$GITHUB_OUTPUT"
@@ -162,6 +171,7 @@ jobs:
             "$BUNDLE/araihu-assets-${TAG}.tar.gz"
             "$BUNDLE/araihu-assets-${TAG}.zip"
             "$BUNDLE/release.json"
+            "$BUNDLE/latest.json"
             "$BUNDLE/checksums.txt"
             "$BUNDLE/SHA256SUMS"
           )

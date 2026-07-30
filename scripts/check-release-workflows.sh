@@ -86,7 +86,12 @@ require_contract(release_publish.scan("gh release upload").length == 1, "release
 require_contract(!release_publish.include?("--clobber"), "release publication must never clobber assets")
 require_contract(release_steps.any? { |step| step["uses"]&.start_with?("actions/upload-artifact@") && step.dig("with", "name") == "release-bundle-${{ steps.release.outputs.tag }}" }, "release must upload immutable release bundle")
 require_contract(release_steps.any? { |step| step["uses"]&.start_with?("actions/upload-artifact@") && step.dig("with", "name") == "latest-candidate-${{ steps.release.outputs.tag }}" }, "release must upload latest candidate separately")
-require_contract(release_runs.include?("latest.json"), "release must write latest candidate")
+require_contract(release_runs.include?('campaigns publish --date "$CHANNEL_DATE" --output "$channel_candidate"'), "release must generate latest through the CLI publication path")
+require_contract(release_runs.include?('"$channel_candidate/releases/latest.json"'), "release must stage the resolved latest channel")
+require_contract(!release_runs.include?('dist/release.json "$latest/latest.json"'), "release must not rename release.json as latest.json")
+release_assets = release_publish[/assets=\((.*?)\n\s*\)/m, 1].to_s
+require_contract(release_assets.include?('"$BUNDLE/latest.json"'), "GitHub Release must publish latest.json")
+require_contract(release_runs.include?('latest.json checksums.txt > SHA256SUMS'), "release SHA256SUMS must cover latest.json")
 require_contract(!release_runs.include?("default.json") && !release_runs.include?("current.json"), "release must not write default or current channels")
 assert_pinned_actions(release, "release")
 
@@ -104,7 +109,11 @@ campaign_steps = job_steps(campaigns)
 campaign_runs = run_text(campaigns)
 campaign_job = campaigns.fetch("jobs", {}).values.first
 require_contract(campaign_job["permissions"] == {"contents" => "read"}, "campaign job permission must be contents read only")
-require_contract(campaign_runs.include?("releases/${default_release}/release.json") && campaign_runs.include?("gh release download"), "campaign workflow must materialize older promoted release snapshots")
+require_contract(campaign_runs.include?('latest_release=$(gh release view') && campaign_runs.include?('materialize_release "$default_release"'), "campaign workflow must require the promoted GitHub Release before resolution")
+require_contract(campaign_runs.include?('gh release download "$latest_release"') && campaign_runs.include?("--pattern latest.json"), "campaign workflow must download published latest channel inputs")
+require_contract(campaign_runs.include?('stage_snapshot "$default_release" "releases/${default_release}"') && campaign_runs.include?("releases/latest/latest.json"), "campaign workflow must materialize promoted and latest tagged snapshots")
+require_contract(campaign_runs.include?("campaign/v1.js") && campaign_runs.include?('sha256sum --check --strict "$download/archive.sha256"') && campaign_runs.include?('sha256sum --check --strict "$latest_download/latest.sha256"') && campaign_runs.include?("unsafe release archive member"), "campaign workflow must hash-check and safely extract tagged runtime inputs")
+require_contract(!campaign_runs.include?("dist/"), "campaign workflow must never source channel bytes from untagged dist")
 require_contract(campaign_runs.include?("campaigns publish --date") && campaign_runs.include?("--output"), "campaign workflow must build channel bundle with CLI")
 require_contract(campaign_runs.include?('scripts/channel-bundle-digest.rb "$bundle"'), "campaign workflow must compute canonical four-file bundle digest")
 digest_script = File.join(repo, "scripts", "channel-bundle-digest.rb")
@@ -137,11 +146,11 @@ require_contract(changed_upload && changed_upload["if"] == "steps.state.outputs.
 dispatch_step = campaign_steps.find { |step| step["run"]&.include?("/dispatches") }
 require_contract(dispatch_step && dispatch_step["if"] == "steps.state.outputs.changed == 'true'", "Ahairu dispatch must use durable-state change gate")
 dispatch_run = dispatch_step["run"]
-dispatch_call = dispatch_run.index('"/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/dispatches"')
-state_update = dispatch_run.index('contents/${STATE_PATH}')
-require_contract(dispatch_call && state_update && dispatch_call < state_update, "accepted state must update only after successful repository dispatch")
-require_contract(dispatch_run.include?('payload[:sha] = state_sha unless state_sha.empty?'), "accepted-state update must use expected blob SHA")
-require_contract(campaign_runs.include?("bundle_digest") && campaign_runs.include?("channel_artifact_id") && campaign_runs.include?("channel_artifact_sha256") && campaign_runs.include?("release_sha256"), "Ahairu dispatch must carry immutable artifact identity and hashes")
+require_contract(dispatch_run.include?('"/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/dispatches"'), "Ahairu repository dispatch call is missing")
+require_contract(!dispatch_run.include?("contents/${STATE_PATH}") && !dispatch_run.include?("accepted-state-update") && !dispatch_run.include?("--request PUT"), "Assets must never write durable accepted state")
+require_contract(dispatch_run.include?("release_artifacts: releases,") && dispatch_run.include?("runtime_release: runtime_release,"), "Ahairu dispatch must carry every distinct release identity and runtime release")
+require_contract(dispatch_run.include?("candidate_bundle_digest: bundle_digest,") && dispatch_run.include?('state_ref: ENV.fetch("STATE_REF"),') && dispatch_run.include?('state_path: ENV.fetch("STATE_PATH")'), "Ahairu dispatch must carry candidate digest and exact durable-state locator")
+require_contract(campaign_runs.include?("channel_artifact_id") && campaign_runs.include?("channel_artifact_sha256") && campaign_runs.include?("release_sha256"), "Ahairu dispatch must carry immutable artifact identity and hashes")
 ["release.yml", "campaigns.yml"].each do |name|
   source = File.read(File.join(repo, ".github", "workflows", name))
   require_contract(!source.match?(/CLOUDFLARE/i), "#{name} must not reference Cloudflare credentials")

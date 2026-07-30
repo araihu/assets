@@ -98,13 +98,29 @@ mutate_and_reject "upload during release preflight" .github/workflows/release.ym
   'missing+=("$asset")' 'gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY"'
 mutate_and_reject "clobbering release upload" .github/workflows/release.yml \
   'gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY"' 'gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY" --clobber'
+mutate_and_reject "release metadata renamed as latest channel" .github/workflows/release.yml \
+  'go run ./cmd/araihu-assets campaigns publish --date "$CHANNEL_DATE" --output "$channel_candidate"' 'install -m 0644 dist/release.json "$latest/latest.json"'
+mutate_and_reject "untagged promoted release shortcut" .github/workflows/campaigns.yml \
+  'materialize_release "$default_release"' 'stage_snapshot "$default_release" "dist"'
+mutate_and_reject "untagged runtime handoff" .github/workflows/campaigns.yml \
+  'cmp --silent "$bundle/campaign/v1.js" "releases/${{ steps.release.outputs.default_release }}/campaign/v1.js"' 'cmp --silent "$bundle/campaign/v1.js" "dist/campaign/v1.js"'
+mutate_and_reject "missing release archive hash check" .github/workflows/campaigns.yml \
+  'sha256sum --check --strict "$download/archive.sha256"' 'test -f "$download/archive.sha256"'
+mutate_and_reject "missing published latest hash check" .github/workflows/campaigns.yml \
+  'sha256sum --check --strict "$latest_download/latest.sha256"' 'test -f "$latest_download/latest.sha256"'
 mutate_and_reject "historical accepted artifact lookup" .github/workflows/campaigns.yml \
   'contents/${STATE_PATH}?ref=${STATE_REF}' 'actions/artifacts?name=accepted-channel-${bundle_digest}'
 mutate_and_reject "retention-backed accepted state" .github/workflows/campaigns.yml \
   'name: channel-${{ steps.channel.outputs.digest }}' 'name: accepted-channel-${{ steps.channel.outputs.digest }}'
 mutate_and_reject "inverted current-state comparison" scripts/accepted-channel-state.rb \
   'accepted_digest != bundle_digest' 'accepted_digest == bundle_digest'
-mutate_and_reject "state update without expected SHA" .github/workflows/campaigns.yml \
-  'payload[:sha] = state_sha unless state_sha.empty?' 'payload.delete(:sha)'
+mutate_and_reject "Assets accepts before Ahairu deployment" .github/workflows/campaigns.yml \
+  '            --input "$payload"' '            --input "$payload"'$'\n''          curl --request PUT "${GITHUB_API_URL}/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/contents/${STATE_PATH}"'
+mutate_and_reject "dispatch omits distinct release identities" .github/workflows/campaigns.yml \
+  'release_artifacts: releases,' 'release: runtime_release,'
+mutate_and_reject "dispatch omits candidate digest" .github/workflows/campaigns.yml \
+  'candidate_bundle_digest: bundle_digest,' 'bundle_digest: nil,'
+mutate_and_reject "dispatch omits accepted-state locator" .github/workflows/campaigns.yml \
+  'state_ref: ENV.fetch("STATE_REF"),' 'state_ref: nil,'
 
 echo "release workflow checker: canonical digest and $mutation mutations passed"
