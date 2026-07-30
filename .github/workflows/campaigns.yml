@@ -1,0 +1,343 @@
+name: Resolve campaign channels
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: UTC date override in YYYY-MM-DD form
+        required: false
+        type: string
+  push:
+    branches: [main]
+    paths:
+      - manifests/campaigns.yaml
+      - manifests/default.yaml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: assets-channel-deployment
+  cancel-in-progress: false
+
+env:
+  GOPROXY: off
+  GOSUMDB: off
+  GONOSUMDB: '*'
+
+jobs:
+  resolve:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up exact Go toolchain
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version: '1.26.5'
+          check-latest: false
+          cache: false
+
+      - name: Resolve UTC date
+        id: date
+        shell: bash
+        env:
+          REQUESTED_DATE: ${{ inputs.date }}
+        run: |
+          set -euo pipefail
+          if [[ -n "$REQUESTED_DATE" ]]; then
+            resolved=$(REQUESTED_DATE="$REQUESTED_DATE" ruby -rdate -e '
+              raw = ENV.fetch("REQUESTED_DATE")
+              parsed = Date.iso8601(raw)
+              abort "date must use YYYY-MM-DD" unless parsed.iso8601 == raw
+              puts raw
+            ')
+          else
+            resolved=$(date -u +%F)
+          fi
+          echo "date=$resolved" >> "$GITHUB_OUTPUT"
+
+      - name: Materialize published release inputs
+        id: release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          default_release=$(ruby -ryaml -e 'puts YAML.safe_load(File.read("manifests/default.yaml")).fetch("release")')
+          latest_release=$(gh release view --repo "$GITHUB_REPOSITORY" --json tagName --jq .tagName)
+          ruby -e '
+            release = /\Av(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?\z/
+            ARGV.each { |value| abort "invalid release tag: #{value.inspect}" unless value.match?(release) }
+          ' "$default_release" "$latest_release"
+
+          published_root="${RUNNER_TEMP}/published-releases"
+          records="${RUNNER_TEMP}/release-artifacts.jsonl"
+          mkdir -p "$published_root"
+          : > "$records"
+
+          materialize_release() {
+            release=$1
+            archive_name="araihu-assets-${release}.tar.gz"
+            download="$published_root/$release/download"
+            extract="$published_root/$release/root"
+            mkdir -p "$download" "$extract"
+            gh release download "$release" --repo "$GITHUB_REPOSITORY" \
+              --pattern "$archive_name" --dir "$download"
+            gh release download "$release" --repo "$GITHUB_REPOSITORY" \
+              --pattern SHA256SUMS --dir "$download"
+            release_sha256=$(ruby -e '
+              name, path = ARGV
+              matches = File.readlines(path, chomp: true).filter_map do |line|
+                hash, candidate = line.split(/\s+/, 2)
+                hash if candidate == name
+              end
+              abort "release archive hash must appear exactly once" unless matches.length == 1 && matches.first.match?(/\A[0-9a-f]{64}\z/)
+              puts matches.first
+            ' "$archive_name" "$download/SHA256SUMS")
+            printf '%s  %s\n' "$release_sha256" "$download/$archive_name" > "$download/archive.sha256"
+            sha256sum --check --strict "$download/archive.sha256"
+            tar --list --gzip --file "$download/$archive_name" > "$download/archive.members"
+            ruby -e '
+              File.readlines(ARGV.fetch(0), chomp: true).each do |path|
+                components = path.split("/", -1)
+                abort "unsafe release archive member: #{path.inspect}" if
+                  path.empty? || path.start_with?("/") || path.include?("\\") ||
+                  components.include?("") || components.include?(".") || components.include?("..")
+              end
+            ' "$download/archive.members"
+            tar --list --verbose --gzip --file "$download/$archive_name" |
+              awk 'substr($1, 1, 1) != "-" { exit 1 }'
+            tar --extract --gzip --file "$download/$archive_name" --directory "$extract"
+            (cd "$extract" && sha256sum --check --strict checksums.txt)
+            for contract in release.json catalog.json themes.json campaigns.json campaign/v1.js; do
+              test -f "$extract/$contract"
+              test ! -L "$extract/$contract"
+            done
+            ruby -rjson -e '
+              document = JSON.parse(File.read(ARGV.fetch(0)))
+              abort "release metadata mismatch" unless document.fetch("release") == ARGV.fetch(1)
+            ' "$extract/release.json" "$release"
+            release_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/download/${release}/${archive_name}"
+            ruby -rjson -e '
+              puts JSON.generate({release: ARGV.fetch(0), release_url: ARGV.fetch(1), release_sha256: ARGV.fetch(2)})
+            ' "$release" "$release_url" "$release_sha256" >> "$records"
+          }
+
+          stage_snapshot() {
+            release=$1
+            target=$2
+            source="$published_root/$release/root"
+            mkdir -p "$target/campaign"
+            for contract in release.json catalog.json themes.json campaigns.json; do
+              install -m 0644 "$source/$contract" "$target/$contract"
+            done
+            install -m 0644 "$source/campaign/v1.js" "$target/campaign/v1.js"
+          }
+
+          materialize_release "$default_release"
+          if [[ "$latest_release" != "$default_release" ]]; then
+            materialize_release "$latest_release"
+          fi
+          stage_snapshot "$default_release" "releases/${default_release}"
+          stage_snapshot "$latest_release" "releases/latest"
+
+          latest_download="$published_root/$latest_release/download"
+          gh release download "$latest_release" --repo "$GITHUB_REPOSITORY" \
+            --pattern latest.json --dir "$latest_download"
+          latest_sha256=$(ruby -e '
+            matches = File.readlines(ARGV.fetch(0), chomp: true).filter_map do |line|
+              hash, candidate = line.split(/\s+/, 2)
+              hash if candidate == "latest.json"
+            end
+            abort "latest.json hash must appear exactly once" unless matches.length == 1 && matches.first.match?(/\A[0-9a-f]{64}\z/)
+            puts matches.first
+          ' "$latest_download/SHA256SUMS")
+          printf '%s  %s\n' "$latest_sha256" "$latest_download/latest.json" > "$latest_download/latest.sha256"
+          sha256sum --check --strict "$latest_download/latest.sha256"
+          install -m 0644 "$latest_download/latest.json" "releases/latest/latest.json"
+
+          release_artifacts=$(ruby -rjson -e '
+            records = File.readlines(ARGV.fetch(0), chomp: true).map { |line| JSON.parse(line) }
+            abort "duplicate release artifact" unless records.map { |record| record.fetch("release") }.uniq.length == records.length
+            print JSON.generate(records.sort_by { |record| record.fetch("release") })
+          ' "$records")
+          echo "default_release=$default_release" >> "$GITHUB_OUTPUT"
+          echo "latest_release=$latest_release" >> "$GITHUB_OUTPUT"
+          echo "runtime_release=$default_release" >> "$GITHUB_OUTPUT"
+          echo "release_artifacts=$release_artifacts" >> "$GITHUB_OUTPUT"
+
+      - name: Build deterministic channel bundle
+        id: channel
+        shell: bash
+        env:
+          RESOLUTION_DATE: ${{ steps.date.outputs.date }}
+        run: |
+          set -euo pipefail
+          test "$(go version | awk '{print $3}')" = go1.26.5
+          go run ./cmd/araihu-assets themes validate
+          go run ./cmd/araihu-assets campaigns validate
+          bundle="${RUNNER_TEMP}/channel-bundle"
+          go run ./cmd/araihu-assets campaigns publish --date "$RESOLUTION_DATE" --output "$bundle"
+          cmp --silent "$bundle/releases/latest.json" "releases/latest/latest.json"
+          cmp --silent "$bundle/campaign/v1.js" "releases/${{ steps.release.outputs.default_release }}/campaign/v1.js"
+          RELEASE_ARTIFACTS='${{ steps.release.outputs.release_artifacts }}' ruby -rjson -e '
+            documents = %w[latest default current].map do |name|
+              JSON.parse(File.read(File.join(ARGV.fetch(0), "releases", "#{name}.json")))
+            end
+            referenced = documents.map { |document| document.fetch("release") }.uniq.sort
+            identities = JSON.parse(ENV.fetch("RELEASE_ARTIFACTS")).map { |record| record.fetch("release") }.uniq.sort
+            abort "release artifact identities do not cover channel bundle" unless referenced == identities
+            abort "default/current release mismatch" unless documents.drop(1).all? { |document| document.fetch("release") == ARGV.fetch(1) }
+          ' "$bundle" "${{ steps.release.outputs.default_release }}"
+          bundle_digest=$(scripts/channel-bundle-digest.rb "$bundle")
+          echo "bundle=$bundle" >> "$GITHUB_OUTPUT"
+          echo "digest=$bundle_digest" >> "$GITHUB_OUTPUT"
+
+      - name: Mint selected-repository dispatch token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.AHAIRU_APP_ID }}
+          private-key: ${{ secrets.AHAIRU_APP_PRIVATE_KEY }}
+          owner: ${{ vars.AHAIRU_OWNER }}
+          repositories: ${{ vars.AHAIRU_REPOSITORY }}
+          permission-contents: write
+
+      - name: Compare current durable accepted state
+        id: state
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          AHAIRU_OWNER: ${{ vars.AHAIRU_OWNER }}
+          AHAIRU_REPOSITORY: ${{ vars.AHAIRU_REPOSITORY }}
+          BUNDLE_DIGEST: ${{ steps.channel.outputs.digest }}
+          SOURCE_REPOSITORY: ${{ github.repository }}
+          SOURCE_WORKFLOW: ${{ github.repository }}/.github/workflows/campaigns.yml
+          STATE_REF: automation/araihu-assets-state
+          STATE_PATH: .automation/araihu-assets/accepted-channel-v1.json
+        run: |
+          set -euo pipefail
+          headers=(
+            --header "Accept: application/vnd.github+json"
+            --header "Authorization: Bearer ${GH_TOKEN}"
+            --header "X-GitHub-Api-Version: 2022-11-28"
+          )
+          ref_response="${RUNNER_TEMP}/accepted-state-ref.json"
+          ref_status=$(curl --silent --show-error --output "$ref_response" --write-out '%{http_code}' \
+            "${headers[@]}" \
+            "${GITHUB_API_URL}/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/git/ref/heads/${STATE_REF}")
+          test "$ref_status" = 200 || {
+            echo "Dedicated accepted-state ref is unavailable (HTTP $ref_status)" >&2
+            exit 1
+          }
+
+          state_response="${RUNNER_TEMP}/accepted-state.json"
+          state_status=$(curl --silent --show-error --output "$state_response" --write-out '%{http_code}' \
+            "${headers[@]}" \
+            "${GITHUB_API_URL}/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/contents/${STATE_PATH}?ref=${STATE_REF}")
+          case "$state_status" in
+            200)
+              decision=$(scripts/accepted-channel-state.rb "$state_response" "$BUNDLE_DIGEST" \
+                "$SOURCE_REPOSITORY" "$SOURCE_WORKFLOW" "$GITHUB_SERVER_URL" "$STATE_PATH")
+              changed=$(ruby -rjson -e 'puts JSON.parse(ARGV.fetch(0)).fetch("changed")' "$decision")
+              ;;
+            404)
+              changed=true
+              ;;
+            *)
+              echo "Accepted-state read failed (HTTP $state_status)" >&2
+              exit 1
+              ;;
+          esac
+          if [[ "$changed" == false ]]; then
+            echo "Current durable state already accepts bundle: $BUNDLE_DIGEST"
+          fi
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+
+      - name: Upload changed immutable channel bundle
+        id: changed
+        if: steps.state.outputs.changed == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: channel-${{ steps.channel.outputs.digest }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ steps.channel.outputs.bundle }}
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Dispatch Ahairu release candidate
+        if: steps.state.outputs.changed == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          AHAIRU_OWNER: ${{ vars.AHAIRU_OWNER }}
+          AHAIRU_REPOSITORY: ${{ vars.AHAIRU_REPOSITORY }}
+          CHANNEL_ARTIFACT_ID: ${{ steps.changed.outputs.artifact-id }}
+          CHANNEL_ARTIFACT_URL: ${{ steps.changed.outputs.artifact-url }}
+          CHANNEL_ARTIFACT_SHA256: ${{ steps.changed.outputs.artifact-digest }}
+          BUNDLE_DIGEST: ${{ steps.channel.outputs.digest }}
+          RELEASE_ARTIFACTS: ${{ steps.release.outputs.release_artifacts }}
+          RUNTIME_RELEASE: ${{ steps.release.outputs.runtime_release }}
+          RESOLUTION_DATE: ${{ steps.date.outputs.date }}
+          SOURCE_REPOSITORY: ${{ github.repository }}
+          STATE_REF: automation/araihu-assets-state
+          STATE_PATH: .automation/araihu-assets/accepted-channel-v1.json
+        run: |
+          set -euo pipefail
+          payload="${RUNNER_TEMP}/dispatch.json"
+          ruby -rjson -e '
+            sha256 = /\A[0-9a-f]{64}\z/
+            artifact_id = Integer(ENV.fetch("CHANNEL_ARTIFACT_ID"), 10)
+            abort "invalid channel artifact ID" unless artifact_id.positive?
+            artifact_sha = ENV.fetch("CHANNEL_ARTIFACT_SHA256")
+            abort "invalid channel artifact SHA-256" unless artifact_sha.match?(sha256)
+            bundle_digest = ENV.fetch("BUNDLE_DIGEST")
+            abort "invalid bundle digest" unless bundle_digest.match?(sha256)
+            release_tag = /\Av(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?\z/
+            release_artifacts = JSON.parse(ENV.fetch("RELEASE_ARTIFACTS"))
+            abort "release artifacts must be a non-empty array" unless release_artifacts.is_a?(Array) && !release_artifacts.empty?
+            releases = release_artifacts.map do |record|
+              abort "release artifact fields differ" unless record.keys.sort == %w[release release_sha256 release_url]
+              release = record.fetch("release")
+              release_sha = record.fetch("release_sha256")
+              release_url = record.fetch("release_url")
+              abort "invalid release artifact" unless release.match?(release_tag) && release_sha.match?(sha256)
+              expected_release = "#{ENV.fetch("GITHUB_SERVER_URL")}/#{ENV.fetch("GITHUB_REPOSITORY")}/releases/download/#{release}/araihu-assets-#{release}.tar.gz"
+              abort "invalid release artifact URL" unless release_url == expected_release
+              {release: release, release_url: release_url, release_sha256: release_sha}
+            end
+            abort "duplicate release artifact" unless releases.map { |record| record.fetch(:release) }.uniq.length == releases.length
+            runtime_release = ENV.fetch("RUNTIME_RELEASE")
+            abort "runtime release lacks immutable identity" unless releases.any? { |record| record.fetch(:release) == runtime_release }
+            expected_artifact = %r{\A#{Regexp.escape(ENV.fetch("GITHUB_SERVER_URL"))}/#{Regexp.escape(ENV.fetch("GITHUB_REPOSITORY"))}/actions/runs/[1-9][0-9]*/artifacts/#{artifact_id}\z}
+            abort "invalid channel artifact URL" unless ENV.fetch("CHANNEL_ARTIFACT_URL").match?(expected_artifact)
+            payload = {
+              event_type: "araihu-assets-released",
+              client_payload: {
+                assets_repository: ENV.fetch("GITHUB_REPOSITORY"),
+                assets_revision: ENV.fetch("GITHUB_SHA"),
+                release_artifacts: releases,
+                runtime_release: runtime_release,
+                channel_artifact_id: artifact_id,
+                channel_artifact_url: ENV.fetch("CHANNEL_ARTIFACT_URL"),
+                channel_artifact_sha256: artifact_sha,
+                candidate_bundle_digest: bundle_digest,
+                resolution_date: ENV.fetch("RESOLUTION_DATE"),
+                state_ref: ENV.fetch("STATE_REF"),
+                state_path: ENV.fetch("STATE_PATH")
+              }
+            }
+            File.write(ARGV.fetch(0), JSON.generate(payload))
+          ' "$payload"
+          gh api --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/dispatches" \
+            --input "$payload"

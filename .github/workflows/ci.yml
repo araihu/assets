@@ -38,6 +38,10 @@ jobs:
         shell: bash
         run: ./scripts/check-ci-workflow.sh
 
+      - name: Test guarded release workflow contracts
+        shell: bash
+        run: ./scripts/check-release-workflows_test.sh
+
       - name: Build verified rsvg-convert 2.62.1
         shell: bash
         env:

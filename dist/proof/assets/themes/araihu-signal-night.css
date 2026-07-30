@@ -1,0 +1,52 @@
+/*
+ * Arai Hû Signal Night for Goshtoso.
+ *
+ * An inactive-by-default campaign theme. Consumers opt in explicitly with
+ * data-theme="araihu-signal-night"; this file never changes the baseline.
+ */
+@layer base {
+  [data-theme="araihu-signal-night"] {
+    color-scheme: dark;
+    --font-body: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-title: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+
+    /* Midnight, storm, paper, lime-signal. */
+    --araihu-logo-surface: #07111f;
+    --araihu-logo-ink: #f7f8f3;
+    --araihu-logo-signal: #c7ff4a;
+
+    --color-surface: #07111f;
+    --color-surface-alt: #10233d;
+    --color-on-surface: #d5ddeb;
+    --color-on-surface-strong: #f7f8f3;
+    --color-primary: #c7ff4a;
+    --color-on-primary: #07111f;
+    --color-secondary: #7aa4df;
+    --color-on-secondary: #07111f;
+    --color-outline: #718397;
+    --color-outline-strong: #c8d5e3;
+    --color-control-outline: #a3b0bf;
+
+    --color-surface-dark: #07111f;
+    --color-surface-dark-alt: #10233d;
+    --color-on-surface-dark: #d5ddeb;
+    --color-on-surface-dark-strong: #f7f8f3;
+    --color-primary-dark: #c7ff4a;
+    --color-on-primary-dark: #07111f;
+    --color-secondary-dark: #7aa4df;
+    --color-on-secondary-dark: #07111f;
+    --color-outline-dark: #718397;
+    --color-outline-dark-strong: #c8d5e3;
+    --color-control-outline-dark: #a3b0bf;
+
+    --color-info: #4da8e8;
+    --color-on-info: #07111f;
+    --color-success: #54c987;
+    --color-on-success: #07111f;
+    --color-warning: #ffbc5c;
+    --color-on-warning: #07111f;
+    --color-danger: #ff8599;
+    --color-on-danger: #07111f;
+    --radius-radius: var(--radius-lg);
+  }
+}

@@ -7,6 +7,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -16,38 +17,51 @@ import (
 	"strings"
 	"testing/fstest"
 
+	"github.com/araihu/assets/internal/campaigns"
 	"github.com/araihu/assets/internal/catalog"
 	"github.com/araihu/assets/internal/platform"
 	"github.com/araihu/assets/internal/proof"
 	"github.com/araihu/assets/internal/provenance"
 	"github.com/araihu/assets/internal/release"
+	"github.com/araihu/assets/internal/releaseinfo"
+	"github.com/araihu/assets/internal/releasemeta"
 	"github.com/araihu/assets/internal/sprite"
 	"github.com/araihu/assets/internal/svgasset"
+	"github.com/araihu/assets/internal/themes"
 	"github.com/araihu/assets/internal/transform"
 )
 
 const (
-	releaseVersion = "v0.1.0"
 	// ManagedDistContract makes ownership explicit: a successful Run replaces
 	// every path under dist, including unrelated files from a prior release.
 	ManagedDistContract = "dist is wholly managed by build.Run"
 )
 
 var generatedPaths = map[string]struct{}{
-	"catalog.json":     {},
-	"checksums.txt":    {},
-	"NOTICE":           {},
-	"proof/index.html": {},
-	"proof/styles.css": {},
-	"proof/app.js":     {},
+	"catalog.json":      {},
+	"campaign/v1.js":    {},
+	"campaigns.json":    {},
+	"checksums.txt":     {},
+	"NOTICE":            {},
+	"proof/index.html":  {},
+	"proof/styles.css":  {},
+	"proof/app.js":      {},
+	"release.json":      {},
+	"themes.json":       {},
+	"themes/araihu.css": {},
 }
 
 // Inputs are fully generated, offline artifacts from approved generators.
 // Brand and Platform paths include a dist/ prefix; UI paths are dist-relative.
 type Inputs struct {
-	Brand    transform.Result
-	UI       provenance.Result
-	Platform platform.Result
+	Brand     transform.Result
+	UI        provenance.Result
+	Platform  platform.Result
+	Themes    themes.Manifest
+	Campaigns campaigns.Manifest
+	// ThemeCSS holds stylesheet bytes captured by the caller before build.
+	// Build never rereads source paths while staging or publishing a release.
+	ThemeCSS map[string][]byte
 }
 
 type buildPhase uint8
@@ -133,6 +147,9 @@ func stage(ctx context.Context, repo string, input Inputs) (string, error) {
 	if err := validateCatalog(ctx, stage); err != nil {
 		return "", err
 	}
+	if err := writeReleaseInventory(ctx, stage); err != nil {
+		return "", err
+	}
 	if err := writeChecksums(ctx, stage); err != nil {
 		return "", err
 	}
@@ -173,7 +190,25 @@ func validateGeneratedSVGs(ctx context.Context, root string) error {
 }
 
 func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string][]byte, error) {
-	files := make(map[string][]byte, len(input.Brand.Files)+len(input.UI.Files)+len(input.Platform.Files)+4)
+	themesPresent := input.Themes.SchemaVersion != 0 || input.Themes.TokenContract != "" || len(input.Themes.Themes) != 0 || len(input.ThemeCSS) != 0
+	themePaths := map[string]struct{}{}
+	if themesPresent {
+		if err := input.Themes.Validate(); err != nil {
+			return nil, fmt.Errorf("build: validate themes manifest: %w", err)
+		}
+		for _, theme := range input.Themes.Themes {
+			themePaths[theme.CSSPath] = struct{}{}
+		}
+	}
+	if err := input.Campaigns.Validate(); err != nil {
+		return nil, fmt.Errorf("build: validate campaigns manifest: %w", err)
+	}
+	runtimeBytes, err := os.ReadFile(filepath.Join(repo, "runtime", "campaign", "v1.js"))
+	if err != nil {
+		return nil, fmt.Errorf("build: capture campaign runtime: %w", err)
+	}
+	files := make(map[string][]byte, len(input.Brand.Files)+len(input.UI.Files)+len(input.Platform.Files)+len(themePaths)+7)
+	files["campaign/v1.js"] = append([]byte(nil), runtimeBytes...)
 	for _, group := range []map[string][]byte{input.Brand.Files, input.UI.Files, input.Platform.Files} {
 		for sourceName, data := range group {
 			if err := checkContext(ctx); err != nil {
@@ -183,7 +218,8 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 			if err != nil {
 				return nil, err
 			}
-			if _, reserved := generatedPaths[name]; reserved || strings.HasPrefix(name, "releases/") {
+			_, themePath := themePaths[name]
+			if _, reserved := generatedPaths[name]; reserved || themePath || strings.HasPrefix(name, "releases/") {
 				return nil, fmt.Errorf("build: input attempts to own generated path %q", name)
 			}
 			if _, exists := files[name]; exists {
@@ -197,7 +233,7 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 		return nil, fmt.Errorf("build: read LICENSE: %w", err)
 	}
 	files["licenses/Apache-2.0.txt"] = license
-	files["NOTICE"] = []byte("Arai Hu Assets " + releaseVersion + "\n\nArai Hu brand assets are subject to Arai Hu Brand Terms.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\n")
+	files["NOTICE"] = []byte("Arai Hu Assets " + releaseinfo.Version + "\n\nArai Hu brand assets are subject to Arai Hu Brand Terms.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\n")
 	proofFiles, err := proofStaticFiles(repo)
 	if err != nil {
 		return nil, err
@@ -205,7 +241,6 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 	for name, data := range proofFiles {
 		files[name] = data
 	}
-
 	assets := make([]catalog.Asset, 0, len(input.Brand.Assets)+len(input.UI.Assets)+len(input.Platform.Assets))
 	assets = append(assets, input.Brand.Assets...)
 	assets = append(assets, input.UI.Assets...)
@@ -215,6 +250,23 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 		return nil, err
 	}
 	files["catalog.json"] = catalogBytes
+	if themesPresent {
+		themeFiles, themeCatalog, err := assembleThemes(input.Themes, input.ThemeCSS)
+		if err != nil {
+			return nil, err
+		}
+		for name, data := range themeFiles {
+			files[name] = data
+		}
+		files["themes.json"] = themeCatalog
+	} else {
+		return nil, errors.New("build: themes input is required")
+	}
+	campaignBytes, err := encodeCampaigns(input.Campaigns)
+	if err != nil {
+		return nil, err
+	}
+	files["campaigns.json"] = campaignBytes
 	proofPage, err := proofDocument(repo, files)
 	if err != nil {
 		return nil, err
@@ -234,6 +286,53 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 		files["proof/index.html"] = proofPage
 	}
 	return files, nil
+}
+
+func encodeCampaigns(manifest campaigns.Manifest) ([]byte, error) {
+	if err := manifest.Validate(); err != nil {
+		return nil, fmt.Errorf("build: validate campaigns manifest: %w", err)
+	}
+	canonical := manifest
+	canonical.Campaigns = slices.Clone(manifest.Campaigns)
+	slices.SortFunc(canonical.Campaigns, func(a, b campaigns.Campaign) int { return strings.Compare(a.ID, b.ID) })
+	var output bytes.Buffer
+	encoder := json.NewEncoder(&output)
+	encoder.SetEscapeHTML(false)
+	encoder.SetIndent("", "  ")
+	if err := encoder.Encode(canonical); err != nil {
+		return nil, fmt.Errorf("build: encode campaigns: %w", err)
+	}
+	return output.Bytes(), nil
+}
+
+func assembleThemes(manifest themes.Manifest, source map[string][]byte) (map[string][]byte, []byte, error) {
+	if len(source) != len(manifest.Themes) {
+		return nil, nil, errors.New("build: theme CSS inputs do not match manifest")
+	}
+	published := manifest
+	published.Themes = slices.Clone(manifest.Themes)
+	files := make(map[string][]byte, len(manifest.Themes))
+	for i, theme := range published.Themes {
+		data, ok := source[theme.CSSPath]
+		if !ok {
+			return nil, nil, fmt.Errorf("build: missing captured CSS for theme %q", theme.ID)
+		}
+		copy := append([]byte(nil), data...)
+		sum := sha256.Sum256(copy)
+		theme.TokenContract = published.TokenContract
+		theme.SHA256 = hex.EncodeToString(sum[:])
+		published.Themes[i] = theme
+		files[theme.CSSPath] = copy
+	}
+	catalog, err := published.Catalog(releaseinfo.Version)
+	if err != nil {
+		return nil, nil, fmt.Errorf("build: create themes catalog: %w", err)
+	}
+	encoded, err := themes.Encode(catalog)
+	if err != nil {
+		return nil, nil, fmt.Errorf("build: encode themes catalog: %w", err)
+	}
+	return files, encoded, nil
 }
 
 func proofDocument(repo string, files map[string][]byte) ([]byte, error) {
@@ -284,7 +383,7 @@ func normalizeInputPath(name string) (string, error) {
 }
 
 func catalogBytes(assets []catalog.Asset, files map[string][]byte) ([]byte, error) {
-	c := catalog.Catalog{SchemaVersion: catalog.SchemaVersion, Release: releaseVersion, IdentityRevision: 11, Assets: slices.Clone(assets)}
+	c := catalog.Catalog{SchemaVersion: catalog.SchemaVersion, Release: releaseinfo.Version, IdentityRevision: 11, Assets: slices.Clone(assets)}
 	for _, asset := range c.Assets {
 		data, ok := files[asset.Path]
 		if !ok {
@@ -374,6 +473,29 @@ func writeChecksums(ctx context.Context, root string) error {
 	return nil
 }
 
+func writeReleaseInventory(ctx context.Context, root string) error {
+	if err := checkContext(ctx); err != nil {
+		return err
+	}
+	document, err := releasemeta.Build(releasemeta.Input{
+		Release:          releaseinfo.Version,
+		IdentityRevision: 11,
+		RuntimeVersion:   1,
+		Files:            os.DirFS(root),
+	})
+	if err != nil {
+		return fmt.Errorf("build: release inventory: %w", err)
+	}
+	encoded, err := releasemeta.Encode(document)
+	if err != nil {
+		return fmt.Errorf("build: encode release inventory: %w", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "release.json"), encoded, 0o644); err != nil {
+		return fmt.Errorf("build: write release inventory: %w", err)
+	}
+	return nil
+}
+
 func writeArchives(ctx context.Context, root string) error {
 	paths, err := filesUnder(ctx, root)
 	if err != nil {
@@ -391,7 +513,7 @@ func writeArchives(ctx context.Context, root string) error {
 	if err := checkContext(ctx); err != nil {
 		return err
 	}
-	zipFile, err := os.Create(filepath.Join(root, "releases", "araihu-assets-v0.1.0.zip"))
+	zipFile, err := os.Create(filepath.Join(root, "releases", releaseinfo.ArchiveName("zip")))
 	if err != nil {
 		return fmt.Errorf("build: create ZIP: %w", err)
 	}
@@ -405,7 +527,7 @@ func writeArchives(ctx context.Context, root string) error {
 	if err := checkContext(ctx); err != nil {
 		return err
 	}
-	tarFile, err := os.Create(filepath.Join(root, "releases", "araihu-assets-v0.1.0.tar.gz"))
+	tarFile, err := os.Create(filepath.Join(root, "releases", releaseinfo.ArchiveName("tar.gz")))
 	if err != nil {
 		return fmt.Errorf("build: create tar.gz: %w", err)
 	}

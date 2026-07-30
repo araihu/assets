@@ -8,6 +8,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -18,11 +19,188 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/araihu/assets/internal/campaigns"
 	"github.com/araihu/assets/internal/catalog"
 	"github.com/araihu/assets/internal/platform"
 	"github.com/araihu/assets/internal/provenance"
+	"github.com/araihu/assets/internal/releasemeta"
+	"github.com/araihu/assets/internal/themes"
 	"github.com/araihu/assets/internal/transform"
 )
+
+func TestRunPublishesCapturedThemeCatalog(t *testing.T) {
+	repo := testRepo(t)
+	inputs := testInputs([]byte("asset"))
+	css := []byte("[data-theme=\"araihu\"] { --color-surface: #f3f2e9; }\n")
+	inputs.Themes = themes.Manifest{SchemaVersion: 1, TokenContract: "goshtoso-theme-v1", Themes: []themes.Theme{{ID: "araihu", CSSPath: "themes/araihu.css"}}}
+	inputs.ThemeCSS = map[string][]byte{"themes/araihu.css": css}
+
+	if err := Run(repo, inputs); err != nil {
+		t.Fatal(err)
+	}
+	gotCSS, err := os.ReadFile(filepath.Join(repo, "dist", "themes", "araihu.css"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(gotCSS, css) {
+		t.Fatalf("published CSS = %q, want %q", gotCSS, css)
+	}
+	gotCatalog, err := os.ReadFile(filepath.Join(repo, "dist", "themes.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(gotCatalog, []byte(`"sha256": "`+hash(css)+`"`)) {
+		t.Fatalf("themes catalog misses captured CSS hash: %s", gotCatalog)
+	}
+	mustWrite(t, filepath.Join(repo, "themes", "araihu.css"), []byte("live source changed"))
+	if err := Check(repo, inputs); err != nil {
+		t.Fatalf("Check() reread live CSS source: %v", err)
+	}
+}
+
+func TestRunPublishesReleaseInventoryBeforeChecksumsAndArchives(t *testing.T) {
+	repo := testRepo(t)
+	inputs := testInputs([]byte("asset"))
+	inputs.Campaigns = campaigns.Manifest{SchemaVersion: 1}
+	if err := Run(repo, inputs); err != nil {
+		t.Fatal(err)
+	}
+	releaseBytes, err := os.ReadFile(filepath.Join(repo, "dist", "release.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document releasemeta.Document
+	if err := json.Unmarshal(releaseBytes, &document); err != nil {
+		t.Fatal(err)
+	}
+	if err := document.Validate(); err != nil {
+		t.Fatal(err)
+	}
+	for _, name := range []string{"catalog.json", "themes.json", "campaigns.json"} {
+		data, err := os.ReadFile(filepath.Join(repo, "dist", name))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !inventoryHasHash(document.Files, name, hash(data)) {
+			t.Fatalf("release inventory omits current %s", name)
+		}
+	}
+	if inventoryHasPath(document.Files, "release.json") || inventoryHasPath(document.Files, "checksums.txt") {
+		t.Fatalf("release inventory includes generated successor: %#v", document.Files)
+	}
+	checksums, err := os.ReadFile(filepath.Join(repo, "dist", "checksums.txt"))
+	if err != nil || !bytes.Contains(checksums, []byte("  release.json\n")) {
+		t.Fatalf("checksums = %q, %v", checksums, err)
+	}
+	members := tarArchiveMembers(t, filepath.Join(repo, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
+	for _, name := range []string{"catalog.json", "themes.json", "campaigns.json", "release.json", "checksums.txt"} {
+		if !slices.Contains(members, name) {
+			t.Fatalf("archive omits %s: %q", name, members)
+		}
+	}
+}
+
+func TestRunEmitsConsistentV011ReleaseFields(t *testing.T) {
+	repo := testRepo(t)
+	if err := Run(repo, testInputs([]byte("asset"))); err != nil {
+		t.Fatal(err)
+	}
+
+	catalogBytes, err := os.ReadFile(filepath.Join(repo, "dist", "catalog.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	assetCatalog, err := catalog.Decode(bytes.NewReader(catalogBytes))
+	if err != nil {
+		t.Fatal(err)
+	}
+	themesBytes, err := os.ReadFile(filepath.Join(repo, "dist", "themes.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var themeCatalog themes.Catalog
+	if err := json.Unmarshal(themesBytes, &themeCatalog); err != nil {
+		t.Fatal(err)
+	}
+	releaseBytes, err := os.ReadFile(filepath.Join(repo, "dist", "release.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var releaseDocument releasemeta.Document
+	if err := json.Unmarshal(releaseBytes, &releaseDocument); err != nil {
+		t.Fatal(err)
+	}
+
+	const wantRelease = "v0.1.1"
+	for name, got := range map[string]string{
+		"catalog":  assetCatalog.Release,
+		"themes":   themeCatalog.Release,
+		"metadata": releaseDocument.Release,
+	} {
+		if got != wantRelease {
+			t.Fatalf("%s release = %q, want %q", name, got, wantRelease)
+		}
+	}
+	checksums, err := os.ReadFile(filepath.Join(repo, "dist", "checksums.txt"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(checksums, []byte(hash(releaseBytes)+"  release.json\n")) {
+		t.Fatal("checksums omit the same release metadata")
+	}
+	for _, extension := range []string{"tar.gz", "zip"} {
+		archive := filepath.Join(repo, "dist", "releases", "araihu-assets-"+wantRelease+"."+extension)
+		if _, err := os.Stat(archive); err != nil {
+			t.Fatalf("release archive %q: %v", archive, err)
+		}
+	}
+}
+
+func TestRunPublishesCapturedCampaignRuntimeInInventoryChecksumsAndArchive(t *testing.T) {
+	repo := testRepo(t)
+	runtimePath := filepath.Join(repo, "runtime", "campaign", "v1.js")
+	captured := []byte("(function(){window.campaignVersion=1;}());\n")
+	mustWrite(t, runtimePath, captured)
+	buildHook = func(phase buildPhase) {
+		if phase == beforePublish {
+			mustWrite(t, runtimePath, []byte("changed after staging\n"))
+		}
+	}
+	t.Cleanup(func() { buildHook = nil })
+
+	if err := Run(repo, testInputs([]byte("asset"))); err != nil {
+		t.Fatal(err)
+	}
+	published, err := os.ReadFile(filepath.Join(repo, "dist", "campaign", "v1.js"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(published, captured) {
+		t.Fatalf("published runtime = %q, want captured %q", published, captured)
+	}
+	releaseBytes, err := os.ReadFile(filepath.Join(repo, "dist", "release.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document releasemeta.Document
+	if err := json.Unmarshal(releaseBytes, &document); err != nil {
+		t.Fatal(err)
+	}
+	if !inventoryHasHash(document.Files, "campaign/v1.js", hash(captured)) {
+		t.Fatal("release inventory omits captured campaign/v1.js")
+	}
+	checksums, err := os.ReadFile(filepath.Join(repo, "dist", "checksums.txt"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(checksums, []byte(hash(captured)+"  campaign/v1.js\n")) {
+		t.Fatalf("checksums omit captured campaign/v1.js: %s", checksums)
+	}
+	members := tarArchiveMembers(t, filepath.Join(repo, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
+	if !slices.Contains(members, "campaign/v1.js") {
+		t.Fatalf("release archive omits campaign/v1.js: %q", members)
+	}
+}
 
 func TestRunFailurePreservesPublishedDist(t *testing.T) {
 	repo := testRepo(t)
@@ -199,18 +377,18 @@ func TestRunWritesSortedChecksumsAndDeterministicReleaseMembership(t *testing.T)
 			t.Fatalf("invalid checksum line %q", checksum)
 		}
 	}
-	firstArchive, err := os.ReadFile(filepath.Join(first, "dist", "releases", "araihu-assets-v0.1.0.tar.gz"))
+	firstArchive, err := os.ReadFile(filepath.Join(first, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	secondArchive, err := os.ReadFile(filepath.Join(second, "dist", "releases", "araihu-assets-v0.1.0.tar.gz"))
+	secondArchive, err := os.ReadFile(filepath.Join(second, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !bytes.Equal(firstArchive, secondArchive) {
 		t.Fatal("independent tar.gz builds differ")
 	}
-	requireArchiveMembers(t, firstArchive, []string{"NOTICE", "catalog.json", "checksums.txt", "icons/brand/asset.svg", "licenses/Apache-2.0.txt", "licenses/heroicons-MIT.txt", "platform/web/araihu/favicon.svg", "proof/app.js", "proof/styles.css"})
+	requireArchiveMembers(t, firstArchive, []string{"NOTICE", "campaign/v1.js", "campaigns.json", "catalog.json", "checksums.txt", "icons/brand/asset.svg", "licenses/Apache-2.0.txt", "licenses/heroicons-MIT.txt", "platform/web/araihu/favicon.svg", "proof/app.js", "proof/styles.css", "release.json", "themes.json", "themes/araihu.css"})
 }
 
 func TestProductionReleaseArchivesIncludeExactProofTree(t *testing.T) {
@@ -240,8 +418,8 @@ func TestProductionReleaseArchivesIncludeExactProofTree(t *testing.T) {
 		archive string
 		members func(t *testing.T, archive string) []string
 	}{
-		{"tar.gz", filepath.Join(dist, "releases", "araihu-assets-v0.1.0.tar.gz"), tarArchiveMembers},
-		{"zip", filepath.Join(dist, "releases", "araihu-assets-v0.1.0.zip"), zipArchiveMembers},
+		{"tar.gz", filepath.Join(dist, "releases", "araihu-assets-v0.1.1.tar.gz"), tarArchiveMembers},
+		{"zip", filepath.Join(dist, "releases", "araihu-assets-v0.1.1.zip"), zipArchiveMembers},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			got := tc.members(t, tc.archive)
@@ -272,7 +450,10 @@ func testInputs(_ []byte) Inputs {
 			CanonicalName: "araihu-icon-light-transparent-optical", Namespace: "brand", Path: "icons/brand/asset.svg", Product: "araihu", Artwork: "icon", Appearance: "light", Surface: "transparent", Framing: "optical", Format: "svg",
 			Dimensions: catalog.Dimensions{ViewBox: "0 0 1 1"}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "source/brand/original/asset.svg", SHA256: hex.EncodeToString(sum[:]),
 		}}},
-		UI: provenance.Result{Files: map[string][]byte{"licenses/heroicons-MIT.txt": []byte("MIT\n")}},
+		UI:        provenance.Result{Files: map[string][]byte{"licenses/heroicons-MIT.txt": []byte("MIT\n")}},
+		Campaigns: campaigns.Manifest{SchemaVersion: 1},
+		Themes:    themes.Manifest{SchemaVersion: 1, TokenContract: "goshtoso-theme-v1", Themes: []themes.Theme{{ID: "araihu", CSSPath: "themes/araihu.css"}}},
+		ThemeCSS:  map[string][]byte{"themes/araihu.css": []byte("[data-theme=\"araihu\"] {}\n")},
 		Platform: platform.Result{Files: map[string][]byte{"dist/platform/web/araihu/favicon.svg": []byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`)}, Assets: []catalog.Asset{{
 			CanonicalName: "platform-web-araihu-favicon-svg", Namespace: "brand", Path: "platform/web/araihu/favicon.svg", Product: "araihu", Artwork: "icon", Appearance: "adaptive", Surface: "transparent", Framing: "optical", Format: "svg",
 			Dimensions: catalog.Dimensions{ViewBox: "0 0 1 1"}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "platform generator v0.1.0", SHA256: hash([]byte(`<svg viewBox="0 0 1 1"><path d="M0 0h1v1z"/></svg>`)),
@@ -297,7 +478,10 @@ func proofInputs() Inputs {
 			CanonicalName: "platform-web-araihu-icon-maskable-512-png", Namespace: "brand", Path: "platform/web/araihu/icon-maskable-512.png", Product: "araihu", Artwork: "icon", Appearance: "light", Surface: "plate", Framing: "launcher", Format: "png",
 			Dimensions: catalog.Dimensions{Width: 512, Height: 512}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "platform generator", SHA256: hash(master),
 		}}},
-		UI: provenance.Result{Files: map[string][]byte{"licenses/heroicons-MIT.txt": []byte("MIT\n")}},
+		UI:        provenance.Result{Files: map[string][]byte{"licenses/heroicons-MIT.txt": []byte("MIT\n")}},
+		Campaigns: campaigns.Manifest{SchemaVersion: 1},
+		Themes:    themes.Manifest{SchemaVersion: 1, TokenContract: "goshtoso-theme-v1", Themes: []themes.Theme{{ID: "araihu", CSSPath: "themes/araihu.css"}}},
+		ThemeCSS:  map[string][]byte{"themes/araihu.css": []byte("[data-theme=\"araihu\"] {}\n")},
 	}
 }
 
@@ -306,12 +490,31 @@ func hash(data []byte) string {
 	return hex.EncodeToString(sum[:])
 }
 
+func inventoryHasHash(files []releasemeta.File, name, want string) bool {
+	for _, file := range files {
+		if file.Path == name && file.SHA256 == want {
+			return true
+		}
+	}
+	return false
+}
+
+func inventoryHasPath(files []releasemeta.File, name string) bool {
+	for _, file := range files {
+		if file.Path == name {
+			return true
+		}
+	}
+	return false
+}
+
 func testRepo(t *testing.T) string {
 	t.Helper()
 	repo := t.TempDir()
 	mustWrite(t, filepath.Join(repo, "LICENSE"), []byte("Apache License\n"))
 	mustWrite(t, filepath.Join(repo, "site", "proof", "styles.css"), []byte("body {}\n"))
 	mustWrite(t, filepath.Join(repo, "site", "proof", "app.js"), []byte("\"use strict\";\n"))
+	mustWrite(t, filepath.Join(repo, "runtime", "campaign", "v1.js"), []byte("(function(){})();\n"))
 	return repo
 }
 

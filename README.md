@@ -2,14 +2,14 @@
 
 Deterministic identity and interface assets for Arai Hû products.
 `dist/catalog.json` is the versioned, language-neutral consumer contract for
-the `v0.1.0` release.
+the `v0.1.1` release candidate.
 
 ## Current checkout
 
 Requires Go `1.26.5`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
-The managed `dist/` tree is the `v0.1.0` distribution. Its catalog, generated
+The managed `dist/` tree is the `v0.1.1` release candidate. Its catalog, generated
 sprites, catalog-driven proof, and deterministic archives are consumer inputs.
 Use a disposable checkout when regenerating it:
 
@@ -26,10 +26,10 @@ managed tree, including `dist/proof`.
 
 ## Install
 
-Install and verify the released module:
+After release approval, install and verify the tagged module:
 
 ```sh
-go install github.com/araihu/assets/cmd/araihu-assets@v0.1.0
+go install github.com/araihu/assets/cmd/araihu-assets@v0.1.1
 araihu-assets verify
 ```
 
@@ -42,6 +42,8 @@ make verify    # rebuild offline and compare with dist/
 make check     # test, then reject generated-output drift
 make proof     # atomically regenerate dist/, including dist/proof
 make proof-check # reject generated proof/output drift without writing
+make themes-check # validate source theme manifest and stylesheets offline
+make campaigns-check # validate campaign references and resolve a fixed UTC date
 ```
 
 `make proof` and `make proof-check` use the same local, catalog-driven builder
@@ -57,6 +59,10 @@ araihu-assets verify
 araihu-assets proof [--check]
 araihu-assets catalog
 araihu-assets export --output <directory>
+araihu-assets themes validate
+araihu-assets campaigns validate
+araihu-assets campaigns resolve --date YYYY-MM-DD
+araihu-assets campaigns publish --date YYYY-MM-DD --output <directory>
 ```
 
 `vendor` is the only networked command. All other commands build from the
@@ -68,9 +74,27 @@ rejects traversal, symlinks, invalid paths, and different-byte collisions;
 existing identical files are idempotent. Treat a collision error as a request
 to choose a separate output directory or reconcile the consumer's copy.
 
+`themes validate`, `campaigns validate`, and `campaigns resolve` are offline
+and credential-free. `resolve` writes one canonical channel JSON document to
+standard output and writes nothing else. `campaigns publish` writes only
+`releases/latest.json`, `releases/default.json`, `releases/current.json`, and
+`campaign/v1.js` below its output root; it never creates immutable release
+history. Existing identical channel bytes are idempotent, while different-byte
+collisions fail without overwriting consumer output.
+
+`dist/` is the newest built release snapshot and therefore supplies
+`latest.json` plus the stable runtime. `manifests/default.yaml` independently
+selects the promoted baseline for `default.json` and `current.json`. When that
+promotion names an older release, provide its immutable offline snapshot at
+`releases/<semver>/` with `release.json`, `catalog.json`, `themes.json`, and
+`campaigns.json`. `release.json` hashes the captured inputs, so a concurrent
+mutation is rejected instead of mixing generations. The command never fetches
+that snapshot. A new `dist/` release changes only
+`latest.json`; it cannot implicitly move `default.json` or `current.json`.
+
 ## Catalog and sprites
 
-The `v0.1.0` `dist/catalog.json` is schema v1, language-neutral metadata for
+The `v0.1.1` `dist/catalog.json` is schema v1, language-neutral metadata for
 generated files only. It records canonical name,
 namespace, variant dimensions,
 `spriteSymbol`, color behavior, license, source label, and SHA-256. Public
@@ -90,7 +114,7 @@ generation is provided by this CLI; consumers own any project-local bindings.
 
 ## Platform files and archives
 
-The `v0.1.0` build emits individual brand/UI SVGs, web/Android/Apple platform
+The `v0.1.1` build emits individual brand/UI SVGs, web/Android/Apple platform
 packages, catalog, checksums, notices, licenses, the self-contained
 `dist/proof/**` review site, and deterministic `.tar.gz` and `.zip` archives
 under `dist/releases/`. Platform launchers
@@ -100,6 +124,10 @@ general SVG for a launcher asset.
 The catalog is the current interoperability boundary. Release archives contain
 the complete managed distribution, including all `dist/proof/**` local assets;
 review screenshots and critique files remain outside release membership.
+
+`v0.1.1` is an offline release candidate in this checkout, not a published tag
+or download. Consumers must wait for integration approval before treating its
+archive names or module version as publicly available.
 
 ## Licensing
 
