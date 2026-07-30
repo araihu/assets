@@ -13,6 +13,10 @@ toggle modes of either `asset` or `sprite`. Unknown fields and multiple YAML
 documents are rejected. Enabled campaigns cannot overlap; disabled campaigns do
 not participate in overlap detection but remain fully validated.
 
-This source-level schema only checks canonical-name form. Immutable catalog
-asset existence, exact sprite symbols, and built-theme reference resolution are
-validated when release documents are assembled.
+This source-level schema only checks canonical-name form. Channel resolution
+validates every campaign, including disabled records, against the selected
+immutable catalog and theme catalog. It resolves exact catalog sprite symbols,
+brand logo and icon membership, and stylesheet and asset URLs below
+`/assets/releases/<release>/` on the configured HTTPS public origin. The
+resolved document is canonical two-space JSON with a final newline; its digest
+is SHA-256 over the same document with an empty `digest` field.
