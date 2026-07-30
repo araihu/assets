@@ -46,6 +46,23 @@ jobs:
           test "$tag_sha" = "$event_sha"
           test "$(go version | awk '{print $3}')" = go1.26.5
 
+      - name: Require release fan-out credentials
+        id: fanout-credentials
+        shell: bash
+        env:
+          ARAIHU_ASSETS_APP_ID: ${{ secrets.ARAIHU_ASSETS_APP_ID }}
+          ARAIHU_ASSETS_APP_PRIVATE_KEY: ${{ secrets.ARAIHU_ASSETS_APP_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$ARAIHU_ASSETS_APP_ID" ]]; then
+            echo "::error title=Missing release credential::ARAIHU_ASSETS_APP_ID must be configured before tagging a release"
+            exit 1
+          fi
+          if [[ -z "$ARAIHU_ASSETS_APP_PRIVATE_KEY" ]]; then
+            echo "::error title=Missing release credential::ARAIHU_ASSETS_APP_PRIVATE_KEY must be configured before tagging a release"
+            exit 1
+          fi
+
       - name: Build verified rsvg-convert 2.62.1
         shell: bash
         env:
@@ -118,6 +135,8 @@ jobs:
       - name: Verify archives and stage immutable bundles
         id: release
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           tag="$GITHUB_REF_NAME"
@@ -141,6 +160,43 @@ jobs:
           latest="${RUNNER_TEMP}/latest-candidate"
           channel_candidate="${RUNNER_TEMP}/release-channel-candidate"
           mkdir -p "$bundle" "$latest"
+
+          default_release=$(ruby -ryaml -e 'puts YAML.safe_load(File.read("manifests/default.yaml")).fetch("release")')
+          if [[ "$default_release" != "$tag" ]]; then
+            default_download="${RUNNER_TEMP}/default-release/download"
+            default_root="${RUNNER_TEMP}/default-release/root"
+            default_archive="araihu-assets-${default_release}.tar.gz"
+            mkdir -p "$default_download" "$default_root"
+            gh release download "$default_release" --repo "$GITHUB_REPOSITORY" \
+              --pattern "$default_archive" --pattern SHA256SUMS --dir "$default_download"
+            default_sha256=$(ruby -e '
+              name, path = ARGV
+              matches = File.readlines(path, chomp: true).filter_map do |line|
+                hash, candidate = line.split(/\s+/, 2)
+                hash if candidate == name
+              end
+              abort "default release archive hash must appear exactly once" unless matches.length == 1 && matches.first.match?(/\A[0-9a-f]{64}\z/)
+              puts matches.first
+            ' "$default_archive" "$default_download/SHA256SUMS")
+            printf '%s  %s\n' "$default_sha256" "$default_download/$default_archive" > "$default_download/archive.sha256"
+            sha256sum --check --strict "$default_download/archive.sha256"
+            tar --list --gzip --file "$default_download/$default_archive" > "$default_download/archive.members"
+            ruby scripts/validate-release-archive-members.rb "$default_download/archive.members"
+            tar --list --verbose --gzip --file "$default_download/$default_archive" |
+              awk 'substr($1, 1, 1) != "-" { exit 1 }'
+            tar --extract --gzip --file "$default_download/$default_archive" --directory "$default_root"
+            (cd "$default_root" && sha256sum --check --strict checksums.txt)
+            ruby -rjson -e '
+              document = JSON.parse(File.read(ARGV.fetch(0)))
+              abort "default release metadata mismatch" unless document.fetch("release") == ARGV.fetch(1)
+            ' "$default_root/release.json" "$default_release"
+            mkdir -p "releases/${default_release}/campaign"
+            for contract in release.json catalog.json themes.json campaigns.json; do
+              install -m 0644 "$default_root/$contract" "releases/${default_release}/$contract"
+            done
+            install -m 0644 "$default_root/campaign/v1.js" "releases/${default_release}/campaign/v1.js"
+          fi
+
           CHANNEL_DATE=1970-01-01
           go run ./cmd/araihu-assets campaigns publish --date "$CHANNEL_DATE" --output "$channel_candidate"
           ruby -rjson -e '

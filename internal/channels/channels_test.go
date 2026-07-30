@@ -84,15 +84,14 @@ func TestEncodeIsDeterministicAndDigestCoversEmptyDigest(t *testing.T) {
 	}
 }
 
-func TestResolveInitialPromotion(t *testing.T) {
+func TestSourceDefaultRemainsV011WhileLatestResolvesBaseline(t *testing.T) {
 	root := os.DirFS("../..")
 	defaultPromotion, err := LoadDefault(root, "manifests/default.yaml")
 	if err != nil {
 		t.Fatalf("LoadDefault() error = %v", err)
 	}
-	campaignManifest, err := campaigns.Load(root, "manifests/campaigns.yaml")
-	if err != nil {
-		t.Fatalf("campaigns.Load() error = %v", err)
+	if defaultPromotion.Release != "v0.1.1" {
+		t.Fatalf("default release = %q, want retained v0.1.1", defaultPromotion.Release)
 	}
 	snapshot := "dist"
 	catalogFile, err := root.Open(snapshot + "/catalog.json")
@@ -113,13 +112,18 @@ func TestResolveInitialPromotion(t *testing.T) {
 	if err := json.NewDecoder(themeFile).Decode(&themeCatalog); err != nil {
 		t.Fatal(err)
 	}
+	if assetCatalog.Release != "v0.1.2" || themeCatalog.Release != "v0.1.2" {
+		t.Fatalf("latest release mismatch: catalog=%q themes=%q", assetCatalog.Release, themeCatalog.Release)
+	}
+	latestPromotion := defaultPromotion
+	latestPromotion.Release = assetCatalog.Release
 	date := mustDate(t, "2026-08-01")
-	document, err := Resolve(Input{Date: date, Default: defaultPromotion, Catalog: assetCatalog, Themes: themeCatalog, Campaigns: campaignManifest, PublicRoot: "https://araihu.example"})
+	document, err := Resolve(Input{Date: date, Default: latestPromotion, Catalog: assetCatalog, Themes: themeCatalog, Campaigns: campaigns.Manifest{SchemaVersion: 1}, PublicRoot: "https://araihu.example"})
 	if err != nil {
 		t.Fatalf("Resolve() error = %v", err)
 	}
 	if document.Source != "default" || document.Theme.ID != "araihu" || document.Campaign != nil {
-		t.Fatalf("resolved initial promotion = %#v", document)
+		t.Fatalf("resolved latest baseline = %#v", document)
 	}
 }
 

@@ -3,6 +3,7 @@ package app
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"io"
 	"io/fs"
@@ -73,19 +74,24 @@ func TestRunHonorsCancelledContextBeforeWork(t *testing.T) {
 }
 
 func TestThemesValidateAndCampaignResolveUseStrictOfflineInputs(t *testing.T) {
-	repo := fixtureRepo(t)
-	for _, args := range [][]string{{"themes", "validate"}, {"campaigns", "validate"}} {
+	for _, command := range []struct {
+		repo string
+		args []string
+	}{
+		{repo: fixtureRepo(t), args: []string{"themes", "validate"}},
+		{repo: campaignFixtureRepo(t), args: []string{"campaigns", "validate"}},
+	} {
 		var stdout, stderr bytes.Buffer
-		if err := Run(context.Background(), Dependencies{Repo: repo}, args, &stdout, &stderr); err != nil {
-			t.Fatalf("Run(%q) error = %v", args, err)
+		if err := Run(context.Background(), Dependencies{Repo: command.repo}, command.args, &stdout, &stderr); err != nil {
+			t.Fatalf("Run(%q) error = %v", command.args, err)
 		}
 		if stdout.Len() == 0 || stderr.Len() != 0 {
-			t.Fatalf("Run(%q) stdout=%q stderr=%q", args, stdout.String(), stderr.String())
+			t.Fatalf("Run(%q) stdout=%q stderr=%q", command.args, stdout.String(), stderr.String())
 		}
 	}
 
 	var stdout, stderr bytes.Buffer
-	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "resolve", "--date", "2026-10-31"}, &stdout, &stderr)
+	err := Run(context.Background(), Dependencies{Repo: campaignFixtureRepo(t)}, []string{"campaigns", "resolve", "--date", "2026-10-31"}, &stdout, &stderr)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -116,10 +122,11 @@ func TestThemeAndCampaignCommandsRejectInvalidArguments(t *testing.T) {
 }
 
 func TestCampaignPublishWritesOnlyChannelsAndAcceptsIdenticalOutput(t *testing.T) {
+	repo := campaignFixtureRepo(t)
 	output := filepath.Join(t.TempDir(), "channel-output")
 	args := []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}
 	for range 2 {
-		if err := Run(context.Background(), Dependencies{Repo: fixtureRepo(t)}, args, io.Discard, io.Discard); err != nil {
+		if err := Run(context.Background(), Dependencies{Repo: repo}, args, io.Discard, io.Discard); err != nil {
 			t.Fatalf("Run(%q) error = %v", args, err)
 		}
 	}
@@ -149,6 +156,7 @@ func TestCampaignPublishWritesOnlyChannelsAndAcceptsIdenticalOutput(t *testing.T
 }
 
 func TestCampaignPublishPreflightsDifferentByteCollision(t *testing.T) {
+	repo := campaignFixtureRepo(t)
 	output := t.TempDir()
 	name := filepath.Join(output, "releases", "current.json")
 	if err := os.MkdirAll(filepath.Dir(name), 0o755); err != nil {
@@ -157,7 +165,7 @@ func TestCampaignPublishPreflightsDifferentByteCollision(t *testing.T) {
 	if err := os.WriteFile(name, []byte("old"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	err := Run(context.Background(), Dependencies{Repo: fixtureRepo(t)}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard)
+	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard)
 	if err == nil || !strings.Contains(err.Error(), "collision") {
 		t.Fatalf("Run(publish) error = %v, want collision", err)
 	}
@@ -170,6 +178,7 @@ func TestCampaignPublishPreflightsDifferentByteCollision(t *testing.T) {
 }
 
 func TestCampaignPublishCancellationPreservesReplacementOutput(t *testing.T) {
+	repo := campaignFixtureRepo(t)
 	parent := t.TempDir()
 	output := filepath.Join(parent, "new-output")
 	ctx, cancel := context.WithCancel(context.Background())
@@ -183,7 +192,7 @@ func TestCampaignPublishCancellationPreservesReplacementOutput(t *testing.T) {
 		cancel()
 	}
 	t.Cleanup(func() { campaignAfterOutputRootHook = nil })
-	err := Run(ctx, Dependencies{Repo: fixtureRepo(t)}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard)
+	err := Run(ctx, Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard)
 	if !errors.Is(err, context.Canceled) {
 		t.Fatalf("Run(publish) error = %v, want context canceled", err)
 	}
@@ -193,11 +202,12 @@ func TestCampaignPublishCancellationPreservesReplacementOutput(t *testing.T) {
 }
 
 func TestCampaignPublishPreservesUnownedOutputPath(t *testing.T) {
+	repo := campaignFixtureRepo(t)
 	output := filepath.Join(t.TempDir(), "unowned")
 	if err := os.WriteFile(output, []byte("do not remove"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	err := Run(context.Background(), Dependencies{Repo: fixtureRepo(t)}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard)
+	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard)
 	if err == nil {
 		t.Fatal("Run(publish) accepted regular-file output root")
 	}
@@ -207,6 +217,7 @@ func TestCampaignPublishPreservesUnownedOutputPath(t *testing.T) {
 }
 
 func TestCampaignPublishRejectsOutputRootAndParentSymlinks(t *testing.T) {
+	repo := campaignFixtureRepo(t)
 	for _, fixture := range func() []struct{ output, outside string } {
 		parent, outside := t.TempDir(), t.TempDir()
 		rootLink := filepath.Join(parent, "root-link")
@@ -219,7 +230,7 @@ func TestCampaignPublishRejectsOutputRootAndParentSymlinks(t *testing.T) {
 		}
 		return []struct{ output, outside string }{{rootLink, outside}, {filepath.Join(parentLink, "child"), outside}}
 	}() {
-		err := Run(context.Background(), Dependencies{Repo: fixtureRepo(t)}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", fixture.output}, io.Discard, io.Discard)
+		err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", fixture.output}, io.Discard, io.Discard)
 		if err == nil || !strings.Contains(err.Error(), "symbolic-link") {
 			t.Fatalf("Run(publish %q) error = %v, want symbolic-link rejection", fixture.output, err)
 		}
@@ -230,6 +241,7 @@ func TestCampaignPublishRejectsOutputRootAndParentSymlinks(t *testing.T) {
 }
 
 func TestCampaignPublishPreservesReplacementSymlinkWithoutWritingOutside(t *testing.T) {
+	repo := campaignFixtureRepo(t)
 	parent, outside := t.TempDir(), t.TempDir()
 	output := filepath.Join(parent, "new-output")
 	campaignAfterOutputRootHook = func() {
@@ -241,7 +253,7 @@ func TestCampaignPublishPreservesReplacementSymlinkWithoutWritingOutside(t *test
 		}
 	}
 	t.Cleanup(func() { campaignAfterOutputRootHook = nil })
-	err := Run(context.Background(), Dependencies{Repo: fixtureRepo(t)}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard)
+	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard)
 	if err == nil || !strings.Contains(err.Error(), "changed") {
 		t.Fatalf("Run(publish) error = %v, want replacement rejection", err)
 	}
@@ -255,6 +267,7 @@ func TestCampaignPublishPreservesReplacementSymlinkWithoutWritingOutside(t *test
 
 func TestCampaignPublishSeparatesLatestFromPromotedDefault(t *testing.T) {
 	repo := promotedSnapshotFixture(t)
+	latestRelease := fixtureRelease(t, repo)
 
 	output := filepath.Join(t.TempDir(), "channels")
 	if err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard); err != nil {
@@ -264,7 +277,7 @@ func TestCampaignPublishSeparatesLatestFromPromotedDefault(t *testing.T) {
 		name    string
 		release string
 	}{
-		{name: "releases/latest.json", release: "v0.1.1"},
+		{name: "releases/latest.json", release: latestRelease},
 		{name: "releases/default.json", release: "v0.0.9"},
 		{name: "releases/current.json", release: "v0.0.9"},
 	} {
@@ -444,6 +457,7 @@ func TestCampaignPublishRejectsIntermediateReleaseDirectoryReplacementDuringOpen
 
 func TestCampaignPublishUsesOneCapturedSnapshot(t *testing.T) {
 	repo := campaignFixtureRepo(t)
+	release := fixtureRelease(t, repo)
 	runtime, err := os.ReadFile(filepath.Join(repo, "dist", "campaign", "v1.js"))
 	if err != nil {
 		t.Fatal(err)
@@ -469,9 +483,9 @@ func TestCampaignPublishUsesOneCapturedSnapshot(t *testing.T) {
 		name    string
 		release string
 	}{
-		{name: "current.json", release: "v0.1.1"},
-		{name: "default.json", release: "v0.1.1"},
-		{name: "latest.json", release: "v0.1.1"},
+		{name: "current.json", release: release},
+		{name: "default.json", release: release},
+		{name: "latest.json", release: release},
 	} {
 		data, err := os.ReadFile(filepath.Join(output, "releases", want.name))
 		if err != nil || !strings.Contains(string(data), `"release": "`+want.release+`"`) {
@@ -667,18 +681,20 @@ func campaignFixtureRepo(t *testing.T) string {
 			t.Fatal(err)
 		}
 	}
+	release := fixtureRelease(t, repo)
+	defaultManifest := []byte("schema_version: 1\nrelease: " + release + "\ntheme: araihu\n")
+	if err := os.WriteFile(filepath.Join(repo, "manifests", "default.yaml"), defaultManifest, 0o644); err != nil {
+		t.Fatal(err)
+	}
 	return repo
 }
 
 func promotedSnapshotFixture(t *testing.T) string {
 	t.Helper()
 	repo := campaignFixtureRepo(t)
+	latestRelease := fixtureRelease(t, repo)
 	defaultManifest := filepath.Join(repo, "manifests", "default.yaml")
-	data, err := os.ReadFile(defaultManifest)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(defaultManifest, bytes.ReplaceAll(data, []byte("v0.1.1"), []byte("v0.0.9")), 0o644); err != nil {
+	if err := os.WriteFile(defaultManifest, []byte("schema_version: 1\nrelease: v0.0.9\ntheme: araihu\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
 	files := fstest.MapFS{}
@@ -691,7 +707,7 @@ func promotedSnapshotFixture(t *testing.T) string {
 		if err != nil {
 			t.Fatal(err)
 		}
-		data = bytes.ReplaceAll(data, []byte("v0.1.1"), []byte("v0.0.9"))
+		data = bytes.ReplaceAll(data, []byte(latestRelease), []byte("v0.0.9"))
 		target := filepath.Join(snapshot, filepath.FromSlash(name))
 		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
 			t.Fatal(err)
@@ -718,4 +734,17 @@ func promotedSnapshotFixture(t *testing.T) string {
 		t.Fatal(err)
 	}
 	return repo
+}
+
+func fixtureRelease(t *testing.T, repo string) string {
+	t.Helper()
+	data, err := os.ReadFile(filepath.Join(repo, "dist", "release.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document releasemeta.Document
+	if err := json.Unmarshal(data, &document); err != nil {
+		t.Fatal(err)
+	}
+	return document.Release
 }
