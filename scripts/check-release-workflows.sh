@@ -84,6 +84,13 @@ require_contract(archive_validator.include?('exact.key?(path)') && archive_valid
 require_contract(release_steps.any? { |step| step["uses"]&.start_with?("actions/checkout@") && step.dig("with", "ref") == "${{ github.sha }}" }, "release checkout must use immutable github.sha")
 require_contract(release_runs.include?('event_sha=$(git rev-parse "${GITHUB_SHA}^{commit}")') && release_runs.include?('git rev-parse "refs/tags/${GITHUB_REF_NAME}^{commit}"') && release_runs.include?('test "$tag_sha" = "$event_sha"'), "release must resolve the triggering tag to github.sha")
 require_contract(release_steps.any? { |step| step["uses"]&.start_with?("actions/setup-go@") && step.dig("with", "go-version") == "1.26.5" }, "release must install Go 1.26.5")
+credential_preflight = release_steps.find { |step| step["id"] == "fanout-credentials" }
+require_contract(credential_preflight && credential_preflight["env"] == {
+  "ARAIHU_ASSETS_APP_ID" => "${{ secrets.ARAIHU_ASSETS_APP_ID }}",
+  "ARAIHU_ASSETS_APP_PRIVATE_KEY" => "${{ secrets.ARAIHU_ASSETS_APP_PRIVATE_KEY }}"
+}, "release credential preflight must receive only canonical App secrets")
+credential_preflight_run = credential_preflight["run"].to_s
+require_contract(credential_preflight_run.include?('[[ -z "$ARAIHU_ASSETS_APP_ID" ]]') && credential_preflight_run.include?('[[ -z "$ARAIHU_ASSETS_APP_PRIVATE_KEY" ]]'), "release credential preflight must reject either missing App secret")
 require_contract(release_runs.include?("env -u HTTPS_PROXY -u HTTP_PROXY make check"), "release must run offline check gate")
 require_contract(release_runs.include?('default_release=$(ruby -ryaml') && release_runs.include?('gh release download "$default_release"'), "release must materialize an older promoted GitHub Release")
 require_contract(release_runs.include?('sha256sum --check --strict "$default_download/archive.sha256"') && release_runs.include?('ruby scripts/validate-release-archive-members.rb "$default_download/archive.members"'), "release must hash-check and safely extract the promoted release")
@@ -94,6 +101,8 @@ require_contract(release_runs.include?("sha256sum --check --strict checksums.txt
 require_contract(release_runs.include?("gh release create") && release_runs.include?("gh release upload"), "release must create or safely update matching GitHub Release")
 release_publish = release_steps.map { |step| step["run"] }.compact.find { |run| run.include?("gh release create") }
 require_contract(release_publish, "release publication step is missing")
+release_publish_step = release_steps.find { |step| step["run"] == release_publish }
+require_contract(release_steps.index(credential_preflight) < release_steps.index(release_publish_step), "release credential preflight must run before GitHub Release publication")
 preflight_loop = release_publish.index('for asset in "${assets[@]}"; do')
 missing_record = release_publish.index('missing+=("$asset")')
 upload_loop = release_publish.index('for asset in "${missing[@]}"; do')

@@ -46,6 +46,23 @@ jobs:
           test "$tag_sha" = "$event_sha"
           test "$(go version | awk '{print $3}')" = go1.26.5
 
+      - name: Require release fan-out credentials
+        id: fanout-credentials
+        shell: bash
+        env:
+          ARAIHU_ASSETS_APP_ID: ${{ secrets.ARAIHU_ASSETS_APP_ID }}
+          ARAIHU_ASSETS_APP_PRIVATE_KEY: ${{ secrets.ARAIHU_ASSETS_APP_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$ARAIHU_ASSETS_APP_ID" ]]; then
+            echo "::error title=Missing release credential::ARAIHU_ASSETS_APP_ID must be configured before tagging a release"
+            exit 1
+          fi
+          if [[ -z "$ARAIHU_ASSETS_APP_PRIVATE_KEY" ]]; then
+            echo "::error title=Missing release credential::ARAIHU_ASSETS_APP_PRIVATE_KEY must be configured before tagging a release"
+            exit 1
+          fi
+
       - name: Build verified rsvg-convert 2.62.1
         shell: bash
         env:

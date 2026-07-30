@@ -119,6 +119,10 @@ mutate_and_reject "mutable release checkout" .github/workflows/release.yml \
   'ref: ${{ github.sha }}' 'ref: ${{ github.ref }}'
 mutate_and_reject "missing tag-to-event SHA verification" .github/workflows/release.yml \
   'test "$tag_sha" = "$event_sha"' 'test -n "$tag_sha"'
+mutate_and_reject "missing pre-publication App credential gate" .github/workflows/release.yml \
+  'id: fanout-credentials' 'id: fanout-credentials-disabled'
+mutate_and_reject "pre-publication gate ignores private key" .github/workflows/release.yml \
+  '[[ -z "$ARAIHU_ASSETS_APP_PRIVATE_KEY" ]]' '[[ -n "$ARAIHU_ASSETS_APP_PRIVATE_KEY" ]]'
 mutate_and_reject "upload during release preflight" .github/workflows/release.yml \
   'missing+=("$asset")' 'gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY"'
 mutate_and_reject "clobbering release upload" .github/workflows/release.yml \
