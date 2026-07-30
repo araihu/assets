@@ -5,6 +5,7 @@ repo=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 checker="$repo/scripts/check-release-workflows.sh"
 
 "$checker" "$repo"
+"$repo/scripts/release-consumer-fanout_test.sh"
 
 scratch=$(mktemp -d)
 trap 'rm -rf -- "$scratch"' EXIT
@@ -72,12 +73,15 @@ mutate_and_reject() {
   after=$4
   mutation=$((mutation + 1))
   fixture="$scratch/mutation-$mutation"
-  mkdir -p "$fixture/.github/workflows" "$fixture/scripts"
+  mkdir -p "$fixture/.github/workflows" "$fixture/scripts" "$fixture/manifests"
   cp "$repo/.github/workflows/release.yml" "$fixture/.github/workflows/release.yml"
+  cp "$repo/.github/workflows/release-fanout.yml" "$fixture/.github/workflows/release-fanout.yml"
   cp "$repo/.github/workflows/campaigns.yml" "$fixture/.github/workflows/campaigns.yml"
   cp "$repo/.github/workflows/ci.yml" "$fixture/.github/workflows/ci.yml"
   cp "$repo/scripts/channel-bundle-digest.rb" "$fixture/scripts/channel-bundle-digest.rb"
   cp "$repo/scripts/accepted-channel-state.rb" "$fixture/scripts/accepted-channel-state.rb"
+  cp "$repo/scripts/release-consumer-fanout.rb" "$fixture/scripts/release-consumer-fanout.rb"
+  cp "$repo/manifests/release-consumers.yaml" "$fixture/manifests/release-consumers.yaml"
   ruby - "$fixture/$relative" "$before" "$after" <<'RUBY'
 path, before, after = ARGV
 text = File.read(path)
@@ -100,6 +104,18 @@ mutate_and_reject "clobbering release upload" .github/workflows/release.yml \
   'gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY"' 'gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY" --clobber'
 mutate_and_reject "release metadata renamed as latest channel" .github/workflows/release.yml \
   'go run ./cmd/araihu-assets campaigns publish --date "$CHANNEL_DATE" --output "$channel_candidate"' 'install -m 0644 dist/release.json "$latest/latest.json"'
+mutate_and_reject "release omits fallback consumer fan-out" .github/workflows/release.yml \
+  'uses: ./.github/workflows/release-fanout.yml' 'uses: ./.github/workflows/missing-fanout.yml'
+mutate_and_reject "manual fan-out disabled" .github/workflows/release-fanout.yml \
+  'workflow_dispatch:' 'disabled_workflow_dispatch:'
+mutate_and_reject "fan-out token targets every installation repository" .github/workflows/release-fanout.yml \
+  'repositories: ${{ steps.consumers.outputs.repositories }}' 'repositories: ""'
+mutate_and_reject "fan-out token minted before release verification" .github/workflows/release-fanout.yml \
+  'id: consumers' 'id: consumers-disabled'
+mutate_and_reject "fallback enrollment includes metaru" manifests/release-consumers.yaml \
+  '  - xisnove' '  - metaru'
+mutate_and_reject "fallback dispatch event type drift" scripts/release-consumer-fanout.rb \
+  '"event_type" => "araihu-assets-released"' '"event_type" => "araihu-assets-current"'
 mutate_and_reject "untagged promoted release shortcut" .github/workflows/campaigns.yml \
   'materialize_release "$default_release"' 'stage_snapshot "$default_release" "dist"'
 mutate_and_reject "untagged runtime handoff" .github/workflows/campaigns.yml \
