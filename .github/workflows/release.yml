@@ -164,14 +164,7 @@ jobs:
             printf '%s  %s\n' "$default_sha256" "$default_download/$default_archive" > "$default_download/archive.sha256"
             sha256sum --check --strict "$default_download/archive.sha256"
             tar --list --gzip --file "$default_download/$default_archive" > "$default_download/archive.members"
-            ruby -e '
-              File.readlines(ARGV.fetch(0), chomp: true).each do |path|
-                components = path.split("/", -1)
-                abort "unsafe default release archive member: #{path.inspect}" if
-                  path.empty? || path.start_with?("/") || path.include?("\\") ||
-                  components.include?("") || components.include?(".") || components.include?("..")
-              end
-            ' "$default_download/archive.members"
+            ruby scripts/validate-release-archive-members.rb "$default_download/archive.members"
             tar --list --verbose --gzip --file "$default_download/$default_archive" |
               awk 'substr($1, 1, 1) != "-" { exit 1 }'
             tar --extract --gzip --file "$default_download/$default_archive" --directory "$default_root"

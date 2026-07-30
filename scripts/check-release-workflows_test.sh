@@ -10,6 +10,26 @@ checker="$repo/scripts/check-release-workflows.sh"
 scratch=$(mktemp -d)
 trap 'rm -rf -- "$scratch"' EXIT
 
+members="$scratch/archive-members"
+printf 'release.json\ncampaign/v1.js\n' > "$members"
+ruby "$repo/scripts/validate-release-archive-members.rb" "$members"
+for invalid in exact casefold unicode traversal; do
+  case "$invalid" in
+    exact) printf 'release.json\nrelease.json\n' > "$members" ;;
+    casefold) printf 'Release.json\nrelease.json\n' > "$members" ;;
+    unicode)
+      ruby - "$members" <<'RUBY'
+File.binwrite(ARGV.fetch(0), "caf\u00e9.json\ncafe\u0301.json\n")
+RUBY
+      ;;
+    traversal) printf '../release.json\n' > "$members" ;;
+  esac
+  if ruby "$repo/scripts/validate-release-archive-members.rb" "$members" >/dev/null 2>&1; then
+    echo "archive member validator accepted $invalid collision" >&2
+    exit 1
+  fi
+done
+
 bundle="$scratch/bundle"
 mkdir -p "$bundle/campaign" "$bundle/releases"
 printf 'runtime-a\n' > "$bundle/campaign/v1.js"
@@ -79,6 +99,7 @@ mutate_and_reject() {
   cp "$repo/.github/workflows/campaigns.yml" "$fixture/.github/workflows/campaigns.yml"
   cp "$repo/.github/workflows/ci.yml" "$fixture/.github/workflows/ci.yml"
   cp "$repo/scripts/channel-bundle-digest.rb" "$fixture/scripts/channel-bundle-digest.rb"
+  cp "$repo/scripts/validate-release-archive-members.rb" "$fixture/scripts/validate-release-archive-members.rb"
   cp "$repo/scripts/accepted-channel-state.rb" "$fixture/scripts/accepted-channel-state.rb"
   cp "$repo/scripts/release-consumer-fanout.rb" "$fixture/scripts/release-consumer-fanout.rb"
   cp "$repo/manifests/release-consumers.yaml" "$fixture/manifests/release-consumers.yaml"
@@ -106,6 +127,8 @@ mutate_and_reject "release metadata renamed as latest channel" .github/workflows
   'go run ./cmd/araihu-assets campaigns publish --date "$CHANNEL_DATE" --output "$channel_candidate"' 'install -m 0644 dist/release.json "$latest/latest.json"'
 mutate_and_reject "release uses untagged dist as promoted snapshot" .github/workflows/release.yml \
   'gh release download "$default_release"' 'cp -R dist "$default_root"'
+mutate_and_reject "release omits archive collision validation" .github/workflows/release.yml \
+  'ruby scripts/validate-release-archive-members.rb "$default_download/archive.members"' 'test -s "$default_download/archive.members"'
 mutate_and_reject "release omits fallback consumer fan-out" .github/workflows/release.yml \
   'uses: ./.github/workflows/release-fanout.yml' 'uses: ./.github/workflows/missing-fanout.yml'
 mutate_and_reject "manual fan-out disabled" .github/workflows/release-fanout.yml \
@@ -124,6 +147,8 @@ mutate_and_reject "untagged runtime handoff" .github/workflows/campaigns.yml \
   'cmp --silent "$bundle/campaign/v1.js" "releases/${{ steps.release.outputs.default_release }}/campaign/v1.js"' 'cmp --silent "$bundle/campaign/v1.js" "dist/campaign/v1.js"'
 mutate_and_reject "missing release archive hash check" .github/workflows/campaigns.yml \
   'sha256sum --check --strict "$download/archive.sha256"' 'test -f "$download/archive.sha256"'
+mutate_and_reject "campaign omits archive collision validation" .github/workflows/campaigns.yml \
+  'ruby scripts/validate-release-archive-members.rb "$download/archive.members"' 'test -s "$download/archive.members"'
 mutate_and_reject "missing published latest hash check" .github/workflows/campaigns.yml \
   'sha256sum --check --strict "$latest_download/latest.sha256"' 'test -f "$latest_download/latest.sha256"'
 mutate_and_reject "historical accepted artifact lookup" .github/workflows/campaigns.yml \

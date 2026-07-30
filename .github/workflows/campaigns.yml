@@ -105,14 +105,7 @@ jobs:
             printf '%s  %s\n' "$release_sha256" "$download/$archive_name" > "$download/archive.sha256"
             sha256sum --check --strict "$download/archive.sha256"
             tar --list --gzip --file "$download/$archive_name" > "$download/archive.members"
-            ruby -e '
-              File.readlines(ARGV.fetch(0), chomp: true).each do |path|
-                components = path.split("/", -1)
-                abort "unsafe release archive member: #{path.inspect}" if
-                  path.empty? || path.start_with?("/") || path.include?("\\") ||
-                  components.include?("") || components.include?(".") || components.include?("..")
-              end
-            ' "$download/archive.members"
+            ruby scripts/validate-release-archive-members.rb "$download/archive.members"
             tar --list --verbose --gzip --file "$download/$archive_name" |
               awk 'substr($1, 1, 1) != "-" { exit 1 }'
             tar --extract --gzip --file "$download/$archive_name" --directory "$extract"
