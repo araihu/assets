@@ -5,17 +5,22 @@ import (
 	"archive/tar"
 	"archive/zip"
 	"compress/gzip"
+	"context"
 	"errors"
 	"fmt"
 	"io"
 	"io/fs"
 	"os"
+	"regexp"
 	"slices"
 	"strings"
 	"time"
 )
 
-var epoch = time.Unix(0, 0).UTC()
+var (
+	epoch      = time.Unix(0, 0).UTC()
+	releaseTag = regexp.MustCompile(`^v(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-(?:(?:0|[1-9][0-9]*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9][0-9]*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$`)
+)
 
 // Archive writes a deterministic gzip-compressed tar archive. source must be
 // immutable or snapshotted: generic mutable fs.FS values cannot close symlink
@@ -105,6 +110,98 @@ func ZIPRoot(output io.Writer, source *os.Root, paths []string) error {
 		return errors.New("release: source root is nil")
 	}
 	return ZIP(output, source.FS(), paths)
+}
+
+// PublicBundle copies one immutable release beneath releases/<releaseID>.
+// Existing equal bytes are retained; differing bytes are a collision.
+func PublicBundle(ctx context.Context, destination *os.Root, releaseID string, source fs.FS, paths []string) error {
+	if ctx == nil {
+		return errors.New("release: context is nil")
+	}
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if destination == nil {
+		return errors.New("release: destination root is nil")
+	}
+	if !validReleaseID(releaseID) {
+		return fmt.Errorf("release: invalid release ID %q", releaseID)
+	}
+	entries, err := load(source, paths)
+	if err != nil {
+		return err
+	}
+	base := "releases/" + releaseID
+	if err := ensureDirectory(destination, base); err != nil {
+		return fmt.Errorf("release: create public bundle root: %w", err)
+	}
+	for _, entry := range entries {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		target := base + "/" + entry.name
+		if err := ensureDirectory(destination, strings.TrimSuffix(target, "/"+pathBase(entry.name))); err != nil {
+			return fmt.Errorf("release: create directory for %s: %w", entry.name, err)
+		}
+		info, err := destination.Lstat(target)
+		if errors.Is(err, fs.ErrNotExist) {
+			if err := destination.WriteFile(target, entry.data, 0o644); err != nil {
+				return fmt.Errorf("release: write public member %s: %w", entry.name, err)
+			}
+			continue
+		}
+		if err != nil {
+			return fmt.Errorf("release: inspect public member %s: %w", entry.name, err)
+		}
+		if info.Mode()&fs.ModeSymlink != 0 || !info.Mode().IsRegular() {
+			return fmt.Errorf("release: non-regular collision %s", entry.name)
+		}
+		existing, err := destination.ReadFile(target)
+		if err != nil {
+			return fmt.Errorf("release: read public member %s: %w", entry.name, err)
+		}
+		if !slices.Equal(existing, entry.data) {
+			return fmt.Errorf("release: collision at %s", target)
+		}
+	}
+	return nil
+}
+
+func ensureDirectory(root *os.Root, name string) error {
+	if name == "." || name == "" {
+		return nil
+	}
+	current := ""
+	for _, component := range strings.Split(name, "/") {
+		if current == "" {
+			current = component
+		} else {
+			current += "/" + component
+		}
+		info, err := root.Lstat(current)
+		if errors.Is(err, fs.ErrNotExist) {
+			if err := root.Mkdir(current, 0o755); err != nil && !errors.Is(err, fs.ErrExist) {
+				return err
+			}
+			info, err = root.Lstat(current)
+		}
+		if err != nil {
+			return err
+		}
+		if info.Mode()&fs.ModeSymlink != 0 || !info.IsDir() {
+			return fmt.Errorf("non-directory path %s", current)
+		}
+	}
+	return nil
+}
+
+func pathBase(name string) string {
+	parts := strings.Split(name, "/")
+	return parts[len(parts)-1]
+}
+
+func validReleaseID(releaseID string) bool {
+	return releaseTag.MatchString(releaseID)
 }
 
 type entry struct {

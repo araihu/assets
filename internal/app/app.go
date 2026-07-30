@@ -14,6 +14,7 @@ import (
 	"strings"
 
 	"github.com/araihu/assets/internal/build"
+	"github.com/araihu/assets/internal/campaigns"
 	"github.com/araihu/assets/internal/catalog"
 	assetexport "github.com/araihu/assets/internal/export"
 	"github.com/araihu/assets/internal/manifest"
@@ -362,7 +363,11 @@ func inputs(ctx context.Context, repoRoot *os.Root, deps Dependencies) (build.In
 	if err != nil {
 		return build.Inputs{}, err
 	}
-	return build.Inputs{Brand: brand, UI: ui, Platform: platformFiles, Themes: themeManifest, ThemeCSS: themeCSS}, nil
+	campaignManifest, err := campaigns.Load(files, "manifests/campaigns.yaml")
+	if err != nil {
+		return build.Inputs{}, fmt.Errorf("manifest manifests/campaigns.yaml: %w", err)
+	}
+	return build.Inputs{Brand: brand, UI: ui, Platform: platformFiles, Themes: themeManifest, ThemeCSS: themeCSS, Campaigns: campaignManifest}, nil
 }
 
 func themeInputs(files fs.FS) (themes.Manifest, map[string][]byte, error) {

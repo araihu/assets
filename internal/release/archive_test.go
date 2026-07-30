@@ -5,13 +5,72 @@ import (
 	"archive/zip"
 	"bytes"
 	"compress/gzip"
+	"context"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"testing/fstest"
 	"time"
 )
+
+func TestPublicBundleRejectsDifferentByteCollision(t *testing.T) {
+	destination := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(destination, "releases", "v0.1.1"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(destination, "releases", "v0.1.1", "catalog.json"), []byte("old"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	root, err := os.OpenRoot(destination)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer root.Close()
+	err = PublicBundle(context.Background(), root, "v0.1.1", fstest.MapFS{"catalog.json": {Data: []byte("new")}}, []string{"catalog.json"})
+	if err == nil || !strings.Contains(err.Error(), "collision") {
+		t.Fatalf("assemble error = %v", err)
+	}
+}
+
+func TestPublicBundleWrapsFilesAndAllowsIdenticalCollision(t *testing.T) {
+	destination := t.TempDir()
+	root, err := os.OpenRoot(destination)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer root.Close()
+	source := fstest.MapFS{"catalog.json": {Data: []byte("same")}}
+	for range 2 {
+		if err := PublicBundle(context.Background(), root, "v0.1.1", source, []string{"catalog.json"}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	got, err := os.ReadFile(filepath.Join(destination, "releases", "v0.1.1", "catalog.json"))
+	if err != nil || string(got) != "same" {
+		t.Fatalf("public file = %q, %v", got, err)
+	}
+}
+
+func TestPublicBundleRejectsDestinationSymlink(t *testing.T) {
+	destination := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(destination, "releases", "v0.1.1"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink("elsewhere", filepath.Join(destination, "releases", "v0.1.1", "catalog.json")); err != nil {
+		t.Fatal(err)
+	}
+	root, err := os.OpenRoot(destination)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer root.Close()
+	err = PublicBundle(context.Background(), root, "v0.1.1", fstest.MapFS{"catalog.json": {Data: []byte("new")}}, []string{"catalog.json"})
+	if err == nil || !strings.Contains(err.Error(), "non-regular") {
+		t.Fatalf("assemble error = %v", err)
+	}
+}
 
 func TestArchiveIsByteDeterministic(t *testing.T) {
 	files := fstest.MapFS{
