@@ -30,6 +30,16 @@ their severity.
   attributes, URL-valued attributes, and malformed `viewBox` values using a
   real XML parser boundary.
 
+## Release consumer fan-out
+
+- `repository_dispatch` confirms GitHub accepted each event but provides no
+  downstream completion receipt. Add consumer acknowledgements only after
+  operational evidence justifies a durable receipt protocol.
+- Manual retry intentionally replays the release to every enrolled fallback
+  consumer. Each consumer must deduplicate by immutable release identity;
+  consider a validated per-consumer retry filter if duplicate handling becomes
+  operationally noisy.
+
 ## Review trigger
 
 Revisit this list after v0.1.1 deployment evidence is stable, or sooner if a

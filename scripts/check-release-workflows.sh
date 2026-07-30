@@ -54,6 +54,7 @@ def assert_pinned_actions(workflow, name)
 end
 
 release = load_workflow(repo, "release.yml")
+release_fanout = load_workflow(repo, "release-fanout.yml")
 campaigns = load_workflow(repo, "campaigns.yml")
 ci = load_workflow(repo, "ci.yml")
 
@@ -62,9 +63,18 @@ require_contract(release_on.is_a?(Hash) && release_on.keys == ["push"], "release
 require_contract(release_on.dig("push", "tags") == ["v*"], "release tags must match v* only")
 require_contract(release["permissions"] == {"contents" => "read"}, "release default permission must be contents read only")
 release_jobs = release.fetch("jobs", {})
-require_contract(release_jobs.length == 1, "release workflow must have one job")
-release_job = release_jobs.values.first
+require_contract(release_jobs.keys == %w[publish fanout], "release workflow must contain publish then fanout jobs")
+release_job = release_jobs.fetch("publish")
 require_contract(release_job["permissions"] == {"contents" => "write"}, "release publishing job needs contents write only")
+require_contract(release_job["outputs"] == {"release" => "${{ steps.release.outputs.tag }}"}, "release publishing job must expose verified tag only")
+fanout_call = release_jobs.fetch("fanout")
+require_contract(fanout_call["needs"] == "publish", "fallback consumer fan-out must wait for publication")
+require_contract(fanout_call["uses"] == "./.github/workflows/release-fanout.yml", "release must call tracked fallback consumer fan-out")
+require_contract(fanout_call["with"] == {"release" => "${{ needs.publish.outputs.release }}"}, "release fan-out input must use published release output")
+require_contract(fanout_call["secrets"] == {
+  "ARAIHU_ASSETS_APP_ID" => "${{ secrets.ARAIHU_ASSETS_APP_ID }}",
+  "ARAIHU_ASSETS_APP_PRIVATE_KEY" => "${{ secrets.ARAIHU_ASSETS_APP_PRIVATE_KEY }}"
+}, "release fan-out must pass only Assets App credentials")
 release_steps = job_steps(release)
 release_runs = run_text(release)
 require_contract(release_steps.any? { |step| step["uses"]&.start_with?("actions/checkout@") && step.dig("with", "ref") == "${{ github.sha }}" }, "release checkout must use immutable github.sha")
@@ -94,6 +104,60 @@ require_contract(release_assets.include?('"$BUNDLE/latest.json"'), "GitHub Relea
 require_contract(release_runs.include?('latest.json checksums.txt > SHA256SUMS'), "release SHA256SUMS must cover latest.json")
 require_contract(!release_runs.include?("default.json") && !release_runs.include?("current.json"), "release must not write default or current channels")
 assert_pinned_actions(release, "release")
+
+fanout_on = triggers(release_fanout)
+require_contract(fanout_on.is_a?(Hash) && fanout_on.keys.sort == %w[workflow_call workflow_dispatch], "release fan-out must support workflow call and manual retry only")
+%w[workflow_call workflow_dispatch].each do |trigger|
+  release_input = fanout_on.dig(trigger, "inputs", "release")
+  require_contract(release_input.is_a?(Hash) && release_input["required"] == true && release_input["type"] == "string", "#{trigger} release input must be a required string")
+end
+call_secrets = fanout_on.dig("workflow_call", "secrets")
+require_contract(call_secrets == {
+  "ARAIHU_ASSETS_APP_ID" => {"required" => true},
+  "ARAIHU_ASSETS_APP_PRIVATE_KEY" => {"required" => true}
+}, "release fan-out reusable secrets differ")
+require_contract(release_fanout["permissions"] == {"contents" => "read"}, "release fan-out default permission must be contents read only")
+require_contract(release_fanout["concurrency"] == {
+  "group" => "release-consumer-fanout-${{ inputs.release }}",
+  "cancel-in-progress" => false
+}, "release fan-out must serialize retries per release")
+fanout_jobs = release_fanout.fetch("jobs", {})
+require_contract(fanout_jobs.keys == ["dispatch"], "release fan-out must have one dispatch job")
+require_contract(fanout_jobs.fetch("dispatch")["permissions"] == {"contents" => "read"}, "release fan-out job permission must be contents read only")
+fanout_steps = job_steps(release_fanout)
+verify_step = fanout_steps.find { |step| step["id"] == "release" }
+consumers_step = fanout_steps.find { |step| step["id"] == "consumers" }
+fanout_app_step = fanout_steps.find { |step| step["id"] == "app-token" }
+fanout_dispatch_step = fanout_steps.find { |step| step["run"]&.include?("release-consumer-fanout.rb dispatch") }
+require_contract(verify_step && consumers_step && fanout_app_step && fanout_dispatch_step, "release fan-out verification, enrollment, token, or dispatch step is missing")
+require_contract(fanout_steps.index(verify_step) < fanout_steps.index(consumers_step) && fanout_steps.index(consumers_step) < fanout_steps.index(fanout_app_step) && fanout_steps.index(fanout_app_step) < fanout_steps.index(fanout_dispatch_step), "release fan-out must verify before minting and dispatching")
+verify_run = verify_step["run"].to_s
+require_contract(verify_run.include?('gh release download "$RELEASE"') && verify_run.include?("SHA256SUMS") && verify_run.include?('sha256sum --check --strict "$selected_checks"'), "release fan-out must hash-check published release assets")
+require_contract(verify_run.include?('release_document.fetch("release") == release') && verify_run.include?('commits/${RELEASE}'), "release fan-out must bind release.json and tag commit identity")
+require_contract(fanout_app_step["uses"]&.start_with?("actions/create-github-app-token@"), "release fan-out must mint a GitHub App token")
+require_contract(fanout_app_step["with"] == {
+  "app-id" => "${{ secrets.ARAIHU_ASSETS_APP_ID }}",
+  "private-key" => "${{ secrets.ARAIHU_ASSETS_APP_PRIVATE_KEY }}",
+  "owner" => "araihu",
+  "repositories" => "${{ steps.consumers.outputs.repositories }}",
+  "permission-contents" => "write"
+}, "release fan-out App token scope differs")
+require_contract(fanout_dispatch_step.dig("env", "GH_TOKEN") == "${{ steps.app-token.outputs.token }}", "release fan-out dispatch must use selected-repository App token")
+assert_pinned_actions(release_fanout, "release fan-out")
+
+consumer_manifest_path = File.join(repo, "manifests", "release-consumers.yaml")
+consumer_manifest = YAML.safe_load(File.read(consumer_manifest_path), aliases: false)
+require_contract(consumer_manifest == {
+  "schema_version" => 1,
+  "owner" => "araihu",
+  "repositories" => %w[goshtoso goshtoso-app-shells goshtoso-charts manja paje xisnove]
+}, "fallback consumer enrollment differs")
+fanout_script_path = File.join(repo, "scripts", "release-consumer-fanout.rb")
+require_contract(File.file?(fanout_script_path) && File.executable?(fanout_script_path), "release consumer fan-out helper is missing or not executable")
+fanout_script = File.read(fanout_script_path)
+require_contract(fanout_script.include?('"event_type" => "araihu-assets-released"'), "fallback consumer event type differs")
+release_test_source = File.read(File.join(repo, "scripts", "check-release-workflows_test.sh"))
+require_contract(run_text(ci).include?("./scripts/check-release-workflows_test.sh") && release_test_source.include?("release-consumer-fanout_test.sh"), "CI must run offline release fan-out tests")
 
 campaign_on = triggers(campaigns)
 require_contract(campaign_on.dig("schedule", 0, "cron") == "0 0 * * *", "campaign schedule must be 00:00 UTC")

@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
+    outputs:
+      release: ${{ steps.release.outputs.tag }}
     steps:
       - name: Check out exact tag
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -219,3 +221,12 @@ jobs:
           path: ${{ steps.release.outputs.latest }}
           if-no-files-found: error
           retention-days: 90
+
+  fanout:
+    needs: publish
+    uses: ./.github/workflows/release-fanout.yml
+    with:
+      release: ${{ needs.publish.outputs.release }}
+    secrets:
+      ARAIHU_ASSETS_APP_ID: ${{ secrets.ARAIHU_ASSETS_APP_ID }}
+      ARAIHU_ASSETS_APP_PRIVATE_KEY: ${{ secrets.ARAIHU_ASSETS_APP_PRIVATE_KEY }}
