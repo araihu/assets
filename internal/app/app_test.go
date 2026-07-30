@@ -254,40 +254,7 @@ func TestCampaignPublishPreservesReplacementSymlinkWithoutWritingOutside(t *test
 }
 
 func TestCampaignPublishSeparatesLatestFromPromotedDefault(t *testing.T) {
-	repo := campaignFixtureRepo(t)
-	defaultManifest := filepath.Join(repo, "manifests", "default.yaml")
-	data, err := os.ReadFile(defaultManifest)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(defaultManifest, bytes.ReplaceAll(data, []byte("v0.1.0"), []byte("v0.0.9")), 0o644); err != nil {
-		t.Fatal(err)
-	}
-	files := fstest.MapFS{}
-	for _, name := range []string{"catalog.json", "themes.json", "campaigns.json"} {
-		data, err := os.ReadFile(filepath.Join(repo, "dist", name))
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := os.MkdirAll(filepath.Join(repo, "releases", "v0.0.9"), 0o755); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(filepath.Join(repo, "releases", "v0.0.9", name), bytes.ReplaceAll(data, []byte("v0.1.0"), []byte("v0.0.9")), 0o644); err != nil {
-			t.Fatal(err)
-		}
-		files[name] = &fstest.MapFile{Data: bytes.ReplaceAll(data, []byte("v0.1.0"), []byte("v0.0.9"))}
-	}
-	document, err := releasemeta.Build(releasemeta.Input{Release: "v0.0.9", IdentityRevision: 11, RuntimeVersion: 1, Files: files})
-	if err != nil {
-		t.Fatal(err)
-	}
-	releaseJSON, err := releasemeta.Encode(document)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join(repo, "releases", "v0.0.9", "release.json"), releaseJSON, 0o644); err != nil {
-		t.Fatal(err)
-	}
+	repo := promotedSnapshotFixture(t)
 
 	output := filepath.Join(t.TempDir(), "channels")
 	if err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", output}, io.Discard, io.Discard); err != nil {
@@ -308,6 +275,95 @@ func TestCampaignPublishSeparatesLatestFromPromotedDefault(t *testing.T) {
 		if !strings.Contains(string(data), `"release": "`+want.release+`"`) || !strings.Contains(string(data), `"source": "default"`) {
 			t.Fatalf("%s = %s", want.name, data)
 		}
+	}
+}
+
+func TestCampaignPublishRejectsSymlinkedPromotedSnapshotMembers(t *testing.T) {
+	for _, name := range []string{".", "release.json", "catalog.json", "themes.json", "campaigns.json"} {
+		t.Run(name, func(t *testing.T) {
+			repo := promotedSnapshotFixture(t)
+			snapshot := filepath.Join(repo, "releases", "v0.0.9")
+			if name == "." {
+				backup := snapshot + "-backup"
+				if err := os.Rename(snapshot, backup); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Symlink(backup, snapshot); err != nil {
+					t.Fatal(err)
+				}
+			} else {
+				member := filepath.Join(snapshot, name)
+				backup := member + ".real"
+				if err := os.Rename(member, backup); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Symlink(filepath.Base(backup), member); err != nil {
+					t.Fatal(err)
+				}
+			}
+			err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", filepath.Join(t.TempDir(), "output")}, io.Discard, io.Discard)
+			if err == nil || !strings.Contains(err.Error(), "symbolic") {
+				t.Fatalf("Run(publish) error = %v, want symbolic-link rejection", err)
+			}
+		})
+	}
+}
+
+func TestCampaignPublishRejectsNonRegularPromotedSnapshotMember(t *testing.T) {
+	repo := promotedSnapshotFixture(t)
+	member := filepath.Join(repo, "releases", "v0.0.9", "catalog.json")
+	if err := os.Remove(member); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Mkdir(member, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", filepath.Join(t.TempDir(), "output")}, io.Discard, io.Discard)
+	if err == nil || !strings.Contains(err.Error(), "regular") {
+		t.Fatalf("Run(publish) error = %v, want non-regular rejection", err)
+	}
+}
+
+func TestCampaignPublishRejectsSymlinkedLiveRuntime(t *testing.T) {
+	repo := campaignFixtureRepo(t)
+	runtime := filepath.Join(repo, "dist", "campaign", "v1.js")
+	backup := runtime + ".real"
+	if err := os.Rename(runtime, backup); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink(filepath.Base(backup), runtime); err != nil {
+		t.Fatal(err)
+	}
+	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", filepath.Join(t.TempDir(), "output")}, io.Discard, io.Discard)
+	if err == nil || !strings.Contains(err.Error(), "symbolic") {
+		t.Fatalf("Run(publish) error = %v, want runtime symbolic-link rejection", err)
+	}
+}
+
+func TestCampaignPublishRejectsPromotedSnapshotReplacementDuringOpen(t *testing.T) {
+	repo := promotedSnapshotFixture(t)
+	snapshot := filepath.Join(repo, "releases", "v0.0.9")
+	seenCatalog := 0
+	campaignAfterCapturedFileOpenHook = func(name string) {
+		if name != "catalog.json" {
+			return
+		}
+		seenCatalog++
+		if seenCatalog != 2 {
+			return
+		}
+		member := filepath.Join(snapshot, name)
+		if err := os.Remove(member); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.Symlink("catalog.json.real", member); err != nil {
+			t.Fatal(err)
+		}
+	}
+	t.Cleanup(func() { campaignAfterCapturedFileOpenHook = nil })
+	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", filepath.Join(t.TempDir(), "output")}, io.Discard, io.Discard)
+	if err == nil || !strings.Contains(err.Error(), "changed") {
+		t.Fatalf("Run(publish) error = %v, want replacement rejection", err)
 	}
 }
 
@@ -478,6 +534,52 @@ func campaignFixtureRepo(t *testing.T) string {
 		if err := os.WriteFile(output, data, 0o644); err != nil {
 			t.Fatal(err)
 		}
+	}
+	return repo
+}
+
+func promotedSnapshotFixture(t *testing.T) string {
+	t.Helper()
+	repo := campaignFixtureRepo(t)
+	defaultManifest := filepath.Join(repo, "manifests", "default.yaml")
+	data, err := os.ReadFile(defaultManifest)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(defaultManifest, bytes.ReplaceAll(data, []byte("v0.1.0"), []byte("v0.0.9")), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	files := fstest.MapFS{}
+	snapshot := filepath.Join(repo, "releases", "v0.0.9")
+	if err := os.MkdirAll(snapshot, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	for _, name := range []string{"catalog.json", "themes.json", "campaigns.json"} {
+		data, err := os.ReadFile(filepath.Join(repo, "dist", name))
+		if err != nil {
+			t.Fatal(err)
+		}
+		data = bytes.ReplaceAll(data, []byte("v0.1.0"), []byte("v0.0.9"))
+		if err := os.WriteFile(filepath.Join(snapshot, name), data, 0o644); err != nil {
+			t.Fatal(err)
+		}
+		if name == "catalog.json" {
+			if err := os.WriteFile(filepath.Join(snapshot, name+".real"), data, 0o644); err != nil {
+				t.Fatal(err)
+			}
+		}
+		files[name] = &fstest.MapFile{Data: data}
+	}
+	document, err := releasemeta.Build(releasemeta.Input{Release: "v0.0.9", IdentityRevision: 11, RuntimeVersion: 1, Files: files})
+	if err != nil {
+		t.Fatal(err)
+	}
+	releaseJSON, err := releasemeta.Encode(document)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(snapshot, "release.json"), releaseJSON, 0o644); err != nil {
+		t.Fatal(err)
 	}
 	return repo
 }

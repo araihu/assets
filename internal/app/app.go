@@ -51,6 +51,9 @@ var campaignAfterOutputRootHook func()
 // campaignAfterSnapshotHook is a test-only source-snapshot seam.
 var campaignAfterSnapshotHook func()
 
+// campaignAfterCapturedFileOpenHook is a test-only descriptor-race seam.
+var campaignAfterCapturedFileOpenHook func(string)
+
 const (
 	assetsPublicRoot      = "https://araihu.com"
 	validationCampaignDay = "1970-01-01"
@@ -342,13 +345,13 @@ func loadCampaignSnapshot(ctx context.Context, deps Dependencies) (campaignSnaps
 	if _, err := campaigns.Load(repoRoot.FS(), "manifests/campaigns.yaml"); err != nil {
 		return campaignSnapshot{}, fmt.Errorf("campaigns: manifest manifests/campaigns.yaml: %w", err)
 	}
-	latest, err := loadCampaignRelease(repoRoot, "dist", true)
+	latest, err := loadCampaignRelease(ctx, repoRoot, "dist", true)
 	if err != nil {
 		return campaignSnapshot{}, err
 	}
 	promoted := latest
 	if defaultPromotion.Release != latest.Catalog.Release {
-		promoted, err = loadCampaignRelease(repoRoot, "releases/"+defaultPromotion.Release, false)
+		promoted, err = loadCampaignRelease(ctx, repoRoot, "releases/"+defaultPromotion.Release, false)
 		if err != nil {
 			return campaignSnapshot{}, fmt.Errorf("campaigns: load promoted release snapshot %q: %w", defaultPromotion.Release, err)
 		}
@@ -359,13 +362,13 @@ func loadCampaignSnapshot(ctx context.Context, deps Dependencies) (campaignSnaps
 	return campaignSnapshot{Default: defaultPromotion, Latest: latest, Promoted: promoted}, nil
 }
 
-func loadCampaignRelease(repoRoot *os.Root, path string, includeRuntime bool) (campaignReleaseSnapshot, error) {
+func loadCampaignRelease(ctx context.Context, repoRoot *os.Root, path string, includeRuntime bool) (campaignReleaseSnapshot, error) {
 	releaseRoot, err := managedRoot(repoRoot, path, false)
 	if err != nil {
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: open release snapshot %q: %w", path, err)
 	}
 	defer releaseRoot.Close()
-	releaseJSON, err := releaseRoot.ReadFile("release.json")
+	releaseJSON, err := readCapturedRegularFile(ctx, releaseRoot, "release.json")
 	if err != nil {
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: read release snapshot %q release.json: %w", path, err)
 	}
@@ -376,7 +379,7 @@ func loadCampaignRelease(repoRoot *os.Root, path string, includeRuntime bool) (c
 	if err := releaseDocument.Validate(); err != nil {
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: validate release snapshot %q release.json: %w", path, err)
 	}
-	catalogJSON, err := releaseRoot.ReadFile("catalog.json")
+	catalogJSON, err := readCapturedRegularFile(ctx, releaseRoot, "catalog.json")
 	if err != nil {
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: read release snapshot %q catalog.json: %w", path, err)
 	}
@@ -384,7 +387,7 @@ func loadCampaignRelease(repoRoot *os.Root, path string, includeRuntime bool) (c
 	if err != nil {
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: validate release snapshot %q catalog.json: %w", path, err)
 	}
-	themesJSON, err := releaseRoot.ReadFile("themes.json")
+	themesJSON, err := readCapturedRegularFile(ctx, releaseRoot, "themes.json")
 	if err != nil {
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: read release snapshot %q themes.json: %w", path, err)
 	}
@@ -392,7 +395,7 @@ func loadCampaignRelease(repoRoot *os.Root, path string, includeRuntime bool) (c
 	if err != nil {
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: decode release snapshot %q themes.json: %w", path, err)
 	}
-	campaignsJSON, err := releaseRoot.ReadFile("campaigns.json")
+	campaignsJSON, err := readCapturedRegularFile(ctx, releaseRoot, "campaigns.json")
 	if err != nil {
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: read release snapshot %q campaigns.json: %w", path, err)
 	}
@@ -407,14 +410,7 @@ func loadCampaignRelease(repoRoot *os.Root, path string, includeRuntime bool) (c
 		}
 		return snapshot, nil
 	}
-	info, err := releaseRoot.Lstat("campaign/v1.js")
-	if err != nil {
-		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: inspect release snapshot %q campaign/v1.js: %w", path, err)
-	}
-	if info.Mode()&fs.ModeSymlink != 0 || !info.Mode().IsRegular() {
-		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: release snapshot %q campaign/v1.js is not a regular file", path)
-	}
-	runtime, err := releaseRoot.ReadFile("campaign/v1.js")
+	runtime, err := readCapturedRegularFile(ctx, releaseRoot, "campaign/v1.js")
 	if err != nil {
 		return campaignReleaseSnapshot{}, fmt.Errorf("campaigns: read release snapshot %q campaign/v1.js: %w", path, err)
 	}
@@ -487,6 +483,73 @@ func validateCapturedRelease(document releasemeta.Document, snapshot campaignRel
 		}
 	}
 	return nil
+}
+
+// readCapturedRegularFile snapshots one release member through a descriptor.
+// Both path observations and the opened descriptor must retain one regular-file
+// identity, so an in-root symlink or replacement cannot be mistaken for an
+// immutable release input.
+func readCapturedRegularFile(ctx context.Context, root *os.Root, name string) ([]byte, error) {
+	if root == nil {
+		return nil, errors.New("release root is nil")
+	}
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	pre, err := root.Lstat(name)
+	if err != nil {
+		return nil, err
+	}
+	if pre.Mode()&fs.ModeSymlink != 0 {
+		return nil, fmt.Errorf("release member %q is a symbolic link", name)
+	}
+	if !pre.Mode().IsRegular() {
+		return nil, fmt.Errorf("release member %q is not a regular file", name)
+	}
+	file, err := root.Open(name)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	if campaignAfterCapturedFileOpenHook != nil {
+		campaignAfterCapturedFileOpenHook(name)
+	}
+	opened, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+	post, err := root.Lstat(name)
+	if err != nil {
+		return nil, err
+	}
+	if post.Mode()&fs.ModeSymlink != 0 {
+		return nil, fmt.Errorf("release member %q changed to a symbolic link while opening", name)
+	}
+	if opened.Mode()&fs.ModeSymlink != 0 || !opened.Mode().IsRegular() || !post.Mode().IsRegular() || !os.SameFile(pre, opened) || !os.SameFile(pre, post) {
+		return nil, fmt.Errorf("release member %q changed while opening", name)
+	}
+	data, err := io.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+	finalFile, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+	finalPath, err := root.Lstat(name)
+	if err != nil {
+		return nil, err
+	}
+	if finalPath.Mode()&fs.ModeSymlink != 0 {
+		return nil, fmt.Errorf("release member %q changed to a symbolic link while reading", name)
+	}
+	if finalFile.Mode()&fs.ModeSymlink != 0 || !finalFile.Mode().IsRegular() || !finalPath.Mode().IsRegular() || !os.SameFile(pre, finalFile) || !os.SameFile(pre, finalPath) {
+		return nil, fmt.Errorf("release member %q changed while reading", name)
+	}
+	return data, nil
 }
 
 func runProof(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {
@@ -928,9 +991,25 @@ func managedRoot(repoRoot *os.Root, name string, create bool) (*os.Root, error) 
 			return nil, err
 		}
 	}
+	pre, err := repoRoot.Lstat(name)
+	if err != nil {
+		return nil, fmt.Errorf("inspect managed path %q: %w", name, err)
+	}
+	if pre.Mode()&fs.ModeSymlink != 0 {
+		return nil, fmt.Errorf("managed path %q is a symbolic link", name)
+	}
+	if !pre.IsDir() {
+		return nil, fmt.Errorf("managed path %q is not a directory", name)
+	}
 	root, err := repoRoot.OpenRoot(name)
 	if err != nil {
 		return nil, fmt.Errorf("open managed path %q: %w", name, err)
+	}
+	opened, openErr := root.Stat(".")
+	post, postErr := repoRoot.Lstat(name)
+	if openErr != nil || postErr != nil || post.Mode()&fs.ModeSymlink != 0 || !post.IsDir() || !os.SameFile(pre, opened) || !os.SameFile(pre, post) {
+		_ = root.Close()
+		return nil, fmt.Errorf("managed path %q changed while opening", name)
 	}
 	return root, nil
 }
