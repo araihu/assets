@@ -323,8 +323,10 @@ jobs:
                 channel_artifact_sha256: artifact_sha,
                 candidate_bundle_digest: bundle_digest,
                 resolution_date: ENV.fetch("RESOLUTION_DATE"),
-                state_ref: ENV.fetch("STATE_REF"),
-                state_path: ENV.fetch("STATE_PATH")
+                state: {
+                  ref: ENV.fetch("STATE_REF"),
+                  path: ENV.fetch("STATE_PATH")
+                }
               }
             }
             File.write(ARGV.fetch(0), JSON.generate(payload))
