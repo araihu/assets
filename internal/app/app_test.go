@@ -367,6 +367,32 @@ func TestCampaignPublishRejectsPromotedSnapshotReplacementDuringOpen(t *testing.
 	}
 }
 
+func TestCampaignPublishRejectsIntermediateReleaseDirectoryReplacementDuringOpen(t *testing.T) {
+	repo := promotedSnapshotFixture(t)
+	releases := filepath.Join(repo, "releases")
+	outside := t.TempDir()
+	managedRootAfterChildOpenHook = func(name string) {
+		if name != "releases" {
+			return
+		}
+		backup := releases + ".real"
+		if err := os.Rename(releases, backup); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.Symlink(outside, releases); err != nil {
+			t.Fatal(err)
+		}
+	}
+	t.Cleanup(func() { managedRootAfterChildOpenHook = nil })
+	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"campaigns", "publish", "--date", "2026-10-31", "--output", filepath.Join(t.TempDir(), "output")}, io.Discard, io.Discard)
+	if err == nil || !strings.Contains(err.Error(), "changed") {
+		t.Fatalf("Run(publish) error = %v, want intermediate replacement rejection", err)
+	}
+	if entries, err := os.ReadDir(outside); err != nil || len(entries) != 0 {
+		t.Fatalf("publish read or wrote through replacement directory: %v, %v", entries, err)
+	}
+}
+
 func TestCampaignPublishUsesOneCapturedSnapshot(t *testing.T) {
 	repo := campaignFixtureRepo(t)
 	runtime, err := os.ReadFile(filepath.Join(repo, "dist", "campaign", "v1.js"))

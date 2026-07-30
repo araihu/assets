@@ -54,6 +54,9 @@ var campaignAfterSnapshotHook func()
 // campaignAfterCapturedFileOpenHook is a test-only descriptor-race seam.
 var campaignAfterCapturedFileOpenHook func(string)
 
+// managedRootAfterChildOpenHook is a test-only managed-root race seam.
+var managedRootAfterChildOpenHook func(string)
+
 const (
 	assetsPublicRoot      = "https://araihu.com"
 	validationCampaignDay = "1970-01-01"
@@ -991,27 +994,51 @@ func managedRoot(repoRoot *os.Root, name string, create bool) (*os.Root, error) 
 			return nil, err
 		}
 	}
-	pre, err := repoRoot.Lstat(name)
-	if err != nil {
-		return nil, fmt.Errorf("inspect managed path %q: %w", name, err)
+	return openManagedRoot(repoRoot, name)
+}
+
+// openManagedRoot opens each managed component from its anchored parent. It
+// never reopens a composite path, so replacing an intermediate directory with
+// an in-root symlink cannot make the final component attacker-controlled.
+func openManagedRoot(repoRoot *os.Root, name string) (_ *os.Root, err error) {
+	current := repoRoot
+	closeCurrent := false
+	defer func() {
+		if err != nil && closeCurrent {
+			_ = current.Close()
+		}
+	}()
+	for _, component := range strings.Split(name, "/") {
+		pre, statErr := current.Lstat(component)
+		if statErr != nil {
+			return nil, fmt.Errorf("inspect managed path %q: %w", name, statErr)
+		}
+		if pre.Mode()&fs.ModeSymlink != 0 {
+			return nil, fmt.Errorf("managed path %q has symbolic-link component %q", name, component)
+		}
+		if !pre.IsDir() {
+			return nil, fmt.Errorf("managed path %q component %q is not a directory", name, component)
+		}
+		next, openErr := current.OpenRoot(component)
+		if openErr != nil {
+			return nil, fmt.Errorf("open managed path %q component %q: %w", name, component, openErr)
+		}
+		if managedRootAfterChildOpenHook != nil {
+			managedRootAfterChildOpenHook(component)
+		}
+		opened, openedErr := next.Stat(".")
+		post, postErr := current.Lstat(component)
+		if openedErr != nil || postErr != nil || post.Mode()&fs.ModeSymlink != 0 || !post.IsDir() || !os.SameFile(pre, opened) || !os.SameFile(pre, post) {
+			_ = next.Close()
+			return nil, fmt.Errorf("managed path %q component %q changed while opening", name, component)
+		}
+		if closeCurrent {
+			_ = current.Close()
+		}
+		current = next
+		closeCurrent = true
 	}
-	if pre.Mode()&fs.ModeSymlink != 0 {
-		return nil, fmt.Errorf("managed path %q is a symbolic link", name)
-	}
-	if !pre.IsDir() {
-		return nil, fmt.Errorf("managed path %q is not a directory", name)
-	}
-	root, err := repoRoot.OpenRoot(name)
-	if err != nil {
-		return nil, fmt.Errorf("open managed path %q: %w", name, err)
-	}
-	opened, openErr := root.Stat(".")
-	post, postErr := repoRoot.Lstat(name)
-	if openErr != nil || postErr != nil || post.Mode()&fs.ModeSymlink != 0 || !post.IsDir() || !os.SameFile(pre, opened) || !os.SameFile(pre, post) {
-		_ = root.Close()
-		return nil, fmt.Errorf("managed path %q changed while opening", name)
-	}
-	return root, nil
+	return current, nil
 }
 
 func rejectSymlinkComponents(root *os.Root, name string) error {
