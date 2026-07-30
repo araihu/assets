@@ -96,8 +96,10 @@ The channel documents have distinct meanings:
 - `current` identifies the resolved active campaign presentation, or the
   current `default` when no campaign is active.
 
-All paths inside a channel document are absolute same-origin paths to an
-immutable versioned release. A channel never points to another channel.
+All paths inside a channel document are absolute paths on the configured channel
+origin and point to an immutable versioned release. Ahairu is same-origin;
+enrolled Arai Hû subdomains consume the canonical `https://araihu.com` asset
+origin through anonymous CORS. A channel never points to another channel.
 
 Versioned files use:
 
@@ -361,10 +363,11 @@ and writes a complete output directory; it never calls GitHub or Cloudflare.
 
 ## Atomic deployment and rollback
 
-The Ahairu workflow downloads a verified immutable release bundle and the
-resolved channel bundle, assembles them with the site, validates the final tree,
-and creates one Worker Static Assets version. It does not partially upload a
-channel over an existing deployment.
+The Ahairu workflow enumerates every published Assets tag, downloads and verifies
+each immutable release bundle, downloads the resolved channel bundle, assembles
+all of them with the site, validates the final tree, and creates one Worker
+Static Assets version. It does not partially upload a channel over an existing
+deployment.
 
 Failure behavior is conservative:
 
@@ -380,7 +383,9 @@ users converge within the one-minute channel cache window.
 ## Security and integrity
 
 - Public runtime inputs are declarative data, never executable extensions.
-- Runtime URLs are HTTPS and same-origin by default.
+- Runtime URLs are HTTPS and every resolved asset URL shares the configured
+  channel origin. Ahairu is same-origin; public Arai Hû subdomains use anonymous
+  CORS from `https://araihu.com` with no credentials.
 - Paths are normalized below their immutable release root and cannot traverse.
 - SVG use is limited to validated files and known symbol IDs.
 - Release files carry SHA-256 checksums for CI and downstream verification.
