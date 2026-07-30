@@ -304,8 +304,8 @@
     },
     {
       "path": "campaign/v1.js",
-      "sha256": "8ce7e0a7a4b16753ac13568731d364a00b3dc44e400a6d53d78b387d39bc5b02",
-      "size": 19535
+      "sha256": "06b5b354c5af7dbf1f8b6dbc19634018b07acbb13f1b97b022211eb48889b134",
+      "size": 21776
     },
     {
       "path": "icons/brand/araihu-icon-adaptive-plate-launcher.svg",
@@ -2054,8 +2054,8 @@
     },
     {
       "path": "proof/assets/campaign/v1.js",
-      "sha256": "8ce7e0a7a4b16753ac13568731d364a00b3dc44e400a6d53d78b387d39bc5b02",
-      "size": 19535
+      "sha256": "06b5b354c5af7dbf1f8b6dbc19634018b07acbb13f1b97b022211eb48889b134",
+      "size": 21776
     },
     {
       "path": "proof/assets/campaigns.json",

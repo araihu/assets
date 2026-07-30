@@ -73,9 +73,10 @@ development channels. Every resolved theme, brand, and icon URL must:
 - be below `/assets/releases/<resolved-release>/`;
 - contain no encoded dot, slash, or backslash path segments.
 
-Fetches use CORS mode with credentials omitted. Stylesheets and image preloads
-use anonymous CORS. This supports same-origin Ahairu pages and explicitly
-enrolled Arai Hû subdomains using the canonical asset origin.
+Fetches use CORS mode with credentials omitted. Stylesheets, image preloads,
+committed brand hooks, and direct toggle images use anonymous CORS. This
+supports same-origin Ahairu pages and explicitly enrolled Arai Hû subdomains
+using the canonical asset origin.
 
 Server data is never passed to `innerHTML`. Direct icons become new `img`
 elements. Sprite XML is parsed as SVG; only the exact lower-kebab symbol named

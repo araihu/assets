@@ -241,6 +241,8 @@ function runtimeFixture(options = {}) {
     styles: [],
     styleGate: options.pendingStyle ? deferred() : null,
     imageGate: options.pendingImages ? deferred() : null,
+    toggleImageGate: options.pendingToggleImage ? deferred() : null,
+    channelGate: null,
     hooks: new Map(),
     failure: options.failure || "",
     reducedMotion: Boolean(options.reducedMotion),
@@ -389,9 +391,15 @@ function runtimeFixture(options = {}) {
         return fixture.storage.has(key) ? fixture.storage.get(key) : null;
       },
       setItem(key, value) {
+        if (options.storageSetError) {
+          throw options.storageSetError;
+        }
         fixture.storage.set(key, String(value));
       },
       removeItem(key) {
+        if (options.storageRemoveError) {
+          throw options.storageRemoveError;
+        }
         fixture.storage.delete(key);
       },
     },
@@ -408,6 +416,9 @@ function runtimeFixture(options = {}) {
           ok: true,
           text: async () => '<svg xmlns="http://www.w3.org/2000/svg"><symbol id="hi-16-solid-sparkles" viewBox="0 0 16 16"><path d="M1 1h14v14z"/></symbol><symbol id="not-selected"><script/></symbol></svg>',
         };
+      }
+      if (fixture.channelGate) {
+        await fixture.channelGate.promise;
       }
       return {
         ok: true,
@@ -446,6 +457,10 @@ function runtimeFixture(options = {}) {
     fixture.toggleImageGate = deferred();
   };
   fixture.resolveToggleImage = () => fixture.toggleImageGate.resolve();
+  fixture.deferChannel = () => {
+    fixture.channelGate = deferred();
+  };
+  fixture.resolveChannel = () => fixture.channelGate.resolve();
   fixture.clickToggle = () => fixture.toggle.dispatchEvent({ type: "click" });
   fixture.setThemeSource = (source, theme) => {
     if (theme) {
@@ -559,12 +574,23 @@ test("channel, CSS, image, and sprite failures preserve baseline", async (t) => 
   }
 });
 
+test("image failure cancels a stylesheet whose load remains pending", async () => {
+  const fixture = runtimeFixture({ failure: "image", pendingStyle: true });
+  await fixture.start();
+
+  assert.equal(fixture.events.at(-1).detail.code, "image-load");
+  assert.equal(fixture.head.children.length, 0);
+  assert.equal(fixture.rootState.theme, "minimal");
+});
+
 test("campaign applies direct assets, selected sprite, anonymous requests, and bounded events", async () => {
   const fixture = runtimeFixture();
   await fixture.start();
 
   assert.equal(fixture.runtime.version, 1);
   assert.equal(fixture.rootState.themeSource, "campaign", JSON.stringify(fixture.events));
+  assert.equal(fixture.brandLogo.crossOrigin, "anonymous");
+  assert.equal(fixture.brandIcon.crossOrigin, "anonymous");
   assert.equal(fixture.brandIcon.href, activeCampaign.campaign.brand.icon.url);
   assert.equal(fixture.toggle.hidden, false);
   assert.equal(fixture.toggle.getAttribute("aria-pressed"), "true");
@@ -603,8 +629,38 @@ test("active campaign toggle restores baseline and persists campaign-specific op
   assert.equal(fixture.storage.get("araihu.assets.campaign.v1.optout.halloween-2026"), "1");
   assert.equal(fixture.toggle.getAttribute("aria-pressed"), "false");
   assert.equal(fixture.toggleIcon.children[0].localName, "img");
+  assert.equal(fixture.toggleIcon.children[0].crossOrigin, "anonymous");
   assert.equal(fixture.toggleIcon.children[0].src, activeCampaign.campaign.toggle.disabledIcon.url);
   assert.equal(fixture.events.at(-1).type, "araihu:campaign:restored");
+});
+
+test("storage write and remove exceptions expose only fixed toggle error codes", async (t) => {
+  await t.test("setItem", async () => {
+    const fixture = runtimeFixture({ storageSetError: { code: 22, server: "private" } });
+    await fixture.start();
+    fixture.clickToggle();
+    await new Promise((resolve) => setImmediate(resolve));
+
+    assert.equal(fixture.rootState.themeSource, "campaign");
+    assert.equal(fixture.events.at(-1).type, "araihu:campaign:error");
+    assert.equal(fixture.events.at(-1).detail.code, "toggle-failed");
+    assert.deepEqual(Object.keys(fixture.events.at(-1).detail), ["code"]);
+  });
+
+  await t.test("removeItem", async () => {
+    const fixture = runtimeFixture({
+      storage: { "araihu.assets.campaign.v1.optout.halloween-2026": "1" },
+      storageRemoveError: { code: "asset-url", server: "private" },
+    });
+    await fixture.start();
+    fixture.clickToggle();
+    await new Promise((resolve) => setImmediate(resolve));
+
+    assert.equal(fixture.rootState.themeSource, "campaign-opt-out");
+    assert.equal(fixture.events.at(-1).type, "araihu:campaign:error");
+    assert.equal(fixture.events.at(-1).detail.code, "toggle-failed");
+    assert.deepEqual(Object.keys(fixture.events.at(-1).detail), ["code"]);
+  });
 });
 
 test("saved campaign opt-out wins on reload without applying campaign", async () => {
@@ -620,6 +676,23 @@ test("saved campaign opt-out wins on reload without applying campaign", async ()
   assert.equal(fixture.toggle.getAttribute("aria-pressed"), "false");
   assert.equal(fixture.events.length, 0);
   assert.equal(await fixture.refresh(), false);
+});
+
+test("preference selected during saved opt-out preload retains ownership", async () => {
+  const fixture = runtimeFixture({
+    storage: { "araihu.assets.campaign.v1.optout.halloween-2026": "1" },
+    pendingToggleImage: true,
+  });
+  const pending = fixture.start();
+  await new Promise((resolve) => setImmediate(resolve));
+  fixture.setThemeSource("preference", "user-night");
+  fixture.resolveToggleImage();
+  await pending;
+
+  assert.equal(fixture.rootState.theme, "user-night");
+  assert.equal(fixture.rootState.themeSource, "preference");
+  assert.equal(fixture.rootState.campaign, undefined);
+  assert.equal(fixture.brandLogo.src, fixture.baselineLogo);
 });
 
 test("preference observer restores owned brand without overwriting selected theme", async () => {
@@ -667,20 +740,57 @@ test("runtime source restoration does not trigger a second channel refresh", asy
   assert.equal(fixture.rootState.themeSource, "default");
 });
 
-test("toggle and refresh share one in-flight state transition", async () => {
+test("refresh requested during toggle runs afterward and applies latest channel", async () => {
   const fixture = runtimeFixture();
   await fixture.start();
   fixture.deferToggleImage();
   fixture.clickToggle();
+  fixture.channel = clone(activeCampaign);
+  const firstRefresh = fixture.refresh();
   fixture.channel = clone(defaultChannel);
-  const overlappingRefresh = fixture.refresh();
+  const latestRefresh = fixture.refresh();
   fixture.resolveToggleImage();
-  await overlappingRefresh;
+  await Promise.all([firstRefresh, latestRefresh]);
+
+  assert.equal(fixture.rootState.themeSource, "default");
+  assert.equal(fixture.rootState.campaign, undefined);
+  assert.equal(fixture.storage.get("araihu.assets.campaign.v1.optout.halloween-2026"), "1");
+  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, 2);
+  assert.equal(fixture.events.some((event) => event.detail.code === "toggle-failed"), false);
+});
+
+test("toggle requested during refresh runs after refreshed state", async () => {
+  const fixture = runtimeFixture();
+  await fixture.start();
+  fixture.deferChannel();
+  const refresh = fixture.refresh();
+  await new Promise((resolve) => setImmediate(resolve));
+  fixture.clickToggle();
+  fixture.resolveChannel();
+  await refresh;
+  await new Promise((resolve) => setImmediate(resolve));
 
   assert.equal(fixture.rootState.themeSource, "campaign-opt-out");
   assert.equal(fixture.storage.get("araihu.assets.campaign.v1.optout.halloween-2026"), "1");
-  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, 1);
-  assert.equal(fixture.events.some((event) => event.detail.code === "toggle-failed"), false);
+  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, 2);
+});
+
+test("alternating queued intents preserve their serialized order", async () => {
+  const fixture = runtimeFixture();
+  await fixture.start();
+  fixture.deferChannel();
+  const activeRefresh = fixture.refresh();
+  await new Promise((resolve) => setImmediate(resolve));
+  fixture.clickToggle();
+  const queuedRefresh = fixture.refresh();
+  fixture.clickToggle();
+  fixture.resolveChannel();
+  await Promise.all([activeRefresh, queuedRefresh]);
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.equal(fixture.rootState.themeSource, "campaign");
+  assert.equal(fixture.storage.has("araihu.assets.campaign.v1.optout.halloween-2026"), false);
+  assert.equal(fixture.fetches.filter((request) => request.url.endsWith("/current")).length, 3);
 });
 
 test("preference selected during toggle preload cancels opt-out mutation", async () => {

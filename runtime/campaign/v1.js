@@ -8,7 +8,8 @@
   var script = document.currentScript;
   var configuredChannel = (script && script.dataset.channel) || "/assets/releases/current";
   var channelURL;
-  var inFlight = null;
+  var activeOperation = null;
+  var pendingOperations = [];
   var state = null;
   var lastChannel = null;
   var selfThemeSource = null;
@@ -226,7 +227,9 @@
       theme: root.getAttribute("data-theme"),
       source: root.getAttribute("data-theme-source") || "default",
       logos: hooks.logos.map(function (node) { return node.src; }),
+      logoCrossOrigins: hooks.logos.map(function (node) { return node.crossOrigin || null; }),
       icons: hooks.icons.map(function (node) { return node.href; }),
+      iconCrossOrigins: hooks.icons.map(function (node) { return node.crossOrigin || null; }),
       toggleHidden: hooks.toggles.map(function (node) { return node.hidden; }),
       togglePressed: hooks.toggles.map(function (node) { return node.getAttribute("aria-pressed"); }),
       toggleChildren: hooks.toggleIcons.map(function (node) {
@@ -239,14 +242,34 @@
 
   function setBrand(urls) {
     var hooks = brandHooks();
-    hooks.logos.forEach(function (node) { node.src = urls.logo; });
-    hooks.icons.forEach(function (node) { node.href = urls.icon; });
+    hooks.logos.forEach(function (node) {
+      node.crossOrigin = "anonymous";
+      node.src = urls.logo;
+    });
+    hooks.icons.forEach(function (node) {
+      node.crossOrigin = "anonymous";
+      node.href = urls.icon;
+    });
   }
 
   function restoreBrand(baseline) {
     var hooks = brandHooks();
-    hooks.logos.forEach(function (node, index) { node.src = baseline.logos[index]; });
-    hooks.icons.forEach(function (node, index) { node.href = baseline.icons[index]; });
+    hooks.logos.forEach(function (node, index) {
+      if (baseline.logoCrossOrigins[index] === null) {
+        node.removeAttribute("crossorigin");
+      } else {
+        node.crossOrigin = baseline.logoCrossOrigins[index];
+      }
+      node.src = baseline.logos[index];
+    });
+    hooks.icons.forEach(function (node, index) {
+      if (baseline.iconCrossOrigins[index] === null) {
+        node.removeAttribute("crossorigin");
+      } else {
+        node.crossOrigin = baseline.iconCrossOrigins[index];
+      }
+      node.href = baseline.icons[index];
+    });
   }
 
   function restoreToggle(baseline) {
@@ -302,19 +325,40 @@
   }
 
   function preloadStyle(url) {
-    return new Promise(function (resolve, reject) {
-      var link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.media = "not all";
-      link.crossOrigin = "anonymous";
-      link.href = url;
-      link.onload = function () { resolve(link); };
-      link.onerror = function () {
-        link.remove();
-        reject(new RuntimeError("theme-load"));
+    var link = document.createElement("link");
+    var rejectLoad;
+    var settled = false;
+    var promise = new Promise(function (resolve, reject) {
+      rejectLoad = reject;
+      link.onload = function () {
+        if (!settled) {
+          settled = true;
+          resolve(link);
+        }
       };
-      document.head.appendChild(link);
+      link.onerror = function () {
+        if (!settled) {
+          settled = true;
+          link.remove();
+          reject(new RuntimeError("theme-load"));
+        }
+      };
     });
+    link.rel = "stylesheet";
+    link.media = "not all";
+    link.crossOrigin = "anonymous";
+    link.href = url;
+    document.head.appendChild(link);
+    return {
+      promise: promise,
+      cancel: function () {
+        link.remove();
+        if (!settled) {
+          settled = true;
+          rejectLoad(new RuntimeError("theme-load"));
+        }
+      }
+    };
   }
 
   async function preloadImage(url) {
@@ -412,6 +456,7 @@
   function renderIcon(prepared) {
     if (prepared.mode === "asset") {
       var image = document.createElement("img");
+      image.crossOrigin = "anonymous";
       image.src = prepared.url;
       image.alt = "";
       image.setAttribute("aria-hidden", "true");
@@ -443,10 +488,10 @@
 
   async function prepareCampaign(channel, baseline) {
     var campaign = channel.campaign;
-    var stylePromise = preloadStyle(channel.theme.cssUrl);
+    var stagedStyle = preloadStyle(channel.theme.cssUrl);
     try {
       var prepared = await Promise.all([
-        stylePromise,
+        stagedStyle.promise,
         preloadImage(campaign.brand.logo.url),
         preloadImage(campaign.brand.icon.url),
         preloadIcon(campaign.toggle.enabledIcon)
@@ -460,9 +505,7 @@
         mode: "campaign"
       };
     } catch (error) {
-      stylePromise.then(function (style) {
-        style.remove();
-      }, function () {});
+      stagedStyle.cancel();
       throw error;
     }
   }
@@ -479,7 +522,11 @@
     }
     var baseline = state ? state.baseline : captureBaseline();
     if (optedOut) {
+      var optOutState = state;
       var disabled = await preloadIcon(campaign.toggle.disabledIcon);
+      if (root.getAttribute("data-theme-source") === "preference" || state !== optOutState) {
+        return false;
+      }
       if (state) {
         restoreState(state, false);
       }
@@ -542,21 +589,50 @@
     return applyCampaign(channel);
   }
 
-  function runExclusive(operation, fallbackCode) {
-    if (inFlight) {
-      return inFlight;
+  function errorCode(error, fallbackCode) {
+    return error instanceof RuntimeError ? error.code : fallbackCode;
+  }
+
+  function drainOperations() {
+    if (activeOperation || pendingOperations.length === 0) {
+      return;
     }
-    inFlight = operation().catch(function (error) {
-      dispatchError(error && error.code ? error.code : fallbackCode);
+    var entry = pendingOperations.shift();
+    activeOperation = entry;
+    Promise.resolve().then(entry.operation).catch(function (error) {
+      dispatchError(errorCode(error, entry.fallbackCode));
       return false;
-    }).finally(function () {
-      inFlight = null;
+    }).then(entry.resolve).finally(function () {
+      activeOperation = null;
+      drainOperations();
     });
-    return inFlight;
+  }
+
+  function enqueueOperation(kind, operation, fallbackCode) {
+    if (activeOperation && activeOperation.kind === kind && pendingOperations.length === 0) {
+      return activeOperation.promise;
+    }
+    var lastPending = pendingOperations[pendingOperations.length - 1];
+    if (lastPending && lastPending.kind === kind) {
+      return lastPending.promise;
+    }
+    var resolveOperation;
+    var promise = new Promise(function (resolve) {
+      resolveOperation = resolve;
+    });
+    pendingOperations.push({
+      kind: kind,
+      operation: operation,
+      fallbackCode: fallbackCode,
+      promise: promise,
+      resolve: resolveOperation
+    });
+    drainOperations();
+    return promise;
   }
 
   function refresh() {
-    return runExclusive(refreshOnce, "refresh-failed");
+    return enqueueOperation("refresh", refreshOnce, "refresh-failed");
   }
 
   async function handleToggle() {
@@ -594,7 +670,7 @@
   }
 
   function startToggle() {
-    return runExclusive(handleToggle, "toggle-failed");
+    return enqueueOperation("toggle", handleToggle, "toggle-failed");
   }
 
   all("[data-campaign-toggle]").forEach(function (node) {
