@@ -22,7 +22,9 @@ jobs:
       - name: Check out exact tag
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          fetch-tags: true
           persist-credentials: false
 
       - name: Set up exact Go toolchain
@@ -36,7 +38,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git tag --points-at HEAD --list "$GITHUB_REF_NAME")" = "$GITHUB_REF_NAME"
+          event_sha=$(git rev-parse "${GITHUB_SHA}^{commit}")
+          test "$(git rev-parse HEAD)" = "$event_sha"
+          tag_sha=$(git rev-parse "refs/tags/${GITHUB_REF_NAME}^{commit}")
+          test "$tag_sha" = "$event_sha"
           test "$(go version | awk '{print $3}')" = go1.26.5
 
       - name: Build verified rsvg-convert 2.62.1
@@ -163,16 +168,25 @@ jobs:
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             existing="${RUNNER_TEMP}/existing-release"
             mkdir -p "$existing"
+            existing_names="${RUNNER_TEMP}/existing-release-assets"
+            gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets \
+              --jq '.assets[].name' > "$existing_names"
+            missing=()
             for asset in "${assets[@]}"; do
               name=$(basename "$asset")
-              if gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern "$name" --dir "$existing" >/dev/null 2>&1; then
+              if grep --fixed-strings --line-regexp --quiet "$name" "$existing_names"; then
+                gh release download "$TAG" --repo "$GITHUB_REPOSITORY" \
+                  --pattern "$name" --dir "$existing"
                 cmp --silent "$asset" "$existing/$name" || {
                   echo "GitHub Release asset differs: $name" >&2
                   exit 1
                 }
               else
-                gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY"
+                missing+=("$asset")
               fi
+            done
+            for asset in "${missing[@]}"; do
+              gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY"
             done
           else
             gh release create "$TAG" "${assets[@]}" --repo "$GITHUB_REPOSITORY" \

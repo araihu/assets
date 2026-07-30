@@ -31,7 +31,6 @@ jobs:
   resolve:
     runs-on: ubuntu-24.04
     permissions:
-      actions: read
       contents: read
     steps:
       - name: Check out source
@@ -118,11 +117,10 @@ jobs:
           echo "release_sha256=$release_sha256" >> "$GITHUB_OUTPUT"
           echo "release_url=${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/download/${default_release}/${archive_name}" >> "$GITHUB_OUTPUT"
 
-      - name: Build deterministic channel bundle and compare accepted digest
+      - name: Build deterministic channel bundle
         id: channel
         shell: bash
         env:
-          GH_TOKEN: ${{ github.token }}
           RESOLUTION_DATE: ${{ steps.date.outputs.date }}
         run: |
           set -euo pipefail
@@ -131,42 +129,12 @@ jobs:
           go run ./cmd/araihu-assets campaigns validate
           bundle="${RUNNER_TEMP}/channel-bundle"
           go run ./cmd/araihu-assets campaigns publish --date "$RESOLUTION_DATE" --output "$bundle"
-          channel_digest=$(ruby -rjson -e '
-            digest = JSON.parse(File.read(ARGV.fetch(0))).fetch("digest")
-            abort "invalid channel digest" unless digest.match?(/\A[0-9a-f]{64}\z/)
-            puts digest
-          ' "$bundle/releases/current.json")
-          accepted_name="accepted-channel-${channel_digest}"
-          accepted_count=$(gh api \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "/repos/${GITHUB_REPOSITORY}/actions/artifacts?name=${accepted_name}&per_page=1" \
-            --jq '.total_count')
-          if [[ "$accepted_count" -gt 0 ]]; then
-            changed=false
-            echo "Channel digest already accepted: $channel_digest"
-          else
-            changed=true
-          fi
+          bundle_digest=$(scripts/channel-bundle-digest.rb "$bundle")
           echo "bundle=$bundle" >> "$GITHUB_OUTPUT"
-          echo "digest=$channel_digest" >> "$GITHUB_OUTPUT"
-          echo "accepted_name=$accepted_name" >> "$GITHUB_OUTPUT"
-          echo "changed=$changed" >> "$GITHUB_OUTPUT"
-
-      - name: Upload changed immutable channel bundle
-        id: changed
-        if: steps.channel.outputs.changed == 'true'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: channel-${{ steps.channel.outputs.digest }}-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ steps.channel.outputs.bundle }}
-          if-no-files-found: error
-          compression-level: 0
-          retention-days: 90
+          echo "digest=$bundle_digest" >> "$GITHUB_OUTPUT"
 
       - name: Mint selected-repository dispatch token
         id: app-token
-        if: steps.channel.outputs.changed == 'true'
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
           app-id: ${{ secrets.AHAIRU_APP_ID }}
@@ -175,8 +143,72 @@ jobs:
           repositories: ${{ vars.AHAIRU_REPOSITORY }}
           permission-contents: write
 
-      - name: Dispatch Ahairu with immutable artifacts
-        if: steps.channel.outputs.changed == 'true'
+      - name: Compare current durable accepted state
+        id: state
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          AHAIRU_OWNER: ${{ vars.AHAIRU_OWNER }}
+          AHAIRU_REPOSITORY: ${{ vars.AHAIRU_REPOSITORY }}
+          BUNDLE_DIGEST: ${{ steps.channel.outputs.digest }}
+          SOURCE_REPOSITORY: ${{ github.repository }}
+          SOURCE_WORKFLOW: ${{ github.repository }}/.github/workflows/campaigns.yml
+          STATE_REF: automation/araihu-assets-state
+          STATE_PATH: .automation/araihu-assets/accepted-channel-v1.json
+        run: |
+          set -euo pipefail
+          headers=(
+            --header "Accept: application/vnd.github+json"
+            --header "Authorization: Bearer ${GH_TOKEN}"
+            --header "X-GitHub-Api-Version: 2022-11-28"
+          )
+          ref_response="${RUNNER_TEMP}/accepted-state-ref.json"
+          ref_status=$(curl --silent --show-error --output "$ref_response" --write-out '%{http_code}' \
+            "${headers[@]}" \
+            "${GITHUB_API_URL}/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/git/ref/heads/${STATE_REF}")
+          test "$ref_status" = 200 || {
+            echo "Dedicated accepted-state ref is unavailable (HTTP $ref_status)" >&2
+            exit 1
+          }
+
+          state_response="${RUNNER_TEMP}/accepted-state.json"
+          state_status=$(curl --silent --show-error --output "$state_response" --write-out '%{http_code}' \
+            "${headers[@]}" \
+            "${GITHUB_API_URL}/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/contents/${STATE_PATH}?ref=${STATE_REF}")
+          case "$state_status" in
+            200)
+              decision=$(scripts/accepted-channel-state.rb "$state_response" "$BUNDLE_DIGEST" \
+                "$SOURCE_REPOSITORY" "$SOURCE_WORKFLOW" "$GITHUB_SERVER_URL" "$STATE_PATH")
+              changed=$(ruby -rjson -e 'puts JSON.parse(ARGV.fetch(0)).fetch("changed")' "$decision")
+              state_sha=$(ruby -rjson -e 'puts JSON.parse(ARGV.fetch(0)).fetch("sha")' "$decision")
+              ;;
+            404)
+              changed=true
+              state_sha=
+              ;;
+            *)
+              echo "Accepted-state read failed (HTTP $state_status)" >&2
+              exit 1
+              ;;
+          esac
+          if [[ "$changed" == false ]]; then
+            echo "Current durable state already accepts bundle: $BUNDLE_DIGEST"
+          fi
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          echo "sha=$state_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Upload changed immutable channel bundle
+        id: changed
+        if: steps.state.outputs.changed == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: channel-${{ steps.channel.outputs.digest }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ steps.channel.outputs.bundle }}
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Dispatch Ahairu and update durable accepted state
+        if: steps.state.outputs.changed == 'true'
         shell: bash
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -185,15 +217,31 @@ jobs:
           CHANNEL_ARTIFACT_ID: ${{ steps.changed.outputs.artifact-id }}
           CHANNEL_ARTIFACT_URL: ${{ steps.changed.outputs.artifact-url }}
           CHANNEL_ARTIFACT_SHA256: ${{ steps.changed.outputs.artifact-digest }}
-          CHANNEL_DIGEST: ${{ steps.channel.outputs.digest }}
+          BUNDLE_DIGEST: ${{ steps.channel.outputs.digest }}
           RELEASE: ${{ steps.release.outputs.release }}
           RELEASE_URL: ${{ steps.release.outputs.release_url }}
           RELEASE_SHA256: ${{ steps.release.outputs.release_sha256 }}
           RESOLUTION_DATE: ${{ steps.date.outputs.date }}
+          SOURCE_REPOSITORY: ${{ github.repository }}
+          SOURCE_WORKFLOW: ${{ github.repository }}/.github/workflows/campaigns.yml
+          STATE_REF: automation/araihu-assets-state
+          STATE_PATH: .automation/araihu-assets/accepted-channel-v1.json
+          STATE_SHA: ${{ steps.state.outputs.sha }}
         run: |
           set -euo pipefail
           payload="${RUNNER_TEMP}/dispatch.json"
           ruby -rjson -e '
+            sha256 = /\A[0-9a-f]{64}\z/
+            artifact_id = Integer(ENV.fetch("CHANNEL_ARTIFACT_ID"), 10)
+            abort "invalid channel artifact ID" unless artifact_id.positive?
+            artifact_sha = ENV.fetch("CHANNEL_ARTIFACT_SHA256")
+            abort "invalid channel artifact SHA-256" unless artifact_sha.match?(sha256)
+            bundle_digest = ENV.fetch("BUNDLE_DIGEST")
+            abort "invalid bundle digest" unless bundle_digest.match?(sha256)
+            release_sha = ENV.fetch("RELEASE_SHA256")
+            abort "invalid release SHA-256" unless release_sha.match?(sha256)
+            expected_artifact = %r{\A#{Regexp.escape(ENV.fetch("GITHUB_SERVER_URL"))}/#{Regexp.escape(ENV.fetch("GITHUB_REPOSITORY"))}/actions/runs/[1-9][0-9]*/artifacts/#{artifact_id}\z}
+            abort "invalid channel artifact URL" unless ENV.fetch("CHANNEL_ARTIFACT_URL").match?(expected_artifact)
             payload = {
               event_type: "araihu-assets-released",
               client_payload: {
@@ -201,11 +249,11 @@ jobs:
                 assets_revision: ENV.fetch("GITHUB_SHA"),
                 release: ENV.fetch("RELEASE"),
                 release_url: ENV.fetch("RELEASE_URL"),
-                release_sha256: ENV.fetch("RELEASE_SHA256"),
-                channel_artifact_id: ENV.fetch("CHANNEL_ARTIFACT_ID"),
+                release_sha256: release_sha,
+                channel_artifact_id: artifact_id,
                 channel_artifact_url: ENV.fetch("CHANNEL_ARTIFACT_URL"),
-                channel_artifact_sha256: ENV.fetch("CHANNEL_ARTIFACT_SHA256"),
-                channel_digest: ENV.fetch("CHANNEL_DIGEST"),
+                channel_artifact_sha256: artifact_sha,
+                bundle_digest: bundle_digest,
                 resolution_date: ENV.fetch("RESOLUTION_DATE")
               }
             }
@@ -217,23 +265,42 @@ jobs:
             "/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/dispatches" \
             --input "$payload"
 
-          accepted="${RUNNER_TEMP}/accepted-channel"
-          mkdir -p "$accepted"
-          ruby -rjson -e '
+          state_update="${RUNNER_TEMP}/accepted-state-update.json"
+          ruby -rbase64 -rjson -e '
             record = {
-              channelDigest: ENV.fetch("CHANNEL_DIGEST"),
-              channelArtifactId: ENV.fetch("CHANNEL_ARTIFACT_ID"),
-              channelArtifactSha256: ENV.fetch("CHANNEL_ARTIFACT_SHA256")
+              schemaVersion: 1,
+              bundleDigest: ENV.fetch("BUNDLE_DIGEST"),
+              channelArtifactId: Integer(ENV.fetch("CHANNEL_ARTIFACT_ID"), 10),
+              channelArtifactUrl: ENV.fetch("CHANNEL_ARTIFACT_URL"),
+              channelArtifactSha256: ENV.fetch("CHANNEL_ARTIFACT_SHA256"),
+              sourceRepository: ENV.fetch("SOURCE_REPOSITORY"),
+              sourceWorkflow: ENV.fetch("SOURCE_WORKFLOW"),
+              sourceRevision: ENV.fetch("GITHUB_SHA"),
+              release: ENV.fetch("RELEASE"),
+              releaseUrl: ENV.fetch("RELEASE_URL"),
+              releaseSha256: ENV.fetch("RELEASE_SHA256"),
+              resolutionDate: ENV.fetch("RESOLUTION_DATE")
             }
-            File.write(File.join(ARGV.fetch(0), "accepted.json"), JSON.pretty_generate(record) + "\n")
-          ' "$accepted"
-          echo "accepted=$accepted" >> "$GITHUB_OUTPUT"
-
-      - name: Record accepted channel digest
-        if: steps.channel.outputs.changed == 'true'
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: accepted-channel-${{ steps.channel.outputs.digest }}
-          path: ${{ runner.temp }}/accepted-channel
-          if-no-files-found: error
-          retention-days: 90
+            content = JSON.pretty_generate(record) + "\n"
+            payload = {
+              message: "ci: accept Assets channel #{record.fetch(:bundleDigest)}",
+              content: Base64.strict_encode64(content),
+              branch: ENV.fetch("STATE_REF")
+            }
+            state_sha = ENV.fetch("STATE_SHA")
+            payload[:sha] = state_sha unless state_sha.empty?
+            File.write(ARGV.fetch(0), JSON.generate(payload))
+          ' "$state_update"
+          state_response="${RUNNER_TEMP}/accepted-state-update-response.json"
+          state_status=$(curl --silent --show-error --output "$state_response" --write-out '%{http_code}' \
+            --request PUT \
+            --header "Accept: application/vnd.github+json" \
+            --header "Authorization: Bearer ${GH_TOKEN}" \
+            --header "X-GitHub-Api-Version: 2022-11-28" \
+            --header "Content-Type: application/json" \
+            --data-binary "@$state_update" \
+            "${GITHUB_API_URL}/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/contents/${STATE_PATH}")
+          [[ "$state_status" == 200 || "$state_status" == 201 ]] || {
+            echo "Accepted-state update failed (HTTP $state_status)" >&2
+            exit 1
+          }
