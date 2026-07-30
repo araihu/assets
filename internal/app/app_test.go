@@ -264,7 +264,7 @@ func TestCampaignPublishSeparatesLatestFromPromotedDefault(t *testing.T) {
 		name    string
 		release string
 	}{
-		{name: "releases/latest.json", release: "v0.1.0"},
+		{name: "releases/latest.json", release: "v0.1.1"},
 		{name: "releases/default.json", release: "v0.0.9"},
 		{name: "releases/current.json", release: "v0.0.9"},
 	} {
@@ -416,10 +416,17 @@ func TestCampaignPublishUsesOneCapturedSnapshot(t *testing.T) {
 	if err != nil || !bytes.Equal(got, runtime) {
 		t.Fatalf("runtime = %q, %v", got, err)
 	}
-	for _, name := range []string{"current.json", "default.json", "latest.json"} {
-		data, err := os.ReadFile(filepath.Join(output, "releases", name))
-		if err != nil || !strings.Contains(string(data), `"release": "v0.1.0"`) {
-			t.Fatalf("%s = %q, %v", name, data, err)
+	for _, want := range []struct {
+		name    string
+		release string
+	}{
+		{name: "current.json", release: "v0.1.0"},
+		{name: "default.json", release: "v0.1.0"},
+		{name: "latest.json", release: "v0.1.1"},
+	} {
+		data, err := os.ReadFile(filepath.Join(output, "releases", want.name))
+		if err != nil || !strings.Contains(string(data), `"release": "`+want.release+`"`) {
+			t.Fatalf("%s = %q, %v", want.name, data, err)
 		}
 	}
 }
@@ -548,6 +555,10 @@ func campaignFixtureRepo(t *testing.T) string {
 		"dist/campaigns.json",
 		"dist/release.json",
 		"dist/campaign/v1.js",
+		"releases/v0.1.0/catalog.json",
+		"releases/v0.1.0/themes.json",
+		"releases/v0.1.0/campaigns.json",
+		"releases/v0.1.0/release.json",
 	} {
 		data, err := os.ReadFile(filepath.Join(fixtureRepo(t), filepath.FromSlash(name)))
 		if err != nil {
@@ -585,7 +596,7 @@ func promotedSnapshotFixture(t *testing.T) string {
 		if err != nil {
 			t.Fatal(err)
 		}
-		data = bytes.ReplaceAll(data, []byte("v0.1.0"), []byte("v0.0.9"))
+		data = bytes.ReplaceAll(data, []byte("v0.1.1"), []byte("v0.0.9"))
 		if err := os.WriteFile(filepath.Join(snapshot, name), data, 0o644); err != nil {
 			t.Fatal(err)
 		}

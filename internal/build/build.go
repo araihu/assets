@@ -23,6 +23,7 @@ import (
 	"github.com/araihu/assets/internal/proof"
 	"github.com/araihu/assets/internal/provenance"
 	"github.com/araihu/assets/internal/release"
+	"github.com/araihu/assets/internal/releaseinfo"
 	"github.com/araihu/assets/internal/releasemeta"
 	"github.com/araihu/assets/internal/sprite"
 	"github.com/araihu/assets/internal/svgasset"
@@ -31,7 +32,6 @@ import (
 )
 
 const (
-	releaseVersion = "v0.1.0"
 	// ManagedDistContract makes ownership explicit: a successful Run replaces
 	// every path under dist, including unrelated files from a prior release.
 	ManagedDistContract = "dist is wholly managed by build.Run"
@@ -233,7 +233,7 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 		return nil, fmt.Errorf("build: read LICENSE: %w", err)
 	}
 	files["licenses/Apache-2.0.txt"] = license
-	files["NOTICE"] = []byte("Arai Hu Assets " + releaseVersion + "\n\nArai Hu brand assets are subject to Arai Hu Brand Terms.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\n")
+	files["NOTICE"] = []byte("Arai Hu Assets " + releaseinfo.Version + "\n\nArai Hu brand assets are subject to Arai Hu Brand Terms.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\n")
 	proofFiles, err := proofStaticFiles(repo)
 	if err != nil {
 		return nil, err
@@ -324,7 +324,7 @@ func assembleThemes(manifest themes.Manifest, source map[string][]byte) (map[str
 		published.Themes[i] = theme
 		files[theme.CSSPath] = copy
 	}
-	catalog, err := published.Catalog(releaseVersion)
+	catalog, err := published.Catalog(releaseinfo.Version)
 	if err != nil {
 		return nil, nil, fmt.Errorf("build: create themes catalog: %w", err)
 	}
@@ -383,7 +383,7 @@ func normalizeInputPath(name string) (string, error) {
 }
 
 func catalogBytes(assets []catalog.Asset, files map[string][]byte) ([]byte, error) {
-	c := catalog.Catalog{SchemaVersion: catalog.SchemaVersion, Release: releaseVersion, IdentityRevision: 11, Assets: slices.Clone(assets)}
+	c := catalog.Catalog{SchemaVersion: catalog.SchemaVersion, Release: releaseinfo.Version, IdentityRevision: 11, Assets: slices.Clone(assets)}
 	for _, asset := range c.Assets {
 		data, ok := files[asset.Path]
 		if !ok {
@@ -478,7 +478,7 @@ func writeReleaseInventory(ctx context.Context, root string) error {
 		return err
 	}
 	document, err := releasemeta.Build(releasemeta.Input{
-		Release:          releaseVersion,
+		Release:          releaseinfo.Version,
 		IdentityRevision: 11,
 		RuntimeVersion:   1,
 		Files:            os.DirFS(root),
@@ -513,7 +513,7 @@ func writeArchives(ctx context.Context, root string) error {
 	if err := checkContext(ctx); err != nil {
 		return err
 	}
-	zipFile, err := os.Create(filepath.Join(root, "releases", "araihu-assets-v0.1.0.zip"))
+	zipFile, err := os.Create(filepath.Join(root, "releases", releaseinfo.ArchiveName("zip")))
 	if err != nil {
 		return fmt.Errorf("build: create ZIP: %w", err)
 	}
@@ -527,7 +527,7 @@ func writeArchives(ctx context.Context, root string) error {
 	if err := checkContext(ctx); err != nil {
 		return err
 	}
-	tarFile, err := os.Create(filepath.Join(root, "releases", "araihu-assets-v0.1.0.tar.gz"))
+	tarFile, err := os.Create(filepath.Join(root, "releases", releaseinfo.ArchiveName("tar.gz")))
 	if err != nil {
 		return fmt.Errorf("build: create tar.gz: %w", err)
 	}

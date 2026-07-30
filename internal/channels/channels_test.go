@@ -1,7 +1,6 @@
 package channels
 
 import (
-	"bytes"
 	"encoding/json"
 	"os"
 	"strings"
@@ -95,7 +94,8 @@ func TestResolveInitialPromotion(t *testing.T) {
 	if err != nil {
 		t.Fatalf("campaigns.Load() error = %v", err)
 	}
-	catalogFile, err := root.Open("dist/catalog.json")
+	snapshot := "releases/" + defaultPromotion.Release
+	catalogFile, err := root.Open(snapshot + "/catalog.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -104,12 +104,13 @@ func TestResolveInitialPromotion(t *testing.T) {
 	if err != nil {
 		t.Fatalf("catalog.Decode() error = %v", err)
 	}
-	themeBytes, err := os.ReadFile("../../dist/themes.json")
+	themeFile, err := root.Open(snapshot + "/themes.json")
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer themeFile.Close()
 	var themeCatalog themes.Catalog
-	if err := json.NewDecoder(bytes.NewReader(themeBytes)).Decode(&themeCatalog); err != nil {
+	if err := json.NewDecoder(themeFile).Decode(&themeCatalog); err != nil {
 		t.Fatal(err)
 	}
 	date := mustDate(t, "2026-08-01")

@@ -2,14 +2,14 @@
 
 Deterministic identity and interface assets for Arai Hû products.
 `dist/catalog.json` is the versioned, language-neutral consumer contract for
-the `v0.1.0` release.
+the `v0.1.1` release candidate.
 
 ## Current checkout
 
 Requires Go `1.26.5`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
-The managed `dist/` tree is the `v0.1.0` distribution. Its catalog, generated
+The managed `dist/` tree is the `v0.1.1` release candidate. Its catalog, generated
 sprites, catalog-driven proof, and deterministic archives are consumer inputs.
 Use a disposable checkout when regenerating it:
 
@@ -26,10 +26,10 @@ managed tree, including `dist/proof`.
 
 ## Install
 
-Install and verify the released module:
+After release approval, install and verify the tagged module:
 
 ```sh
-go install github.com/araihu/assets/cmd/araihu-assets@v0.1.0
+go install github.com/araihu/assets/cmd/araihu-assets@v0.1.1
 araihu-assets verify
 ```
 
@@ -94,7 +94,7 @@ that snapshot. A new `dist/` release changes only
 
 ## Catalog and sprites
 
-The `v0.1.0` `dist/catalog.json` is schema v1, language-neutral metadata for
+The `v0.1.1` `dist/catalog.json` is schema v1, language-neutral metadata for
 generated files only. It records canonical name,
 namespace, variant dimensions,
 `spriteSymbol`, color behavior, license, source label, and SHA-256. Public
@@ -114,7 +114,7 @@ generation is provided by this CLI; consumers own any project-local bindings.
 
 ## Platform files and archives
 
-The `v0.1.0` build emits individual brand/UI SVGs, web/Android/Apple platform
+The `v0.1.1` build emits individual brand/UI SVGs, web/Android/Apple platform
 packages, catalog, checksums, notices, licenses, the self-contained
 `dist/proof/**` review site, and deterministic `.tar.gz` and `.zip` archives
 under `dist/releases/`. Platform launchers
@@ -124,6 +124,10 @@ general SVG for a launcher asset.
 The catalog is the current interoperability boundary. Release archives contain
 the complete managed distribution, including all `dist/proof/**` local assets;
 review screenshots and critique files remain outside release membership.
+
+`v0.1.1` is an offline release candidate in this checkout, not a published tag
+or download. Consumers must wait for integration approval before treating its
+archive names or module version as publicly available.
 
 ## Licensing
 

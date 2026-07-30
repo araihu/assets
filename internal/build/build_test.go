@@ -92,10 +92,66 @@ func TestRunPublishesReleaseInventoryBeforeChecksumsAndArchives(t *testing.T) {
 	if err != nil || !bytes.Contains(checksums, []byte("  release.json\n")) {
 		t.Fatalf("checksums = %q, %v", checksums, err)
 	}
-	members := tarArchiveMembers(t, filepath.Join(repo, "dist", "releases", "araihu-assets-v0.1.0.tar.gz"))
+	members := tarArchiveMembers(t, filepath.Join(repo, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
 	for _, name := range []string{"catalog.json", "themes.json", "campaigns.json", "release.json", "checksums.txt"} {
 		if !slices.Contains(members, name) {
 			t.Fatalf("archive omits %s: %q", name, members)
+		}
+	}
+}
+
+func TestRunEmitsConsistentV011ReleaseFields(t *testing.T) {
+	repo := testRepo(t)
+	if err := Run(repo, testInputs([]byte("asset"))); err != nil {
+		t.Fatal(err)
+	}
+
+	catalogBytes, err := os.ReadFile(filepath.Join(repo, "dist", "catalog.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	assetCatalog, err := catalog.Decode(bytes.NewReader(catalogBytes))
+	if err != nil {
+		t.Fatal(err)
+	}
+	themesBytes, err := os.ReadFile(filepath.Join(repo, "dist", "themes.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var themeCatalog themes.Catalog
+	if err := json.Unmarshal(themesBytes, &themeCatalog); err != nil {
+		t.Fatal(err)
+	}
+	releaseBytes, err := os.ReadFile(filepath.Join(repo, "dist", "release.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var releaseDocument releasemeta.Document
+	if err := json.Unmarshal(releaseBytes, &releaseDocument); err != nil {
+		t.Fatal(err)
+	}
+
+	const wantRelease = "v0.1.1"
+	for name, got := range map[string]string{
+		"catalog":  assetCatalog.Release,
+		"themes":   themeCatalog.Release,
+		"metadata": releaseDocument.Release,
+	} {
+		if got != wantRelease {
+			t.Fatalf("%s release = %q, want %q", name, got, wantRelease)
+		}
+	}
+	checksums, err := os.ReadFile(filepath.Join(repo, "dist", "checksums.txt"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(checksums, []byte(hash(releaseBytes)+"  release.json\n")) {
+		t.Fatal("checksums omit the same release metadata")
+	}
+	for _, extension := range []string{"tar.gz", "zip"} {
+		archive := filepath.Join(repo, "dist", "releases", "araihu-assets-"+wantRelease+"."+extension)
+		if _, err := os.Stat(archive); err != nil {
+			t.Fatalf("release archive %q: %v", archive, err)
 		}
 	}
 }
@@ -140,7 +196,7 @@ func TestRunPublishesCapturedCampaignRuntimeInInventoryChecksumsAndArchive(t *te
 	if !bytes.Contains(checksums, []byte(hash(captured)+"  campaign/v1.js\n")) {
 		t.Fatalf("checksums omit captured campaign/v1.js: %s", checksums)
 	}
-	members := tarArchiveMembers(t, filepath.Join(repo, "dist", "releases", "araihu-assets-v0.1.0.tar.gz"))
+	members := tarArchiveMembers(t, filepath.Join(repo, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
 	if !slices.Contains(members, "campaign/v1.js") {
 		t.Fatalf("release archive omits campaign/v1.js: %q", members)
 	}
@@ -321,11 +377,11 @@ func TestRunWritesSortedChecksumsAndDeterministicReleaseMembership(t *testing.T)
 			t.Fatalf("invalid checksum line %q", checksum)
 		}
 	}
-	firstArchive, err := os.ReadFile(filepath.Join(first, "dist", "releases", "araihu-assets-v0.1.0.tar.gz"))
+	firstArchive, err := os.ReadFile(filepath.Join(first, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	secondArchive, err := os.ReadFile(filepath.Join(second, "dist", "releases", "araihu-assets-v0.1.0.tar.gz"))
+	secondArchive, err := os.ReadFile(filepath.Join(second, "dist", "releases", "araihu-assets-v0.1.1.tar.gz"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -362,8 +418,8 @@ func TestProductionReleaseArchivesIncludeExactProofTree(t *testing.T) {
 		archive string
 		members func(t *testing.T, archive string) []string
 	}{
-		{"tar.gz", filepath.Join(dist, "releases", "araihu-assets-v0.1.0.tar.gz"), tarArchiveMembers},
-		{"zip", filepath.Join(dist, "releases", "araihu-assets-v0.1.0.zip"), zipArchiveMembers},
+		{"tar.gz", filepath.Join(dist, "releases", "araihu-assets-v0.1.1.tar.gz"), tarArchiveMembers},
+		{"zip", filepath.Join(dist, "releases", "araihu-assets-v0.1.1.zip"), zipArchiveMembers},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			got := tc.members(t, tc.archive)
