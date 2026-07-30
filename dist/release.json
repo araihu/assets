@@ -303,6 +303,11 @@
       "size": 3688
     },
     {
+      "path": "campaign/v1.js",
+      "sha256": "8ce7e0a7a4b16753ac13568731d364a00b3dc44e400a6d53d78b387d39bc5b02",
+      "size": 19535
+    },
+    {
       "path": "icons/brand/araihu-icon-adaptive-plate-launcher.svg",
       "sha256": "97da1639ca75483b2515c41077edcbaf09d533e484c9d124992a19cfefd196fd",
       "size": 2412
@@ -2046,6 +2051,11 @@
       "path": "proof/assets/brand/x9/logo/tinted-transparent-optical.svg",
       "sha256": "76a080c4b2581b4f11cd31efead80a8fadeedd86f551d700c94e29326e6ad6bb",
       "size": 3688
+    },
+    {
+      "path": "proof/assets/campaign/v1.js",
+      "sha256": "8ce7e0a7a4b16753ac13568731d364a00b3dc44e400a6d53d78b387d39bc5b02",
+      "size": 19535
     },
     {
       "path": "proof/assets/campaigns.json",

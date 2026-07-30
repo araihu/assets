@@ -100,6 +100,52 @@ func TestRunPublishesReleaseInventoryBeforeChecksumsAndArchives(t *testing.T) {
 	}
 }
 
+func TestRunPublishesCapturedCampaignRuntimeInInventoryChecksumsAndArchive(t *testing.T) {
+	repo := testRepo(t)
+	runtimePath := filepath.Join(repo, "runtime", "campaign", "v1.js")
+	captured := []byte("(function(){window.campaignVersion=1;}());\n")
+	mustWrite(t, runtimePath, captured)
+	buildHook = func(phase buildPhase) {
+		if phase == beforePublish {
+			mustWrite(t, runtimePath, []byte("changed after staging\n"))
+		}
+	}
+	t.Cleanup(func() { buildHook = nil })
+
+	if err := Run(repo, testInputs([]byte("asset"))); err != nil {
+		t.Fatal(err)
+	}
+	published, err := os.ReadFile(filepath.Join(repo, "dist", "campaign", "v1.js"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(published, captured) {
+		t.Fatalf("published runtime = %q, want captured %q", published, captured)
+	}
+	releaseBytes, err := os.ReadFile(filepath.Join(repo, "dist", "release.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document releasemeta.Document
+	if err := json.Unmarshal(releaseBytes, &document); err != nil {
+		t.Fatal(err)
+	}
+	if !inventoryHasHash(document.Files, "campaign/v1.js", hash(captured)) {
+		t.Fatal("release inventory omits captured campaign/v1.js")
+	}
+	checksums, err := os.ReadFile(filepath.Join(repo, "dist", "checksums.txt"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(checksums, []byte(hash(captured)+"  campaign/v1.js\n")) {
+		t.Fatalf("checksums omit captured campaign/v1.js: %s", checksums)
+	}
+	members := tarArchiveMembers(t, filepath.Join(repo, "dist", "releases", "araihu-assets-v0.1.0.tar.gz"))
+	if !slices.Contains(members, "campaign/v1.js") {
+		t.Fatalf("release archive omits campaign/v1.js: %q", members)
+	}
+}
+
 func TestRunFailurePreservesPublishedDist(t *testing.T) {
 	repo := testRepo(t)
 	mustWrite(t, filepath.Join(repo, "dist", "sentinel.txt"), []byte("keep"))
@@ -286,7 +332,7 @@ func TestRunWritesSortedChecksumsAndDeterministicReleaseMembership(t *testing.T)
 	if !bytes.Equal(firstArchive, secondArchive) {
 		t.Fatal("independent tar.gz builds differ")
 	}
-	requireArchiveMembers(t, firstArchive, []string{"NOTICE", "campaigns.json", "catalog.json", "checksums.txt", "icons/brand/asset.svg", "licenses/Apache-2.0.txt", "licenses/heroicons-MIT.txt", "platform/web/araihu/favicon.svg", "proof/app.js", "proof/styles.css", "release.json", "themes.json", "themes/araihu.css"})
+	requireArchiveMembers(t, firstArchive, []string{"NOTICE", "campaign/v1.js", "campaigns.json", "catalog.json", "checksums.txt", "icons/brand/asset.svg", "licenses/Apache-2.0.txt", "licenses/heroicons-MIT.txt", "platform/web/araihu/favicon.svg", "proof/app.js", "proof/styles.css", "release.json", "themes.json", "themes/araihu.css"})
 }
 
 func TestProductionReleaseArchivesIncludeExactProofTree(t *testing.T) {
@@ -412,6 +458,7 @@ func testRepo(t *testing.T) string {
 	mustWrite(t, filepath.Join(repo, "LICENSE"), []byte("Apache License\n"))
 	mustWrite(t, filepath.Join(repo, "site", "proof", "styles.css"), []byte("body {}\n"))
 	mustWrite(t, filepath.Join(repo, "site", "proof", "app.js"), []byte("\"use strict\";\n"))
+	mustWrite(t, filepath.Join(repo, "runtime", "campaign", "v1.js"), []byte("(function(){})();\n"))
 	return repo
 }
 

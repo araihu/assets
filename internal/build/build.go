@@ -39,6 +39,7 @@ const (
 
 var generatedPaths = map[string]struct{}{
 	"catalog.json":      {},
+	"campaign/v1.js":    {},
 	"campaigns.json":    {},
 	"checksums.txt":     {},
 	"NOTICE":            {},
@@ -202,7 +203,12 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 	if err := input.Campaigns.Validate(); err != nil {
 		return nil, fmt.Errorf("build: validate campaigns manifest: %w", err)
 	}
-	files := make(map[string][]byte, len(input.Brand.Files)+len(input.UI.Files)+len(input.Platform.Files)+len(themePaths)+6)
+	runtimeBytes, err := os.ReadFile(filepath.Join(repo, "runtime", "campaign", "v1.js"))
+	if err != nil {
+		return nil, fmt.Errorf("build: capture campaign runtime: %w", err)
+	}
+	files := make(map[string][]byte, len(input.Brand.Files)+len(input.UI.Files)+len(input.Platform.Files)+len(themePaths)+7)
+	files["campaign/v1.js"] = append([]byte(nil), runtimeBytes...)
 	for _, group := range []map[string][]byte{input.Brand.Files, input.UI.Files, input.Platform.Files} {
 		for sourceName, data := range group {
 			if err := checkContext(ctx); err != nil {
