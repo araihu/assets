@@ -101,7 +101,7 @@ func TestRunPublishesReleaseInventoryBeforeChecksumsAndArchives(t *testing.T) {
 	}
 }
 
-func TestRunEmitsConsistentV013ReleaseFields(t *testing.T) {
+func TestRunEmitsConsistentV014ReleaseFields(t *testing.T) {
 	repo := testRepo(t)
 	if err := Run(repo, testInputs([]byte("asset"))); err != nil {
 		t.Fatal(err)
