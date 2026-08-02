@@ -6,9 +6,10 @@ catalog's relative path under that release root.
 
 For `v0.1.1` and later, also require `catalog.json.release`, `themes.json.release`, and
 `release.json.release` to agree. Verify `release.json` inventory hashes before
-using a patch candidate. This checkout's `v0.1.2` files are offline RC inputs;
+using a patch candidate. This checkout's `v0.1.3` files are offline RC inputs;
 they are not a published tag or public download until integration approval.
-`v0.1.1` remains the independently published promoted default.
+`v0.1.2` remains the latest published release, while `v0.1.1` remains the
+independently published promoted default.
 
 Use generated sprite files only with the `spriteSymbol` recorded by the
 catalog. Same-origin external sprite references and inline-document rendering
@@ -23,3 +24,17 @@ or generate bindings from source-tree files.
 Export into a clean release-owned directory. The CLI refuses different-byte
 collisions and accepts existing identical files, so a collision never silently
 overwrites consumer-owned output.
+
+## Typed acquisition metadata
+
+Go consumers may import `github.com/araihu/assets/assetmeta` from `v0.1.3` and
+adapt generated acquisition records into `assetmeta.Resource` values. The
+package validates and indexes those records, strictly loads a schema-1 YAML
+overlay into consumer-defined generic metadata types, and resolves stable
+`resource/download` references.
+
+Acquisition tools own versions, URLs, paths, integrity values, content hashes,
+materialized files, and embedding. Consumers own metadata types, relationship
+validation through explicit `assetmeta.ValidateRefs` calls, ordering, rendering,
+and generated domain APIs. `assetmeta` does not import Muamba, infer metadata
+semantics, or traverse consumer metadata automatically.
