@@ -167,7 +167,11 @@ mutate_and_reject "dispatch omits distinct release identities" .github/workflows
   'release_artifacts: releases,' 'release: runtime_release,'
 mutate_and_reject "dispatch omits candidate digest" .github/workflows/campaigns.yml \
   'candidate_bundle_digest: bundle_digest,' 'bundle_digest: nil,'
-mutate_and_reject "dispatch omits accepted-state locator" .github/workflows/campaigns.yml \
-  'state_ref: ENV.fetch("STATE_REF"),' 'state_ref: nil,'
+mutate_and_reject "dispatch renames compact accepted-state envelope" .github/workflows/campaigns.yml \
+  '                state: {' '                accepted_state: {'
+mutate_and_reject "dispatch omits accepted-state ref" .github/workflows/campaigns.yml \
+  'ref: ENV.fetch("STATE_REF"),' 'ref: nil,'
+mutate_and_reject "dispatch omits accepted-state path" .github/workflows/campaigns.yml \
+  'path: ENV.fetch("STATE_PATH")' 'path: nil'
 
 echo "release workflow checker: canonical digest and $mutation mutations passed"

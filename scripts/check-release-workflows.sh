@@ -229,7 +229,7 @@ dispatch_run = dispatch_step["run"]
 require_contract(dispatch_run.include?('"/repos/${AHAIRU_OWNER}/${AHAIRU_REPOSITORY}/dispatches"'), "Ahairu repository dispatch call is missing")
 require_contract(!dispatch_run.include?("contents/${STATE_PATH}") && !dispatch_run.include?("accepted-state-update") && !dispatch_run.include?("--request PUT"), "Assets must never write durable accepted state")
 require_contract(dispatch_run.include?("release_artifacts: releases,") && dispatch_run.include?("runtime_release: runtime_release,"), "Ahairu dispatch must carry every distinct release identity and runtime release")
-require_contract(dispatch_run.include?("candidate_bundle_digest: bundle_digest,") && dispatch_run.include?('state_ref: ENV.fetch("STATE_REF"),') && dispatch_run.include?('state_path: ENV.fetch("STATE_PATH")'), "Ahairu dispatch must carry candidate digest and exact durable-state locator")
+require_contract(dispatch_run.include?("candidate_bundle_digest: bundle_digest,") && dispatch_run.include?("state: {") && dispatch_run.include?('ref: ENV.fetch("STATE_REF"),') && dispatch_run.include?('path: ENV.fetch("STATE_PATH")') && !dispatch_run.include?("state_ref:") && !dispatch_run.include?("state_path:"), "Ahairu dispatch must carry candidate digest and compact durable-state locator")
 require_contract(campaign_runs.include?("channel_artifact_id") && campaign_runs.include?("channel_artifact_sha256") && campaign_runs.include?("release_sha256"), "Ahairu dispatch must carry immutable artifact identity and hashes")
 ["release.yml", "campaigns.yml"].each do |name|
   source = File.read(File.join(repo, ".github", "workflows", name))
