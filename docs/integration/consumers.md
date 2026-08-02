@@ -23,3 +23,17 @@ or generate bindings from source-tree files.
 Export into a clean release-owned directory. The CLI refuses different-byte
 collisions and accepts existing identical files, so a collision never silently
 overwrites consumer-owned output.
+
+## Typed acquisition metadata
+
+Go consumers may import `github.com/araihu/assets/assetmeta` from `v0.1.3` and
+adapt generated acquisition records into `assetmeta.Resource` values. The
+package validates and indexes those records, strictly loads a schema-1 YAML
+overlay into consumer-defined generic metadata types, and resolves stable
+`resource/download` references.
+
+Acquisition tools own versions, URLs, paths, integrity values, content hashes,
+materialized files, and embedding. Consumers own metadata types, relationship
+validation through explicit `assetmeta.ValidateRefs` calls, ordering, rendering,
+and generated domain APIs. `assetmeta` does not import Muamba, infer metadata
+semantics, or traverse consumer metadata automatically.

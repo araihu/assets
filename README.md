@@ -33,6 +33,51 @@ go install github.com/araihu/assets/cmd/araihu-assets@v0.1.2
 araihu-assets verify
 ```
 
+## Typed acquisition overlays
+
+Release `v0.1.3` adds `github.com/araihu/assets/assetmeta` for applications that
+keep acquisition data separate from consumer metadata:
+
+```sh
+go get github.com/araihu/assets@v0.1.3
+```
+
+Adapt generated acquisition records into an inventory, then load metadata into
+consumer-owned Go types:
+
+```go
+type metadata struct {
+	Entry assetmeta.Ref `yaml:"entry"`
+}
+
+inventory, err := assetmeta.NewInventory([]assetmeta.Resource{{
+	Name:    "example",
+	Version: "1.0.0",
+	Downloads: []assetmeta.Download{{
+		Name:      "runtime-js",
+		URL:       "https://cdn.example/runtime.js",
+		Path:      "assets/js/runtime.js",
+		Integrity: "sha384-base64-value",
+		Hash:      "sha384:0123456789abcdef",
+	}},
+}})
+if err != nil {
+	return err
+}
+document, err := assetmeta.Load[metadata, struct{}, struct{}](overlay, inventory)
+if err != nil {
+	return err
+}
+if err := assetmeta.ValidateRefs(document.Inventory(), document.Metadata.Entry); err != nil {
+	return err
+}
+```
+
+Muamba or another acquisition tool owns downloads, integrity, paths, hashes,
+and embedding. `assetmeta` owns strict typed YAML association and stable
+`resource/download` references. Each application owns metadata meaning and
+semantic validation.
+
 For release-maintenance work, stable Make targets are:
 
 ```sh
