@@ -10,7 +10,8 @@ grep -Fx 'toolchain go1.26.5' go.mod
 grep -F "go-version: '1.26.5'" "$workflow"
 grep -F 'test "$(go version | awk '\''{print $3}'\'')" = go1.26.5' "$workflow"
 
-grep -F 'actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0' "$workflow"
+grep -F 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1' "$workflow"
+grep -F 'actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0' "$workflow"
 grep -F 'CARGO_C_VERSION: 0.10.10' "$workflow"
 grep -F 'CARGO_C_SOURCE_SHA256: da2101c5bee6c4bc0d62785c7b79d74a22dd566f93f0530b70d82531d4340b80' "$workflow"
 grep -F 'CARGO_C_LOCK_SHA256: 3d9107cb39d4d3c3503eed03fd668f8c24ad94d2a836f7e8c31f782c31b4a548' "$workflow"
