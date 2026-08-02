@@ -382,6 +382,47 @@ func TestBuildEmitsSemanticLabelsAndMetricsTable(t *testing.T) {
 	}
 }
 
+func TestBuildRoutesProductionProofAssetsThroughJsDelivr(t *testing.T) {
+	t.Setenv("APP_ENV", "production")
+	t.Setenv("CDN_VERSION", "v0.1.2")
+
+	var output bytes.Buffer
+	if err := BuildTemplate(fixtureModel(t), fixtureDistributionFS(), filepath.Join("..", "..", "site", "proof", "index.tmpl"), &output); err != nil {
+		t.Fatalf("BuildTemplate() error = %v", err)
+	}
+	html := output.String()
+	const base = "https://cdn.jsdelivr.net/gh/araihu/assets@v0.1.2/dist/proof/"
+	for _, want := range []string{
+		`<link rel="stylesheet" href="` + base + `styles.css">`,
+		`<script defer src="` + base + `app.js"></script>`,
+		`src="` + base + `assets/icons/brand/araihu-icon.svg"`,
+		`href="` + base + `assets/icons/ui/sprite.svg#hi-16-solid-check"`,
+		`href="` + base + `assets/platform/web/araihu/manifest-icons.json"`,
+		`href="` + base + `assets/NOTICE"`,
+		`href="` + base + `assets/licenses/Apache-2.0.txt"`,
+		`href="` + base + `assets/licenses/heroicons-MIT.txt"`,
+		`href="` + base + `assets/icons/ui/heroicons/provenance.json"`,
+	} {
+		if !strings.Contains(html, want) {
+			t.Fatalf("Build() production output missing %q", want)
+		}
+	}
+}
+
+func TestBuildDefaultEnvironmentRemainsOfflineGolden(t *testing.T) {
+	setOptionalEnv(t, "APP_ENV", nil)
+	setOptionalEnv(t, "CDN_VERSION", nil)
+
+	got := buildFixture(t)
+	want, err := os.ReadFile("testdata/golden/index.html")
+	if err != nil {
+		t.Fatalf("ReadFile golden: %v", err)
+	}
+	if got != string(want) {
+		t.Fatal("Build() default output differs from offline golden")
+	}
+}
+
 func TestBuildEmitsReviewFilteringAndMaskEvidence(t *testing.T) {
 	html := buildProduction(t)
 	for _, want := range []string{

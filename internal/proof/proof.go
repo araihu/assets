@@ -78,11 +78,7 @@ func Build(m Model, fsys fs.FS, output io.Writer) error {
 // this form so its staged repository never depends on process working directory.
 func BuildTemplate(m Model, fsys fs.FS, templateFile string, output io.Writer) error {
 	return build(m, fsys, output, func() (*template.Template, error) {
-		page, err := template.ParseFiles(templateFile)
-		if err != nil {
-			return nil, fmt.Errorf("parse proof template: %w", err)
-		}
-		return page, nil
+		return parseProofTemplate(templateFile)
 	})
 }
 
@@ -357,7 +353,7 @@ func productName(id string) string {
 }
 
 func relativeProofURL(distributionPath string) string {
-	return "assets/" + path.Clean(distributionPath)
+	return AssetURL("assets/" + path.Clean(distributionPath))
 }
 
 func parseDocumentTemplate() (*template.Template, error) {
@@ -365,7 +361,11 @@ func parseDocumentTemplate() (*template.Template, error) {
 	if err != nil {
 		return nil, err
 	}
-	page, err := template.ParseFiles(file)
+	return parseProofTemplate(file)
+}
+
+func parseProofTemplate(file string) (*template.Template, error) {
+	page, err := template.New(filepath.Base(file)).Funcs(template.FuncMap{"AssetURL": AssetURL}).ParseFiles(file)
 	if err != nil {
 		return nil, fmt.Errorf("parse proof template: %w", err)
 	}
