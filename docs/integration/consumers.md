@@ -38,3 +38,7 @@ materialized files, and embedding. Consumers own metadata types, relationship
 validation through explicit `assetmeta.ValidateRefs` calls, ordering, rendering,
 and generated domain APIs. `assetmeta` does not import Muamba, infer metadata
 semantics, or traverse consumer metadata automatically.
+
+This repository demonstrates the boundary directly: `muamba.yaml` and
+`internal/acquisition/muamba_gen.go` own Heroicons acquisition, while
+`manifests/icons-ui.yaml` retains only consumer semantics and stable refs.

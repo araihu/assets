@@ -974,8 +974,8 @@
     },
     {
       "path": "icons/ui/heroicons/provenance.json",
-      "sha256": "3feeb62d703521a30d9f8a198f165abaf2cbe165059d0c9828dc576051acd538",
-      "size": 9561
+      "sha256": "d9d8c8273d3aa25e5a926cff9119260a44a38aaa573f98ff572fbccee21b76b0",
+      "size": 35198
     },
     {
       "path": "icons/ui/sprite.svg",
@@ -2729,8 +2729,8 @@
     },
     {
       "path": "proof/assets/icons/ui/heroicons/provenance.json",
-      "sha256": "3feeb62d703521a30d9f8a198f165abaf2cbe165059d0c9828dc576051acd538",
-      "size": 9561
+      "sha256": "d9d8c8273d3aa25e5a926cff9119260a44a38aaa573f98ff572fbccee21b76b0",
+      "size": 35198
     },
     {
       "path": "proof/assets/icons/ui/sprite.svg",

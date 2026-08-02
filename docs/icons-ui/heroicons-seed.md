@@ -1,11 +1,11 @@
 # Heroicons UI seed
 
-`v0.1.0` ships exactly 67 UI icons from Heroicons `v2.2.0`, pinned to commit
-`0435d4ca364a608cc75e2f8683d374e55abbae26`. Source files are the explicitly
-allowlisted `src/16/solid/*.svg` paths in `manifests/icons-ui.yaml`; no glob or
-mutable branch expands this set. Vendored bytes live under
-`vendor/icons/ui/heroicons/v2.2.0/`, with per-file SHA-256 locks in the
-manifest and `provenance.json` beside them.
+The catalog ships exactly 67 UI icons from Heroicons `v2.2.0`. Source files are
+the explicit `src/16/solid/*.svg` downloads in `muamba.yaml`; no glob or mutable
+branch expands this set. Muamba retains each upstream SVG and license under
+`internal/acquisition/vendor/heroicons/v2.2.0/`, locks each with SHA-384 SRI,
+and generates the embedded acquisition API. `manifests/icons-ui.yaml` is only
+the typed `assetmeta` overlay for semantic paths and stable references.
 
 ## Selection evidence
 
@@ -50,5 +50,6 @@ Each `16/solid/<name>.svg` source becomes
 sorted deterministically. The unmodified upstream MIT notice is distributed at
 `dist/licenses/heroicons-MIT.txt`.
 
-Normal builds read only tracked vendor files. The opt-in live Sync test is the
-sole network path; all ordinary tests and UI builds are offline.
+Normal builds read only embedded, tracked Muamba inputs. Network access occurs
+only through the explicit `make vendor` acquisition workflow; tests, UI builds,
+verification, proof generation, and release gates remain offline.

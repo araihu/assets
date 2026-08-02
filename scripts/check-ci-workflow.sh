@@ -5,13 +5,17 @@ set -euo pipefail
 
 workflow=.github/workflows/ci.yml
 
-grep -Fx 'go 1.26.0' go.mod
-grep -Fx 'toolchain go1.26.5' go.mod
+grep -Fx 'go 1.26.5' go.mod
+if grep -F 'toolchain ' go.mod; then
+  echo 'go.mod must express the exact toolchain through its go directive' >&2
+  exit 1
+fi
 grep -F "go-version: '1.26.5'" "$workflow"
 grep -F 'test "$(go version | awk '\''{print $3}'\'')" = go1.26.5' "$workflow"
 
 grep -F 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1' "$workflow"
 grep -F 'actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0' "$workflow"
+grep -F 'actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3' "$workflow"
 grep -F 'CARGO_C_VERSION: 0.10.10' "$workflow"
 grep -F 'CARGO_C_SOURCE_SHA256: da2101c5bee6c4bc0d62785c7b79d74a22dd566f93f0530b70d82531d4340b80' "$workflow"
 grep -F 'CARGO_C_LOCK_SHA256: 3d9107cb39d4d3c3503eed03fd668f8c24ad94d2a836f7e8c31f782c31b4a548' "$workflow"

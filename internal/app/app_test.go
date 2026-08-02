@@ -544,25 +544,6 @@ func TestCampaignPublishUsesPublishedLatestChannelAndPromotedRuntime(t *testing.
 	}
 }
 
-func TestVendorRejectsSymlinkedManagedVersionDirectory(t *testing.T) {
-	repo, outside := t.TempDir(), t.TempDir()
-	copyManifest(t, repo, "icons-ui.yaml")
-	managed := filepath.Join(repo, "vendor", "icons", "ui", "heroicons")
-	if err := os.MkdirAll(managed, 0o755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.Symlink(outside, filepath.Join(managed, "v2.2.0")); err != nil {
-		t.Fatal(err)
-	}
-	err := Run(context.Background(), Dependencies{Repo: repo}, []string{"vendor"}, io.Discard, io.Discard)
-	if err == nil || !strings.Contains(err.Error(), "symbolic-link component") {
-		t.Fatalf("Run(vendor) error = %v, want managed symlink rejection", err)
-	}
-	if entries, err := os.ReadDir(outside); err != nil || len(entries) != 0 {
-		t.Fatalf("vendor wrote outside root: %v, %v", entries, err)
-	}
-}
-
 func TestExportAndCatalogRejectSymlinkedDist(t *testing.T) {
 	repo, outside, output := t.TempDir(), t.TempDir(), t.TempDir()
 	if err := os.WriteFile(filepath.Join(outside, "catalog.json"), []byte(`{"not":"catalog"}`), 0o644); err != nil {

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
-	"net/url"
 	"regexp"
 	"slices"
 	"strings"
@@ -15,9 +14,7 @@ import (
 )
 
 const (
-	schemaVersion    = 1
-	heroiconsCommit  = "0435d4ca364a608cc75e2f8683d374e55abbae26"
-	heroiconsBaseURL = "https://raw.githubusercontent.com/tailwindlabs/heroicons/" + heroiconsCommit + "/src/"
+	schemaVersion = 1
 )
 
 var (
@@ -26,22 +23,6 @@ var (
 	lowerHexColor    = regexp.MustCompile(`^#[0-9a-f]{6}$`)
 	expectedProducts = map[string]string{
 		"araihu": "Arai Hu", "goshtoso": "Goshtoso", "manja": "Manja", "paje": "Paje", "x9": "X9",
-	}
-	expectedUIPaths = []string{
-		"16/solid/arrow-down-tray.svg", "16/solid/arrow-down.svg", "16/solid/arrow-path.svg", "16/solid/arrow-top-right-on-square.svg",
-		"16/solid/arrow-up.svg", "16/solid/arrow-uturn-left.svg", "16/solid/arrows-up-down.svg", "16/solid/bars-3.svg", "16/solid/bell.svg",
-		"16/solid/book-open.svg", "16/solid/chart-bar.svg", "16/solid/check-circle.svg", "16/solid/check.svg", "16/solid/chevron-down.svg",
-		"16/solid/chevron-left.svg", "16/solid/chevron-right.svg", "16/solid/clipboard-document-list.svg", "16/solid/clipboard.svg",
-		"16/solid/clock.svg", "16/solid/cloud-arrow-up.svg", "16/solid/code-bracket.svg", "16/solid/cog-6-tooth.svg", "16/solid/cube.svg",
-		"16/solid/document-duplicate.svg", "16/solid/document-text.svg", "16/solid/ellipsis-horizontal.svg", "16/solid/ellipsis-vertical.svg",
-		"16/solid/exclamation-circle.svg", "16/solid/eye-slash.svg", "16/solid/eye.svg", "16/solid/face-smile.svg", "16/solid/folder.svg",
-		"16/solid/funnel.svg", "16/solid/heart.svg", "16/solid/home.svg", "16/solid/identification.svg", "16/solid/inbox.svg",
-		"16/solid/information-circle.svg", "16/solid/language.svg", "16/solid/link.svg", "16/solid/lock-closed.svg", "16/solid/magnifying-glass.svg",
-		"16/solid/microphone.svg", "16/solid/moon.svg", "16/solid/paint-brush.svg", "16/solid/paper-clip.svg", "16/solid/pause.svg",
-		"16/solid/pencil-square.svg", "16/solid/play.svg", "16/solid/plus.svg", "16/solid/printer.svg", "16/solid/queue-list.svg",
-		"16/solid/rectangle-group.svg", "16/solid/scissors.svg", "16/solid/shield-check.svg", "16/solid/sparkles.svg", "16/solid/squares-2x2.svg",
-		"16/solid/star.svg", "16/solid/sun.svg", "16/solid/table-cells.svg", "16/solid/trash.svg", "16/solid/user-circle.svg",
-		"16/solid/user.svg", "16/solid/users.svg", "16/solid/window.svg", "16/solid/x-circle.svg", "16/solid/x-mark.svg",
 	}
 )
 
@@ -79,30 +60,6 @@ type BrandRecipe struct {
 	ColorBehavior string `yaml:"color_behavior"`
 }
 
-// UI describes immutable external UI-icon source files.
-type UI struct {
-	SchemaVersion int        `yaml:"schema_version"`
-	Sources       []UISource `yaml:"sources"`
-}
-
-// UISource identifies one immutable icon release.
-type UISource struct {
-	Name       string   `yaml:"name"`
-	Alias      string   `yaml:"alias"`
-	Version    string   `yaml:"version"`
-	Commit     string   `yaml:"commit"`
-	BaseURL    string   `yaml:"base_url"`
-	License    string   `yaml:"license"`
-	LicenseURL string   `yaml:"license_url"`
-	Icons      []UIIcon `yaml:"icons"`
-}
-
-// UIIcon is one pinned source path and its expected bytes hash.
-type UIIcon struct {
-	Path   string `yaml:"path"`
-	SHA256 string `yaml:"sha256"`
-}
-
 // LoadBrand decodes a single strict YAML brand manifest and validates it.
 func LoadBrand(fsys fs.FS, name string) (Brand, error) {
 	var brand Brand
@@ -113,18 +70,6 @@ func LoadBrand(fsys fs.FS, name string) (Brand, error) {
 		return Brand{}, err
 	}
 	return brand, nil
-}
-
-// LoadUI decodes a single strict YAML UI manifest and validates it.
-func LoadUI(fsys fs.FS, name string) (UI, error) {
-	var ui UI
-	if err := decode(fsys, name, &ui); err != nil {
-		return UI{}, err
-	}
-	if err := ui.Validate(); err != nil {
-		return UI{}, err
-	}
-	return ui, nil
 }
 
 func decode(fsys fs.FS, name string, dst any) error {
@@ -361,49 +306,4 @@ func brandRecipe(artwork, appearance, surface, framing, colorBehavior string) Br
 		Name: strings.Join([]string{artwork, appearance, surface, framing}, "-"), Artwork: artwork,
 		Appearance: appearance, Surface: surface, Framing: framing, ColorBehavior: colorBehavior,
 	}
-}
-
-// Validate checks that a UI manifest is an exact, immutable Heroicons v2.2.0 lock.
-func (ui UI) Validate() error {
-	if ui.SchemaVersion != schemaVersion {
-		return fmt.Errorf("ui schema_version = %d, want %d", ui.SchemaVersion, schemaVersion)
-	}
-	if len(ui.Sources) != 1 {
-		return fmt.Errorf("ui sources = %d, want 1", len(ui.Sources))
-	}
-	source := ui.Sources[0]
-	if source.Name != "heroicons" || source.Alias != "hi" || source.Version != "v2.2.0" || source.Commit != heroiconsCommit || source.BaseURL != heroiconsBaseURL || source.License != "MIT" {
-		return errors.New("ui source must be immutable Heroicons v2.2.0")
-	}
-	if !lowerKebab.MatchString(source.Name) || !lowerKebab.MatchString(source.Alias) || !validHTTPS(source.LicenseURL) {
-		return errors.New("ui source metadata is invalid")
-	}
-	if len(source.Icons) != len(expectedUIPaths) {
-		return fmt.Errorf("ui icon count = %d, want %d", len(source.Icons), len(expectedUIPaths))
-	}
-	want := make(map[string]struct{}, len(expectedUIPaths))
-	for _, path := range expectedUIPaths {
-		want[path] = struct{}{}
-	}
-	for _, icon := range source.Icons {
-		if !fs.ValidPath(icon.Path) || !strings.HasPrefix(icon.Path, "16/solid/") || !strings.HasSuffix(icon.Path, ".svg") {
-			return fmt.Errorf("invalid ui icon path %q", icon.Path)
-		}
-		if !lowerSHA256.MatchString(icon.SHA256) {
-			return fmt.Errorf("invalid sha256 for %q", icon.Path)
-		}
-		if _, ok := want[icon.Path]; !ok {
-			return fmt.Errorf("unexpected or duplicate ui icon %q", icon.Path)
-		}
-		delete(want, icon.Path)
-	}
-	if len(want) != 0 {
-		return errors.New("ui manifest is missing expected icon paths")
-	}
-	return nil
-}
-
-func validHTTPS(raw string) bool {
-	u, err := url.Parse(raw)
-	return err == nil && u.Scheme == "https" && u.Host != "" && u.User == nil && u.Fragment == ""
 }

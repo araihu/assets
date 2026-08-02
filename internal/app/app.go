@@ -17,6 +17,7 @@ import (
 	"strings"
 	"testing/fstest"
 
+	"github.com/araihu/assets/internal/acquisition"
 	"github.com/araihu/assets/internal/build"
 	"github.com/araihu/assets/internal/campaigns"
 	"github.com/araihu/assets/internal/catalog"
@@ -30,12 +31,10 @@ import (
 	"github.com/araihu/assets/internal/transform"
 )
 
-// Dependencies contains the narrow injectable process boundaries. A nil Doer
-// uses the locked network client only for vendor; a nil Rasterizer uses pinned
-// rsvg-convert for build and verify.
+// Dependencies contains the narrow injectable process boundaries. A nil
+// Rasterizer uses pinned rsvg-convert for build and verify.
 type Dependencies struct {
 	Repo       string
-	Doer       provenance.Doer
 	Rasterizer platform.Rasterizer
 }
 
@@ -74,7 +73,7 @@ func IsUsage(err error) bool {
 	return errors.As(err, &usage)
 }
 
-// Run dispatches one asset command. Only vendor can use a network client.
+// Run dispatches one offline asset command.
 func Run(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {
 	if stdout == nil {
 		stdout = io.Discard
@@ -83,12 +82,10 @@ func Run(ctx context.Context, deps Dependencies, args []string, stdout, stderr i
 		stderr = io.Discard
 	}
 	if len(args) == 0 {
-		return usagef("usage: araihu-assets <vendor|build|verify|proof|export|catalog|themes|campaigns>")
+		return usagef("usage: araihu-assets <build|verify|proof|export|catalog|themes|campaigns>")
 	}
 
 	switch args[0] {
-	case "vendor":
-		return runVendor(ctx, deps, args[1:], stdout, stderr)
 	case "build":
 		return runBuild(ctx, deps, args[1:], stdout, stderr)
 	case "verify":
@@ -104,7 +101,7 @@ func Run(ctx context.Context, deps Dependencies, args []string, stdout, stderr i
 	case "campaigns":
 		return runCampaigns(ctx, deps, args[1:], stdout, stderr)
 	default:
-		return usagef("unknown command %q; expected vendor, build, verify, proof, export, catalog, themes, or campaigns", args[0])
+		return usagef("unknown command %q; expected build, verify, proof, export, catalog, themes, or campaigns", args[0])
 	}
 }
 
@@ -625,49 +622,6 @@ func runProof(ctx context.Context, deps Dependencies, args []string, stdout, std
 	return nil
 }
 
-func runVendor(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {
-	flags := newFlagSet("vendor", stderr, "usage: araihu-assets vendor")
-	if err := parse(flags, args); err != nil {
-		return usagef("vendor: %v", err)
-	}
-	if err := contextError("vendor", ctx); err != nil {
-		return err
-	}
-	_, repoRoot, err := openRepository(deps)
-	if err != nil {
-		return commandError("vendor", err)
-	}
-	defer repoRoot.Close()
-	ui, err := manifest.LoadUI(repoRoot.FS(), "manifests/icons-ui.yaml")
-	if err != nil {
-		return fmt.Errorf("vendor: manifest manifests/icons-ui.yaml: %w", err)
-	}
-	doer := deps.Doer
-	if doer == nil {
-		doer = provenance.NewHTTPClient()
-	}
-	for _, source := range ui.Sources {
-		if err := contextError("vendor", ctx); err != nil {
-			return err
-		}
-		path := "vendor/icons/ui/" + source.Name + "/" + source.Version
-		root, err := managedRoot(repoRoot, path, true)
-		if err != nil {
-			return fmt.Errorf("vendor: open rooted vendor path %q: %w", path, err)
-		}
-		err = provenance.Sync(ctx, doer, source, root)
-		closeErr := root.Close()
-		if err != nil {
-			return fmt.Errorf("vendor: source %s@%s: %w", source.Name, source.Version, err)
-		}
-		if closeErr != nil {
-			return fmt.Errorf("vendor: close rooted vendor path %q: %w", path, closeErr)
-		}
-		fmt.Fprintf(stdout, "vendor: %s@%s synchronized %d locked files\n", source.Name, source.Version, len(source.Icons))
-	}
-	return nil
-}
-
 func runBuild(ctx context.Context, deps Dependencies, args []string, stdout, stderr io.Writer) error {
 	flags := newFlagSet("build", stderr, "usage: araihu-assets build [--offline] [--check]")
 	offline := flags.Bool("offline", false, "assert offline generation")
@@ -844,9 +798,21 @@ func inputs(ctx context.Context, repoRoot *os.Root, deps Dependencies) (build.In
 	if err != nil {
 		return build.Inputs{}, fmt.Errorf("manifest manifests/brand.yaml: %w", err)
 	}
-	uiManifest, err := manifest.LoadUI(files, "manifests/icons-ui.yaml")
+	inventory, err := acquisition.Inventory()
 	if err != nil {
-		return build.Inputs{}, fmt.Errorf("manifest manifests/icons-ui.yaml: %w", err)
+		return build.Inputs{}, fmt.Errorf("acquisition inventory: %w", err)
+	}
+	uiFile, err := files.Open("manifests/icons-ui.yaml")
+	if err != nil {
+		return build.Inputs{}, fmt.Errorf("open manifest manifests/icons-ui.yaml: %w", err)
+	}
+	uiManifest, loadErr := provenance.LoadUI(uiFile, inventory)
+	closeErr := uiFile.Close()
+	if loadErr != nil {
+		return build.Inputs{}, fmt.Errorf("manifest manifests/icons-ui.yaml: %w", loadErr)
+	}
+	if closeErr != nil {
+		return build.Inputs{}, fmt.Errorf("close manifest manifests/icons-ui.yaml: %w", closeErr)
 	}
 	brand, err := transform.BuildBrand(files, brandManifest)
 	if err != nil {
@@ -855,7 +821,7 @@ func inputs(ctx context.Context, repoRoot *os.Root, deps Dependencies) (build.In
 	if err := ctx.Err(); err != nil {
 		return build.Inputs{}, err
 	}
-	ui, err := provenance.BuildUI(files, uiManifest)
+	ui, err := provenance.BuildUI(acquisition.Embedded(), uiManifest)
 	if err != nil {
 		return build.Inputs{}, fmt.Errorf("ui generator: %w", err)
 	}

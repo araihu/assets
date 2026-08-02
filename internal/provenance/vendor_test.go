@@ -2,263 +2,134 @@ package provenance
 
 import (
 	"bytes"
-	"context"
-	"crypto/sha256"
-	"encoding/json"
-	"errors"
-	"fmt"
+	"crypto/sha512"
+	"encoding/hex"
 	"io"
-	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 
-	"github.com/araihu/assets/internal/manifest"
+	"github.com/araihu/assets/internal/acquisition"
 	"github.com/araihu/assets/internal/sprite"
 	"github.com/araihu/assets/internal/svgasset"
 )
 
-func TestSyncDoesNotPublishHashMismatch(t *testing.T) {
-	root := openTempRoot(t)
-	err := Sync(context.Background(), fakeDoer{body: []byte("wrong")}, source("expected"), root)
-	if err == nil || !strings.Contains(err.Error(), "checksum mismatch") {
-		t.Fatalf("Sync() error = %v, want checksum mismatch", err)
-	}
-	if _, err := root.Stat("16/solid/check.svg"); !os.IsNotExist(err) {
-		t.Fatalf("published mismatched bytes: stat error = %v", err)
-	}
-}
-
-func TestSyncRejectsRedirectAndOversize(t *testing.T) {
-	root := openTempRoot(t)
-	if err := Sync(context.Background(), fakeDoer{status: http.StatusFound}, source("expected"), root); err == nil || !strings.Contains(err.Error(), "unexpected HTTP status") {
-		t.Fatalf("redirect Sync() error = %v, want unexpected HTTP status", err)
-	}
-	tooLarge := bytes.Repeat([]byte("a"), maxResponseBytes+1)
-	if err := Sync(context.Background(), fakeDoer{body: tooLarge}, source(string(tooLarge)), root); err == nil || !strings.Contains(err.Error(), "response exceeds") {
-		t.Fatalf("oversize Sync() error = %v, want response exceeds", err)
-	}
-}
-
-func TestNewHTTPClientDisablesRedirectFollowing(t *testing.T) {
-	client := NewHTTPClient()
-	if client.Timeout != 15*time.Second {
-		t.Fatalf("client timeout = %s, want 15s", client.Timeout)
-	}
-	if err := client.CheckRedirect(&http.Request{}, nil); !errors.Is(err, http.ErrUseLastResponse) {
-		t.Fatalf("CheckRedirect() error = %v, want ErrUseLastResponse", err)
+func TestMuambaHashMatchesEmbeddedBytes(t *testing.T) {
+	for _, resource := range acquisition.MuambaResources() {
+		for _, download := range resource.Downloads {
+			file, err := acquisition.MuambaOpen(resource.Name, download.Name)
+			if err != nil {
+				t.Fatalf("MuambaOpen(%s/%s): %v", resource.Name, download.Name, err)
+			}
+			data, err := io.ReadAll(file)
+			_ = file.Close()
+			if err != nil {
+				t.Fatal(err)
+			}
+			sum := sha512.Sum384(data)
+			got := "sha384:" + hex.EncodeToString(sum[:])
+			hash, ok := acquisition.MuambaHash(resource.Name, download.Name)
+			if !ok || hash != got {
+				t.Fatalf("MuambaHash(%s/%s) = %q, %v; want %q", resource.Name, download.Name, hash, ok, got)
+			}
+		}
 	}
 }
 
-func TestSyncKeepsByteIdenticalExistingFile(t *testing.T) {
-	root := openTempRoot(t)
-	contents := []byte("already verified")
-	if err := root.MkdirAll("16/solid", 0o755); err != nil {
-		t.Fatal(err)
-	}
-	if err := root.WriteFile("16/solid/check.svg", contents, 0o644); err != nil {
-		t.Fatal(err)
-	}
-	if err := Sync(context.Background(), fakeDoer{body: []byte("different")}, source(string(contents)), root); err != nil {
-		t.Fatalf("Sync() error = %v", err)
-	}
-	got, err := root.ReadFile("16/solid/check.svg")
-	if err != nil || !bytes.Equal(got, contents) {
-		t.Fatalf("existing file changed: got %q, err %v", got, err)
-	}
-}
-
-func TestSyncRejectsUnsafeSource(t *testing.T) {
-	root := openTempRoot(t)
-	s := source("expected")
-	s.BaseURL = "https://example.invalid/"
-	if err := Sync(context.Background(), fakeDoer{}, s, root); err == nil || !strings.Contains(err.Error(), "immutable Heroicons") {
-		t.Fatalf("Sync() error = %v, want immutable Heroicons", err)
-	}
-}
-
-func TestBuildUIRejectsMissingVendoredSVG(t *testing.T) {
+func TestBuildUIFromMuambaIsDeterministicAndCompatible(t *testing.T) {
 	ui := lockedUI(t)
-	root := copiedVendorRoot(t)
-	if err := os.Remove(filepath.Join(root, heroiconsVendor, "16/solid/check.svg")); err != nil {
-		t.Fatal(err)
-	}
-	if _, err := BuildUI(os.DirFS(root), ui); err == nil || !strings.Contains(err.Error(), "missing vendored SVG") {
-		t.Fatalf("BuildUI() error = %v, want missing vendored SVG", err)
-	}
-}
-
-func TestBuildUIProducesDeterministicUIArtifactsOffline(t *testing.T) {
-	ui := lockedUI(t)
-	first, err := BuildUI(os.DirFS("../.."), ui)
+	first, err := BuildUI(acquisition.Embedded(), ui)
 	if err != nil {
 		t.Fatalf("BuildUI(first) error = %v", err)
 	}
-	second, err := BuildUI(os.DirFS("../.."), ui)
+	second, err := BuildUI(acquisition.Embedded(), ui)
 	if err != nil {
 		t.Fatalf("BuildUI(second) error = %v", err)
 	}
 	if len(first.Assets) != 67 || len(first.Files) != 70 {
 		t.Fatalf("BuildUI() assets/files = %d/%d, want 67/70", len(first.Assets), len(first.Files))
 	}
-	if !bytes.Equal(first.Files["icons/ui/sprite.svg"], second.Files["icons/ui/sprite.svg"]) || !bytes.Equal(first.Files["icons/ui/heroicons/provenance.json"], second.Files["icons/ui/heroicons/provenance.json"]) {
-		t.Fatal("BuildUI() output is not deterministic")
+	for name, want := range first.Files {
+		if got := second.Files[name]; !bytes.Equal(got, want) {
+			t.Fatalf("BuildUI() changed %s between runs", name)
+		}
+		if name == "icons/ui/heroicons/provenance.json" {
+			continue
+		}
+		tracked, err := os.ReadFile("../../dist/" + name)
+		if err != nil {
+			t.Fatalf("read tracked %s: %v", name, err)
+		}
+		if !bytes.Equal(want, tracked) {
+			t.Fatalf("generated %s differs from pre-migration dist", name)
+		}
 	}
 	icon := first.Files["icons/ui/heroicons/16-solid-check.svg"]
 	if !bytes.Contains(icon, []byte(`fill="currentColor"`)) || bytes.Contains(icon, []byte(`width="16"`)) {
 		t.Fatalf("normalized icon = %s", icon)
 	}
-	for path, svg := range first.Files {
-		if !strings.HasSuffix(path, ".svg") || path == "icons/ui/sprite.svg" {
+	for name, svg := range first.Files {
+		if !strings.HasSuffix(name, ".svg") || name == "icons/ui/sprite.svg" {
 			continue
 		}
 		if _, err := svgasset.Parse(svg); err != nil {
-			t.Errorf("generated %s did not reparse: %v", path, err)
+			t.Errorf("generated %s did not reparse: %v", name, err)
 		}
-	}
-	if !bytes.Contains(first.Files["icons/ui/sprite.svg"], []byte(`id="hi-16-solid-check"`)) {
-		t.Fatal("sprite omits hi-16-solid-check")
-	}
-	uiSprite := first.Files["icons/ui/sprite.svg"]
-	checkStart := bytes.Index(uiSprite, []byte(`<symbol id="hi-16-solid-check"`))
-	if checkStart < 0 {
-		t.Fatal("sprite omits complete hi-16-solid-check symbol tag")
-	}
-	checkEnd := bytes.IndexByte(uiSprite[checkStart:], '>')
-	if checkEnd < 0 {
-		t.Fatal("sprite omits complete hi-16-solid-check symbol tag")
-	}
-	checkTag := uiSprite[checkStart : checkStart+checkEnd+1]
-	if !bytes.Contains(checkTag, []byte(`fill="none"`)) {
-		t.Fatalf("UI symbol root paint changed: %s", checkTag)
 	}
 	if err := sprite.Validate(first.Files["icons/ui/sprite.svg"]); err != nil {
 		t.Fatalf("validate generated UI sprite: %v", err)
 	}
-	if got := string(first.Files["licenses/heroicons-MIT.txt"]); got != heroiconsMIT {
-		t.Fatalf("MIT text differs:\n%s", got)
-	}
-	if !bytes.Contains(first.Files["icons/ui/heroicons/provenance.json"], []byte(`"path": "16/solid/check.svg"`)) {
-		t.Fatal("provenance JSON does not use stable public field names")
-	}
-}
-
-func TestBuildUIRejectsExtraVendoredSVG(t *testing.T) {
-	ui := lockedUI(t)
-	root := copiedVendorRoot(t)
-	extra := filepath.Join(root, heroiconsVendor, "16/solid/unexpected.svg")
-	if err := os.WriteFile(extra, []byte(`<svg viewBox="0 0 16 16"/>`), 0o644); err != nil {
-		t.Fatal(err)
-	}
-	if _, err := BuildUI(os.DirFS(root), ui); err == nil || !strings.Contains(err.Error(), "extra vendored SVG") {
-		t.Fatalf("BuildUI() error = %v, want extra vendored SVG", err)
-	}
-}
-
-func copiedVendorRoot(t *testing.T) string {
-	t.Helper()
-	root := t.TempDir()
-	destination := filepath.Join(root, heroiconsVendor)
-	if err := os.MkdirAll(destination, 0o755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.CopyFS(destination, os.DirFS(filepath.Join("../..", heroiconsVendor))); err != nil {
-		t.Fatal(err)
-	}
-	return root
-}
-
-func TestLiveSyncLockedHeroicons(t *testing.T) {
-	if os.Getenv("ARAIHU_LIVE_SYNC") != "1" {
-		t.Skip("set ARAIHU_LIVE_SYNC=1 to vendor immutable Heroicons")
-	}
-	ui := lockedUI(t)
-	if err := os.MkdirAll(filepath.Join("../..", heroiconsVendor), 0o755); err != nil {
-		t.Fatal(err)
-	}
-	root, err := os.OpenRoot(filepath.Join("../..", heroiconsVendor))
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer root.Close()
-	if err := Sync(context.Background(), NewHTTPClient(), ui.Sources[0], root); err != nil {
-		t.Fatal(err)
-	}
-}
-
-func TestGenerateTrackedUIArtifacts(t *testing.T) {
-	if os.Getenv("ARAIHU_WRITE_UI_ARTIFACTS") != "1" {
-		t.Skip("set ARAIHU_WRITE_UI_ARTIFACTS=1 to write tracked UI artifacts")
-	}
-	ui := lockedUI(t)
-	result, err := BuildUI(os.DirFS("../.."), ui)
-	if err != nil {
-		t.Fatal(err)
-	}
-	for name, data := range result.Files {
-		output := filepath.Join("../..", "dist", filepath.FromSlash(name))
-		if err := os.MkdirAll(filepath.Dir(output), 0o755); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(output, data, 0o644); err != nil {
-			t.Fatal(err)
+	provenance := first.Files["icons/ui/heroicons/provenance.json"]
+	for _, want := range []string{`"ref": "heroicons/icon-16-solid-check"`, `"integrity": "sha384-`, `"hash": "sha384:`} {
+		if !bytes.Contains(provenance, []byte(want)) {
+			t.Fatalf("provenance omits %s", want)
 		}
 	}
-	data, err := json.MarshalIndent(provenanceDocument(ui.Sources[0]), "", "  ")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join("../..", heroiconsVendor, "provenance.json"), append(data, '\n'), 0o644); err != nil {
-		t.Fatal(err)
+}
+
+func TestBuildUIRejectsMissingOrCorruptAcquisition(t *testing.T) {
+	ui := lockedUI(t)
+	for _, source := range []Source{
+		mutatedSource{Source: acquisition.Embedded(), missing: "icon-16-solid-check"},
+		mutatedSource{Source: acquisition.Embedded(), corrupt: "icon-16-solid-check"},
+	} {
+		if _, err := BuildUI(source, ui); err == nil {
+			t.Fatal("BuildUI() error = nil")
+		}
 	}
 }
 
-func lockedUI(t *testing.T) manifest.UI {
+type mutatedSource struct {
+	Source
+	missing string
+	corrupt string
+}
+
+func (source mutatedSource) Lookup(resource, download string) (Record, bool) {
+	if download == source.missing {
+		return Record{}, false
+	}
+	record, ok := source.Source.Lookup(resource, download)
+	if download == source.corrupt {
+		record.Hash = "sha384:corrupt"
+	}
+	return record, ok
+}
+
+func lockedUI(t *testing.T) UI {
 	t.Helper()
-	ui, err := manifest.LoadUI(os.DirFS("../.."), "manifests/icons-ui.yaml")
+	inventory, err := acquisition.Inventory()
+	if err != nil {
+		t.Fatal(err)
+	}
+	file, err := os.Open("../../manifests/icons-ui.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer file.Close()
+	ui, err := LoadUI(file, inventory)
 	if err != nil {
 		t.Fatal(err)
 	}
 	return ui
-}
-
-type fakeDoer struct {
-	body   []byte
-	status int
-}
-
-func (d fakeDoer) Do(*http.Request) (*http.Response, error) {
-	status := d.status
-	if status == 0 {
-		status = http.StatusOK
-	}
-	return &http.Response{StatusCode: status, Body: io.NopCloser(bytes.NewReader(d.body)), Header: make(http.Header)}, nil
-}
-
-func source(body string) manifest.UISource {
-	hash := sha256.Sum256([]byte(body))
-	return manifest.UISource{
-		Name:    "heroicons",
-		Alias:   "hi",
-		Version: "v2.2.0",
-		Commit:  heroiconsCommit,
-		BaseURL: heroiconsBaseURL,
-		License: "MIT",
-		Icons: []manifest.UIIcon{{
-			Path: "16/solid/check.svg", SHA256: fmt.Sprintf("%x", hash),
-		}},
-	}
-}
-
-func openTempRoot(t *testing.T) *os.Root {
-	t.Helper()
-	dir := t.TempDir()
-	root, err := os.OpenRoot(dir)
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() { _ = root.Close() })
-	return root
 }

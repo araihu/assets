@@ -2,278 +2,544 @@
   "source": "heroicons",
   "alias": "hi",
   "version": "v2.2.0",
-  "commit": "0435d4ca364a608cc75e2f8683d374e55abbae26",
-  "baseURL": "https://raw.githubusercontent.com/tailwindlabs/heroicons/0435d4ca364a608cc75e2f8683d374e55abbae26/src/",
   "license": "MIT",
-  "licenseURL": "https://github.com/tailwindlabs/heroicons/blob/0435d4ca364a608cc75e2f8683d374e55abbae26/LICENSE",
+  "licenseRef": "heroicons/license",
   "icons": [
     {
+      "ref": "heroicons/icon-16-solid-arrow-down-tray",
       "path": "16/solid/arrow-down-tray.svg",
-      "sha256": "90cf121bac7f3918c782f737163866320590974589410861ddad15ebfba532b7"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/arrow-down-tray.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/arrow-down-tray.svg",
+      "integrity": "sha384-hNsnU76sd2T6tCt1fTMtM6ikQblXyuOE0HLEHyENebBEfQLbtmC5Bo7bJqQp6B9J",
+      "hash": "sha384:84db2753beac7764fab42b757d332d33a8a441b957cae384d072c41f210d79b0447d02dbb660b9068edb26a429e81f49"
     },
     {
+      "ref": "heroicons/icon-16-solid-arrow-down",
       "path": "16/solid/arrow-down.svg",
-      "sha256": "5c9ec6818c879d11328ad219c3076293950e6a52411065c13ced0ed7f65cd2be"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/arrow-down.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/arrow-down.svg",
+      "integrity": "sha384-NRvCAF2E4xEBi6cco3droorlas7f6CZ2tJoO+X+I3YD7lzkSgXIog2ewVYvc7bzM",
+      "hash": "sha384:351bc2005d84e311018ba71ca3776ba28ae56acedfe82676b49a0ef97f88dd80fb9739128172288367b0558bdcedbccc"
     },
     {
+      "ref": "heroicons/icon-16-solid-arrow-path",
       "path": "16/solid/arrow-path.svg",
-      "sha256": "ea23fa4ba2a7b88b6e6b7a2d1063e2e8b8d415adae2bb65cdf51f2e1f8edc28d"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/arrow-path.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/arrow-path.svg",
+      "integrity": "sha384-KUxmFcVU1DRz5ryLUCK8pfQG6z1U+8QdI7Baw9Be5PS/bH8Chm8SqEoEQLDo9lL6",
+      "hash": "sha384:294c6615c554d43473e6bc8b5022bca5f406eb3d54fbc41d23b05ac3d05ee4f4bf6c7f02866f12a84a0440b0e8f652fa"
     },
     {
+      "ref": "heroicons/icon-16-solid-arrow-top-right-on-square",
       "path": "16/solid/arrow-top-right-on-square.svg",
-      "sha256": "e41ec99af49ac0668602bfb1813ed33bfc0062a85fd09064d30b3edb4e499ab9"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/arrow-top-right-on-square.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/arrow-top-right-on-square.svg",
+      "integrity": "sha384-rqACaOHudow8vuhcEpx6lPZU7GDQU06/UKdZ3ObGWSdxhOSXYUK8We2E0SEVBzZW",
+      "hash": "sha384:aea00268e1ee768c3cbee85c129c7a94f654ec60d0534ebf50a759dce6c659277184e4976142bc59ed84d12115073656"
     },
     {
+      "ref": "heroicons/icon-16-solid-arrow-up",
       "path": "16/solid/arrow-up.svg",
-      "sha256": "f1c8f1df4d7b4d7db0644552b3f3fbfe844e582544f8f4709f82e677d3188b55"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/arrow-up.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/arrow-up.svg",
+      "integrity": "sha384-H7lrqD2w2qR8TQjTxzWiiKbOflTXTLGdf7RqQn55gyRi95xsNvbtMshSmYX3jbuy",
+      "hash": "sha384:1fb96ba83db0daa47c4d08d3c735a288a6ce7e54d74cb19d7fb46a427e79832462f79c6c36f6ed32c8529985f78dbbb2"
     },
     {
+      "ref": "heroicons/icon-16-solid-arrow-uturn-left",
       "path": "16/solid/arrow-uturn-left.svg",
-      "sha256": "5e4488ed8001fcc19f98db4f3ecad1cc8dbc6b762709a8df695f7a1d86f021a9"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/arrow-uturn-left.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/arrow-uturn-left.svg",
+      "integrity": "sha384-vRyg3Wsc3rCM3lSd8/Pw6kFuyHIJJ1q3oMqq8j/yeOK5j+CRTy+ZNkS3HB9oap49",
+      "hash": "sha384:bd1ca0dd6b1cdeb08cde549df3f3f0ea416ec87209275ab7a0caaaf23ff278e2b98fe0914f2f993644b71c1f686a9e3d"
     },
     {
+      "ref": "heroicons/icon-16-solid-arrows-up-down",
       "path": "16/solid/arrows-up-down.svg",
-      "sha256": "20509f2e289c7ec77554991efe2bc91bcfce489cee03d8d97ee2e84ba1282847"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/arrows-up-down.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/arrows-up-down.svg",
+      "integrity": "sha384-vcYLU3Tc3NPM27yu8EBjkZFIwANS6Fa82t0Jh45uHozDA3NNgaZSSDlQ36Gxlpgs",
+      "hash": "sha384:bdc60b5374dcdcd3ccdbbcaef04063919148c00352e856bcdadd09878e6e1e8cc303734d81a652483950dfa1b196982c"
     },
     {
+      "ref": "heroicons/icon-16-solid-bars-3",
       "path": "16/solid/bars-3.svg",
-      "sha256": "4802c7fe0a38b31ede2fa633d1c5dd7fd10ed722ea791c70fa043ee06ec8fd08"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/bars-3.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/bars-3.svg",
+      "integrity": "sha384-Qk1v9XnJBwVbh8fj6WHoW+gXGKGBY0jh+ZJ7H/cqNOQ5ACOAi8bGmMkORbDhjbVE",
+      "hash": "sha384:424d6ff579c907055b87c7e3e961e85be81718a1816348e1f9927b1ff72a34e4390023808bc6c698c90e45b0e18db544"
     },
     {
+      "ref": "heroicons/icon-16-solid-bell",
       "path": "16/solid/bell.svg",
-      "sha256": "e2dcfe766951927fc3f87498ee3c18b9d6e87dc7a83ee6aaba1b34894f22d629"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/bell.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/bell.svg",
+      "integrity": "sha384-jGRTfAeO2qBEobuZIhFH6gthp+OOF7VTCZbi3uUwB594p5ANMFmCKe95325P9r7t",
+      "hash": "sha384:8c64537c078edaa044a1bb99221147ea0b61a7e38e17b5530996e2dee530079f78a7900d30598229ef79df6e4ff6beed"
     },
     {
+      "ref": "heroicons/icon-16-solid-book-open",
       "path": "16/solid/book-open.svg",
-      "sha256": "61f01901ccc59ca87cca9e4487020b529b413deef0ae0b82e0b1c02c326e467a"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/book-open.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/book-open.svg",
+      "integrity": "sha384-fydaKUNzNjkG6LvUMjZ61D1yIhmYYWMMKcl9ZtXkYEI/6jWxVXbNMk3UVhB6dShk",
+      "hash": "sha384:7f275a294373363906e8bbd432367ad43d7222199861630c29c97d66d5e460423fea35b15576cd324dd456107a752864"
     },
     {
+      "ref": "heroicons/icon-16-solid-chart-bar",
       "path": "16/solid/chart-bar.svg",
-      "sha256": "6edb5810e425e86d41d3a0197d77e0b6e521379486b7bd98a53979bd79ee405f"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/chart-bar.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/chart-bar.svg",
+      "integrity": "sha384-y8SF6rd97UA2sj6QlFq+YYE8P5uxO2LqshaQ0HeP6Sk7ZSKXqw6B/jMDKP8O2j3N",
+      "hash": "sha384:cbc485eab77ded4036b23e90945abe61813c3f9bb13b62eab21690d0778fe9293b652297ab0e81fe330328ff0eda3dcd"
     },
     {
+      "ref": "heroicons/icon-16-solid-check-circle",
       "path": "16/solid/check-circle.svg",
-      "sha256": "bb5dabf320d6970f7148799b41fe97092a8e92e35f4c6ffe156f5c0737fddac9"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/check-circle.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/check-circle.svg",
+      "integrity": "sha384-QseYNwhrfaw0hzzlMhb0thoTOPUg0yRBxVLyYln1vghm0XvLmo9UHVE+n3E0vSx3",
+      "hash": "sha384:42c79837086b7dac34873ce53216f4b61a1338f520d32441c552f26259f5be0866d17bcb9a8f541d513e9f7134bd2c77"
     },
     {
+      "ref": "heroicons/icon-16-solid-check",
       "path": "16/solid/check.svg",
-      "sha256": "b5a5d971ddd76d57b332eaf2d8038579027a58459783f1f2a08cb27a7e8a2249"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/check.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/check.svg",
+      "integrity": "sha384-Gl7H7nRABhJv4dqRis/5adnCxoo0Nt1KrsrOYgU8YbM63MgBXkNXFeHwbO5QvdyI",
+      "hash": "sha384:1a5ec7ee744006126fe1da918acff969d9c2c68a3436dd4aaecace62053c61b33adcc8015e435715e1f06cee50bddc88"
     },
     {
+      "ref": "heroicons/icon-16-solid-chevron-down",
       "path": "16/solid/chevron-down.svg",
-      "sha256": "867478b3f831f96a0a41d08ae470cddbdbbba83733ef50ff15765a654aa567d5"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/chevron-down.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/chevron-down.svg",
+      "integrity": "sha384-l8XzbwThNc+uNzWGOR0xfx58ZH4gYsc4T3tlXPZG5GpfstpvIVcjeQhXF0S0tf2v",
+      "hash": "sha384:97c5f36f04e135cfae373586391d317f1e7c647e2062c7384f7b655cf646e46a5fb2da6f2157237908571744b4b5fdaf"
     },
     {
+      "ref": "heroicons/icon-16-solid-chevron-left",
       "path": "16/solid/chevron-left.svg",
-      "sha256": "33e3759c5b2d19fe107b33bfded6633f4b57d64a81938e03cd689fc92fd79511"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/chevron-left.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/chevron-left.svg",
+      "integrity": "sha384-6vlarSPTJiZgiH5vN/3L09mTvIWIWL/MeTp2b8TtHYbqSbwtSm+9uHN2sikT3AWw",
+      "hash": "sha384:eaf95aad23d3262660887e6f37fdcbd3d993bc858858bfcc793a766fc4ed1d86ea49bc2d4a6fbdb87376b22913dc05b0"
     },
     {
+      "ref": "heroicons/icon-16-solid-chevron-right",
       "path": "16/solid/chevron-right.svg",
-      "sha256": "a53229bb9a597eeba5868aea2f1692cdf2092bcdf95a08736ce5278fb13502bc"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/chevron-right.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/chevron-right.svg",
+      "integrity": "sha384-2yj3eluh8DJWAWvmGYYtO7ilk6eSvgCTuEpamz5PVlvYkzw+Z8DTya4Sq3rzrUiN",
+      "hash": "sha384:db28f77a5ba1f03256016be619862d3bb8a593a792be0093b84a5a9b3e4f565bd8933c3e67c0d3c9ae12ab7af3ad488d"
     },
     {
+      "ref": "heroicons/icon-16-solid-clipboard-document-list",
       "path": "16/solid/clipboard-document-list.svg",
-      "sha256": "852f529cc17f192a2b7f0af7a95ebd21bbdfc8fd41d1669ce5c0a4d0d96cbdf9"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/clipboard-document-list.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/clipboard-document-list.svg",
+      "integrity": "sha384-ZeA5tJFfTyy8ioYRBpZUL5vb/g0+8V6+ks/e34haXCMZOQORd/wpVGgVoj/jfzmw",
+      "hash": "sha384:65e039b4915f4f2cbc8a86110696542f9bdbfe0d3ef15ebe92cfdedf885a5c231939039177fc29546815a23fe37f39b0"
     },
     {
+      "ref": "heroicons/icon-16-solid-clipboard",
       "path": "16/solid/clipboard.svg",
-      "sha256": "59f09f7f5d8df3c6b8e9eaa2a4e0870b2c64fd739129d416cdb7ac27704c08f3"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/clipboard.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/clipboard.svg",
+      "integrity": "sha384-RWwLEh6fpHnbVKzxePuwxzEYHsldRg0Q4xHiwtcly5pxB44gXNoEkwWKbxZHFDG1",
+      "hash": "sha384:456c0b121e9fa479db54acf178fbb0c731181ec95d460d10e311e2c2d725cb9a71078e205cda0493058a6f16471431b5"
     },
     {
+      "ref": "heroicons/icon-16-solid-clock",
       "path": "16/solid/clock.svg",
-      "sha256": "b7ca75a4291b0fbf4e79cab5ae46476fd06f1b4c20cedb7cc2a5c395bbee2e48"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/clock.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/clock.svg",
+      "integrity": "sha384-vE7Xv5qmQzwCVv/9Z2YGqVVYUBxMETO1QVT+OsBSBQ0Xkxr4LtKRLJXimQnbR864",
+      "hash": "sha384:bc4ed7bf9aa6433c0256fffd676606a95558501c4c1133b54154fe3ac052050d17931af82ed2912c95e29909db47ceb8"
     },
     {
+      "ref": "heroicons/icon-16-solid-cloud-arrow-up",
       "path": "16/solid/cloud-arrow-up.svg",
-      "sha256": "ef2c43395afdc45e02cd13a19e8afd88b032fa31166a5b4306884448c9aa3521"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/cloud-arrow-up.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/cloud-arrow-up.svg",
+      "integrity": "sha384-FIT9OuMxEev926ZVWpa+H+kKKsjsGCv0ah7H8iYJ3N4SEg1N3y70qheTi21Arez5",
+      "hash": "sha384:1484fd3ae33111ebfddba6555a96be1fe90a2ac8ec182bf46a1ec7f22609dcde12120d4ddf2ef4aa17938b6d40adecf9"
     },
     {
+      "ref": "heroicons/icon-16-solid-code-bracket",
       "path": "16/solid/code-bracket.svg",
-      "sha256": "6a3bea33e662d071abbd899d7452dc7ab384c683c9dce1c1a3b7b63db7330e33"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/code-bracket.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/code-bracket.svg",
+      "integrity": "sha384-dqAydkLscQ+ru/irA8fcgg5jcwltsCHIjwDHmDQi9/yAhFypVX7MQF/SOghmtCxO",
+      "hash": "sha384:76a0327642ec710fabbbf8ab03c7dc820e6373096db021c88f00c7983422f7fc80845ca9557ecc405fd23a0866b42c4e"
     },
     {
+      "ref": "heroicons/icon-16-solid-cog-6-tooth",
       "path": "16/solid/cog-6-tooth.svg",
-      "sha256": "0b2c3c29f86596732e5c5bec3392aae092fff3492822c3c614f7d305428a140a"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/cog-6-tooth.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/cog-6-tooth.svg",
+      "integrity": "sha384-DdiTiAUNw0Cn+Z+3serE4UV1ekUIrs9IyjuteHrwOR2Te9g52f41rGwv7PfgQEvB",
+      "hash": "sha384:0dd89388050dc340a7f99fb7b1eac4e145757a4508aecf48ca3bad787af0391d937bd839d9fe35ac6c2fecf7e0404bc1"
     },
     {
+      "ref": "heroicons/icon-16-solid-cube",
       "path": "16/solid/cube.svg",
-      "sha256": "47a69af9398e812ce64d025bc09bc34ee0ced96b0eb23de84f082f9f3c9ee870"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/cube.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/cube.svg",
+      "integrity": "sha384-bWmFS6ihsF7MbvjzmLRUDcc+mRk7vhkR0O0DCCaP8Qv1EfGAhGDsmKdg5f+FEhgT",
+      "hash": "sha384:6d69854ba8a1b05ecc6ef8f398b4540dc73e99193bbe1911d0ed0308268ff10bf511f1808460ec98a760e5ff85121813"
     },
     {
+      "ref": "heroicons/icon-16-solid-document-duplicate",
       "path": "16/solid/document-duplicate.svg",
-      "sha256": "e8c8e5e9d96a0c24cfdfb4004de0e8312121684b17554c388fa68ec5b66fcec1"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/document-duplicate.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/document-duplicate.svg",
+      "integrity": "sha384-/1srTetbgQ1QNQqsAOnb8k8wGJInPWqYP+MpVIaz+xXG3PeRXf5y6atxTApVbV3a",
+      "hash": "sha384:ff5b2b4deb5b810d50350aac00e9dbf24f301892273d6a983fe3295486b3fb15c6dcf7915dfe72e9ab714c0a556d5dda"
     },
     {
+      "ref": "heroicons/icon-16-solid-document-text",
       "path": "16/solid/document-text.svg",
-      "sha256": "ab3affc12c70340a5777f57f881a6e2dfb0ad2c197c273559c73639eeec3a217"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/document-text.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/document-text.svg",
+      "integrity": "sha384-UZ2Xp3xIzZ9L8Bm9u/OLqd50gpWl2gHsZpMWvXD+GfI5p5Erbr7FFh9KornGjHSk",
+      "hash": "sha384:519d97a77c48cd9f4bf019bdbbf38ba9de748295a5da01ec669316bd70fe19f239a7912b6ebec5161f4aa2b9c68c74a4"
     },
     {
+      "ref": "heroicons/icon-16-solid-ellipsis-horizontal",
       "path": "16/solid/ellipsis-horizontal.svg",
-      "sha256": "6aa3eaae3f1a801bc3f648957fb9093b0eb7d6a9d69df1346d1d35d4acca3c71"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/ellipsis-horizontal.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/ellipsis-horizontal.svg",
+      "integrity": "sha384-lhE5n4mctkT4Jc8iPm16NKa4EfuY8/byz+O+YCMQHhet3OoEREqcXLqg2rgWlbLq",
+      "hash": "sha384:9611399f899cb644f825cf223e6d7a34a6b811fb98f3f6f2cfe3be6023101e17addcea04444a9c5cbaa0dab81695b2ea"
     },
     {
+      "ref": "heroicons/icon-16-solid-ellipsis-vertical",
       "path": "16/solid/ellipsis-vertical.svg",
-      "sha256": "171d39a60fbd8f23b2904b8ce725c470242db905b4704fee283f31ad38f64ce0"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/ellipsis-vertical.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/ellipsis-vertical.svg",
+      "integrity": "sha384-Asmxv5FN0uCs+C9obzictdf6px1g4k9JS9x4oK2mu/ORUH1W1F7WD3PupBCI4N1N",
+      "hash": "sha384:02c9b1bf914dd2e0acf82f686f389cb5d7faa71d60e24f494bdc78a0ada6bbf391507d56d45ed60f73eea41088e0dd4d"
     },
     {
+      "ref": "heroicons/icon-16-solid-exclamation-circle",
       "path": "16/solid/exclamation-circle.svg",
-      "sha256": "09bbed311fd5f4e9d725a13b7f9c831598a8664d1e3209a1619f3018f3596e6b"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/exclamation-circle.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/exclamation-circle.svg",
+      "integrity": "sha384-jTQqVCRJQNrNIC/YhlnupWAiWEZTxD/8uY53HixbFgiV2eLVLw8C0ix8ZdmgSCbf",
+      "hash": "sha384:8d342a54244940dacd202fd88659eea56022584653c43ffcb98e771e2c5b160895d9e2d52f0f02d22c7c65d9a04826df"
     },
     {
+      "ref": "heroicons/icon-16-solid-eye-slash",
       "path": "16/solid/eye-slash.svg",
-      "sha256": "520435c6fc9de08979b1445b6a1114ab9ae353388ed415f82f9d618c07ec4aa2"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/eye-slash.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/eye-slash.svg",
+      "integrity": "sha384-p/8Vj1FKXv83doOjMS4wuVCg/eE6pLUw+V1w49zwd2rbqtOd2Ymi+6kKag7eI1UQ",
+      "hash": "sha384:a7ff158f514a5eff377683a3312e30b950a0fde13aa4b530f95d70e3dcf0776adbaad39dd989a2fba90a6a0ede235510"
     },
     {
+      "ref": "heroicons/icon-16-solid-eye",
       "path": "16/solid/eye.svg",
-      "sha256": "a3c9e54224fa611edbd3c5826bf07abed5374807e3193f24ba7bd3d5ecc082d2"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/eye.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/eye.svg",
+      "integrity": "sha384-yfj4TeIs8F8KO0uDTc4vwEWmWCGNc6Xb3Yi3IME2fqNBhWhbqMGp+ckKU14sCR3T",
+      "hash": "sha384:c9f8f84de22cf05f0a3b4b834dce2fc045a658218d73a5dbdd88b720c1367ea34185685ba8c1a9f9c90a535e2c091dd3"
     },
     {
+      "ref": "heroicons/icon-16-solid-face-smile",
       "path": "16/solid/face-smile.svg",
-      "sha256": "87d8fa688ac0a8e030246ea7ee04595db47fc5ea2614b7f60832088a59507e49"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/face-smile.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/face-smile.svg",
+      "integrity": "sha384-Udqkpj2y3jDDA/UgK6xe/bZBAH91HMqhV3+FY0bRD0mYTZ+oHXJC/2JC7Ttl9A2d",
+      "hash": "sha384:51daa4a63db2de30c303f5202bac5efdb641007f751ccaa1577f856346d10f49984d9fa81d7242ff6242ed3b65f40d9d"
     },
     {
+      "ref": "heroicons/icon-16-solid-folder",
       "path": "16/solid/folder.svg",
-      "sha256": "0fc7d7f9c6ee8624313ac12102bd1948653c08344127d51399833995b224e210"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/folder.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/folder.svg",
+      "integrity": "sha384-COoy8zU2yddZQ1fN+99PDF24rcHK8uS0K8p106yeun01xGPA0CXb6KZ4cUGrQHRV",
+      "hash": "sha384:08ea32f33536c9d7594357cdfbdf4f0c5db8adc1caf2e4b42bca75d3ac9eba7d35c463c0d025dbe8a6787141ab407455"
     },
     {
+      "ref": "heroicons/icon-16-solid-funnel",
       "path": "16/solid/funnel.svg",
-      "sha256": "533b3f3d1447936d0f429f14aba7c7f899c4e9717edcd7b37c1a1813c890de5e"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/funnel.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/funnel.svg",
+      "integrity": "sha384-hHXNn+wTXp4BsDuqxTc3JGNWtqxibsp6JwLj3rz7sVxRgc0Sru5laCXP6TwNFHQm",
+      "hash": "sha384:8475cd9fec135e9e01b03baac53737246356b6ac626eca7a2702e3debcfbb15c5181cd12aeee656825cfe93c0d147426"
     },
     {
+      "ref": "heroicons/icon-16-solid-heart",
       "path": "16/solid/heart.svg",
-      "sha256": "6e49d8f488665cc3f80661acbc786f3ef4c81414342bbd3eb76bdd03cebfc500"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/heart.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/heart.svg",
+      "integrity": "sha384-g/lo3Pzv6dBJKbkICFUqHzzaMF0+3D5/XrI8pHnFUmCk/dVy12bERcEqm+cHSihE",
+      "hash": "sha384:83f968dcfcefe9d04929b90808552a1f3cda305d3edc3e7f5eb23ca479c55260a4fdd572d766c445c12a9be7074a2844"
     },
     {
+      "ref": "heroicons/icon-16-solid-home",
       "path": "16/solid/home.svg",
-      "sha256": "ed31f5b1e6bcdc4443884fa628aa32af997560e70fab6d30d275349d09fd7716"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/home.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/home.svg",
+      "integrity": "sha384-/i02k5/2nLpexGBnbUxIcQZf8C6LbsGI0s203/v5fGaYiII32BobvDTX74g/6seu",
+      "hash": "sha384:fe2d36939ff69cba5ec460676d4c4871065ff02e8b6ec188d2cdb4dffbf97c6698888237d81a1bbc34d7ef883feac7ae"
     },
     {
+      "ref": "heroicons/icon-16-solid-identification",
       "path": "16/solid/identification.svg",
-      "sha256": "e274895cf2d56c6791a978c3c7dd8ba441d447f85b063817bb2c7bd339b904f9"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/identification.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/identification.svg",
+      "integrity": "sha384-r3E+VrPeuM5h0njsiXHeMeWQI2i2E4o9L/UNDnSNt2TM1ecp0cIjk6SOw3KwgYIY",
+      "hash": "sha384:af713e56b3deb8ce61d278ec8971de31e5902368b6138a3d2ff50d0e748db764ccd5e729d1c22393a48ec372b0818218"
     },
     {
+      "ref": "heroicons/icon-16-solid-inbox",
       "path": "16/solid/inbox.svg",
-      "sha256": "64fab1d0ae1b522524131c40e5c958eaa88ef63a867ab36f00be87265eb30717"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/inbox.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/inbox.svg",
+      "integrity": "sha384-uK0AvwafB0wz0PReU+f0RTTwNYyfy3gBJXQZoELZWe2i1m2WjTil9/WdI/JeHPXS",
+      "hash": "sha384:b8ad00bf069f074c33d0f45e53e7f44534f0358c9fcb7801257419a042d959eda2d66d968d38a5f7f59d23f25e1cf5d2"
     },
     {
+      "ref": "heroicons/icon-16-solid-information-circle",
       "path": "16/solid/information-circle.svg",
-      "sha256": "aa778b0665df259d78cf69a61121186d8013cde895d5098a59340873d4c73bcd"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/information-circle.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/information-circle.svg",
+      "integrity": "sha384-c1GBP1jZVNXK/qOFms5TXqW8tyHDsMmrbmsHwP5zLW/2dTgmlFsVTvsEt2sXQA9i",
+      "hash": "sha384:7351813f58d954d5cafea3859ace535ea5bcb721c3b0c9ab6e6b07c0fe732d6ff6753826945b154efb04b76b17400f62"
     },
     {
+      "ref": "heroicons/icon-16-solid-language",
       "path": "16/solid/language.svg",
-      "sha256": "409b36bae472dc7401195c4de65928e92bd0689c0ab632424ebde841c6bb150d"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/language.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/language.svg",
+      "integrity": "sha384-dhrv/NJo7MePHUnc8t54Bs6pM5uJrymC8ITUZQLid8nPEFD3iMXVU8Kx/71x2LgB",
+      "hash": "sha384:761aeffcd268ecc78f1d49dcf2de7806cea9339b89af2982f084d46502e277c9cf1050f788c5d553c2b1ffbd71d8b801"
     },
     {
+      "ref": "heroicons/icon-16-solid-link",
       "path": "16/solid/link.svg",
-      "sha256": "dafd2bf1109368e380ee596c96be64e1a7bc25a89b4e6a7f749b8a563bf8096f"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/link.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/link.svg",
+      "integrity": "sha384-5AZe4sqojzsfPfA2nIyxaz8+nQT3umhCI7w0fwRcURd3nylHdMYz50c62JLhviKf",
+      "hash": "sha384:e4065ee2caa88f3b1f3df0369c8cb16b3f3e9d04f7ba684223bc347f045c5117779f294774c633e7473ad892e1be229f"
     },
     {
+      "ref": "heroicons/icon-16-solid-lock-closed",
       "path": "16/solid/lock-closed.svg",
-      "sha256": "90c3a11f1e398248085225416ccf6e60fc1c3e6ed49a9e98b2887d66ec39cc7b"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/lock-closed.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/lock-closed.svg",
+      "integrity": "sha384-+V6ZW4VJfGTdDYvIRjPCLWt6CLBBk+6h74mS6mHtTnsn+wWBrGchSMr1lMW/QjeX",
+      "hash": "sha384:f95e995b85497c64dd0d8bc84633c22d6b7a08b04193eea1ef8992ea61ed4e7b27fb0581ac672148caf594c5bf423797"
     },
     {
+      "ref": "heroicons/icon-16-solid-magnifying-glass",
       "path": "16/solid/magnifying-glass.svg",
-      "sha256": "d2b669134fbfa03fb3a59935a9483acfd8ccfa49f270bb9546226b5e51ef5712"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/magnifying-glass.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/magnifying-glass.svg",
+      "integrity": "sha384-+Mhuh2g4BaKbsZniX9zvfZuZeM4IExgxWAPwyloZ/+jtgz4fY48EFiM1JL8GLxpL",
+      "hash": "sha384:f8c86e87683805a29bb199e25fdcef7d9b9978ce081318315803f0ca5a19ffe8ed833e1f638f0416233524bf062f1a4b"
     },
     {
+      "ref": "heroicons/icon-16-solid-microphone",
       "path": "16/solid/microphone.svg",
-      "sha256": "24c355cf961617f985b74db5926f040eff0803ede6a80eb70eb8ceb330958d68"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/microphone.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/microphone.svg",
+      "integrity": "sha384-VZjS0+PbTr+zPlpasiQuCnNt7vgxVIkxkcvLB4r72C7p03oiObfrUbNy1f0VKZYt",
+      "hash": "sha384:5598d2d3e3db4ebfb33e5a5ab2242e0a736deef83154893191cbcb078afbd82ee9d37a2239b7eb51b372d5fd1529962d"
     },
     {
+      "ref": "heroicons/icon-16-solid-moon",
       "path": "16/solid/moon.svg",
-      "sha256": "b0b747d68effc8262d3dbc26cff27fbc2854466f24a50c5063bc2092408ed6da"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/moon.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/moon.svg",
+      "integrity": "sha384-j8513soMk9g3VaFpZe3GEBP0af0CYsAC4UBTINS3f9QZu32BeD0bre1dw77TkFjp",
+      "hash": "sha384:8fce75deca0c93d83755a16965edc61013f469fd0262c002e1405320d4b77fd419bb7d81783d1baded5dc3bed39058e9"
     },
     {
+      "ref": "heroicons/icon-16-solid-paint-brush",
       "path": "16/solid/paint-brush.svg",
-      "sha256": "e2cb942e058abc3ae2eafa5c8f0a94aada23fdd692ffffc260ebcb0592ca4b2e"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/paint-brush.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/paint-brush.svg",
+      "integrity": "sha384-4pBVb8VREzdceLiU97bpBNWb8nmOHjnTflAhZdiccjaWs1dLkdvFAGkbMMdzD09o",
+      "hash": "sha384:e290556fc55113375c78b894f7b6e904d59bf2798e1e39d37e502165d89c723696b3574b91dbc500691b30c7730f4f68"
     },
     {
+      "ref": "heroicons/icon-16-solid-paper-clip",
       "path": "16/solid/paper-clip.svg",
-      "sha256": "62eff5163ca0c81bff1263aff184d1cd54662ec98adcda8bd155d74376717e53"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/paper-clip.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/paper-clip.svg",
+      "integrity": "sha384-9y7cBJwi/ELZ9qHnNWceNENZiR6+l3DtfSNYVXCCYBn8znVFBq9Z+MTTFABZ1UPG",
+      "hash": "sha384:f72edc049c22fc42d9f6a1e735671e344359891ebe9770ed7d23585570826019fcce754506af59f8c4d3140059d543c6"
     },
     {
+      "ref": "heroicons/icon-16-solid-pause",
       "path": "16/solid/pause.svg",
-      "sha256": "68d8abfbeb92884474170a24f581ad9884bfe4d1ad6f77fb94611f7c35cb3f7d"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/pause.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/pause.svg",
+      "integrity": "sha384-HfVUT680n/VkZP6OCBiWhYDfqE1RfHkl4+pOG744KqxHQsBUCmOrz3cgrRgaBAo5",
+      "hash": "sha384:1df5544faf349ff56464fe8e0818968580dfa84d517c7925e3ea4e1bbe382aac4742c0540a63abcf7720ad181a040a39"
     },
     {
+      "ref": "heroicons/icon-16-solid-pencil-square",
       "path": "16/solid/pencil-square.svg",
-      "sha256": "0faba7f9d56bef39647c65426b187052e927eff9651009d347d338f8bcf5a7d8"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/pencil-square.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/pencil-square.svg",
+      "integrity": "sha384-cDy4+YtP9bilyOiPJk+QlWKkthuehGv9otJcaEfFCAkap3kc/bbTGkhx/i/K275J",
+      "hash": "sha384:703cb8f98b4ff5b8a5c8e88f264f909562a4b61b9e846bfda2d25c6847c508091aa7791cfdb6d31a4871fe2fcadbbe49"
     },
     {
+      "ref": "heroicons/icon-16-solid-play",
       "path": "16/solid/play.svg",
-      "sha256": "c0c5e621010d4c7214c065b5cbfbf5e92c584a3cdb3fb8e864cd7eaf24aec906"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/play.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/play.svg",
+      "integrity": "sha384-d8CWsOQ9fcx9I8C0/ur5qOmlpOMx9ppFnc3QgJVrFauOROJLJ4wBjuDcaNI+yZy5",
+      "hash": "sha384:77c096b0e43d7dcc7d23c0b4feeaf9a8e9a5a4e331f69a459dcdd080956b15ab8e44e24b278c018ee0dc68d23ec99cb9"
     },
     {
+      "ref": "heroicons/icon-16-solid-plus",
       "path": "16/solid/plus.svg",
-      "sha256": "7efeb2aa6611c1de57d0e32339f3cbbf02e7b349ce204dfdf34fdd136f58bc99"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/plus.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/plus.svg",
+      "integrity": "sha384-DjtxBeAOR9NWyu0rr6ZzQmIEXmAH0uxeeGGfkc8+jK8LkbgSUdGJu0ccKkKMGY9j",
+      "hash": "sha384:0e3b7105e00e47d356caed2bafa6734262045e6007d2ec5e78619f91cf3e8caf0b91b81251d189bb471c2a428c198f63"
     },
     {
+      "ref": "heroicons/icon-16-solid-printer",
       "path": "16/solid/printer.svg",
-      "sha256": "a25544f5ec9b8c4ac1cb58710222c594cfcd15e4f38e9ab3dd7d481eb503c6e9"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/printer.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/printer.svg",
+      "integrity": "sha384-js2xoY1iG6MzGc/dHoUML7QWDejh4fqz3os9HsnLT5wuZyqbmNR6Ya/p1y7akyVN",
+      "hash": "sha384:8ecdb1a18d621ba33319cfdd1e850c2fb4160de8e1e1fab3de8b3d1ec9cb4f9c2e672a9b98d47a61afe9d72eda93254d"
     },
     {
+      "ref": "heroicons/icon-16-solid-queue-list",
       "path": "16/solid/queue-list.svg",
-      "sha256": "52dd2256ad59fc37806e6d1f6404b55dd955dd4de3c9e753c968a17522c9dc30"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/queue-list.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/queue-list.svg",
+      "integrity": "sha384-Sygeg5mef6rL5ZT+H2KYBWKzhWOnLJazcNLblrimr2n6CHVC7zEk/92pOAI6lt1Q",
+      "hash": "sha384:4b281e83999e7faacbe594fe1f62980562b38563a72c96b370d2db96b8a6af69fa087542ef3124ffdda938023a96dd50"
     },
     {
+      "ref": "heroicons/icon-16-solid-rectangle-group",
       "path": "16/solid/rectangle-group.svg",
-      "sha256": "63ff0c37ec28fe7f6f5fa9ff59aa93a0f06f6552bb5ef9f3f7fa4c5891007419"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/rectangle-group.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/rectangle-group.svg",
+      "integrity": "sha384-9Ctd1OJi/x7ULZ2ZEhTYBjkLJTXe+qxI8tfKLXvCpXrcrkZPRKMsliiq+JTp95y0",
+      "hash": "sha384:f42b5dd4e262ff1ed42d9d991214d806390b2535defaac48f2d7ca2d7bc2a57adcae464f44a32c9628aaf894e9f79cb4"
     },
     {
+      "ref": "heroicons/icon-16-solid-scissors",
       "path": "16/solid/scissors.svg",
-      "sha256": "d79c4d3c3e4083536e8029ff32c537907b7733ceb715e65cb9d5240b5f418b8e"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/scissors.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/scissors.svg",
+      "integrity": "sha384-Et/gufq7krjtTd2e/edJSYfJM1k+wKoJL4vS3tCw81g9psaGA7k7wtzSy7bUaEiN",
+      "hash": "sha384:12dfe0b9fabb92b8ed4ddd9efde7494987c933593ec0aa092f8bd2ded0b0f3583da6c68603b93bc2dcd2cbb6d468488d"
     },
     {
+      "ref": "heroicons/icon-16-solid-shield-check",
       "path": "16/solid/shield-check.svg",
-      "sha256": "1db071e819bc8773fe69d0c4f1f023012d834f3e44236732185e8f2e00974d43"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/shield-check.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/shield-check.svg",
+      "integrity": "sha384-a3u+v7Y6AaR1bLx/xUJNG5yyDckD6QFNhPG4sqZ3xlSQO0YAv+ilxzCo+IjsadZa",
+      "hash": "sha384:6b7bbebfb63a01a4756cbc7fc5424d1b9cb20dc903e9014d84f1b8b2a677c654903b4600bfe8a5c730a8f888ec69d65a"
     },
     {
+      "ref": "heroicons/icon-16-solid-sparkles",
       "path": "16/solid/sparkles.svg",
-      "sha256": "96d70a7c68282d92a401db564c458359c1ff7fdbccd90b69184c1b100338d900"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/sparkles.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/sparkles.svg",
+      "integrity": "sha384-Yp8ciBu9oPiJz/bxSSrKfla97d2BNEWTjxfmPOiC6xngRG+MqYOg3jcbPzNb5kz0",
+      "hash": "sha384:629f1c881bbda0f889cff6f1492aca7e56bdeddd813445938f17e63ce882eb19e0446f8ca983a0de371b3f335be64cf4"
     },
     {
+      "ref": "heroicons/icon-16-solid-squares-2x2",
       "path": "16/solid/squares-2x2.svg",
-      "sha256": "59557d694fc318a49de436b61736e7af434d738e2251e1f38d10d8b8cbc1e697"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/squares-2x2.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/squares-2x2.svg",
+      "integrity": "sha384-GjhIhcl1i0gso5oPo52zuOi9F6hinQR2P2+VMhHw+Z13qO7alQrxiA9uExqeifR4",
+      "hash": "sha384:1a384885c9758b482ca39a0fa39db3b8e8bd17a8629d04763f6f953211f0f99d77a8eeda950af1880f6e131a9e89f478"
     },
     {
+      "ref": "heroicons/icon-16-solid-star",
       "path": "16/solid/star.svg",
-      "sha256": "9633b9171e66615a03dddc98ce4dd8a6dfaaac69f2a99b38a843d5f74666457c"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/star.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/star.svg",
+      "integrity": "sha384-nInYxKxB4f7uPX0/iK8BaE3iB6oWyfXWe3A5OTn0l+I+hGq8i4IFYRkBZAU5mzsn",
+      "hash": "sha384:9c89d8c4ac41e1feee3d7d3f88af01684de207aa16c9f5d67b70393939f497e23e846abc8b82056119016405399b3b27"
     },
     {
+      "ref": "heroicons/icon-16-solid-sun",
       "path": "16/solid/sun.svg",
-      "sha256": "859d4a74c7f8745b2eb64ce1520d6ad75bcb7079a755d1bb32dc894b3ccf67ee"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/sun.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/sun.svg",
+      "integrity": "sha384-5SrA/AgAFCmLzQYKHz2jY9boSEP7uHAYbcBfRN9LRGbwIUaQx/AxUjbE88uE9nuB",
+      "hash": "sha384:e52ac0fc080014298bcd060a1f3da363d6e84843fbb870186dc05f44df4b4466f0214690c7f0315236c4f3cb84f67b81"
     },
     {
+      "ref": "heroicons/icon-16-solid-table-cells",
       "path": "16/solid/table-cells.svg",
-      "sha256": "cadb5380ba46940a5903448be60944bebd5207204d290718337b4b285cf1475c"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/table-cells.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/table-cells.svg",
+      "integrity": "sha384-Ns+JCAqBxnweAo0DTJ6Lt8eAYA+UfVmNg7hVm+9Gd/IXns/OD0SgBRd7GUdqv+gT",
+      "hash": "sha384:36cf89080a81c67c1e028d034c9e8bb7c780600f947d598d83b8559bef4677f2179ecfce0f44a005177b19476abfe813"
     },
     {
+      "ref": "heroicons/icon-16-solid-trash",
       "path": "16/solid/trash.svg",
-      "sha256": "c2282d3dbacfbf2f71f3f8c643404a019997d62ecabd092e57e2c6cd621cbe55"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/trash.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/trash.svg",
+      "integrity": "sha384-4jOnSIY0m7R9YnyfnCuNmHdpQZI+YiN+dfi9M4vn6RvxMJYXItJ3nk3PbQoo7GZP",
+      "hash": "sha384:e233a74886349bb47d627c9f9c2b8d98776941923e62237e75f8bd338be7e91bf130961722d2779e4dcf6d0a28ec664f"
     },
     {
+      "ref": "heroicons/icon-16-solid-user-circle",
       "path": "16/solid/user-circle.svg",
-      "sha256": "57d66e0c77a51c5ac7504cda5be5bc867f0d4ad91a054241ccaf15106cd1e33c"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/user-circle.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/user-circle.svg",
+      "integrity": "sha384-TmB7reQG8WJYvHxjWmGIVdFAei9UVYP4SfGf606H09IvqoyBv3vuUmpljxo6G4s/",
+      "hash": "sha384:4e607bade406f16258bc7c635a618855d1407a2f545583f849f19feb4e87d3d22faa8c81bf7bee526a658f1a3a1b8b3f"
     },
     {
+      "ref": "heroicons/icon-16-solid-user",
       "path": "16/solid/user.svg",
-      "sha256": "1159e70a05f18eda673ee1f14730d361d3f278a4db18edc2f4e888c40905ddc0"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/user.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/user.svg",
+      "integrity": "sha384-V0WHKgOlyvaxIEyIlX/g0pDYjWc2XcCxasJ4zniihdIAycqE5WNvcLiAfLC1ii15",
+      "hash": "sha384:5745872a03a5caf6b1204c88957fe0d290d88d67365dc0b16ac278ce78a285d200c9ca84e5636f70b8807cb0b58a2d79"
     },
     {
+      "ref": "heroicons/icon-16-solid-users",
       "path": "16/solid/users.svg",
-      "sha256": "faefc31eecc4032dc91cc185d53add4b451fb1e924ecbc7210002bffe6235472"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/users.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/users.svg",
+      "integrity": "sha384-KqW5/vGT+gvxJlo/TNeHZd1gaxdm3UxW2Sam25VWeIUMSqaIZDLPIXTK6FauVecq",
+      "hash": "sha384:2aa5b9fef193fa0bf1265a3f4cd78765dd606b1766dd4c56d926a6db955678850c4aa6886432cf2174cae856ae55e72a"
     },
     {
+      "ref": "heroicons/icon-16-solid-window",
       "path": "16/solid/window.svg",
-      "sha256": "0dcac059a9a744d507e1b712b45e5152b3c35a594a99d2922ebcd6f94f1f136a"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/window.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/window.svg",
+      "integrity": "sha384-NRxn26/cLAsAfWpQk/nKJxQhDwKD8cDJVvFOv2lR/VmpxDTxnKF9tCRGqA3N+Ojv",
+      "hash": "sha384:351c67dbafdc2c0b007d6a5093f9ca2714210f0283f1c0c956f14ebf6951fd59a9c434f19ca17db42446a80dcdf8e8ef"
     },
     {
+      "ref": "heroicons/icon-16-solid-x-circle",
       "path": "16/solid/x-circle.svg",
-      "sha256": "9eb182ccb20a1de4e5780120a3ab01a0bff1eabc73a79e144cefa4ae2ed88b65"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/x-circle.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/x-circle.svg",
+      "integrity": "sha384-L7n9d5CK60WW3GETj+49NRkvV6BmPsv6JXuMrMb4OPZ2HSV8Y9Zjld8BzZRzoaaj",
+      "hash": "sha384:2fb9fd77908aeb4596dc61138fee3d35192f57a0663ecbfa257b8cacc6f838f6761d257c63d66395df01cd9473a1a6a3"
     },
     {
+      "ref": "heroicons/icon-16-solid-x-mark",
       "path": "16/solid/x-mark.svg",
-      "sha256": "aaa2907d6f1a4435df7005ccda899b3d7337534604776076aa7c23100694543a"
+      "url": "https://raw.githubusercontent.com/tailwindlabs/heroicons/v2.2.0/src/16/solid/x-mark.svg",
+      "acquisitionPath": "internal/acquisition/vendor/heroicons/v2.2.0/16/solid/x-mark.svg",
+      "integrity": "sha384-6Y07CcSbYUoKIWx3Ppqz9FkhdZlvmPZ5e9aKOlXCmjxdDv4qCva+gsAOqk6K+z1K",
+      "hash": "sha384:e98d3b09c49b614a0a216c773e9ab3f4592175996f98f6797bd68a3a55c29a3c5d0efe2a0af6be82c00eaa4e8afb3d4a"
     }
   ]
 }
