@@ -64,6 +64,10 @@ inventory, err := assetmeta.NewInventory([]assetmeta.Resource{{
 if err != nil {
 	return err
 }
+overlay := strings.NewReader(`schema: 1
+metadata:
+  entry: example/runtime-js
+`)
 document, err := assetmeta.Load[metadata, struct{}, struct{}](overlay, inventory)
 if err != nil {
 	return err
