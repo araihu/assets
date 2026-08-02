@@ -26,15 +26,17 @@ type Resolved struct {
 
 // Inventory is an immutable, indexed acquisition inventory.
 type Inventory struct {
-	resources       []Resource
-	resourcesByName map[string]Resource
+	resources           []Resource
+	resourcesByName     map[string]Resource
+	downloadsByResource map[string]map[string]Download
 }
 
 // NewInventory validates and copies resources into an immutable inventory.
 func NewInventory(resources []Resource) (*Inventory, error) {
 	inventory := &Inventory{
-		resources:       make([]Resource, 0, len(resources)),
-		resourcesByName: make(map[string]Resource, len(resources)),
+		resources:           make([]Resource, 0, len(resources)),
+		resourcesByName:     make(map[string]Resource, len(resources)),
+		downloadsByResource: make(map[string]map[string]Download, len(resources)),
 	}
 
 	for _, resource := range resources {
@@ -77,9 +79,30 @@ func NewInventory(resources []Resource) (*Inventory, error) {
 		owned := cloneResource(resource)
 		inventory.resources = append(inventory.resources, owned)
 		inventory.resourcesByName[owned.Name] = owned
+		inventory.downloadsByResource[owned.Name] = make(map[string]Download, len(owned.Downloads))
+		for _, download := range owned.Downloads {
+			inventory.downloadsByResource[owned.Name][download.Name] = download
+		}
 	}
 
 	return inventory, nil
+}
+
+// Resolve returns the resource and download selected by ref as caller-owned
+// copies.
+func (i *Inventory) Resolve(ref Ref) (Resolved, bool) {
+	if i == nil {
+		return Resolved{}, false
+	}
+	resource, ok := i.resourcesByName[ref.Resource]
+	if !ok {
+		return Resolved{}, false
+	}
+	download, ok := i.downloadsByResource[ref.Resource][ref.Download]
+	if !ok {
+		return Resolved{}, false
+	}
+	return Resolved{Resource: cloneResource(resource), Download: download}, true
 }
 
 // Resources returns resources in declaration order as caller-owned copies.
