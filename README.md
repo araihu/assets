@@ -2,14 +2,14 @@
 
 Deterministic identity and interface assets for Arai Hû products.
 `dist/catalog.json` is the versioned, language-neutral consumer contract for
-the `v0.1.2` release candidate.
+the `v0.1.3` release candidate.
 
 ## Current checkout
 
 Requires Go `1.26.5`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
-The managed `dist/` tree is the `v0.1.2` release candidate. Its catalog, generated
+The managed `dist/` tree is the `v0.1.3` release candidate. Its catalog, generated
 sprites, catalog-driven proof, and deterministic archives are consumer inputs.
 Use a disposable checkout when regenerating it:
 
@@ -29,7 +29,7 @@ managed tree, including `dist/proof`.
 After release approval, install and verify the tagged module:
 
 ```sh
-go install github.com/araihu/assets/cmd/araihu-assets@v0.1.2
+go install github.com/araihu/assets/cmd/araihu-assets@v0.1.3
 araihu-assets verify
 ```
 
@@ -144,7 +144,7 @@ not remain in managed `dist/`, and no unpublished release is synthesized.
 
 ## Catalog and sprites
 
-The `v0.1.2` `dist/catalog.json` is schema v1, language-neutral metadata for
+The `v0.1.3` `dist/catalog.json` is schema v1, language-neutral metadata for
 generated files only. It records canonical name,
 namespace, variant dimensions,
 `spriteSymbol`, color behavior, license, source label, and SHA-256. Public
@@ -164,7 +164,7 @@ generation is provided by this CLI; consumers own any project-local bindings.
 
 ## Platform files and archives
 
-The `v0.1.2` build emits individual brand/UI SVGs, web/Android/Apple platform
+The `v0.1.3` build emits individual brand/UI SVGs, web/Android/Apple platform
 packages, catalog, checksums, notices, licenses, the self-contained
 `dist/proof/**` review site, and deterministic `.tar.gz` and `.zip` archives
 under `dist/releases/`. Platform launchers
@@ -175,14 +175,15 @@ The catalog is the current interoperability boundary. Release archives contain
 the complete managed distribution, including all `dist/proof/**` local assets;
 review screenshots and critique files remain outside release membership.
 
-`v0.1.2` is an offline release candidate in this checkout, not a published tag
+`v0.1.3` is an offline release candidate in this checkout, not a published tag
 or download. Consumers must wait for integration approval before treating its
 archive names or module version as publicly available.
 
 `v0.1.1` remains the published promoted default until an explicit promotion
-changes `manifests/default.yaml`. The patch candidate updates immutable release
-identity and release fan-out automation; catalog asset semantics, themes,
-campaign calendar, and campaign runtime remain compatible with `v0.1.1`.
+changes `manifests/default.yaml`; `v0.1.2` remains the latest published release
+until this candidate is tagged. The patch candidate adds the `assetmeta` Go
+package. Catalog asset semantics, themes, campaign calendar, and campaign
+runtime remain compatible with `v0.1.2`.
 
 ## Licensing
 

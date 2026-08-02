@@ -6,9 +6,10 @@ catalog's relative path under that release root.
 
 For `v0.1.1` and later, also require `catalog.json.release`, `themes.json.release`, and
 `release.json.release` to agree. Verify `release.json` inventory hashes before
-using a patch candidate. This checkout's `v0.1.2` files are offline RC inputs;
+using a patch candidate. This checkout's `v0.1.3` files are offline RC inputs;
 they are not a published tag or public download until integration approval.
-`v0.1.1` remains the independently published promoted default.
+`v0.1.2` remains the latest published release, while `v0.1.1` remains the
+independently published promoted default.
 
 Use generated sprite files only with the `spriteSymbol` recorded by the
 catalog. Same-origin external sprite references and inline-document rendering

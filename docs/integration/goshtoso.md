@@ -4,11 +4,12 @@ Goshtoso stays brand-neutral. Read a validated `dist/catalog.json`, select
 entries by canonical name and namespace, and use the catalog's exact
 `spriteSymbol`; never derive a symbol from a filename.
 
-Before adopting this checkout's `v0.1.2` candidate, require matching release
+Before adopting this checkout's `v0.1.3` candidate, require matching release
 values in `catalog.json`, `themes.json`, and `release.json`, then verify the
 inventory hashes in `release.json`. `v0.1.1` remains the published promoted
-default; `v0.1.2` remains local and offline until integration review accepts it
-and publishes its tag and GitHub Release.
+default and `v0.1.2` remains the latest published release. `v0.1.3` stays local
+and offline until integration review accepts it and publishes its tag and
+GitHub Release.
 
 Its generic sprite component owns sprite URL or inline mode, symbol, size,
 accessible label, decorative state, CSS classes, and `currentColor` for
