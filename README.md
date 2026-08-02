@@ -85,7 +85,7 @@ semantic validation.
 For release-maintenance work, stable Make targets are:
 
 ```sh
-make vendor    # fetch only locked manifest-selected UI sources
+make vendor    # sync SHA-384-locked Muamba inputs and regenerate acquisition APIs
 make generate  # build offline and atomically replace managed dist/
 make verify    # rebuild offline and compare with dist/
 make check     # test, then reject generated-output drift
@@ -102,7 +102,6 @@ the retired V11 scripts.
 ## CLI
 
 ```text
-araihu-assets vendor
 araihu-assets build --offline [--check]
 araihu-assets verify
 araihu-assets proof [--check]
@@ -114,9 +113,10 @@ araihu-assets campaigns resolve --date YYYY-MM-DD
 araihu-assets campaigns publish --date YYYY-MM-DD --output <directory>
 ```
 
-`vendor` is the only networked command. All other commands build from the
-manifest, promoted brand masters, and pinned local UI inputs. `catalog`
-strictly validates the published catalog before reporting it.
+The application CLI is offline. Static Heroicons acquisition is owned by
+`muamba.yaml`; `make vendor` invokes the exactly pinned Muamba tool. All CLI
+commands build from promoted brand masters and embedded locked UI inputs.
+`catalog` strictly validates the published catalog before reporting it.
 
 `export` writes only release files below the selected output directory. It
 rejects traversal, symlinks, invalid paths, and different-byte collisions;

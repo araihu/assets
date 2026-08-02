@@ -46,6 +46,21 @@ jobs:
           test "$tag_sha" = "$event_sha"
           test "$(go version | awk '{print $3}')" = go1.26.5
 
+      - name: Restore Muamba acquisition cache
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: .cache/muamba
+          key: muamba-${{ runner.os }}-${{ hashFiles('muamba.yaml') }}
+          restore-keys: |
+            muamba-${{ runner.os }}-
+
+      - name: Verify embedded acquisition inventory offline
+        shell: bash
+        run: |
+          set -euo pipefail
+          go tool muamba verify --strict
+          go tool muamba generate-go --strict --check --dir internal/acquisition --output muamba_gen.go
+
       - name: Require release fan-out credentials
         id: fanout-credentials
         shell: bash

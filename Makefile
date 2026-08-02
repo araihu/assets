@@ -4,7 +4,8 @@ test:
 	go test ./... -count=1
 
 vendor:
-	go run ./cmd/araihu-assets vendor
+	go tool muamba sync --strict
+	go tool muamba generate-go --strict --dir internal/acquisition --output muamba_gen.go
 
 generate:
 	go run ./cmd/araihu-assets build --offline
@@ -12,7 +13,10 @@ generate:
 verify:
 	go run ./cmd/araihu-assets verify
 
-check: test
+check:
+	go tool muamba verify --strict
+	go tool muamba generate-go --strict --check --dir internal/acquisition --output muamba_gen.go
+	$(MAKE) test
 	go run ./cmd/araihu-assets build --offline --check
 
 proof:
@@ -30,5 +34,9 @@ campaigns-check:
 
 # release validates only local release artifacts and generated proof. It never
 # creates tags or pushes.
-release: check proof-check
+release:
+	go tool muamba verify --strict
+	go tool muamba generate-go --strict --check --dir internal/acquisition --output muamba_gen.go
+	$(MAKE) check
+	$(MAKE) proof-check
 	go run ./cmd/araihu-assets catalog
