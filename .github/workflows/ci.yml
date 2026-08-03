@@ -90,12 +90,12 @@ jobs:
         shell: bash
         run: test "$(go version | awk '{print $3}')" = go1.26.5
 
-      - name: Install Ruby on self-hosted runners
+      - name: Install self-hosted workflow tooling
         if: runner.environment == 'self-hosted'
         shell: bash
         run: |
           apt-get update
-          apt-get install --yes --no-install-recommends ruby
+          apt-get install --yes --no-install-recommends ruby rustup
 
       - name: Restore Muamba acquisition cache
         uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
