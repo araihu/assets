@@ -90,10 +90,12 @@ jobs:
         shell: bash
         run: test "$(go version | awk '{print $3}')" = go1.26.5
 
-      - name: Set up Ruby for workflow contract tests
-        uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1
-        with:
-          ruby-version: '3.3'
+      - name: Install Ruby on self-hosted runners
+        if: runner.environment == 'self-hosted'
+        shell: bash
+        run: |
+          apt-get update
+          apt-get install --yes --no-install-recommends ruby
 
       - name: Restore Muamba acquisition cache
         uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
