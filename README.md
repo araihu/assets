@@ -24,14 +24,50 @@ Run `catalog` only after a successful `make generate`, because it validates the
 generated `dist/catalog.json`. `make check` rejects drift across the complete
 managed tree, including `dist/proof`.
 
-## Install
+## Install and verify
 
-After release approval, install and verify the tagged module:
+Install the CLI when you need to run the repository's offline build and
+catalog commands:
 
 ```sh
 go install github.com/araihu/assets/cmd/araihu-assets@v0.2.0
-araihu-assets verify
 ```
+
+`araihu-assets verify` is a source-checkout reproducibility command. Run it
+from the root of the tagged repository checkout; it reads the checkout's
+`.muamba.yaml`, `.muamba.lock.yaml`, acquisition inputs, and `dist/`. An
+installed binary by itself does not download or authenticate a GitHub Release
+archive. Consumers must verify the published archive and its extracted files
+as described below.
+
+### Verify a published release archive
+
+Use a disposable, empty directory for each release verification. `SHA256SUMS`
+authenticates the GitHub Release asset; the embedded `checksums.txt` verifies
+the extracted release members. The tar and zip archives are content-equivalent
+after extraction, not byte-equivalent archives.
+
+```sh
+tag=v0.2.0
+mkdir release-download release-root
+
+gh release download "$tag" --repo araihu/assets \
+  --pattern "araihu-assets-${tag}.tar.gz" \
+  --pattern SHA256SUMS \
+  --dir release-download
+
+grep "  araihu-assets-${tag}.tar.gz$" \
+  release-download/SHA256SUMS > release-download/archive.sha256
+(cd release-download && sha256sum --check --strict archive.sha256)
+tar -xzf "release-download/araihu-assets-${tag}.tar.gz" -C release-root
+(cd release-root && sha256sum --check --strict checksums.txt)
+```
+
+On macOS, use `shasum -a 256 -c` in place of `sha256sum --check`. On Windows,
+use `Get-FileHash -Algorithm SHA256` for the downloaded archive and compare
+the result with the matching archive record in `SHA256SUMS`. `release.json`
+binds the catalog and other release inputs; `checksums.txt` remains the
+authoritative member inventory inside the extracted release root.
 
 ## Typed acquisition overlays
 
@@ -118,6 +154,10 @@ is declared in `.muamba.yaml`; `.muamba.lock.yaml` pins each archive and every
 resolved SVG. `make vendor` invokes the exactly pinned Muamba tool. All CLI
 commands build from promoted brand masters and SHA-384-verified locked inputs.
 `catalog` strictly validates the published catalog before reporting it.
+
+`build`, `verify`, `proof`, `catalog`, and `export` operate on the current
+repository checkout. They are not release-download verifiers and do not
+replace the archive and extracted-member checks above.
 
 `export` writes only release files below the selected output directory. It
 rejects traversal, symlinks, invalid paths, and different-byte collisions;
@@ -221,6 +261,10 @@ reviews, screenshots, and exported PDFs live in Git history; see
 [identity evolution](docs/history/identity-evolution.md). Consumer integration,
 including Goshtoso's generic sprite boundary and catalog-first local binding
 generation, is documented in [docs/integration](docs/integration/).
+
+Those guides also define release-archive verification, schema-v2 migration,
+exact `canonicalName` and `spriteSymbol` handling, and the provenance boundary
+for consumer-local generators.
 
 The temporary V11 calibration scaffold remains only for historical reference.
 Generated `dist/proof` is release evidence, not a public consumer path or a

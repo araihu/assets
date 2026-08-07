@@ -70,3 +70,16 @@ Release, publication, deployment, or consumer integration.
 - [x] `go test -race ./... -count=1`.
 - [x] CI and release-workflow guard scripts.
 - [x] `git diff --check`.
+
+## Documentation gate
+
+- [x] README distinguishes source-checkout reproducibility checks from
+  published archive and extracted-member verification.
+- [x] Consumer guides document `SHA256SUMS`, `checksums.txt`, schema-v2
+  migration, exact mixed-case canonical names, and literal sprite symbols.
+- [x] Provenance fields and their traceability-only role are documented in
+  [`docs/provenance-schema.md`](provenance-schema.md).
+- [x] Candidate status remains explicit: no public tag, archive, or module
+  version is advertised until the release is published.
+- [ ] Publish the Muamba release, replace the unpublished pseudo-version, and
+  rerun the full release/archive/checksum gate before tagging Assets.

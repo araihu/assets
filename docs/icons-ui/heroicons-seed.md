@@ -34,3 +34,7 @@ licenses, release inventory, checksums, and archive members are deterministic.
 The upstream MIT notices are distributed at
 `dist/licenses/heroicons-MIT.txt` and
 `dist/licenses/developer-icons-MIT.txt`.
+
+The provenance files are traceability records, not a replacement for release
+integrity checks. Their fields and verification role are defined in
+[`docs/provenance-schema.md`](../provenance-schema.md).
