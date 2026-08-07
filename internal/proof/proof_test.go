@@ -348,7 +348,10 @@ func TestProductionProofHasCompleteSocialMetadataAndPreview(t *testing.T) {
 		}
 	}
 	const base = "https://cdn.jsdelivr.net/gh/araihu/assets@v0.2.0/dist/proof/"
-	if !strings.Contains(html, `rel="canonical" href="`+base+`"`) || !strings.Contains(html, `property="og:image" content="`+base+`og.png"`) {
+	const documentURL = base + "index.html"
+	if !strings.Contains(html, `rel="canonical" href="`+documentURL+`"`) ||
+		!strings.Contains(html, `property="og:url" content="`+documentURL+`"`) ||
+		!strings.Contains(html, `property="og:image" content="`+base+`og.png"`) {
 		t.Fatal("proof metadata does not use the absolute release URL")
 	}
 	preview, err := os.Open(filepath.Join(root, "og.png"))

@@ -43,13 +43,13 @@ Release, publication, deployment, or consumer integration.
 ## Release and consumer boundary
 
 - [x] `dist/release.json` SHA-256:
-  `0650e51dd2b7ec7797622b3cdd9ff75dfd53cb1914155931014223bbd1684fa6`.
+  `77c696ae5eceb5e7bc11d19affb7c2c7b7e8afc6414882b9b059239e315f2260`.
 - [x] `dist/checksums.txt` SHA-256:
-  `86dac118901d423117e20bd14ce6ed30717fca9c2a8244909c2be4b926ce1c4e`.
+  `334005c77622250a1e827b9472161cd6e56c82d487fc0d44023d49261f8dbee5`.
 - [x] Tar archive: 3,797 members; SHA-256
-  `dcb97bbbbf98fb2e3c0e96b63eefb17b9b60eb2b3d8097fa6b4e2876f3f19271`.
+  `5d7d691e22d4071507b0bf2248713d7008adf57c18840cfd46e20901db0b78e5`.
 - [x] Zip archive: 3,797 members; SHA-256
-  `a52dda1ac713d6761e80cbf6d69d4acf9f0411348fcce4d20bd95fc4281fee46`.
+  `881094d3d161b79904fcfad320c26d947c9a1e526ee0b69ce8a2d04c3ff4b1b0`.
 - [x] Both archives extract cleanly and all 3,796 records in their embedded
   `checksums.txt` verify.
 - [x] Goshtoso's later input is the verified root extracted from either
@@ -57,8 +57,9 @@ Release, publication, deployment, or consumer integration.
   archive digest; the extracted members are equivalent, but the containers are
   not byte-equivalent. It is never the vendored source tree. The assets CLI
   emits no Go or other client-language bindings.
-- [x] The generated proof has initial-HTML canonical, description, Open Graph,
-  and X-card metadata plus a validated 1280x640 PNG below 1 MiB.
+- [x] The generated proof has initial-HTML canonical and `og:url` values that
+  resolve to the actual `dist/proof/index.html` document, plus description,
+  Open Graph, and X-card metadata and a validated 1280x640 PNG below 1 MiB.
 
 ## Gates
 
