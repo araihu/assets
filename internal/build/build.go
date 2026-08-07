@@ -233,7 +233,7 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 		return nil, fmt.Errorf("build: read LICENSE: %w", err)
 	}
 	files["licenses/Apache-2.0.txt"] = license
-	files["NOTICE"] = []byte("Arai Hu Assets " + releaseinfo.Version + "\n\nArai Hu brand assets are subject to Arai Hu Brand Terms.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\n")
+	files["NOTICE"] = []byte("Arai Hu Assets " + releaseinfo.Version + "\n\nArai Hu brand assets are subject to Arai Hu Brand Terms.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\nDeveloper Icons material is included under its MIT license in licenses/developer-icons-MIT.txt.\n")
 	proofFiles, err := proofStaticFiles(repo)
 	if err != nil {
 		return nil, err
@@ -363,8 +363,8 @@ func proofDocument(repo string, files map[string][]byte) ([]byte, error) {
 }
 
 func proofStaticFiles(repo string) (map[string][]byte, error) {
-	files := make(map[string][]byte, 2)
-	for _, name := range []string{"styles.css", "app.js"} {
+	files := make(map[string][]byte, 3)
+	for _, name := range []string{"styles.css", "app.js", "og.png"} {
 		data, err := os.ReadFile(filepath.Join(repo, "site", "proof", name))
 		if err != nil {
 			return nil, fmt.Errorf("build: read proof static asset %s: %w", name, err)

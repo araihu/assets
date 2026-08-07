@@ -1,5 +1,5 @@
-github.com/araihu/muamba v0.0.2 h1:UAXI1ajiOHBcJqsB/NVYfsg9YbgsAsLFhKtPVp+WG/A=
-github.com/araihu/muamba v0.0.2/go.mod h1:HWgw9kWiYam0Y8Ulmej5aW/AvLd8L2GWUmO6WlYNsVQ=
+github.com/araihu/muamba v0.0.4 h1:0T+2vwAMjWqZCYtKZceWGFxQgdCugp/E1ug447VwBKw=
+github.com/araihu/muamba v0.0.4/go.mod h1:HWgw9kWiYam0Y8Ulmej5aW/AvLd8L2GWUmO6WlYNsVQ=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

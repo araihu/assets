@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/araihu/muamba/internal/buildinfo"
 	"github.com/araihu/muamba/internal/gogen"
 	"github.com/araihu/muamba/internal/lifecycle"
 	"github.com/araihu/muamba/internal/manifest"
@@ -25,10 +26,11 @@ Commands:
   update RESOURCE --version VERSION    Trust a new grouped version
   update RESOURCE/DOWNLOAD             Re-trust one current URL
   generate-go --dir DIR --output FILE  Generate an embedded Go registry
+  version                              Print build identity
   help
 
 Common options:
-  -f FILE                         Manifest path (default: find muamba.yaml)
+  -f FILE                         Declaration path (default: find .muamba.yaml, then legacy muamba.yaml)
   --strict                       Promote manifest warnings to errors
   --allow-http                   Allow explicitly insecure HTTP URLs
   --insecure-skip-tls-verify     Allow invalid HTTPS certificates
@@ -37,7 +39,7 @@ Common options:
   --max-size BYTES               Maximum response size (default: 104857600)
   --target GOOS/GOARCH           Materialization target (default: runtime)
   --cache-dir DIR                Integrity cache (default: MUAMBA_CACHE_DIR or OS cache)
-  --all-platforms                Verify every cached variant (verify only)
+  --all-platforms                Verify every cached platform variant and materialized directory file (verify only)
 
 Environment:
   MUAMBA_CACHE_DIR               Default integrity cache directory
@@ -90,6 +92,9 @@ func Run(args []string, stdout io.Writer, stderr io.Writer) int {
 	}
 
 	switch args[0] {
+	case "version", "--version":
+		_, _ = fmt.Fprintln(stdout, buildinfo.String())
+		return 0
 	case "help", "-h", "--help":
 		_, _ = fmt.Fprint(stdout, helpText)
 		return 0
@@ -112,7 +117,7 @@ func runLifecycle(command string, args []string, stdout, stderr io.Writer) int {
 	common := addCommonFlags(flags)
 	allPlatforms := false
 	if command == "verify" {
-		flags.BoolVar(&allPlatforms, "all-platforms", false, "verify every cached platform variant")
+		flags.BoolVar(&allPlatforms, "all-platforms", false, "verify every cached platform variant and materialized directory file")
 	}
 	if err := flags.Parse(args); err != nil {
 		return 2

@@ -1,55 +1,40 @@
-# Heroicons UI seed
+# Icon pack source boundary
 
-The catalog ships exactly 67 UI icons from Heroicons `v2.2.0`. Source files are
-the explicit `src/16/solid/*.svg` downloads in `muamba.yaml`; no glob or mutable
-branch expands this set. Muamba retains each upstream SVG and license under
-`internal/acquisition/vendor/heroicons/v2.2.0/`, locks each with SHA-384 SRI,
-and generates the embedded acquisition API. `manifests/icons-ui.yaml` is only
-the typed `assetmeta` overlay for semantic paths and stable references.
+The catalog ships the complete supported SVG surfaces from two immutable
+upstream releases:
 
-## Selection evidence
+- Heroicons `v2.2.0`: all 1,288 optimized icons in `16/solid`, `20/solid`,
+  `24/outline`, and `24/solid`.
+- Developer Icons `v7.0.1`: all 318 individual default, dark, and light SVGs;
+  the upstream aggregate `developer-icons.svg` is excluded because this
+  repository deterministically generates its own sprite.
 
-57 names normalize existing Goshtoso components and demos by semantics:
+`.muamba.yaml` declares the reviewed HTTPS tag archives and bounded glob rules.
+`.muamba.lock.yaml` pins each archive plus every resolved source path,
+destination path, size, and SHA-384 digest. Muamba materializes those exact
+files under `internal/acquisition/vendor/`; normal build and verification paths
+perform no network access. `manifests/icons-ui.yaml` contains only semantic pack
+metadata and immutable upstream revisions.
 
-```text
-arrow-down-tray arrow-down arrow-up arrow-uturn-left arrows-up-down bars-3
-bell book-open chart-bar check-circle check chevron-down chevron-left
-chevron-right clipboard-document-list clipboard clock cloud-arrow-up
-cog-6-tooth cube document-duplicate document-text ellipsis-horizontal
-exclamation-circle eye-slash eye face-smile funnel heart home identification
-inbox information-circle lock-closed magnifying-glass microphone moon
-paint-brush paper-clip pause play plus printer queue-list rectangle-group
-scissors sparkles squares-2x2 star sun table-cells user-circle user users
-window x-circle x-mark
-```
+## Distributed names
 
-10 additional foundational web/mobile actions complete the seed:
+Heroicons source `optimized/<size>/<style>/<name>.svg` becomes
+`dist/icons/ui/heroicons/<size>-<style>-<name>.svg`, with sprite symbol
+`hi-<size>-<style>-<name>` in `dist/icons/ui/sprite.svg`.
 
-```text
-arrow-path                 refresh or retry
-arrow-top-right-on-square  open external destination
-code-bracket               code or developer surface
-ellipsis-vertical          compact overflow actions
-folder                     browse or open collection
-language                   locale selection
-link                       link or copy-link action
-pencil-square              edit action
-shield-check               verified security state
-trash                      delete action
-```
+Developer Icons source `icons/<literal-name>.svg` becomes
+`dist/icons/brand/developer-icons/<literal-name>.svg`. Canonical names preserve
+the literal upstream spelling, including mixed case such as
+`brand-developer-icons-tRPC`; the separate safe sprite symbol is
+`devicon-trpc`. Its generated sprite is
+`dist/icons/brand/developer-icons/sprite.svg`.
 
-The 57 mappings are semantic normalization targets. Goshtoso's historical
-inline icons are mixed Heroicons and Bootstrap artwork at several dimensions;
-this document does not claim their bytes are Heroicons `v2.2.0` bytes.
+All generated catalog entries, individual SVGs, sprites, provenance documents,
+licenses, release inventory, checksums, and archive members are deterministic.
+The upstream MIT notices are distributed at
+`dist/licenses/heroicons-MIT.txt` and
+`dist/licenses/developer-icons-MIT.txt`.
 
-## Distributed names and licensing
-
-Each `16/solid/<name>.svg` source becomes
-`dist/icons/ui/heroicons/16-solid-<name>.svg`, with sprite symbol
-`hi-16-solid-<name>`. `dist/icons/ui/sprite.svg` and the catalog data are
-sorted deterministically. The unmodified upstream MIT notice is distributed at
-`dist/licenses/heroicons-MIT.txt`.
-
-Normal builds read only embedded, tracked Muamba inputs. Network access occurs
-only through the explicit `make vendor` acquisition workflow; tests, UI builds,
-verification, proof generation, and release gates remain offline.
+The provenance files are traceability records, not a replacement for release
+integrity checks. Their fields and verification role are defined in
+[`docs/provenance-schema.md`](../provenance-schema.md).

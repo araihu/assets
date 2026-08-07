@@ -1,7 +1,9 @@
-# github.com/araihu/muamba v0.0.2
+# github.com/araihu/muamba v0.0.4
 ## explicit; go 1.26.5
 github.com/araihu/muamba/cmd/muamba
+github.com/araihu/muamba/internal/archive
 github.com/araihu/muamba/internal/blobcache
+github.com/araihu/muamba/internal/buildinfo
 github.com/araihu/muamba/internal/cli
 github.com/araihu/muamba/internal/gogen
 github.com/araihu/muamba/internal/integrity

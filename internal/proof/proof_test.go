@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"image/png"
 	"io"
 	"io/fs"
 	"os"
@@ -264,7 +265,7 @@ func TestProductionScenariosCoverLiteral512AndEveryProduct(t *testing.T) {
 	if !slices.Contains(m.ExactSizes, 512) {
 		t.Fatalf("ExactSizes = %v, want 512", m.ExactSizes)
 	}
-	for _, id := range []string{"araihu", "goshtoso", "manja", "paje", "x9"} {
+	for _, id := range []string{"araihu", "developer-icons", "goshtoso", "heroicons", "manja", "paje", "x9"} {
 		if !m.HasProduct(id) {
 			t.Fatalf("HasProduct(%q) = false", id)
 		}
@@ -283,18 +284,24 @@ func TestProductionScenariosCoverBrandCatalogAndUISpriteGlyphs(t *testing.T) {
 	uiGlyphs := 0
 	for _, asset := range m.Catalog.Assets {
 		scenario, ok := covered[asset.CanonicalName]
+		if asset.Namespace == "ui" && asset.SpriteSymbol != "" {
+			uiGlyphs++
+		}
+		if asset.Product == "heroicons" && !ok {
+			continue
+		}
+		if asset.Product == "developer-icons" && asset.CanonicalName != "brand-developer-icons-tRPC" {
+			continue
+		}
 		if !ok {
 			t.Fatalf("asset %q has no scenario", asset.CanonicalName)
 		}
 		if asset.Namespace == "brand" && (scenario.Surface != asset.Surface || scenario.Artwork != asset.Artwork || scenario.Appearance != asset.Appearance || scenario.Framing != asset.Framing) {
 			t.Fatalf("scenario %q does not preserve brand semantics for %q", scenario.ID, asset.CanonicalName)
 		}
-		if asset.Namespace == "ui" && asset.SpriteSymbol != "" {
-			uiGlyphs++
-		}
 	}
-	if uiGlyphs != 67 {
-		t.Fatalf("UI sprite glyph coverage = %d, want 67", uiGlyphs)
+	if uiGlyphs != 1288 {
+		t.Fatalf("UI sprite glyph catalog = %d, want 1288", uiGlyphs)
 	}
 }
 
@@ -319,6 +326,53 @@ func TestProductionProofMatchesTrackedDist(t *testing.T) {
 		t.Fatalf("generate production proof: %v\n%s", err, output)
 	}
 	requireDirectoriesEqual(t, filepath.Join(repo, "dist", "proof"), filepath.Join(generated, "dist", "proof"))
+}
+
+func TestProductionProofHasCompleteSocialMetadataAndPreview(t *testing.T) {
+	root := filepath.Join("..", "..", "dist", "proof")
+	htmlBytes, err := os.ReadFile(filepath.Join(root, "index.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	html := string(htmlBytes)
+	for _, token := range []string{
+		`<meta name="description"`, `<link rel="canonical"`, `<meta property="og:url"`,
+		`<meta property="og:type"`, `<meta property="og:title"`, `<meta property="og:description"`,
+		`<meta property="og:site_name"`, `<meta property="og:image"`, `<meta property="og:image:type"`,
+		`<meta property="og:image:width"`, `<meta property="og:image:height"`, `<meta property="og:image:alt"`,
+		`<meta name="twitter:card"`, `<meta name="twitter:title"`, `<meta name="twitter:description"`,
+		`<meta name="twitter:image"`, `<meta name="twitter:image:alt"`,
+	} {
+		if count := strings.Count(html, token); count != 1 {
+			t.Fatalf("metadata token %q count = %d, want 1", token, count)
+		}
+	}
+	const base = "https://cdn.jsdelivr.net/gh/araihu/assets@v0.2.0/dist/proof/"
+	const documentURL = base + "index.html"
+	if !strings.Contains(html, `rel="canonical" href="`+documentURL+`"`) ||
+		!strings.Contains(html, `property="og:url" content="`+documentURL+`"`) ||
+		!strings.Contains(html, `property="og:image" content="`+base+`og.png"`) {
+		t.Fatal("proof metadata does not use the absolute release URL")
+	}
+	preview, err := os.Open(filepath.Join(root, "og.png"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer preview.Close()
+	configuration, err := png.DecodeConfig(preview)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if configuration.Width != 1280 || configuration.Height != 640 {
+		t.Fatalf("preview dimensions = %dx%d, want 1280x640", configuration.Width, configuration.Height)
+	}
+	info, err := preview.Stat()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if info.Size() >= 1<<20 {
+		t.Fatalf("preview size = %d, want below 1 MiB", info.Size())
+	}
 }
 
 func TestProductionMasterProofUsesCatalogMaskable512Semantics(t *testing.T) {

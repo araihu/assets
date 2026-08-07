@@ -1,28 +1,59 @@
 package acquisition
 
-import "testing"
+import (
+	"os"
+	"testing"
+)
 
-func TestHeroiconsInventoryIsComplete(t *testing.T) {
-	resource, ok := MuambaResourceByName("heroicons")
-	if !ok {
-		t.Fatal("heroicons resource missing")
+func TestIconPackInventoryIsComplete(t *testing.T) {
+	wantVersions := map[string]string{"heroicons": "v2.2.0", "developer-icons": "v7.0.1"}
+	if got := len(MuambaResources()); got != len(wantVersions) {
+		t.Fatalf("resources = %d, want %d", got, len(wantVersions))
 	}
-	if resource.Version != "v2.2.0" {
-		t.Fatalf("version = %q", resource.Version)
-	}
-	if len(resource.Downloads) != 68 {
-		t.Fatalf("downloads = %d, want 67 icons plus license", len(resource.Downloads))
-	}
-	seenLicense := false
-	for _, download := range resource.Downloads {
-		if download.Integrity == "" || download.Hash == "" {
-			t.Fatalf("unlocked %s", download.Name)
+	for name, version := range wantVersions {
+		resource, ok := MuambaResourceByName(name)
+		if !ok {
+			t.Fatalf("resource %q missing", name)
 		}
-		if download.Name == "license" {
-			seenLicense = true
+		if resource.Version != version {
+			t.Fatalf("%s version = %q, want %q", name, resource.Version, version)
+		}
+		if len(resource.Downloads) != 1 {
+			t.Fatalf("%s downloads = %d, want license only", name, len(resource.Downloads))
+		}
+		seen := map[string]bool{}
+		for _, download := range resource.Downloads {
+			if download.Integrity == "" || download.Hash == "" {
+				t.Fatalf("unlocked %s/%s", name, download.Name)
+			}
+			seen[download.Name] = true
+		}
+		if !seen["license"] {
+			t.Fatalf("%s downloads = %#v", name, seen)
 		}
 	}
-	if !seenLicense {
-		t.Fatal("license download missing")
+
+	source, err := Repository(os.DirFS("../.."), ".muamba.lock.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []struct {
+		resource  string
+		directory string
+		files     int
+	}{
+		{resource: "heroicons", directory: "optimized", files: 1288},
+		{resource: "developer-icons", directory: "icons", files: 318},
+	} {
+		locked, ok := source.Directory(want.resource, want.directory)
+		if !ok {
+			t.Fatalf("directory %s/%s missing", want.resource, want.directory)
+		}
+		if len(locked.Files) != want.files {
+			t.Fatalf("directory %s/%s files = %d, want %d", want.resource, want.directory, len(locked.Files), want.files)
+		}
+		if locked.Integrity == "" || locked.URL == "" {
+			t.Fatalf("directory %s/%s is unlocked", want.resource, want.directory)
+		}
 	}
 }

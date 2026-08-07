@@ -1,0 +1,2248 @@
+{
+  "source": "developer-icons",
+  "alias": "devicon",
+  "release": "v7.0.1",
+  "revision": "28b895aba6a4984b8c43714336fafa5fa832f08f",
+  "repository": "https://github.com/xandemon/developer-icons",
+  "license": "MIT",
+  "licenseRef": "developer-icons/license",
+  "sourceRef": "developer-icons/icons",
+  "sourceUrl": "https://github.com/xandemon/developer-icons/archive/v7.0.1.tar.gz",
+  "sourcePath": "internal/acquisition/vendor/developer-icons/v7.0.1",
+  "integrity": "sha384-ZwGEq2XSjfKzYIjEY6XNdVlf8EGiSBF56VD3jYkfoEN0HsaL3CJ+RSs5UXwT9tGd",
+  "hash": "sha384:670184ab65d28df2b36088c463a5cd75595ff041a2481179e950f78d891fa043741ec68bdc227e452b39517c13f6d19d",
+  "variants": [
+    "default",
+    "dark",
+    "light"
+  ],
+  "assetCount": 318,
+  "assets": [
+    {
+      "canonicalName": "brand-developer-icons-android",
+      "spriteSymbol": "devicon-android",
+      "sourcePath": "icons/android.svg",
+      "artifactPath": "icons/brand/developer-icons/android.svg",
+      "sha256": "db76bf46c0365c3e2e1cd6c843ddcbfc67962678c034b9a6347ddd4d5aff1dc0"
+    },
+    {
+      "canonicalName": "brand-developer-icons-angular",
+      "spriteSymbol": "devicon-angular",
+      "sourcePath": "icons/angular.svg",
+      "artifactPath": "icons/brand/developer-icons/angular.svg",
+      "sha256": "a55e278f8f0fb065d72b6454593ad170802dda9515cfe4b46e5ab453231bc62e"
+    },
+    {
+      "canonicalName": "brand-developer-icons-ansible",
+      "spriteSymbol": "devicon-ansible",
+      "sourcePath": "icons/ansible.svg",
+      "artifactPath": "icons/brand/developer-icons/ansible.svg",
+      "sha256": "e31999e7f0825d86635e57d4ed44e4d18d431f403f004e725e69cb11731af7b5"
+    },
+    {
+      "canonicalName": "brand-developer-icons-ansible-wordmark",
+      "spriteSymbol": "devicon-ansible-wordmark",
+      "sourcePath": "icons/ansible-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/ansible-wordmark.svg",
+      "sha256": "01b42d90ee88f2d320bdc37a0a11aecb1e2ca76cf9748af4b911c5a1b7deae5f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-anthropic",
+      "spriteSymbol": "devicon-anthropic",
+      "sourcePath": "icons/anthropic.svg",
+      "artifactPath": "icons/brand/developer-icons/anthropic.svg",
+      "sha256": "5415ab01a45ccece06ea359b4821e708b77bf89bac87440d904d98dcbf783e1d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-anthropic-basic-dark",
+      "spriteSymbol": "devicon-anthropic-basic-dark",
+      "sourcePath": "icons/anthropic-basic-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/anthropic-basic-dark.svg",
+      "sha256": "f906c0b03fd68091730016c5d7e0b2e4960e771f14b685dc8dd727b2a3571dec"
+    },
+    {
+      "canonicalName": "brand-developer-icons-anthropic-basic-light",
+      "spriteSymbol": "devicon-anthropic-basic-light",
+      "sourcePath": "icons/anthropic-basic-light.svg",
+      "artifactPath": "icons/brand/developer-icons/anthropic-basic-light.svg",
+      "sha256": "78c75caee146c5b9a5603f627801b5f14b24309125635ab27f172da51a06b30b"
+    },
+    {
+      "canonicalName": "brand-developer-icons-apache",
+      "spriteSymbol": "devicon-apache",
+      "sourcePath": "icons/apache.svg",
+      "artifactPath": "icons/brand/developer-icons/apache.svg",
+      "sha256": "d6153c2af8e659bdf7c3fb0d1bc8c6bb4fed318d31c8b93ab43c6d0e43ac379a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-apple-dark",
+      "spriteSymbol": "devicon-apple-dark",
+      "sourcePath": "icons/apple-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/apple-dark.svg",
+      "sha256": "b0ae174744e57a7c035ea2d388ac363e65ebab442eb0ee76b0161f61d680b095"
+    },
+    {
+      "canonicalName": "brand-developer-icons-apple-light",
+      "spriteSymbol": "devicon-apple-light",
+      "sourcePath": "icons/apple-light.svg",
+      "artifactPath": "icons/brand/developer-icons/apple-light.svg",
+      "sha256": "97066d8ae978ae7465e6a39c3ef74b70da1f83de8549407d9af3c8563058e9ef"
+    },
+    {
+      "canonicalName": "brand-developer-icons-appwrite",
+      "spriteSymbol": "devicon-appwrite",
+      "sourcePath": "icons/appwrite.svg",
+      "artifactPath": "icons/brand/developer-icons/appwrite.svg",
+      "sha256": "c8aa9edb3c6b76d155ae44f93bc48f6868fa770ebf5d4021cca208f47a68ae69"
+    },
+    {
+      "canonicalName": "brand-developer-icons-arc",
+      "spriteSymbol": "devicon-arc",
+      "sourcePath": "icons/arc.svg",
+      "artifactPath": "icons/brand/developer-icons/arc.svg",
+      "sha256": "d4d1785236f662438e9833ef06330be9db67daf756ad1f9a1b214ae1d3481cac"
+    },
+    {
+      "canonicalName": "brand-developer-icons-astro",
+      "spriteSymbol": "devicon-astro",
+      "sourcePath": "icons/astro.svg",
+      "artifactPath": "icons/brand/developer-icons/astro.svg",
+      "sha256": "ee65374277f26e75733cbdd8799f069e616915130a54b5dc565cfb93369e502f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-atlassian",
+      "spriteSymbol": "devicon-atlassian",
+      "sourcePath": "icons/atlassian.svg",
+      "artifactPath": "icons/brand/developer-icons/atlassian.svg",
+      "sha256": "a8798cbe10a281fe3f0950f6798b69e1cb4afbbe3cac142f84a05020834f33c3"
+    },
+    {
+      "canonicalName": "brand-developer-icons-atom",
+      "spriteSymbol": "devicon-atom",
+      "sourcePath": "icons/atom.svg",
+      "artifactPath": "icons/brand/developer-icons/atom.svg",
+      "sha256": "29d3ea1d607f31232800fbe91890bd32f6df9849253679a24df6093cc773daff"
+    },
+    {
+      "canonicalName": "brand-developer-icons-auth0",
+      "spriteSymbol": "devicon-auth0",
+      "sourcePath": "icons/auth0.svg",
+      "artifactPath": "icons/brand/developer-icons/auth0.svg",
+      "sha256": "097741dd7ede2a43f17039831b85276b4c1f021821df5ddd93ad0b78aeb67a1d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-avajs",
+      "spriteSymbol": "devicon-avajs",
+      "sourcePath": "icons/avajs.svg",
+      "artifactPath": "icons/brand/developer-icons/avajs.svg",
+      "sha256": "5b0626791d2788a9dfa2356261fc5f33876bb621efbed55baee63d07046fe7fc"
+    },
+    {
+      "canonicalName": "brand-developer-icons-aws",
+      "spriteSymbol": "devicon-aws",
+      "sourcePath": "icons/aws.svg",
+      "artifactPath": "icons/brand/developer-icons/aws.svg",
+      "sha256": "cbee7c47dda3dd022cb05ecbb56c467c0ce25905c3a6704476d800cc9893cd61"
+    },
+    {
+      "canonicalName": "brand-developer-icons-axiom",
+      "spriteSymbol": "devicon-axiom",
+      "sourcePath": "icons/axiom.svg",
+      "artifactPath": "icons/brand/developer-icons/axiom.svg",
+      "sha256": "d5540bd22869f9ebe291abe536893e52e2982af666d16dae620a17893595bb49"
+    },
+    {
+      "canonicalName": "brand-developer-icons-axure",
+      "spriteSymbol": "devicon-axure",
+      "sourcePath": "icons/axure.svg",
+      "artifactPath": "icons/brand/developer-icons/axure.svg",
+      "sha256": "aa1c139e3332574a9ee3a50ec340edfc96208fb2522e969e490af8689f2f0f33"
+    },
+    {
+      "canonicalName": "brand-developer-icons-azure",
+      "spriteSymbol": "devicon-azure",
+      "sourcePath": "icons/azure.svg",
+      "artifactPath": "icons/brand/developer-icons/azure.svg",
+      "sha256": "5e90b4a01b92bc886f0d45e2b8d3d37a165551ea315f39010b9d2bb089085e47"
+    },
+    {
+      "canonicalName": "brand-developer-icons-babel",
+      "spriteSymbol": "devicon-babel",
+      "sourcePath": "icons/babel.svg",
+      "artifactPath": "icons/brand/developer-icons/babel.svg",
+      "sha256": "8ce7e54ba980d7913c5c0ffdad3b0d7da47f92e50299d291c9ce14feb8807847"
+    },
+    {
+      "canonicalName": "brand-developer-icons-backbonejs",
+      "spriteSymbol": "devicon-backbonejs",
+      "sourcePath": "icons/backbonejs.svg",
+      "artifactPath": "icons/brand/developer-icons/backbonejs.svg",
+      "sha256": "3c869a13af4f200b4a55a7222a206b8dca6c3cbd1d6cc394d221331fc613921d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-bard",
+      "spriteSymbol": "devicon-bard",
+      "sourcePath": "icons/bard.svg",
+      "artifactPath": "icons/brand/developer-icons/bard.svg",
+      "sha256": "3e3b2b9d8dfd0e93fdf85e690b832c9617c999a0c4fffda0a32a100651853e76"
+    },
+    {
+      "canonicalName": "brand-developer-icons-bash",
+      "spriteSymbol": "devicon-bash",
+      "sourcePath": "icons/bash.svg",
+      "artifactPath": "icons/brand/developer-icons/bash.svg",
+      "sha256": "de4213c2383799239dc51fa83c6fbee19db0943f67a9606e37e371ea997350c4"
+    },
+    {
+      "canonicalName": "brand-developer-icons-bing",
+      "spriteSymbol": "devicon-bing",
+      "sourcePath": "icons/bing.svg",
+      "artifactPath": "icons/brand/developer-icons/bing.svg",
+      "sha256": "e9e257b8fdf64eefbc59233fd1fc90c9510d5f267c05c446722ecdb146f22532"
+    },
+    {
+      "canonicalName": "brand-developer-icons-biome",
+      "spriteSymbol": "devicon-biome",
+      "sourcePath": "icons/biome.svg",
+      "artifactPath": "icons/brand/developer-icons/biome.svg",
+      "sha256": "c114753ecbf07152e8e6f1ebcd7cce46ab62c6ea329a144e8140e443f8de7076"
+    },
+    {
+      "canonicalName": "brand-developer-icons-bitbucket",
+      "spriteSymbol": "devicon-bitbucket",
+      "sourcePath": "icons/bitbucket.svg",
+      "artifactPath": "icons/brand/developer-icons/bitbucket.svg",
+      "sha256": "69b14bb061e4c4f36d1b77afbd904a32578febbd4aefbbb653db13e3273bc391"
+    },
+    {
+      "canonicalName": "brand-developer-icons-bitnami",
+      "spriteSymbol": "devicon-bitnami",
+      "sourcePath": "icons/bitnami.svg",
+      "artifactPath": "icons/brand/developer-icons/bitnami.svg",
+      "sha256": "36cf019e090ea3b9a8de3da8b9a5ab6c34a4d9aac6ccd63fdb9b671f3b3a4644"
+    },
+    {
+      "canonicalName": "brand-developer-icons-blueprintjs",
+      "spriteSymbol": "devicon-blueprintjs",
+      "sourcePath": "icons/blueprintjs.svg",
+      "artifactPath": "icons/brand/developer-icons/blueprintjs.svg",
+      "sha256": "1cd17cbdbd22fc696e655609e87ed3438d9d7403260c0d7a2749eab96bff24ab"
+    },
+    {
+      "canonicalName": "brand-developer-icons-bluesky",
+      "spriteSymbol": "devicon-bluesky",
+      "sourcePath": "icons/bluesky.svg",
+      "artifactPath": "icons/brand/developer-icons/bluesky.svg",
+      "sha256": "00b2c08a03c4b432bce2554a2d404d9b6ed0b246474143f2d95d5333a0efc5b3"
+    },
+    {
+      "canonicalName": "brand-developer-icons-bootstrap4",
+      "spriteSymbol": "devicon-bootstrap4",
+      "sourcePath": "icons/bootstrap4.svg",
+      "artifactPath": "icons/brand/developer-icons/bootstrap4.svg",
+      "sha256": "d98e6dbd778f42572e91fe392464734ece28bdc80b2efcc6dac140a388094c03"
+    },
+    {
+      "canonicalName": "brand-developer-icons-bootstrap5",
+      "spriteSymbol": "devicon-bootstrap5",
+      "sourcePath": "icons/bootstrap5.svg",
+      "artifactPath": "icons/brand/developer-icons/bootstrap5.svg",
+      "sha256": "aaf4b9d7cc9aae64bfe0ca69fee447af416e5ce98bce0e2980600d1dadf554f9"
+    },
+    {
+      "canonicalName": "brand-developer-icons-brave",
+      "spriteSymbol": "devicon-brave",
+      "sourcePath": "icons/brave.svg",
+      "artifactPath": "icons/brand/developer-icons/brave.svg",
+      "sha256": "173e4136020ca61a6c373b53d15b423ce30cb0f23089f48430bae1cefe6c472f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-bulmaui",
+      "spriteSymbol": "devicon-bulmaui",
+      "sourcePath": "icons/bulmaui.svg",
+      "artifactPath": "icons/brand/developer-icons/bulmaui.svg",
+      "sha256": "84e3563a1c2006fa7c09e5cc617cf810915e0425f336d2a1d38651761053d563"
+    },
+    {
+      "canonicalName": "brand-developer-icons-bunjs",
+      "spriteSymbol": "devicon-bunjs",
+      "sourcePath": "icons/bunjs.svg",
+      "artifactPath": "icons/brand/developer-icons/bunjs.svg",
+      "sha256": "552acb0876eb2fff4f9d7b6e416d621c92bf44a2cfbb9b04e16097da546b3ad8"
+    },
+    {
+      "canonicalName": "brand-developer-icons-c",
+      "spriteSymbol": "devicon-c",
+      "sourcePath": "icons/c.svg",
+      "artifactPath": "icons/brand/developer-icons/c.svg",
+      "sha256": "c3d3de77ddbc8e8c76d94bb40ad52e7d2513b1d6003d19904856506ca638b946"
+    },
+    {
+      "canonicalName": "brand-developer-icons-c-plus-plus",
+      "spriteSymbol": "devicon-c-plus-plus",
+      "sourcePath": "icons/c-plus-plus.svg",
+      "artifactPath": "icons/brand/developer-icons/c-plus-plus.svg",
+      "sha256": "d5bd5eb3feea760e0190f23c0532addbfeb9bd1e771e34b4d616c97a7148d8a5"
+    },
+    {
+      "canonicalName": "brand-developer-icons-c-sharp",
+      "spriteSymbol": "devicon-c-sharp",
+      "sourcePath": "icons/c-sharp.svg",
+      "artifactPath": "icons/brand/developer-icons/c-sharp.svg",
+      "sha256": "d6fec72955f9e658792eb1f254fdcb124da167a43d2ee13a8f3090cc20133598"
+    },
+    {
+      "canonicalName": "brand-developer-icons-cakephp",
+      "spriteSymbol": "devicon-cakephp",
+      "sourcePath": "icons/cakephp.svg",
+      "artifactPath": "icons/brand/developer-icons/cakephp.svg",
+      "sha256": "af7e8e9e7a98d4e388b5aa305ff215e3d3eabcd8d36788534f48408eea9b92bd"
+    },
+    {
+      "canonicalName": "brand-developer-icons-canva",
+      "spriteSymbol": "devicon-canva",
+      "sourcePath": "icons/canva.svg",
+      "artifactPath": "icons/brand/developer-icons/canva.svg",
+      "sha256": "036b930afc08ddd1380cd8f2a15e610eaa04514b2ef75e660cf74cac6656c1b2"
+    },
+    {
+      "canonicalName": "brand-developer-icons-cassandradb",
+      "spriteSymbol": "devicon-cassandradb",
+      "sourcePath": "icons/cassandradb.svg",
+      "artifactPath": "icons/brand/developer-icons/cassandradb.svg",
+      "sha256": "08f0f064213de27c61d76b76b1b409024169692f0798296ac7fbfe1c81a4721b"
+    },
+    {
+      "canonicalName": "brand-developer-icons-chakraui",
+      "spriteSymbol": "devicon-chakraui",
+      "sourcePath": "icons/chakraui.svg",
+      "artifactPath": "icons/brand/developer-icons/chakraui.svg",
+      "sha256": "fc0ecf6f5210858260ce320dbfcecadebdf3b7b043e7057144c65b78ef9fe10d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-chatgpt",
+      "spriteSymbol": "devicon-chatgpt",
+      "sourcePath": "icons/chatgpt.svg",
+      "artifactPath": "icons/brand/developer-icons/chatgpt.svg",
+      "sha256": "e5e45ea8d615b5b1153cb13b1183f973a8661da5dbb374c5013b1e5b4a136765"
+    },
+    {
+      "canonicalName": "brand-developer-icons-chrome",
+      "spriteSymbol": "devicon-chrome",
+      "sourcePath": "icons/chrome.svg",
+      "artifactPath": "icons/brand/developer-icons/chrome.svg",
+      "sha256": "00bc25541d96cfcdd8f68356ce12ca4b88bf1a465bc35f1a6042dac8140875aa"
+    },
+    {
+      "canonicalName": "brand-developer-icons-chromium",
+      "spriteSymbol": "devicon-chromium",
+      "sourcePath": "icons/chromium.svg",
+      "artifactPath": "icons/brand/developer-icons/chromium.svg",
+      "sha256": "4932c05df8a3b9265159b695c3b4e45e4ad26b7ec6ab4129429d369534767572"
+    },
+    {
+      "canonicalName": "brand-developer-icons-circleci",
+      "spriteSymbol": "devicon-circleci",
+      "sourcePath": "icons/circleci.svg",
+      "artifactPath": "icons/brand/developer-icons/circleci.svg",
+      "sha256": "2131123c71206a1bf0752c6c4e1b781b4f9537de5ecfa7ef39479ab68923843a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-claude-ai",
+      "spriteSymbol": "devicon-claude-ai",
+      "sourcePath": "icons/claude-ai.svg",
+      "artifactPath": "icons/brand/developer-icons/claude-ai.svg",
+      "sha256": "d340fb5d5d57e68ec934071e2a220c7fc8f5ac2138c948afc861ee5243b29d9f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-clerk",
+      "spriteSymbol": "devicon-clerk",
+      "sourcePath": "icons/clerk.svg",
+      "artifactPath": "icons/brand/developer-icons/clerk.svg",
+      "sha256": "6173e958cff6c94fc6f1919d7e28feb5567051f4bf3c3008524d0e63cccc2cf3"
+    },
+    {
+      "canonicalName": "brand-developer-icons-clickhouse",
+      "spriteSymbol": "devicon-clickhouse",
+      "sourcePath": "icons/clickhouse.svg",
+      "artifactPath": "icons/brand/developer-icons/clickhouse.svg",
+      "sha256": "0bd2251ebacc2e933bc3ddf042cd89435c30abf43522117e729ce37c1766b3b4"
+    },
+    {
+      "canonicalName": "brand-developer-icons-clojure",
+      "spriteSymbol": "devicon-clojure",
+      "sourcePath": "icons/clojure.svg",
+      "artifactPath": "icons/brand/developer-icons/clojure.svg",
+      "sha256": "9d1f98c1d1c6100fff6ee0f5edad1c942d682b5d3cac9dcf591f6c7aa54c250d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-cloudflare",
+      "spriteSymbol": "devicon-cloudflare",
+      "sourcePath": "icons/cloudflare.svg",
+      "artifactPath": "icons/brand/developer-icons/cloudflare.svg",
+      "sha256": "d3fb8926f4f0d0796d57d62bd297180c65fa8cf0ee31e7294046315412334a47"
+    },
+    {
+      "canonicalName": "brand-developer-icons-cloudinary",
+      "spriteSymbol": "devicon-cloudinary",
+      "sourcePath": "icons/cloudinary.svg",
+      "artifactPath": "icons/brand/developer-icons/cloudinary.svg",
+      "sha256": "bf41b7eaf331ec34968e7d9799eab39644f21fa51407c70bf758efe7b3de242a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-codefresh",
+      "spriteSymbol": "devicon-codefresh",
+      "sourcePath": "icons/codefresh.svg",
+      "artifactPath": "icons/brand/developer-icons/codefresh.svg",
+      "sha256": "9b40c565ac97392b1f4c1857de03229fcc5ccc0ceefd0b10ef6a172a8b4cfbe1"
+    },
+    {
+      "canonicalName": "brand-developer-icons-codeigniter",
+      "spriteSymbol": "devicon-codeigniter",
+      "sourcePath": "icons/codeigniter.svg",
+      "artifactPath": "icons/brand/developer-icons/codeigniter.svg",
+      "sha256": "4b65dae7ab1fbe1cca5bdf5b32e6be747357a244dbb171a8db36601e8412cc5a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-convex",
+      "spriteSymbol": "devicon-convex",
+      "sourcePath": "icons/convex.svg",
+      "artifactPath": "icons/brand/developer-icons/convex.svg",
+      "sha256": "ce9500ea886b951fcf07fc5bf6d3b3f6a8d801f7f5e349fad01c0567ed47aea9"
+    },
+    {
+      "canonicalName": "brand-developer-icons-copilot",
+      "spriteSymbol": "devicon-copilot",
+      "sourcePath": "icons/copilot.svg",
+      "artifactPath": "icons/brand/developer-icons/copilot.svg",
+      "sha256": "a284e37c450aefb1139e1814d9d6be91d165878ad5261592a21b7f1037d67eca"
+    },
+    {
+      "canonicalName": "brand-developer-icons-crystal",
+      "spriteSymbol": "devicon-crystal",
+      "sourcePath": "icons/crystal.svg",
+      "artifactPath": "icons/brand/developer-icons/crystal.svg",
+      "sha256": "58307f44bc20ccfa5683e13770022a3ffff9a8423d0b7367018a3ae0aec43677"
+    },
+    {
+      "canonicalName": "brand-developer-icons-css",
+      "spriteSymbol": "devicon-css",
+      "sourcePath": "icons/css.svg",
+      "artifactPath": "icons/brand/developer-icons/css.svg",
+      "sha256": "e09adab0c65dd610b417319c79f30be2920f91534e43c610b7ec8ea4601f8a19"
+    },
+    {
+      "canonicalName": "brand-developer-icons-css3",
+      "spriteSymbol": "devicon-css3",
+      "sourcePath": "icons/css3.svg",
+      "artifactPath": "icons/brand/developer-icons/css3.svg",
+      "sha256": "218b19480b1d8a333ab63cb9b6af590e4938f4b6a09cb5f4ce8e5c7979322412"
+    },
+    {
+      "canonicalName": "brand-developer-icons-cypress",
+      "spriteSymbol": "devicon-cypress",
+      "sourcePath": "icons/cypress.svg",
+      "artifactPath": "icons/brand/developer-icons/cypress.svg",
+      "sha256": "071dac15c0a327903339d4cede62b221b4f9377235c4c6203f60a5acbedd78cb"
+    },
+    {
+      "canonicalName": "brand-developer-icons-dart",
+      "spriteSymbol": "devicon-dart",
+      "sourcePath": "icons/dart.svg",
+      "artifactPath": "icons/brand/developer-icons/dart.svg",
+      "sha256": "ea43758bd840401eb72e8b55896ac1a8b7af503520737f8015f19980b7cbee8a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-datadog",
+      "spriteSymbol": "devicon-datadog",
+      "sourcePath": "icons/datadog.svg",
+      "artifactPath": "icons/brand/developer-icons/datadog.svg",
+      "sha256": "824a883eabaa15b7838db27787b23289eaf4e8ad7ac8d454371ea58aaceac11c"
+    },
+    {
+      "canonicalName": "brand-developer-icons-deepseek",
+      "spriteSymbol": "devicon-deepseek",
+      "sourcePath": "icons/deepseek.svg",
+      "artifactPath": "icons/brand/developer-icons/deepseek.svg",
+      "sha256": "76533457c84c755af7cc355b77c7aa83e39cfbac0c335f4f13c1676d126e0464"
+    },
+    {
+      "canonicalName": "brand-developer-icons-deepseek-wordmark",
+      "spriteSymbol": "devicon-deepseek-wordmark",
+      "sourcePath": "icons/deepseek-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/deepseek-wordmark.svg",
+      "sha256": "2c461aeafd6bc06253f3d7c8c212bcd6ca0601caff924cfb89329f3854e16960"
+    },
+    {
+      "canonicalName": "brand-developer-icons-deno",
+      "spriteSymbol": "devicon-deno",
+      "sourcePath": "icons/deno.svg",
+      "artifactPath": "icons/brand/developer-icons/deno.svg",
+      "sha256": "ab72832eee415f240d4bd681ea189f8b86c6fa7a0c83dca690eb0cd951c58060"
+    },
+    {
+      "canonicalName": "brand-developer-icons-deno-fresh",
+      "spriteSymbol": "devicon-deno-fresh",
+      "sourcePath": "icons/deno-fresh.svg",
+      "artifactPath": "icons/brand/developer-icons/deno-fresh.svg",
+      "sha256": "57322e2ec4f5ceabbb2eee671d11f255e2610cd4e1c64b1ec102707fccb0790a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-digitalocean",
+      "spriteSymbol": "devicon-digitalocean",
+      "sourcePath": "icons/digitalocean.svg",
+      "artifactPath": "icons/brand/developer-icons/digitalocean.svg",
+      "sha256": "fa0f66ddb311feef39ab52742513a7d2d693baa3e28a3de3e4f6405847ba2e47"
+    },
+    {
+      "canonicalName": "brand-developer-icons-discord",
+      "spriteSymbol": "devicon-discord",
+      "sourcePath": "icons/discord.svg",
+      "artifactPath": "icons/brand/developer-icons/discord.svg",
+      "sha256": "b890f820d9342f52feb4a9622a632e3d7ab5efe84cdc3fc92a24cc5fba270e69"
+    },
+    {
+      "canonicalName": "brand-developer-icons-django",
+      "spriteSymbol": "devicon-django",
+      "sourcePath": "icons/django.svg",
+      "artifactPath": "icons/brand/developer-icons/django.svg",
+      "sha256": "9eeb46eac3aac1519e35e84945cf46d50ed0d63c3fdf6b4276713bb5bed93257"
+    },
+    {
+      "canonicalName": "brand-developer-icons-dlang",
+      "spriteSymbol": "devicon-dlang",
+      "sourcePath": "icons/dlang.svg",
+      "artifactPath": "icons/brand/developer-icons/dlang.svg",
+      "sha256": "04fa68f85d9d9f37b7cc731898b48023f2a672fa4dece8fafd1945009550e8bc"
+    },
+    {
+      "canonicalName": "brand-developer-icons-docker",
+      "spriteSymbol": "devicon-docker",
+      "sourcePath": "icons/docker.svg",
+      "artifactPath": "icons/brand/developer-icons/docker.svg",
+      "sha256": "bd3ff7dcabaabe97bfbc28b5580ff04154bd345da2d9a538d7892b3b245e2830"
+    },
+    {
+      "canonicalName": "brand-developer-icons-doctrine",
+      "spriteSymbol": "devicon-doctrine",
+      "sourcePath": "icons/doctrine.svg",
+      "artifactPath": "icons/brand/developer-icons/doctrine.svg",
+      "sha256": "f923a223e6e89528e26ed2983afc304879996a755cb2af1baaaa94deef36bb42"
+    },
+    {
+      "canonicalName": "brand-developer-icons-docusaurus",
+      "spriteSymbol": "devicon-docusaurus",
+      "sourcePath": "icons/docusaurus.svg",
+      "artifactPath": "icons/brand/developer-icons/docusaurus.svg",
+      "sha256": "54b22e60178c556a11e59e3c50201d1e1b983133ce3a0949d54c25a1feac726f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-dovetail",
+      "spriteSymbol": "devicon-dovetail",
+      "sourcePath": "icons/dovetail.svg",
+      "artifactPath": "icons/brand/developer-icons/dovetail.svg",
+      "sha256": "ddbac0d53a56175c76b316b40ff9d65808ebb51d94830c46babd350715233755"
+    },
+    {
+      "canonicalName": "brand-developer-icons-ec2",
+      "spriteSymbol": "devicon-ec2",
+      "sourcePath": "icons/ec2.svg",
+      "artifactPath": "icons/brand/developer-icons/ec2.svg",
+      "sha256": "c152b412b24a2df84f95a0d6b8d7e35a5c30892bc1e456ad7a5062a858c5e6b6"
+    },
+    {
+      "canonicalName": "brand-developer-icons-edge",
+      "spriteSymbol": "devicon-edge",
+      "sourcePath": "icons/edge.svg",
+      "artifactPath": "icons/brand/developer-icons/edge.svg",
+      "sha256": "42ebe0e6083c08034c569c3c90a69778f17f84b5d3a7ba4e0e09e529b8ee643d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-elastic",
+      "spriteSymbol": "devicon-elastic",
+      "sourcePath": "icons/elastic.svg",
+      "artifactPath": "icons/brand/developer-icons/elastic.svg",
+      "sha256": "7359f317b190d26ec53614be5c1ccb3640d08c7c6c937e2667c41948eb5f63aa"
+    },
+    {
+      "canonicalName": "brand-developer-icons-electron",
+      "spriteSymbol": "devicon-electron",
+      "sourcePath": "icons/electron.svg",
+      "artifactPath": "icons/brand/developer-icons/electron.svg",
+      "sha256": "c206f4b33e747bb04c77e4f2acbdc2a53aeff43db2644866fe5e2d8acbbcfb48"
+    },
+    {
+      "canonicalName": "brand-developer-icons-elementui",
+      "spriteSymbol": "devicon-elementui",
+      "sourcePath": "icons/elementui.svg",
+      "artifactPath": "icons/brand/developer-icons/elementui.svg",
+      "sha256": "f2099eabfcde74a2b083004a251b45fa3b6ce12dadac030c2132a19ad62d6f1f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-elixir",
+      "spriteSymbol": "devicon-elixir",
+      "sourcePath": "icons/elixir.svg",
+      "artifactPath": "icons/brand/developer-icons/elixir.svg",
+      "sha256": "780e81f4e46dddf63349d72749af674607556250e60fc1617332a36b01897685"
+    },
+    {
+      "canonicalName": "brand-developer-icons-ember",
+      "spriteSymbol": "devicon-ember",
+      "sourcePath": "icons/ember.svg",
+      "artifactPath": "icons/brand/developer-icons/ember.svg",
+      "sha256": "14a606864e17086384a5902fad5cb3296b989300f5ad2dd387f73b1e34504f02"
+    },
+    {
+      "canonicalName": "brand-developer-icons-erlang",
+      "spriteSymbol": "devicon-erlang",
+      "sourcePath": "icons/erlang.svg",
+      "artifactPath": "icons/brand/developer-icons/erlang.svg",
+      "sha256": "5c0516e816e1c2d12d56fee1e9d228b578b11a17b1b3802037aefa5ec37f0a47"
+    },
+    {
+      "canonicalName": "brand-developer-icons-esbuild",
+      "spriteSymbol": "devicon-esbuild",
+      "sourcePath": "icons/esbuild.svg",
+      "artifactPath": "icons/brand/developer-icons/esbuild.svg",
+      "sha256": "d851a3881501277109972d0c18937da29ba98bfb05bc3d9577932edb8e89dca8"
+    },
+    {
+      "canonicalName": "brand-developer-icons-eslint",
+      "spriteSymbol": "devicon-eslint",
+      "sourcePath": "icons/eslint.svg",
+      "artifactPath": "icons/brand/developer-icons/eslint.svg",
+      "sha256": "75bf2e276fc629b478d13029f04e29e238a2412159679d85bbe9c0b9c0e9b0db"
+    },
+    {
+      "canonicalName": "brand-developer-icons-expressjs-dark",
+      "spriteSymbol": "devicon-expressjs-dark",
+      "sourcePath": "icons/expressjs-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/expressjs-dark.svg",
+      "sha256": "882f63ed50d0dc317e30def14ef31fd21c7707d2826e8992ce6a090d2f092c4d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-expressjs-light",
+      "spriteSymbol": "devicon-expressjs-light",
+      "sourcePath": "icons/expressjs-light.svg",
+      "artifactPath": "icons/brand/developer-icons/expressjs-light.svg",
+      "sha256": "3aa4ce4d18cd612e45afae896b24530449dc223d2877c917af40ce663c7cb469"
+    },
+    {
+      "canonicalName": "brand-developer-icons-facebook",
+      "spriteSymbol": "devicon-facebook",
+      "sourcePath": "icons/facebook.svg",
+      "artifactPath": "icons/brand/developer-icons/facebook.svg",
+      "sha256": "b008105cebb3b61d12e470959d9cc32a3aa223958b8f825d083f8a0673da0428"
+    },
+    {
+      "canonicalName": "brand-developer-icons-fast-api",
+      "spriteSymbol": "devicon-fast-api",
+      "sourcePath": "icons/fast-api.svg",
+      "artifactPath": "icons/brand/developer-icons/fast-api.svg",
+      "sha256": "03ee90418a3bed1b624fced6878c45dbad9eb7534e8c074f91f9e3225b2684c3"
+    },
+    {
+      "canonicalName": "brand-developer-icons-faunadb",
+      "spriteSymbol": "devicon-faunadb",
+      "sourcePath": "icons/faunadb.svg",
+      "artifactPath": "icons/brand/developer-icons/faunadb.svg",
+      "sha256": "1b5eee199180222b2b0bc6cd7dc718a5817260a1748696fd405e56c3fdc91c57"
+    },
+    {
+      "canonicalName": "brand-developer-icons-figma",
+      "spriteSymbol": "devicon-figma",
+      "sourcePath": "icons/figma.svg",
+      "artifactPath": "icons/brand/developer-icons/figma.svg",
+      "sha256": "4a6f985312bc65bb671f97b751167ac851530640e8b1ba564c15e44d487cf6cc"
+    },
+    {
+      "canonicalName": "brand-developer-icons-firebase",
+      "spriteSymbol": "devicon-firebase",
+      "sourcePath": "icons/firebase.svg",
+      "artifactPath": "icons/brand/developer-icons/firebase.svg",
+      "sha256": "49fba1b0e98108dbe4ae376116a4eab6d83f050ed9d684101817926d37d4e664"
+    },
+    {
+      "canonicalName": "brand-developer-icons-firefox",
+      "spriteSymbol": "devicon-firefox",
+      "sourcePath": "icons/firefox.svg",
+      "artifactPath": "icons/brand/developer-icons/firefox.svg",
+      "sha256": "6ef3490c504b7ae3f51c4e9d2835035056de59baa890e06e88d1f7f8f5ce148d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-flask-dark",
+      "spriteSymbol": "devicon-flask-dark",
+      "sourcePath": "icons/flask-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/flask-dark.svg",
+      "sha256": "211cd889287ea8d09da4712371167ce3e97966e55f73b60ea663d2bc92d19979"
+    },
+    {
+      "canonicalName": "brand-developer-icons-flask-light",
+      "spriteSymbol": "devicon-flask-light",
+      "sourcePath": "icons/flask-light.svg",
+      "artifactPath": "icons/brand/developer-icons/flask-light.svg",
+      "sha256": "da13ff989cdcab91be9ba4034d2593c7101caa079e917eb16beb41d9d651f95c"
+    },
+    {
+      "canonicalName": "brand-developer-icons-flutter",
+      "spriteSymbol": "devicon-flutter",
+      "sourcePath": "icons/flutter.svg",
+      "artifactPath": "icons/brand/developer-icons/flutter.svg",
+      "sha256": "ff545a80e77de08fedd376b81f4b03f625753f33c0e179d6ece1df82d307714f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-flyio",
+      "spriteSymbol": "devicon-flyio",
+      "sourcePath": "icons/flyio.svg",
+      "artifactPath": "icons/brand/developer-icons/flyio.svg",
+      "sha256": "2b489d2522841289ced5e079ea7072c3cb5dd6bca87fa9cd260c728bccf28742"
+    },
+    {
+      "canonicalName": "brand-developer-icons-framer-dark",
+      "spriteSymbol": "devicon-framer-dark",
+      "sourcePath": "icons/framer-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/framer-dark.svg",
+      "sha256": "715ec8313d922f9acd5925576ff7c87114aadf599f175ba23976c2762e4ed0a5"
+    },
+    {
+      "canonicalName": "brand-developer-icons-framer-light",
+      "spriteSymbol": "devicon-framer-light",
+      "sourcePath": "icons/framer-light.svg",
+      "artifactPath": "icons/brand/developer-icons/framer-light.svg",
+      "sha256": "ca453cb19edce3b847c728d07177899dca33c7720e4cfe7b62a1f6ca18ad9c26"
+    },
+    {
+      "canonicalName": "brand-developer-icons-gatsby",
+      "spriteSymbol": "devicon-gatsby",
+      "sourcePath": "icons/gatsby.svg",
+      "artifactPath": "icons/brand/developer-icons/gatsby.svg",
+      "sha256": "bc2cc121b2f825b7f6c84aaf6a744ec62d26f411c229b20178cf6acc7b15de58"
+    },
+    {
+      "canonicalName": "brand-developer-icons-git",
+      "spriteSymbol": "devicon-git",
+      "sourcePath": "icons/git.svg",
+      "artifactPath": "icons/brand/developer-icons/git.svg",
+      "sha256": "d0b096c8ad6a3934019f64fe2fae06a07f6cf996c3b5a567d4ac15535644ca14"
+    },
+    {
+      "canonicalName": "brand-developer-icons-github-copilot",
+      "spriteSymbol": "devicon-github-copilot",
+      "sourcePath": "icons/github-copilot.svg",
+      "artifactPath": "icons/brand/developer-icons/github-copilot.svg",
+      "sha256": "bda79ccfee4c425cf281c795910261a2bdbc996410e4f24311bf26e1f8642562"
+    },
+    {
+      "canonicalName": "brand-developer-icons-github-dark",
+      "spriteSymbol": "devicon-github-dark",
+      "sourcePath": "icons/github-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/github-dark.svg",
+      "sha256": "9aa1268fabc2795d625a075725df0abd43a464d98c786e6c24a3acb2ffe2b962"
+    },
+    {
+      "canonicalName": "brand-developer-icons-github-light",
+      "spriteSymbol": "devicon-github-light",
+      "sourcePath": "icons/github-light.svg",
+      "artifactPath": "icons/brand/developer-icons/github-light.svg",
+      "sha256": "d3e27cb0eecadca45c3ee8f7cc3094434a535c64e62931a53de6124f0c42945a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-gitlab",
+      "spriteSymbol": "devicon-gitlab",
+      "sourcePath": "icons/gitlab.svg",
+      "artifactPath": "icons/brand/developer-icons/gitlab.svg",
+      "sha256": "3cba46ef9522baf9601127392081c6ec3d5578fb6b52ee0090d6a102a0ec79a2"
+    },
+    {
+      "canonicalName": "brand-developer-icons-gmail",
+      "spriteSymbol": "devicon-gmail",
+      "sourcePath": "icons/gmail.svg",
+      "artifactPath": "icons/brand/developer-icons/gmail.svg",
+      "sha256": "e851ca529001bf33db501441e45a80345a2859b975958ccf3be297c166178b0e"
+    },
+    {
+      "canonicalName": "brand-developer-icons-go",
+      "spriteSymbol": "devicon-go",
+      "sourcePath": "icons/go.svg",
+      "artifactPath": "icons/brand/developer-icons/go.svg",
+      "sha256": "da392240de58c3e9b17d38051f51efee55bbc0858d458b8efc5a563e96b67dc9"
+    },
+    {
+      "canonicalName": "brand-developer-icons-google",
+      "spriteSymbol": "devicon-google",
+      "sourcePath": "icons/google.svg",
+      "artifactPath": "icons/brand/developer-icons/google.svg",
+      "sha256": "95818f17a71ee7814f9af66633c01e908db6ff458906155fd36825f5ef80f0ef"
+    },
+    {
+      "canonicalName": "brand-developer-icons-google-cloud",
+      "spriteSymbol": "devicon-google-cloud",
+      "sourcePath": "icons/google-cloud.svg",
+      "artifactPath": "icons/brand/developer-icons/google-cloud.svg",
+      "sha256": "66ee8e2347f878399855a1ff6b50f257fb68f02d6983556fe72c54ff81e03141"
+    },
+    {
+      "canonicalName": "brand-developer-icons-google-wordmark",
+      "spriteSymbol": "devicon-google-wordmark",
+      "sourcePath": "icons/google-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/google-wordmark.svg",
+      "sha256": "f0c74bfbf12961be3848c690db06db221ae4d65505420540d1902a0ce10d3ca6"
+    },
+    {
+      "canonicalName": "brand-developer-icons-grafana",
+      "spriteSymbol": "devicon-grafana",
+      "sourcePath": "icons/grafana.svg",
+      "artifactPath": "icons/brand/developer-icons/grafana.svg",
+      "sha256": "5a29de2bd10c00a8ad4efd0a9278e3cc6fae2bdc6eb8c87a2b0602f43833bff9"
+    },
+    {
+      "canonicalName": "brand-developer-icons-grafbase",
+      "spriteSymbol": "devicon-grafbase",
+      "sourcePath": "icons/grafbase.svg",
+      "artifactPath": "icons/brand/developer-icons/grafbase.svg",
+      "sha256": "c38efd4f1841ed1b3b22f8fae7bde78db536eba48469cacf65c99d15d6e913ac"
+    },
+    {
+      "canonicalName": "brand-developer-icons-graphite",
+      "spriteSymbol": "devicon-graphite",
+      "sourcePath": "icons/graphite.svg",
+      "artifactPath": "icons/brand/developer-icons/graphite.svg",
+      "sha256": "ff6f3fefd24426d9dda32429e517c3251b2e854f43ab62fe41b08f0862fad883"
+    },
+    {
+      "canonicalName": "brand-developer-icons-graphql",
+      "spriteSymbol": "devicon-graphql",
+      "sourcePath": "icons/graphql.svg",
+      "artifactPath": "icons/brand/developer-icons/graphql.svg",
+      "sha256": "a0127621388e6e8eb44817a59277bf4759d9df4976acee306d4a2711193499cc"
+    },
+    {
+      "canonicalName": "brand-developer-icons-gridsome",
+      "spriteSymbol": "devicon-gridsome",
+      "sourcePath": "icons/gridsome.svg",
+      "artifactPath": "icons/brand/developer-icons/gridsome.svg",
+      "sha256": "346cb81a6e05495a0ace68fc16dfa5f68a413064108766deda0edff03f9c20fa"
+    },
+    {
+      "canonicalName": "brand-developer-icons-gruntjs",
+      "spriteSymbol": "devicon-gruntjs",
+      "sourcePath": "icons/gruntjs.svg",
+      "artifactPath": "icons/brand/developer-icons/gruntjs.svg",
+      "sha256": "4a223acaee850a0f47d11cfa2a280dbb9a4b334c11f893d20ebc724f50847a75"
+    },
+    {
+      "canonicalName": "brand-developer-icons-gulp",
+      "spriteSymbol": "devicon-gulp",
+      "sourcePath": "icons/gulp.svg",
+      "artifactPath": "icons/brand/developer-icons/gulp.svg",
+      "sha256": "1b12223f81e29d6a7cb4b13a03a6df30af7d1a64062de6eb3eee2614f0db3103"
+    },
+    {
+      "canonicalName": "brand-developer-icons-hashnode",
+      "spriteSymbol": "devicon-hashnode",
+      "sourcePath": "icons/hashnode.svg",
+      "artifactPath": "icons/brand/developer-icons/hashnode.svg",
+      "sha256": "9bcd3d4ea3a0cfa894b1a7261ad514d8e7b43f063b2d30aab798e3de95027062"
+    },
+    {
+      "canonicalName": "brand-developer-icons-haskell",
+      "spriteSymbol": "devicon-haskell",
+      "sourcePath": "icons/haskell.svg",
+      "artifactPath": "icons/brand/developer-icons/haskell.svg",
+      "sha256": "0ba269de90a91bf6c204b715ffcddaa706fa92a882d0f0e08a3929b6a8f7da30"
+    },
+    {
+      "canonicalName": "brand-developer-icons-headlessui",
+      "spriteSymbol": "devicon-headlessui",
+      "sourcePath": "icons/headlessui.svg",
+      "artifactPath": "icons/brand/developer-icons/headlessui.svg",
+      "sha256": "ec54dc11b38501b6e02bd8c257a0d61eb6b662bab162fc30e73964feb48fe269"
+    },
+    {
+      "canonicalName": "brand-developer-icons-heroku",
+      "spriteSymbol": "devicon-heroku",
+      "sourcePath": "icons/heroku.svg",
+      "artifactPath": "icons/brand/developer-icons/heroku.svg",
+      "sha256": "dcf89d018596fb215b482aca4e375cecd9839d7a87f83ade338b13703e5c0b0e"
+    },
+    {
+      "canonicalName": "brand-developer-icons-hexo",
+      "spriteSymbol": "devicon-hexo",
+      "sourcePath": "icons/hexo.svg",
+      "artifactPath": "icons/brand/developer-icons/hexo.svg",
+      "sha256": "7e193bae95c40e6387c7dc2d48bedcb5cd3e9e87b3a1748e2aa6ba9d177d57af"
+    },
+    {
+      "canonicalName": "brand-developer-icons-hhvm",
+      "spriteSymbol": "devicon-hhvm",
+      "sourcePath": "icons/hhvm.svg",
+      "artifactPath": "icons/brand/developer-icons/hhvm.svg",
+      "sha256": "2ea197d0186a0d724347ce29453940bcc1f02b1184f00a01036178bae4638785"
+    },
+    {
+      "canonicalName": "brand-developer-icons-homebrew",
+      "spriteSymbol": "devicon-homebrew",
+      "sourcePath": "icons/homebrew.svg",
+      "artifactPath": "icons/brand/developer-icons/homebrew.svg",
+      "sha256": "f2931dd37650e4d5be547fc5a2855931cd777bf92f9486a37c90658812009de7"
+    },
+    {
+      "canonicalName": "brand-developer-icons-hotjar",
+      "spriteSymbol": "devicon-hotjar",
+      "sourcePath": "icons/hotjar.svg",
+      "artifactPath": "icons/brand/developer-icons/hotjar.svg",
+      "sha256": "8ad6ba193af39a89b7a2016a27a19754d08f6f4668171d629e5657315eea23ee"
+    },
+    {
+      "canonicalName": "brand-developer-icons-html5",
+      "spriteSymbol": "devicon-html5",
+      "sourcePath": "icons/html5.svg",
+      "artifactPath": "icons/brand/developer-icons/html5.svg",
+      "sha256": "279f613303c947a2216070684ac5fe3607149e9470f72b5f6a1630aa5f10e3a3"
+    },
+    {
+      "canonicalName": "brand-developer-icons-hugging-face",
+      "spriteSymbol": "devicon-hugging-face",
+      "sourcePath": "icons/hugging-face.svg",
+      "artifactPath": "icons/brand/developer-icons/hugging-face.svg",
+      "sha256": "b5ec949fda0cf9301203c258ea7686325c6dac6db6ec9841c3b4a63a7f5a38d7"
+    },
+    {
+      "canonicalName": "brand-developer-icons-hyper2",
+      "spriteSymbol": "devicon-hyper2",
+      "sourcePath": "icons/hyper2.svg",
+      "artifactPath": "icons/brand/developer-icons/hyper2.svg",
+      "sha256": "b529a4a8fc4c19f2f8208e7ce41c7d6b6adb52523997efd416a4276685f743ac"
+    },
+    {
+      "canonicalName": "brand-developer-icons-i18next",
+      "spriteSymbol": "devicon-i18next",
+      "sourcePath": "icons/i18next.svg",
+      "artifactPath": "icons/brand/developer-icons/i18next.svg",
+      "sha256": "cdfe54684fc7154272b403566ce077bef3ad8d61fe0e15ef8f07ec7e6d6de76b"
+    },
+    {
+      "canonicalName": "brand-developer-icons-indesign",
+      "spriteSymbol": "devicon-indesign",
+      "sourcePath": "icons/indesign.svg",
+      "artifactPath": "icons/brand/developer-icons/indesign.svg",
+      "sha256": "f9fdd38fb99dc0964d9abdc32ec59e321d575b99d37a84bdaff5954d08a3924a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-insomnia",
+      "spriteSymbol": "devicon-insomnia",
+      "sourcePath": "icons/insomnia.svg",
+      "artifactPath": "icons/brand/developer-icons/insomnia.svg",
+      "sha256": "d696520e9bdc39b001003ae39f3cc7664cadd049481ac2031e5ac60367cb66ac"
+    },
+    {
+      "canonicalName": "brand-developer-icons-instagram",
+      "spriteSymbol": "devicon-instagram",
+      "sourcePath": "icons/instagram.svg",
+      "artifactPath": "icons/brand/developer-icons/instagram.svg",
+      "sha256": "3c5b83cee94efc05d46b5d36352268569d38cf3fc8b4432fa99c7c0e0da85775"
+    },
+    {
+      "canonicalName": "brand-developer-icons-internet-explorer",
+      "spriteSymbol": "devicon-internet-explorer",
+      "sourcePath": "icons/internet-explorer.svg",
+      "artifactPath": "icons/brand/developer-icons/internet-explorer.svg",
+      "sha256": "47c7092154595e29c0e2ff4ce26b60f27f27ec137c624b32b926afeec4a53d75"
+    },
+    {
+      "canonicalName": "brand-developer-icons-invision",
+      "spriteSymbol": "devicon-invision",
+      "sourcePath": "icons/invision.svg",
+      "artifactPath": "icons/brand/developer-icons/invision.svg",
+      "sha256": "64a1d2b50a785e9af595230139b75b6a39b2bcd4346e91f6b2b1c276933cec9a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-ionic",
+      "spriteSymbol": "devicon-ionic",
+      "sourcePath": "icons/ionic.svg",
+      "artifactPath": "icons/brand/developer-icons/ionic.svg",
+      "sha256": "e954c20751816730a14079d81266c83294a1b08ddc0b7ec2fc1ed74226095cea"
+    },
+    {
+      "canonicalName": "brand-developer-icons-jamstack",
+      "spriteSymbol": "devicon-jamstack",
+      "sourcePath": "icons/jamstack.svg",
+      "artifactPath": "icons/brand/developer-icons/jamstack.svg",
+      "sha256": "42a47a8e2a14f9e552ffeb44771286801a36da20ddc188864defe2be92af3fe8"
+    },
+    {
+      "canonicalName": "brand-developer-icons-java",
+      "spriteSymbol": "devicon-java",
+      "sourcePath": "icons/java.svg",
+      "artifactPath": "icons/brand/developer-icons/java.svg",
+      "sha256": "5599224a839853fdc44401257f4501f62579d56d67a2a5a9681992feb7287503"
+    },
+    {
+      "canonicalName": "brand-developer-icons-javascript",
+      "spriteSymbol": "devicon-javascript",
+      "sourcePath": "icons/javascript.svg",
+      "artifactPath": "icons/brand/developer-icons/javascript.svg",
+      "sha256": "980da2ba1ac995322801bd749cd283b04dfabc1407bb813d806dfe7b3599eb61"
+    },
+    {
+      "canonicalName": "brand-developer-icons-jenkins",
+      "spriteSymbol": "devicon-jenkins",
+      "sourcePath": "icons/jenkins.svg",
+      "artifactPath": "icons/brand/developer-icons/jenkins.svg",
+      "sha256": "28fa94785146d8b1fb080752a7aa107f83a2d265c7a7c7af3010deff3fa46a7f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-jest",
+      "spriteSymbol": "devicon-jest",
+      "sourcePath": "icons/jest.svg",
+      "artifactPath": "icons/brand/developer-icons/jest.svg",
+      "sha256": "598b09cac09a97028297a91fb471aa9711d117a79bea33cc1fd423126e54db1c"
+    },
+    {
+      "canonicalName": "brand-developer-icons-jira",
+      "spriteSymbol": "devicon-jira",
+      "sourcePath": "icons/jira.svg",
+      "artifactPath": "icons/brand/developer-icons/jira.svg",
+      "sha256": "2377e7dfde8daa2871822e86c4d0fc52814e536db6d84d6b87168848c933f711"
+    },
+    {
+      "canonicalName": "brand-developer-icons-jquery",
+      "spriteSymbol": "devicon-jquery",
+      "sourcePath": "icons/jquery.svg",
+      "artifactPath": "icons/brand/developer-icons/jquery.svg",
+      "sha256": "a7713ec6ad0f6a2ddb589698ac7d26a9dc6938eec9acad60cfebd36fc01fcd39"
+    },
+    {
+      "canonicalName": "brand-developer-icons-jslint",
+      "spriteSymbol": "devicon-jslint",
+      "sourcePath": "icons/jslint.svg",
+      "artifactPath": "icons/brand/developer-icons/jslint.svg",
+      "sha256": "62ed6974305ddfb71a585e4533ad98fbe7460b0a81020627814c77751c25ae4b"
+    },
+    {
+      "canonicalName": "brand-developer-icons-json",
+      "spriteSymbol": "devicon-json",
+      "sourcePath": "icons/json.svg",
+      "artifactPath": "icons/brand/developer-icons/json.svg",
+      "sha256": "ed0d082822dd6015e487794c05af88ff9a1d714114914c44d9cb35b3e7266ac3"
+    },
+    {
+      "canonicalName": "brand-developer-icons-k6",
+      "spriteSymbol": "devicon-k6",
+      "sourcePath": "icons/k6.svg",
+      "artifactPath": "icons/brand/developer-icons/k6.svg",
+      "sha256": "ecaa0b5ef70999235f3f319d9c222edd7a682fae75123e65229031389a735b73"
+    },
+    {
+      "canonicalName": "brand-developer-icons-kafka",
+      "spriteSymbol": "devicon-kafka",
+      "sourcePath": "icons/kafka.svg",
+      "artifactPath": "icons/brand/developer-icons/kafka.svg",
+      "sha256": "4391c1e62cdf62faf320e6593329c78f385c03ad8ccef6fd8d05707ef40d24e4"
+    },
+    {
+      "canonicalName": "brand-developer-icons-kibana",
+      "spriteSymbol": "devicon-kibana",
+      "sourcePath": "icons/kibana.svg",
+      "artifactPath": "icons/brand/developer-icons/kibana.svg",
+      "sha256": "189e8ed5b77a9a5cf5e0c00dc35ceeb64420bbdc357bbc5a2925294d3c0e9266"
+    },
+    {
+      "canonicalName": "brand-developer-icons-kotlin",
+      "spriteSymbol": "devicon-kotlin",
+      "sourcePath": "icons/kotlin.svg",
+      "artifactPath": "icons/brand/developer-icons/kotlin.svg",
+      "sha256": "34e08be659d488000cd7bae9f65bc26aca119291c590baa47ba8ad71e79157be"
+    },
+    {
+      "canonicalName": "brand-developer-icons-kubernetes",
+      "spriteSymbol": "devicon-kubernetes",
+      "sourcePath": "icons/kubernetes.svg",
+      "artifactPath": "icons/brand/developer-icons/kubernetes.svg",
+      "sha256": "adf7d1a2062244a0b5391d6c5c35ad536f816473410777e523d506474c47d672"
+    },
+    {
+      "canonicalName": "brand-developer-icons-laravel",
+      "spriteSymbol": "devicon-laravel",
+      "sourcePath": "icons/laravel.svg",
+      "artifactPath": "icons/brand/developer-icons/laravel.svg",
+      "sha256": "4d4f29b0d1e71c32cdb14116b979b1b3ca94e9c59872832c3e581375b34a84c0"
+    },
+    {
+      "canonicalName": "brand-developer-icons-lerna-dark",
+      "spriteSymbol": "devicon-lerna-dark",
+      "sourcePath": "icons/lerna-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/lerna-dark.svg",
+      "sha256": "bcb5ba952fd3b78d1171a8d985396f6a64d8c075a31fcf06073d9d01f14e841e"
+    },
+    {
+      "canonicalName": "brand-developer-icons-lerna-light",
+      "spriteSymbol": "devicon-lerna-light",
+      "sourcePath": "icons/lerna-light.svg",
+      "artifactPath": "icons/brand/developer-icons/lerna-light.svg",
+      "sha256": "1a496ad9d1fcf2e057bf1be541aef54a7ca732926510ac08e7498543d7bd2239"
+    },
+    {
+      "canonicalName": "brand-developer-icons-less",
+      "spriteSymbol": "devicon-less",
+      "sourcePath": "icons/less.svg",
+      "artifactPath": "icons/brand/developer-icons/less.svg",
+      "sha256": "9e8322681ebd308230a284da689019a1c378026e18f25e30cc8d9f2ff41c8297"
+    },
+    {
+      "canonicalName": "brand-developer-icons-lightroom",
+      "spriteSymbol": "devicon-lightroom",
+      "sourcePath": "icons/lightroom.svg",
+      "artifactPath": "icons/brand/developer-icons/lightroom.svg",
+      "sha256": "51376868d9e108e73494730abd66c3883acef53bf1be82682b43be69822bf914"
+    },
+    {
+      "canonicalName": "brand-developer-icons-linkedin",
+      "spriteSymbol": "devicon-linkedin",
+      "sourcePath": "icons/linkedin.svg",
+      "artifactPath": "icons/brand/developer-icons/linkedin.svg",
+      "sha256": "1cc82039b2780fa2a139687d7ec939b8dae8b55fd3531b41d8c2322b996a0ea4"
+    },
+    {
+      "canonicalName": "brand-developer-icons-linux",
+      "spriteSymbol": "devicon-linux",
+      "sourcePath": "icons/linux.svg",
+      "artifactPath": "icons/brand/developer-icons/linux.svg",
+      "sha256": "29a70120c44209c59a849c99bc5af3d82003dd6f34065f3db676fa8d7aaef252"
+    },
+    {
+      "canonicalName": "brand-developer-icons-lit",
+      "spriteSymbol": "devicon-lit",
+      "sourcePath": "icons/lit.svg",
+      "artifactPath": "icons/brand/developer-icons/lit.svg",
+      "sha256": "322d8fd69bd3bcc324e2b4d6e8ccb3ec71bb19cdfa8fd2eb24a18e149bfd3b79"
+    },
+    {
+      "canonicalName": "brand-developer-icons-liveblocks",
+      "spriteSymbol": "devicon-liveblocks",
+      "sourcePath": "icons/liveblocks.svg",
+      "artifactPath": "icons/brand/developer-icons/liveblocks.svg",
+      "sha256": "bf347e9ae6085d98c550259228e0f0f390c61618fde93e3bfe2af5e34832260c"
+    },
+    {
+      "canonicalName": "brand-developer-icons-logrocket",
+      "spriteSymbol": "devicon-logrocket",
+      "sourcePath": "icons/logrocket.svg",
+      "artifactPath": "icons/brand/developer-icons/logrocket.svg",
+      "sha256": "f6fce3b99049c1eb82f1c61feda7c11be2f4a5d607c1363fe57a45ae0b1a9819"
+    },
+    {
+      "canonicalName": "brand-developer-icons-lokalise",
+      "spriteSymbol": "devicon-lokalise",
+      "sourcePath": "icons/lokalise.svg",
+      "artifactPath": "icons/brand/developer-icons/lokalise.svg",
+      "sha256": "19b9d281266176252be4c73dc721fbd86a7c3b0ceffc526a70154c3e3e8fddcd"
+    },
+    {
+      "canonicalName": "brand-developer-icons-lua",
+      "spriteSymbol": "devicon-lua",
+      "sourcePath": "icons/lua.svg",
+      "artifactPath": "icons/brand/developer-icons/lua.svg",
+      "sha256": "b26bda94de9f206df12bb8e731dd5cfbdf7ad1cf801990ae1667d944bb8c5bfa"
+    },
+    {
+      "canonicalName": "brand-developer-icons-lunacy",
+      "spriteSymbol": "devicon-lunacy",
+      "sourcePath": "icons/lunacy.svg",
+      "artifactPath": "icons/brand/developer-icons/lunacy.svg",
+      "sha256": "91b14b48d64f191b7d4e33ee9843ce4d77b1c607b642a4aec85e479525547d00"
+    },
+    {
+      "canonicalName": "brand-developer-icons-mariadb",
+      "spriteSymbol": "devicon-mariadb",
+      "sourcePath": "icons/mariadb.svg",
+      "artifactPath": "icons/brand/developer-icons/mariadb.svg",
+      "sha256": "57b97dd66d9219a79dd4f72640c4c14788235e338f63349ab03b8958459119ae"
+    },
+    {
+      "canonicalName": "brand-developer-icons-marionette",
+      "spriteSymbol": "devicon-marionette",
+      "sourcePath": "icons/marionette.svg",
+      "artifactPath": "icons/brand/developer-icons/marionette.svg",
+      "sha256": "efad0025192058f204ff0383c8b05c43469bfa3bf3fc5dec0642e8140fba1b96"
+    },
+    {
+      "canonicalName": "brand-developer-icons-markdown",
+      "spriteSymbol": "devicon-markdown",
+      "sourcePath": "icons/markdown.svg",
+      "artifactPath": "icons/brand/developer-icons/markdown.svg",
+      "sha256": "9e20cd41f2bb22eca43c76afc906932fddf3ee133698835f17df3fd0f45fda88"
+    },
+    {
+      "canonicalName": "brand-developer-icons-mastodon",
+      "spriteSymbol": "devicon-mastodon",
+      "sourcePath": "icons/mastodon.svg",
+      "artifactPath": "icons/brand/developer-icons/mastodon.svg",
+      "sha256": "b7fd1dcd82a285493e52a69606023c5982b5566d1c2a4ade26ec73f1f54aea67"
+    },
+    {
+      "canonicalName": "brand-developer-icons-materialui",
+      "spriteSymbol": "devicon-materialui",
+      "sourcePath": "icons/materialui.svg",
+      "artifactPath": "icons/brand/developer-icons/materialui.svg",
+      "sha256": "1efacfa7107adff8dda07c520c2447ac2a48fd7368f3901df526c6d379c40422"
+    },
+    {
+      "canonicalName": "brand-developer-icons-messenger",
+      "spriteSymbol": "devicon-messenger",
+      "sourcePath": "icons/messenger.svg",
+      "artifactPath": "icons/brand/developer-icons/messenger.svg",
+      "sha256": "64b1fc63defc2366f4d3faca34edc30fad86ae3395dc608083f934e295b7f4ac"
+    },
+    {
+      "canonicalName": "brand-developer-icons-meta",
+      "spriteSymbol": "devicon-meta",
+      "sourcePath": "icons/meta.svg",
+      "artifactPath": "icons/brand/developer-icons/meta.svg",
+      "sha256": "e1e066f7be38c442a8b835b44d4fb75491c2375b14a180a5697577d39b039668"
+    },
+    {
+      "canonicalName": "brand-developer-icons-microsoft",
+      "spriteSymbol": "devicon-microsoft",
+      "sourcePath": "icons/microsoft.svg",
+      "artifactPath": "icons/brand/developer-icons/microsoft.svg",
+      "sha256": "a9e8841c5d96766878c9f67bc855af165aa5560714c218d35b5d454e1dc8c1a5"
+    },
+    {
+      "canonicalName": "brand-developer-icons-microsoft-sql-server",
+      "spriteSymbol": "devicon-microsoft-sql-server",
+      "sourcePath": "icons/microsoft-sql-server.svg",
+      "artifactPath": "icons/brand/developer-icons/microsoft-sql-server.svg",
+      "sha256": "2d7a107a2001d2ef174164acb4eaebd06a1a50a9b9122bd5ede83a0dd07f3ea6"
+    },
+    {
+      "canonicalName": "brand-developer-icons-microsoft-sql-server-2",
+      "spriteSymbol": "devicon-microsoft-sql-server-2",
+      "sourcePath": "icons/microsoft-sql-server-2.svg",
+      "artifactPath": "icons/brand/developer-icons/microsoft-sql-server-2.svg",
+      "sha256": "e097e038e4413b3071d0bb0bff95dc20203f6d1a55a8146ab912c39c5e22fc6f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-miro",
+      "spriteSymbol": "devicon-miro",
+      "sourcePath": "icons/miro.svg",
+      "artifactPath": "icons/brand/developer-icons/miro.svg",
+      "sha256": "cb69e4610b579b10f4bccb16b4a9bad5926bfd2d769e256347c74755ff406233"
+    },
+    {
+      "canonicalName": "brand-developer-icons-mochajs",
+      "spriteSymbol": "devicon-mochajs",
+      "sourcePath": "icons/mochajs.svg",
+      "artifactPath": "icons/brand/developer-icons/mochajs.svg",
+      "sha256": "a2a986d2f95a165f9b0bc65f9d4b0f7d154caa18847a205a1fb71f04352d920d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-mongodb",
+      "spriteSymbol": "devicon-mongodb",
+      "sourcePath": "icons/mongodb.svg",
+      "artifactPath": "icons/brand/developer-icons/mongodb.svg",
+      "sha256": "b36394cd1897ec14c60806ca56fa9456c875aee625065b3bfb477280e71ae014"
+    },
+    {
+      "canonicalName": "brand-developer-icons-mozilla",
+      "spriteSymbol": "devicon-mozilla",
+      "sourcePath": "icons/mozilla.svg",
+      "artifactPath": "icons/brand/developer-icons/mozilla.svg",
+      "sha256": "a622d21339203a046933f03b84be6b8bbee022ecf8ad32217dd7a5db31996f6e"
+    },
+    {
+      "canonicalName": "brand-developer-icons-mysql",
+      "spriteSymbol": "devicon-mysql",
+      "sourcePath": "icons/mysql.svg",
+      "artifactPath": "icons/brand/developer-icons/mysql.svg",
+      "sha256": "dccaf46947bc7ee49e0e8379a3906f2db736019f4d3d5ceede64af94d9ca8b7a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-neovim",
+      "spriteSymbol": "devicon-neovim",
+      "sourcePath": "icons/neovim.svg",
+      "artifactPath": "icons/brand/developer-icons/neovim.svg",
+      "sha256": "9b00e21ca7b056b33615404fe910cae1b68012f9a3fe511788971ca2dc028ede"
+    },
+    {
+      "canonicalName": "brand-developer-icons-nestjs",
+      "spriteSymbol": "devicon-nestjs",
+      "sourcePath": "icons/nestjs.svg",
+      "artifactPath": "icons/brand/developer-icons/nestjs.svg",
+      "sha256": "6941492728563405abf5b2e1a72dc5a0c9d326def8bc0f3536a41c9c4676bb28"
+    },
+    {
+      "canonicalName": "brand-developer-icons-netlify",
+      "spriteSymbol": "devicon-netlify",
+      "sourcePath": "icons/netlify.svg",
+      "artifactPath": "icons/brand/developer-icons/netlify.svg",
+      "sha256": "f28fe2df67fd361dfd7b272d31b00df4fb0f851a3e1927b129f9712fd9ca8139"
+    },
+    {
+      "canonicalName": "brand-developer-icons-netlify2",
+      "spriteSymbol": "devicon-netlify2",
+      "sourcePath": "icons/netlify2.svg",
+      "artifactPath": "icons/brand/developer-icons/netlify2.svg",
+      "sha256": "7499c8acf98da3b9ae12c1b36c71a390e218991acbc5a252fb83f0fa7707d4c9"
+    },
+    {
+      "canonicalName": "brand-developer-icons-nextjs",
+      "spriteSymbol": "devicon-nextjs",
+      "sourcePath": "icons/nextjs.svg",
+      "artifactPath": "icons/brand/developer-icons/nextjs.svg",
+      "sha256": "cbc119e59e8394e5607b2c53c3025f403bf2a960abf88d79e2e545e8e19a60b1"
+    },
+    {
+      "canonicalName": "brand-developer-icons-nextjs-wordmark",
+      "spriteSymbol": "devicon-nextjs-wordmark",
+      "sourcePath": "icons/nextjs-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/nextjs-wordmark.svg",
+      "sha256": "596bb7de929b78fceb4d57c637f80913600b08b543a3ea4084f93cd1fac33b30"
+    },
+    {
+      "canonicalName": "brand-developer-icons-nim",
+      "spriteSymbol": "devicon-nim",
+      "sourcePath": "icons/nim.svg",
+      "artifactPath": "icons/brand/developer-icons/nim.svg",
+      "sha256": "b5356706dd54765f3fccfd9f2a0a60cbae9fe0d9cb85f5b93079d9feb448bf91"
+    },
+    {
+      "canonicalName": "brand-developer-icons-nodejs",
+      "spriteSymbol": "devicon-nodejs",
+      "sourcePath": "icons/nodejs.svg",
+      "artifactPath": "icons/brand/developer-icons/nodejs.svg",
+      "sha256": "06b710c1c7537842c03586753ed5c2db8fadc8f3e2d5b9066cfd8a2185688d86"
+    },
+    {
+      "canonicalName": "brand-developer-icons-notion",
+      "spriteSymbol": "devicon-notion",
+      "sourcePath": "icons/notion.svg",
+      "artifactPath": "icons/brand/developer-icons/notion.svg",
+      "sha256": "8a90d69c1121db1e9572f8138b3e849c1da3c7ef55d4453e673e9a828e5f1479"
+    },
+    {
+      "canonicalName": "brand-developer-icons-npm",
+      "spriteSymbol": "devicon-npm",
+      "sourcePath": "icons/npm.svg",
+      "artifactPath": "icons/brand/developer-icons/npm.svg",
+      "sha256": "9157fdf9ef13414337b161d89bf66ab54c11780342a9b946e9978f9ba0e237cb"
+    },
+    {
+      "canonicalName": "brand-developer-icons-npm-wordmark",
+      "spriteSymbol": "devicon-npm-wordmark",
+      "sourcePath": "icons/npm-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/npm-wordmark.svg",
+      "sha256": "05de8fde34afd24078a81c8e29af85c44cbb42f1e983e4f2e6baf24d618049be"
+    },
+    {
+      "canonicalName": "brand-developer-icons-numpy",
+      "spriteSymbol": "devicon-numpy",
+      "sourcePath": "icons/numpy.svg",
+      "artifactPath": "icons/brand/developer-icons/numpy.svg",
+      "sha256": "e3c79675b3744283472ebc1ea6800fdae1e769d89d194ac56d1881f045d9f24b"
+    },
+    {
+      "canonicalName": "brand-developer-icons-nuxtjs",
+      "spriteSymbol": "devicon-nuxtjs",
+      "sourcePath": "icons/nuxtjs.svg",
+      "artifactPath": "icons/brand/developer-icons/nuxtjs.svg",
+      "sha256": "c2446db9bc2ac93ec7182905b99d1090d5c879c1c47d1d3360774a3ec504903f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-nx",
+      "spriteSymbol": "devicon-nx",
+      "sourcePath": "icons/nx.svg",
+      "artifactPath": "icons/brand/developer-icons/nx.svg",
+      "sha256": "2b726c77792b0e4a86631d8532f9aaffe927ae5d000060476e13023b01d6b5bc"
+    },
+    {
+      "canonicalName": "brand-developer-icons-ocaml",
+      "spriteSymbol": "devicon-ocaml",
+      "sourcePath": "icons/ocaml.svg",
+      "artifactPath": "icons/brand/developer-icons/ocaml.svg",
+      "sha256": "77b56ec1638e9371074a4c1963a02c463cd1261b40c09cabdb317251908bef42"
+    },
+    {
+      "canonicalName": "brand-developer-icons-onedrive",
+      "spriteSymbol": "devicon-onedrive",
+      "sourcePath": "icons/onedrive.svg",
+      "artifactPath": "icons/brand/developer-icons/onedrive.svg",
+      "sha256": "32d58ded801bf4c4575fffbf0a1aa3a6eebeb33981af8e986683b0b322b2dcaf"
+    },
+    {
+      "canonicalName": "brand-developer-icons-openai",
+      "spriteSymbol": "devicon-openai",
+      "sourcePath": "icons/openai.svg",
+      "artifactPath": "icons/brand/developer-icons/openai.svg",
+      "sha256": "7e4c56e7c0d8397fdd06c2467cdaa1941ac5584f0ea644a2012314381c9f0141"
+    },
+    {
+      "canonicalName": "brand-developer-icons-opera",
+      "spriteSymbol": "devicon-opera",
+      "sourcePath": "icons/opera.svg",
+      "artifactPath": "icons/brand/developer-icons/opera.svg",
+      "sha256": "37e4840ebae954131da4898c308a4a11fd6ba502ad359ceb3094634bac0ea4e8"
+    },
+    {
+      "canonicalName": "brand-developer-icons-oracle",
+      "spriteSymbol": "devicon-oracle",
+      "sourcePath": "icons/oracle.svg",
+      "artifactPath": "icons/brand/developer-icons/oracle.svg",
+      "sha256": "17b30d0b0ee2868f05dadb779d907bdc07d86518d1bbad31a95842f24597fcba"
+    },
+    {
+      "canonicalName": "brand-developer-icons-outlook",
+      "spriteSymbol": "devicon-outlook",
+      "sourcePath": "icons/outlook.svg",
+      "artifactPath": "icons/brand/developer-icons/outlook.svg",
+      "sha256": "459596d92539093439ecd08f88f1a9a9554dcda5cf8e6e00372f50d22fb12303"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pandacss",
+      "spriteSymbol": "devicon-pandacss",
+      "sourcePath": "icons/pandacss.svg",
+      "artifactPath": "icons/brand/developer-icons/pandacss.svg",
+      "sha256": "e3bb94090f3ad10df71e495c9bce23cd014106c0b90845d61e398306b4acafd6"
+    },
+    {
+      "canonicalName": "brand-developer-icons-photoshop",
+      "spriteSymbol": "devicon-photoshop",
+      "sourcePath": "icons/photoshop.svg",
+      "artifactPath": "icons/brand/developer-icons/photoshop.svg",
+      "sha256": "c4d66f6b096f420c58a036c76ad7a95283eab50c252a6f29d506a4bf75dd687d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-php",
+      "spriteSymbol": "devicon-php",
+      "sourcePath": "icons/php.svg",
+      "artifactPath": "icons/brand/developer-icons/php.svg",
+      "sha256": "ea56243f54e222347ff9f0f5861e31d4de1b2d7b434586778a4921f770d730f2"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pinia",
+      "spriteSymbol": "devicon-pinia",
+      "sourcePath": "icons/pinia.svg",
+      "artifactPath": "icons/brand/developer-icons/pinia.svg",
+      "sha256": "663314a12327c8d5a22a0e586b1a58905fab787b3e2d43a93132e86e9cd72052"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pinterest",
+      "spriteSymbol": "devicon-pinterest",
+      "sourcePath": "icons/pinterest.svg",
+      "artifactPath": "icons/brand/developer-icons/pinterest.svg",
+      "sha256": "0d736de8539056e33eae8cf5b7fc751210e3cf1fd4c8306c7e3f6b13c3858c39"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pixijs",
+      "spriteSymbol": "devicon-pixijs",
+      "sourcePath": "icons/pixijs.svg",
+      "artifactPath": "icons/brand/developer-icons/pixijs.svg",
+      "sha256": "da5642e0e182185a1c1b1389d0a96a5a5e633f7680b2fbb9e6d9e7009d84419d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-playwright",
+      "spriteSymbol": "devicon-playwright",
+      "sourcePath": "icons/playwright.svg",
+      "artifactPath": "icons/brand/developer-icons/playwright.svg",
+      "sha256": "539eaa0d04721fb6b7b1782f1cb5279cf768acce5ba660a386ba2e09bae1a76e"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pnpm-dark",
+      "spriteSymbol": "devicon-pnpm-dark",
+      "sourcePath": "icons/pnpm-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/pnpm-dark.svg",
+      "sha256": "069a78dc16f43b4009d189849c824bbc6a697f8c53fc68e9123a1a3d5b5cdfa0"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pnpm-dark-wordmark",
+      "spriteSymbol": "devicon-pnpm-dark-wordmark",
+      "sourcePath": "icons/pnpm-dark-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/pnpm-dark-wordmark.svg",
+      "sha256": "45a3e20d39c4152e76867d1f35ae8d9fc0a781be20d844c8ed65c6114621e468"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pnpm-light",
+      "spriteSymbol": "devicon-pnpm-light",
+      "sourcePath": "icons/pnpm-light.svg",
+      "artifactPath": "icons/brand/developer-icons/pnpm-light.svg",
+      "sha256": "56f3899e182ba10182cedcd0d14b5453ee9fe43dd916fd01f073739a882431ff"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pnpm-light-wordmark",
+      "spriteSymbol": "devicon-pnpm-light-wordmark",
+      "sourcePath": "icons/pnpm-light-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/pnpm-light-wordmark.svg",
+      "sha256": "55a50b9458517a5ae2bbaf3215c891a9e8095938aadb8775b6fb24bd67c51f99"
+    },
+    {
+      "canonicalName": "brand-developer-icons-postgresql",
+      "spriteSymbol": "devicon-postgresql",
+      "sourcePath": "icons/postgresql.svg",
+      "artifactPath": "icons/brand/developer-icons/postgresql.svg",
+      "sha256": "5148f3be6d996f04f408c10c41561fdfdfe2543b5a16c8c614be16a631f1c33b"
+    },
+    {
+      "canonicalName": "brand-developer-icons-postman",
+      "spriteSymbol": "devicon-postman",
+      "sourcePath": "icons/postman.svg",
+      "artifactPath": "icons/brand/developer-icons/postman.svg",
+      "sha256": "2005929d4dd23ad4beca5286cf70625d5c0c908753eb297e3bb91cd64899bdef"
+    },
+    {
+      "canonicalName": "brand-developer-icons-powershell",
+      "spriteSymbol": "devicon-powershell",
+      "sourcePath": "icons/powershell.svg",
+      "artifactPath": "icons/brand/developer-icons/powershell.svg",
+      "sha256": "e68512e1e072359d5e9597808860b132cf896a7a2f9cb63a7961c2a807a264e0"
+    },
+    {
+      "canonicalName": "brand-developer-icons-preact",
+      "spriteSymbol": "devicon-preact",
+      "sourcePath": "icons/preact.svg",
+      "artifactPath": "icons/brand/developer-icons/preact.svg",
+      "sha256": "6ec366bf40fe51a402eb88914a624cb1d7ffd556fd8862729b22dc368fa3ed7a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-presto",
+      "spriteSymbol": "devicon-presto",
+      "sourcePath": "icons/presto.svg",
+      "artifactPath": "icons/brand/developer-icons/presto.svg",
+      "sha256": "6ba748cadcbc3f352f5b05a36aea5c6199417ca56f02c9e3249dcd5f90213806"
+    },
+    {
+      "canonicalName": "brand-developer-icons-prettier",
+      "spriteSymbol": "devicon-prettier",
+      "sourcePath": "icons/prettier.svg",
+      "artifactPath": "icons/brand/developer-icons/prettier.svg",
+      "sha256": "6252e50be2f5bdcf2dc2ad65ef11017e8373e3a47bd508ada489f55ff43417f7"
+    },
+    {
+      "canonicalName": "brand-developer-icons-prisma",
+      "spriteSymbol": "devicon-prisma",
+      "sourcePath": "icons/prisma.svg",
+      "artifactPath": "icons/brand/developer-icons/prisma.svg",
+      "sha256": "72c80e858ca781811b3a6aae99f6ec87ac7678af954a137f741d2ca75da25a59"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pugjs",
+      "spriteSymbol": "devicon-pugjs",
+      "sourcePath": "icons/pugjs.svg",
+      "artifactPath": "icons/brand/developer-icons/pugjs.svg",
+      "sha256": "88e1a8063a4cd0cb208f898c4ee64de162bf8f08d3815edd123454ecd9953af8"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pulumi",
+      "spriteSymbol": "devicon-pulumi",
+      "sourcePath": "icons/pulumi.svg",
+      "artifactPath": "icons/brand/developer-icons/pulumi.svg",
+      "sha256": "224bed0378e9fb16e093f9614b291e8cd7b33d7736479c068c66d563799f10f9"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pulumi-dark-wordmark",
+      "spriteSymbol": "devicon-pulumi-dark-wordmark",
+      "sourcePath": "icons/pulumi-dark-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/pulumi-dark-wordmark.svg",
+      "sha256": "5a6a46945d44b4b5fd13436736c284f6c5f87a700603ca7f073941741dd42a1e"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pulumi-light-wordmark",
+      "spriteSymbol": "devicon-pulumi-light-wordmark",
+      "sourcePath": "icons/pulumi-light-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/pulumi-light-wordmark.svg",
+      "sha256": "6beef2864e496f9aff510e114f0c4870cee4f053a81d5b2a03f4a1a2b3e77ab3"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pwa",
+      "spriteSymbol": "devicon-pwa",
+      "sourcePath": "icons/pwa.svg",
+      "artifactPath": "icons/brand/developer-icons/pwa.svg",
+      "sha256": "8aaa604b7ed08920998a24e2f07f22805420a0bc580237a411e0474e9b93eb80"
+    },
+    {
+      "canonicalName": "brand-developer-icons-python",
+      "spriteSymbol": "devicon-python",
+      "sourcePath": "icons/python.svg",
+      "artifactPath": "icons/brand/developer-icons/python.svg",
+      "sha256": "d104493c25083b2cc8a6011957da2d9689a50fdcbc71e558e8c738fb3330b9bd"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pytorch",
+      "spriteSymbol": "devicon-pytorch",
+      "sourcePath": "icons/pytorch.svg",
+      "artifactPath": "icons/brand/developer-icons/pytorch.svg",
+      "sha256": "17a96d475e1d9ee20d7c6d7db9d50949eadaf3f01785e8cead723003aa312e96"
+    },
+    {
+      "canonicalName": "brand-developer-icons-pytorch3d",
+      "spriteSymbol": "devicon-pytorch3d",
+      "sourcePath": "icons/pytorch3d.svg",
+      "artifactPath": "icons/brand/developer-icons/pytorch3d.svg",
+      "sha256": "03177ef9e656bd1eef67a4859ea04d00b86ea011dd47494c8ad8794df999f542"
+    },
+    {
+      "canonicalName": "brand-developer-icons-qwik",
+      "spriteSymbol": "devicon-qwik",
+      "sourcePath": "icons/qwik.svg",
+      "artifactPath": "icons/brand/developer-icons/qwik.svg",
+      "sha256": "4f6b6bc8c44353a09ad64bcd5e5777c8a42c6f77e38f80164c1fa8b1ecb2542d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-r",
+      "spriteSymbol": "devicon-r",
+      "sourcePath": "icons/r.svg",
+      "artifactPath": "icons/brand/developer-icons/r.svg",
+      "sha256": "277a458e7ed1de9bd007612511b41a2aba141d26b108c51253b13e9567481ab7"
+    },
+    {
+      "canonicalName": "brand-developer-icons-radixui",
+      "spriteSymbol": "devicon-radixui",
+      "sourcePath": "icons/radixui.svg",
+      "artifactPath": "icons/brand/developer-icons/radixui.svg",
+      "sha256": "e61eec36f4cab4d0fa1147874a284bf86bae83e1a4a2d4ba4f78ebdd77fa1f75"
+    },
+    {
+      "canonicalName": "brand-developer-icons-rails",
+      "spriteSymbol": "devicon-rails",
+      "sourcePath": "icons/rails.svg",
+      "artifactPath": "icons/brand/developer-icons/rails.svg",
+      "sha256": "316f93cddaa87ad0c8dfd54ac5502db9582a2ebfb47f1a0b4c6627773a481698"
+    },
+    {
+      "canonicalName": "brand-developer-icons-railway",
+      "spriteSymbol": "devicon-railway",
+      "sourcePath": "icons/railway.svg",
+      "artifactPath": "icons/brand/developer-icons/railway.svg",
+      "sha256": "586246cb05aa31cfa0a3c7efad575a3fb80606202c69231cb97c87f4fa41e8c3"
+    },
+    {
+      "canonicalName": "brand-developer-icons-react-query",
+      "spriteSymbol": "devicon-react-query",
+      "sourcePath": "icons/react-query.svg",
+      "artifactPath": "icons/brand/developer-icons/react-query.svg",
+      "sha256": "9348c612b2384e80afc6d641a95787d76c3d1e05d0c8a617d0c835c2f054300d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-reactjs",
+      "spriteSymbol": "devicon-reactjs",
+      "sourcePath": "icons/reactjs.svg",
+      "artifactPath": "icons/brand/developer-icons/reactjs.svg",
+      "sha256": "1be57327eba52a0c181708280909e839265d7b6fe26677faf8edff4c18e1eb02"
+    },
+    {
+      "canonicalName": "brand-developer-icons-reactrouter",
+      "spriteSymbol": "devicon-reactrouter",
+      "sourcePath": "icons/reactrouter.svg",
+      "artifactPath": "icons/brand/developer-icons/reactrouter.svg",
+      "sha256": "47c4a057c2887e4cf24cd9fafe9b7903712f6cb895898ae7b7043dd1fb9ffb12"
+    },
+    {
+      "canonicalName": "brand-developer-icons-reddit",
+      "spriteSymbol": "devicon-reddit",
+      "sourcePath": "icons/reddit.svg",
+      "artifactPath": "icons/brand/developer-icons/reddit.svg",
+      "sha256": "fdd0d0816a20306e50c9693853afc1c5cf217b47bd8a1caefc9fc427f1325c18"
+    },
+    {
+      "canonicalName": "brand-developer-icons-reddit-wordmark",
+      "spriteSymbol": "devicon-reddit-wordmark",
+      "sourcePath": "icons/reddit-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/reddit-wordmark.svg",
+      "sha256": "48c2b4259ef2845f443bd319d202e3a044ecc3abe11c3a2c1ecb8d9f83940d7f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-redhat",
+      "spriteSymbol": "devicon-redhat",
+      "sourcePath": "icons/redhat.svg",
+      "artifactPath": "icons/brand/developer-icons/redhat.svg",
+      "sha256": "2a9aca71def34f4ecc5afc340177df1859ff9c17a2764d6752ab3383e36b4bdc"
+    },
+    {
+      "canonicalName": "brand-developer-icons-redis",
+      "spriteSymbol": "devicon-redis",
+      "sourcePath": "icons/redis.svg",
+      "artifactPath": "icons/brand/developer-icons/redis.svg",
+      "sha256": "e5564225ec02ded813a98c261959ea1bc855b73ba0e2a6f047fe75bc5f69d0e4"
+    },
+    {
+      "canonicalName": "brand-developer-icons-redux",
+      "spriteSymbol": "devicon-redux",
+      "sourcePath": "icons/redux.svg",
+      "artifactPath": "icons/brand/developer-icons/redux.svg",
+      "sha256": "244ec501ab51d1fdafec9d35c3dbecd0982074ab5d19f518341dadb399937b74"
+    },
+    {
+      "canonicalName": "brand-developer-icons-redux-saga",
+      "spriteSymbol": "devicon-redux-saga",
+      "sourcePath": "icons/redux-saga.svg",
+      "artifactPath": "icons/brand/developer-icons/redux-saga.svg",
+      "sha256": "f0ab1f11144e156d1dee67c50b6a22701d21e55d41c622a9b38705ee61eda902"
+    },
+    {
+      "canonicalName": "brand-developer-icons-remix-dark",
+      "spriteSymbol": "devicon-remix-dark",
+      "sourcePath": "icons/remix-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/remix-dark.svg",
+      "sha256": "633ecad17fd85d3f742454b9d0f4d7eb9aa438a2628e0e041471f8c2eec8a78d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-remix-dark-wordmark",
+      "spriteSymbol": "devicon-remix-dark-wordmark",
+      "sourcePath": "icons/remix-dark-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/remix-dark-wordmark.svg",
+      "sha256": "79b4210d97266c217fd0d98ff77a15dc6fa9512a52d244c75982f54b291a2632"
+    },
+    {
+      "canonicalName": "brand-developer-icons-remix-light",
+      "spriteSymbol": "devicon-remix-light",
+      "sourcePath": "icons/remix-light.svg",
+      "artifactPath": "icons/brand/developer-icons/remix-light.svg",
+      "sha256": "5c3d6686b1ee4597a938aca2e210262e164273ddfd4a4fede9ec9d1d15f2863e"
+    },
+    {
+      "canonicalName": "brand-developer-icons-remix-light-wordmark",
+      "spriteSymbol": "devicon-remix-light-wordmark",
+      "sourcePath": "icons/remix-light-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/remix-light-wordmark.svg",
+      "sha256": "186ffe4b5fb7e20923083748b946db593924326bc6965383f16af7cf11fca875"
+    },
+    {
+      "canonicalName": "brand-developer-icons-render",
+      "spriteSymbol": "devicon-render",
+      "sourcePath": "icons/render.svg",
+      "artifactPath": "icons/brand/developer-icons/render.svg",
+      "sha256": "817a111761c00797611d4919cdde71490dab2d5f63ea854a668b06f1d448a7c7"
+    },
+    {
+      "canonicalName": "brand-developer-icons-resend",
+      "spriteSymbol": "devicon-resend",
+      "sourcePath": "icons/resend.svg",
+      "artifactPath": "icons/brand/developer-icons/resend.svg",
+      "sha256": "49b6fc23c563c5971fe76572003ec14d61c252c5914b455a4cd666109e042f98"
+    },
+    {
+      "canonicalName": "brand-developer-icons-rollup",
+      "spriteSymbol": "devicon-rollup",
+      "sourcePath": "icons/rollup.svg",
+      "artifactPath": "icons/brand/developer-icons/rollup.svg",
+      "sha256": "1c8bbb53d67a5f048f452087bb1f31047503e0ea69da0b4081fcf7789c7afb91"
+    },
+    {
+      "canonicalName": "brand-developer-icons-ruby",
+      "spriteSymbol": "devicon-ruby",
+      "sourcePath": "icons/ruby.svg",
+      "artifactPath": "icons/brand/developer-icons/ruby.svg",
+      "sha256": "0937a718923ee160137109d0fe83d08ab360df5235513c7b627902369477673a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-rust-dark",
+      "spriteSymbol": "devicon-rust-dark",
+      "sourcePath": "icons/rust-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/rust-dark.svg",
+      "sha256": "478186cfcb119909ad90cb231f88e9fadfdc23f37a4035744bb188c6ffe69dcc"
+    },
+    {
+      "canonicalName": "brand-developer-icons-rust-light",
+      "spriteSymbol": "devicon-rust-light",
+      "sourcePath": "icons/rust-light.svg",
+      "artifactPath": "icons/brand/developer-icons/rust-light.svg",
+      "sha256": "74ccf7abf2ba8d627f1b0bece4675b1aca8042bdd01204f0c2df17527c05c888"
+    },
+    {
+      "canonicalName": "brand-developer-icons-safari",
+      "spriteSymbol": "devicon-safari",
+      "sourcePath": "icons/safari.svg",
+      "artifactPath": "icons/brand/developer-icons/safari.svg",
+      "sha256": "2f512e7e3dbcfbb67ef6316a1177bafaac24a464b361b9414e60dbad52a20d87"
+    },
+    {
+      "canonicalName": "brand-developer-icons-sass",
+      "spriteSymbol": "devicon-sass",
+      "sourcePath": "icons/sass.svg",
+      "artifactPath": "icons/brand/developer-icons/sass.svg",
+      "sha256": "92789cf2bb067d4c4c1d498ddaf22dc47a7434ad18c2a885e3783209b0142f3e"
+    },
+    {
+      "canonicalName": "brand-developer-icons-scala",
+      "spriteSymbol": "devicon-scala",
+      "sourcePath": "icons/scala.svg",
+      "artifactPath": "icons/brand/developer-icons/scala.svg",
+      "sha256": "827e586e17b43abd71267f2ab7733079ab8f2b8e05a816bad58f311b1e96467f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-semanticui",
+      "spriteSymbol": "devicon-semanticui",
+      "sourcePath": "icons/semanticui.svg",
+      "artifactPath": "icons/brand/developer-icons/semanticui.svg",
+      "sha256": "6c524302ce61a794534fc53aae80f6c922828b106b8fc0150a0ddcda4f55eff7"
+    },
+    {
+      "canonicalName": "brand-developer-icons-serverless",
+      "spriteSymbol": "devicon-serverless",
+      "sourcePath": "icons/serverless.svg",
+      "artifactPath": "icons/brand/developer-icons/serverless.svg",
+      "sha256": "f4b79c63ae882bb93e5987708e8536372e91ad9310bf41eb31bc3ed68accf6b4"
+    },
+    {
+      "canonicalName": "brand-developer-icons-shadcnui",
+      "spriteSymbol": "devicon-shadcnui",
+      "sourcePath": "icons/shadcnui.svg",
+      "artifactPath": "icons/brand/developer-icons/shadcnui.svg",
+      "sha256": "2b82bf8379812d4ecd95ca1250a6e6c8ed479b3338c97f7869d842e0e4354186"
+    },
+    {
+      "canonicalName": "brand-developer-icons-shopware",
+      "spriteSymbol": "devicon-shopware",
+      "sourcePath": "icons/shopware.svg",
+      "artifactPath": "icons/brand/developer-icons/shopware.svg",
+      "sha256": "7fc6bb93a87a34e252c47f050a94c0422f14d5437717e98f81d7071bdd96bed3"
+    },
+    {
+      "canonicalName": "brand-developer-icons-sketch",
+      "spriteSymbol": "devicon-sketch",
+      "sourcePath": "icons/sketch.svg",
+      "artifactPath": "icons/brand/developer-icons/sketch.svg",
+      "sha256": "133698e4a4d2a8baeeca8d5e5e7e0e57b4bc5054eb5cfd2c86470af1aa5f8558"
+    },
+    {
+      "canonicalName": "brand-developer-icons-sketch2",
+      "spriteSymbol": "devicon-sketch2",
+      "sourcePath": "icons/sketch2.svg",
+      "artifactPath": "icons/brand/developer-icons/sketch2.svg",
+      "sha256": "33a82478711aa03b08495bdd16404d9aa4b4585d8bc8937a9ea1196739761385"
+    },
+    {
+      "canonicalName": "brand-developer-icons-skype",
+      "spriteSymbol": "devicon-skype",
+      "sourcePath": "icons/skype.svg",
+      "artifactPath": "icons/brand/developer-icons/skype.svg",
+      "sha256": "92a5d435523898ef2cade200c99f1f41dee51489fda415ca5d727e219a3d1132"
+    },
+    {
+      "canonicalName": "brand-developer-icons-slack",
+      "spriteSymbol": "devicon-slack",
+      "sourcePath": "icons/slack.svg",
+      "artifactPath": "icons/brand/developer-icons/slack.svg",
+      "sha256": "225d8749ba7b05e02b24c673870f4001977f73fa8d669b1469b00b7d7c4a7d21"
+    },
+    {
+      "canonicalName": "brand-developer-icons-solidity",
+      "spriteSymbol": "devicon-solidity",
+      "sourcePath": "icons/solidity.svg",
+      "artifactPath": "icons/brand/developer-icons/solidity.svg",
+      "sha256": "69f2d2eb977535f487dfe9fac6c613aecc0c4139b02098541bdf18a70d3260b5"
+    },
+    {
+      "canonicalName": "brand-developer-icons-solidjs",
+      "spriteSymbol": "devicon-solidjs",
+      "sourcePath": "icons/solidjs.svg",
+      "artifactPath": "icons/brand/developer-icons/solidjs.svg",
+      "sha256": "96af77ef0aeee68f208662e9ecbc4ee0393d1dab56997ab60f9b4d02b020147a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-spring",
+      "spriteSymbol": "devicon-spring",
+      "sourcePath": "icons/spring.svg",
+      "artifactPath": "icons/brand/developer-icons/spring.svg",
+      "sha256": "2bd82c580ee32ccafce1d6c98f35224714836990db26108864a82963d2129f8f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-storyblok",
+      "spriteSymbol": "devicon-storyblok",
+      "sourcePath": "icons/storyblok.svg",
+      "artifactPath": "icons/brand/developer-icons/storyblok.svg",
+      "sha256": "13656c38bc60d5f12be29d99b5b6a3bc0cbe2efdf85f957db653674997120472"
+    },
+    {
+      "canonicalName": "brand-developer-icons-storybook",
+      "spriteSymbol": "devicon-storybook",
+      "sourcePath": "icons/storybook.svg",
+      "artifactPath": "icons/brand/developer-icons/storybook.svg",
+      "sha256": "23ca73a6eebb09185e763e62620249457d1de56d00654a661b3863f2d1c8c592"
+    },
+    {
+      "canonicalName": "brand-developer-icons-stream",
+      "spriteSymbol": "devicon-stream",
+      "sourcePath": "icons/stream.svg",
+      "artifactPath": "icons/brand/developer-icons/stream.svg",
+      "sha256": "929dd4129350a5f9f7f4956e2e1d4d1223153f7abf1023d32174d672b48aa679"
+    },
+    {
+      "canonicalName": "brand-developer-icons-stylelint",
+      "spriteSymbol": "devicon-stylelint",
+      "sourcePath": "icons/stylelint.svg",
+      "artifactPath": "icons/brand/developer-icons/stylelint.svg",
+      "sha256": "8b7fd3d9758cdbbf74381189a6eb0153d6cc797e96f5256217e4338b921e4044"
+    },
+    {
+      "canonicalName": "brand-developer-icons-sublime",
+      "spriteSymbol": "devicon-sublime",
+      "sourcePath": "icons/sublime.svg",
+      "artifactPath": "icons/brand/developer-icons/sublime.svg",
+      "sha256": "434c96d24aafdd4f7ae561b8d9d3722fdf72380c9c639576bc0bc5e9d7530c24"
+    },
+    {
+      "canonicalName": "brand-developer-icons-supabase",
+      "spriteSymbol": "devicon-supabase",
+      "sourcePath": "icons/supabase.svg",
+      "artifactPath": "icons/brand/developer-icons/supabase.svg",
+      "sha256": "701dcdcde0d18699b78ec1e73277591d4ee8ccbf32304d2eefb76983b7eab73f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-sveltejs",
+      "spriteSymbol": "devicon-sveltejs",
+      "sourcePath": "icons/sveltejs.svg",
+      "artifactPath": "icons/brand/developer-icons/sveltejs.svg",
+      "sha256": "a0201a21745259f416a4af2d67c20688b5ae3a072f206bc60ea0cb5e862fa003"
+    },
+    {
+      "canonicalName": "brand-developer-icons-swagger",
+      "spriteSymbol": "devicon-swagger",
+      "sourcePath": "icons/swagger.svg",
+      "artifactPath": "icons/brand/developer-icons/swagger.svg",
+      "sha256": "c5f9274c41d646cc9233cb4c5ba3ae3520b3ff0f3eb8edd2338889625e9a5e07"
+    },
+    {
+      "canonicalName": "brand-developer-icons-swift",
+      "spriteSymbol": "devicon-swift",
+      "sourcePath": "icons/swift.svg",
+      "artifactPath": "icons/brand/developer-icons/swift.svg",
+      "sha256": "c273f94ddf057baf59a83beadc4c6473f738b7cbe186f6ffc33ce9801231680a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-symfony-dark",
+      "spriteSymbol": "devicon-symfony-dark",
+      "sourcePath": "icons/symfony-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/symfony-dark.svg",
+      "sha256": "005e0beb9608ec200c50851375ceea80900a279df542d83bda6ea4bac62dfa3d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-symfony-light",
+      "spriteSymbol": "devicon-symfony-light",
+      "sourcePath": "icons/symfony-light.svg",
+      "artifactPath": "icons/brand/developer-icons/symfony-light.svg",
+      "sha256": "25fb24e4103920d08a8eab012fc57b51800cfa7109bcf8d36ed0d1552ed95e89"
+    },
+    {
+      "canonicalName": "brand-developer-icons-tRPC",
+      "spriteSymbol": "devicon-trpc",
+      "sourcePath": "icons/tRPC.svg",
+      "artifactPath": "icons/brand/developer-icons/tRPC.svg",
+      "sha256": "cad6435b711e950afa1d8bd9490516869086ee0945d65607d9a2a867e5b7da49"
+    },
+    {
+      "canonicalName": "brand-developer-icons-tailwindcss",
+      "spriteSymbol": "devicon-tailwindcss",
+      "sourcePath": "icons/tailwindcss.svg",
+      "artifactPath": "icons/brand/developer-icons/tailwindcss.svg",
+      "sha256": "50a70c5deace0ddf8031a6326b80e3ca3ad1f5fa84990a2a1ca1a0ba5d1c63fb"
+    },
+    {
+      "canonicalName": "brand-developer-icons-telegram",
+      "spriteSymbol": "devicon-telegram",
+      "sourcePath": "icons/telegram.svg",
+      "artifactPath": "icons/brand/developer-icons/telegram.svg",
+      "sha256": "dddcb4358ea0458bf7f4cafea5e62eca1c7f6fffdcd85a835908e127a52b59ce"
+    },
+    {
+      "canonicalName": "brand-developer-icons-tensorflow",
+      "spriteSymbol": "devicon-tensorflow",
+      "sourcePath": "icons/tensorflow.svg",
+      "artifactPath": "icons/brand/developer-icons/tensorflow.svg",
+      "sha256": "855ebbccfb886bef1737511cc2a558a4563bcf76298e4b9b1d0b215ae0358574"
+    },
+    {
+      "canonicalName": "brand-developer-icons-terraform",
+      "spriteSymbol": "devicon-terraform",
+      "sourcePath": "icons/terraform.svg",
+      "artifactPath": "icons/brand/developer-icons/terraform.svg",
+      "sha256": "23b40c817924075225ef9fabf1fcbd7db31e5a461579570178456311d6929ef9"
+    },
+    {
+      "canonicalName": "brand-developer-icons-threads-dark",
+      "spriteSymbol": "devicon-threads-dark",
+      "sourcePath": "icons/threads-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/threads-dark.svg",
+      "sha256": "522e9decf01df16bdb9441c6185687643102588456797701f9999765ce3cf133"
+    },
+    {
+      "canonicalName": "brand-developer-icons-threads-light",
+      "spriteSymbol": "devicon-threads-light",
+      "sourcePath": "icons/threads-light.svg",
+      "artifactPath": "icons/brand/developer-icons/threads-light.svg",
+      "sha256": "761215622c8e682acf3e0d9a3704204af0633290178a132c9d75259a6619361d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-threejs-dark",
+      "spriteSymbol": "devicon-threejs-dark",
+      "sourcePath": "icons/threejs-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/threejs-dark.svg",
+      "sha256": "77cc5a60b25d45ad5616261177e269c15851e6ce6c381a7c3c031cb561c44702"
+    },
+    {
+      "canonicalName": "brand-developer-icons-threejs-light",
+      "spriteSymbol": "devicon-threejs-light",
+      "sourcePath": "icons/threejs-light.svg",
+      "artifactPath": "icons/brand/developer-icons/threejs-light.svg",
+      "sha256": "925faf0c2acf98f1c1f34fcad93fc44b42ea6a3b467eec584c5dde251e28d9dd"
+    },
+    {
+      "canonicalName": "brand-developer-icons-tiktok",
+      "spriteSymbol": "devicon-tiktok",
+      "sourcePath": "icons/tiktok.svg",
+      "artifactPath": "icons/brand/developer-icons/tiktok.svg",
+      "sha256": "d0713b80071e188ebcf74dbde76b325d7761afc9389f78b0b68de908adcb167d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-tinyhttp",
+      "spriteSymbol": "devicon-tinyhttp",
+      "sourcePath": "icons/tinyhttp.svg",
+      "artifactPath": "icons/brand/developer-icons/tinyhttp.svg",
+      "sha256": "e4863f5a6c5f7dec880d380db31b8753580e90d566a1467ffb4d1e727db525db"
+    },
+    {
+      "canonicalName": "brand-developer-icons-tor",
+      "spriteSymbol": "devicon-tor",
+      "sourcePath": "icons/tor.svg",
+      "artifactPath": "icons/brand/developer-icons/tor.svg",
+      "sha256": "c69dec6b264af4feec4169493b070a2bf0f2eb601265a46610268549403f40ef"
+    },
+    {
+      "canonicalName": "brand-developer-icons-twitter",
+      "spriteSymbol": "devicon-twitter",
+      "sourcePath": "icons/twitter.svg",
+      "artifactPath": "icons/brand/developer-icons/twitter.svg",
+      "sha256": "ede2d5980b6385bec5cafa82eafa58438eda97e26b32045d938b26675f1c072d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-typescript",
+      "spriteSymbol": "devicon-typescript",
+      "sourcePath": "icons/typescript.svg",
+      "artifactPath": "icons/brand/developer-icons/typescript.svg",
+      "sha256": "0fc627fd5ae0730da1e760b1c5e5da788f31cbf2626f7c5e3dcde4f083ec2da9"
+    },
+    {
+      "canonicalName": "brand-developer-icons-ubuntu",
+      "spriteSymbol": "devicon-ubuntu",
+      "sourcePath": "icons/ubuntu.svg",
+      "artifactPath": "icons/brand/developer-icons/ubuntu.svg",
+      "sha256": "922238fc0d1dbaf362751e755023b00c9c780bce4f5fb009b508423d8fe4814e"
+    },
+    {
+      "canonicalName": "brand-developer-icons-unjs",
+      "spriteSymbol": "devicon-unjs",
+      "sourcePath": "icons/unjs.svg",
+      "artifactPath": "icons/brand/developer-icons/unjs.svg",
+      "sha256": "98efd4cff1d3e3f6fb38f0ee694fc67e0e47ff51726cd2d705eb7e0e6fbf8a35"
+    },
+    {
+      "canonicalName": "brand-developer-icons-upwork",
+      "spriteSymbol": "devicon-upwork",
+      "sourcePath": "icons/upwork.svg",
+      "artifactPath": "icons/brand/developer-icons/upwork.svg",
+      "sha256": "3763fb106f4522bbdadff5f1068b167eebc6793900085a4081efc8d0dcbba788"
+    },
+    {
+      "canonicalName": "brand-developer-icons-upwork-basic",
+      "spriteSymbol": "devicon-upwork-basic",
+      "sourcePath": "icons/upwork-basic.svg",
+      "artifactPath": "icons/brand/developer-icons/upwork-basic.svg",
+      "sha256": "135ae9224c530ad9b1456a6e15004e17fd52cbee9ab68ba4857ed124f4846715"
+    },
+    {
+      "canonicalName": "brand-developer-icons-upwork-wordmark",
+      "spriteSymbol": "devicon-upwork-wordmark",
+      "sourcePath": "icons/upwork-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/upwork-wordmark.svg",
+      "sha256": "d85ca5e01376195032b01f57040a4777c1eea44897a60753403f06f47205ce7d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vagrant",
+      "spriteSymbol": "devicon-vagrant",
+      "sourcePath": "icons/vagrant.svg",
+      "artifactPath": "icons/brand/developer-icons/vagrant.svg",
+      "sha256": "726dd9e2e858b89520d2ad69cdcab4633b5e04e0f6e94485fee6861f7c936a87"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vercel-dark",
+      "spriteSymbol": "devicon-vercel-dark",
+      "sourcePath": "icons/vercel-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/vercel-dark.svg",
+      "sha256": "c369f59e716eff41be2c92fb7369ec8b6a765861d24ee7c73342e12c67a98dbf"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vercel-dark-wordmark",
+      "spriteSymbol": "devicon-vercel-dark-wordmark",
+      "sourcePath": "icons/vercel-dark-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/vercel-dark-wordmark.svg",
+      "sha256": "08a0669f53c1e575639954a45dab1e3e3be6e36fcf96e9a1ade7a9e08bd8dc67"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vercel-light",
+      "spriteSymbol": "devicon-vercel-light",
+      "sourcePath": "icons/vercel-light.svg",
+      "artifactPath": "icons/brand/developer-icons/vercel-light.svg",
+      "sha256": "b2036cef8348d90710c9459aaab6a91f5234d1f24a36fd3855ecaaa61d6415ae"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vercel-light-wordmark",
+      "spriteSymbol": "devicon-vercel-light-wordmark",
+      "sourcePath": "icons/vercel-light-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/vercel-light-wordmark.svg",
+      "sha256": "d7036af6a31fbccd79718bc878c7c6cb51b6feeac8ca75edde2d281c57eca6a1"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vim",
+      "spriteSymbol": "devicon-vim",
+      "sourcePath": "icons/vim.svg",
+      "artifactPath": "icons/brand/developer-icons/vim.svg",
+      "sha256": "1599000f1fd304bca0fe79658f148e9d34921e156ee1995af6ff0a1e493ec3fb"
+    },
+    {
+      "canonicalName": "brand-developer-icons-visualbasic",
+      "spriteSymbol": "devicon-visualbasic",
+      "sourcePath": "icons/visualbasic.svg",
+      "artifactPath": "icons/brand/developer-icons/visualbasic.svg",
+      "sha256": "25d7e08f8d81c6d3007e42ca6763618583fdcbfa5be140c7cdbb2139977e8c9f"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vitejs",
+      "spriteSymbol": "devicon-vitejs",
+      "sourcePath": "icons/vitejs.svg",
+      "artifactPath": "icons/brand/developer-icons/vitejs.svg",
+      "sha256": "4ea238124dbab3ca723b8be8953d95d45bd92a4eb47263ecb1e3561830345450"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vitest",
+      "spriteSymbol": "devicon-vitest",
+      "sourcePath": "icons/vitest.svg",
+      "artifactPath": "icons/brand/developer-icons/vitest.svg",
+      "sha256": "cb8f3530dfcafb23e59a2b62085b74915d07ad47775481d672e889223645ffe5"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vivaldi",
+      "spriteSymbol": "devicon-vivaldi",
+      "sourcePath": "icons/vivaldi.svg",
+      "artifactPath": "icons/brand/developer-icons/vivaldi.svg",
+      "sha256": "d9687652b8dbbc1e1375dc8fbeb0f4d234f4c2b15f25b19db749867d45973ea3"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vk",
+      "spriteSymbol": "devicon-vk",
+      "sourcePath": "icons/vk.svg",
+      "artifactPath": "icons/brand/developer-icons/vk.svg",
+      "sha256": "2a73c5c3c2bbbe8a23ff9a41ba0f5ab4100cd80dfe8a494c3ae7018b5c2fe709"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vscode",
+      "spriteSymbol": "devicon-vscode",
+      "sourcePath": "icons/vscode.svg",
+      "artifactPath": "icons/brand/developer-icons/vscode.svg",
+      "sha256": "7f6237fb182143c685d4f80b7a25e67ab24309c71bc7cf8b0b710544efd2dfdd"
+    },
+    {
+      "canonicalName": "brand-developer-icons-vuejs",
+      "spriteSymbol": "devicon-vuejs",
+      "sourcePath": "icons/vuejs.svg",
+      "artifactPath": "icons/brand/developer-icons/vuejs.svg",
+      "sha256": "fb07d0e5acc0953c5fdc8a677d55b7daad9b3d5823337f67a3b99c5d1f204e46"
+    },
+    {
+      "canonicalName": "brand-developer-icons-webassembly",
+      "spriteSymbol": "devicon-webassembly",
+      "sourcePath": "icons/webassembly.svg",
+      "artifactPath": "icons/brand/developer-icons/webassembly.svg",
+      "sha256": "55247cf2910f20b604d402e596ab4d5bfa16ddfca82d15b0b49a043e842ce994"
+    },
+    {
+      "canonicalName": "brand-developer-icons-webpack",
+      "spriteSymbol": "devicon-webpack",
+      "sourcePath": "icons/webpack.svg",
+      "artifactPath": "icons/brand/developer-icons/webpack.svg",
+      "sha256": "6227dbb9055bda3bf39a1956437d06097b6e5c8dbf6dc17e2d61e7c15e47ea90"
+    },
+    {
+      "canonicalName": "brand-developer-icons-webrtc",
+      "spriteSymbol": "devicon-webrtc",
+      "sourcePath": "icons/webrtc.svg",
+      "artifactPath": "icons/brand/developer-icons/webrtc.svg",
+      "sha256": "95faef71f937b9e5234639205d6d2362b402b7710709af1059dc94991ce48381"
+    },
+    {
+      "canonicalName": "brand-developer-icons-whatsapp",
+      "spriteSymbol": "devicon-whatsapp",
+      "sourcePath": "icons/whatsapp.svg",
+      "artifactPath": "icons/brand/developer-icons/whatsapp.svg",
+      "sha256": "4740f64611e255b2632a752b19141b97d51a9ac4d6ca7740e807251dc9457a2c"
+    },
+    {
+      "canonicalName": "brand-developer-icons-wordpress",
+      "spriteSymbol": "devicon-wordpress",
+      "sourcePath": "icons/wordpress.svg",
+      "artifactPath": "icons/brand/developer-icons/wordpress.svg",
+      "sha256": "32457f8c6443ca4964f35c8ec82169d1862dbbded097bd3c1b3d8c8eb0dd159a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-x-dark",
+      "spriteSymbol": "devicon-x-dark",
+      "sourcePath": "icons/x-dark.svg",
+      "artifactPath": "icons/brand/developer-icons/x-dark.svg",
+      "sha256": "f90eb2efc71477d087722ff3bc3c8119c364261b917a6bda1ae8d2d5412cbf03"
+    },
+    {
+      "canonicalName": "brand-developer-icons-x-light",
+      "spriteSymbol": "devicon-x-light",
+      "sourcePath": "icons/x-light.svg",
+      "artifactPath": "icons/brand/developer-icons/x-light.svg",
+      "sha256": "3a89c21fdf408aad4555b8dc55b31f9f50172caa390132e1be84bbd0ca28dc3d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-xamarin",
+      "spriteSymbol": "devicon-xamarin",
+      "sourcePath": "icons/xamarin.svg",
+      "artifactPath": "icons/brand/developer-icons/xamarin.svg",
+      "sha256": "efc14d96ac74ce84dfc93afaee521c1f2dd4f0890815ad6aa568495363313928"
+    },
+    {
+      "canonicalName": "brand-developer-icons-xd",
+      "spriteSymbol": "devicon-xd",
+      "sourcePath": "icons/xd.svg",
+      "artifactPath": "icons/brand/developer-icons/xd.svg",
+      "sha256": "03144a91c81e2d29394b6b877b2e95a3de54498996045d8e533e868f3a0f1bda"
+    },
+    {
+      "canonicalName": "brand-developer-icons-yoga",
+      "spriteSymbol": "devicon-yoga",
+      "sourcePath": "icons/yoga.svg",
+      "artifactPath": "icons/brand/developer-icons/yoga.svg",
+      "sha256": "c51977aa3ba04773f38f743bb912d5eddec28e7851269e917794fe48f0da3d3a"
+    },
+    {
+      "canonicalName": "brand-developer-icons-youtube",
+      "spriteSymbol": "devicon-youtube",
+      "sourcePath": "icons/youtube.svg",
+      "artifactPath": "icons/brand/developer-icons/youtube.svg",
+      "sha256": "bdd9a46e60b34aca5ab65858b016e68f2f2c141bc6fbf8270ba3563377b0895c"
+    },
+    {
+      "canonicalName": "brand-developer-icons-youtube-wordmark",
+      "spriteSymbol": "devicon-youtube-wordmark",
+      "sourcePath": "icons/youtube-wordmark.svg",
+      "artifactPath": "icons/brand/developer-icons/youtube-wordmark.svg",
+      "sha256": "43faa3d0043841dc717514ba0c6f3fa280173c04e33957a21822752e3cb3c61c"
+    },
+    {
+      "canonicalName": "brand-developer-icons-zen",
+      "spriteSymbol": "devicon-zen",
+      "sourcePath": "icons/zen.svg",
+      "artifactPath": "icons/brand/developer-icons/zen.svg",
+      "sha256": "c7faed0b688fbc98bc5df200eaf41d873e49a5e0e1bd326813ac232646c8147d"
+    },
+    {
+      "canonicalName": "brand-developer-icons-zod",
+      "spriteSymbol": "devicon-zod",
+      "sourcePath": "icons/zod.svg",
+      "artifactPath": "icons/brand/developer-icons/zod.svg",
+      "sha256": "9bb00698a1e85ac77b0dc922072cc187ab8ad7bf1c8e51cd16907ea2ce75f61b"
+    }
+  ]
+}

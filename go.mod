@@ -5,7 +5,7 @@ go 1.26.5
 require gopkg.in/yaml.v3 v3.0.1
 
 require (
-	github.com/araihu/muamba v0.0.2 // indirect
+	github.com/araihu/muamba v0.0.4 // indirect
 	github.com/gofrs/flock v0.13.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/rogpeppe/go-internal v1.15.0 // indirect

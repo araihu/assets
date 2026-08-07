@@ -101,7 +101,7 @@ func TestRunPublishesReleaseInventoryBeforeChecksumsAndArchives(t *testing.T) {
 	}
 }
 
-func TestRunEmitsConsistentV014ReleaseFields(t *testing.T) {
+func TestRunEmitsConsistentV020ReleaseFields(t *testing.T) {
 	repo := testRepo(t)
 	if err := Run(repo, testInputs([]byte("asset"))); err != nil {
 		t.Fatal(err)
@@ -132,7 +132,7 @@ func TestRunEmitsConsistentV014ReleaseFields(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	const wantRelease = "v0.1.4"
+	const wantRelease = "v0.2.0"
 	for name, got := range map[string]string{
 		"catalog":  assetCatalog.Release,
 		"themes":   themeCatalog.Release,
@@ -389,7 +389,7 @@ func TestRunWritesSortedChecksumsAndDeterministicReleaseMembership(t *testing.T)
 	if !bytes.Equal(firstArchive, secondArchive) {
 		t.Fatal("independent tar.gz builds differ")
 	}
-	requireArchiveMembers(t, firstArchive, []string{"NOTICE", "campaign/v1.js", "campaigns.json", "catalog.json", "checksums.txt", "icons/brand/asset.svg", "licenses/Apache-2.0.txt", "licenses/heroicons-MIT.txt", "platform/web/araihu/favicon.svg", "proof/app.js", "proof/styles.css", "release.json", "themes.json", "themes/araihu.css"})
+	requireArchiveMembers(t, firstArchive, []string{"NOTICE", "campaign/v1.js", "campaigns.json", "catalog.json", "checksums.txt", "icons/brand/asset.svg", "licenses/Apache-2.0.txt", "licenses/developer-icons-MIT.txt", "licenses/heroicons-MIT.txt", "platform/web/araihu/favicon.svg", "proof/app.js", "proof/og.png", "proof/styles.css", "release.json", "themes.json", "themes/araihu.css"})
 }
 
 func TestProductionReleaseArchivesIncludeExactProofTree(t *testing.T) {
@@ -451,7 +451,10 @@ func testInputs(_ []byte) Inputs {
 			CanonicalName: "araihu-icon-light-transparent-optical", Namespace: "brand", Path: "icons/brand/asset.svg", Product: "araihu", Artwork: "icon", Appearance: "light", Surface: "transparent", Framing: "optical", Format: "svg",
 			Dimensions: catalog.Dimensions{ViewBox: "0 0 1 1"}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "source/brand/original/asset.svg", SHA256: hex.EncodeToString(sum[:]),
 		}}},
-		UI:        provenance.Result{Files: map[string][]byte{"licenses/heroicons-MIT.txt": []byte("MIT\n")}},
+		UI: provenance.Result{Files: map[string][]byte{
+			"licenses/developer-icons-MIT.txt": []byte("MIT\n"),
+			"licenses/heroicons-MIT.txt":       []byte("MIT\n"),
+		}},
 		Campaigns: campaigns.Manifest{SchemaVersion: 1},
 		Themes:    themes.Manifest{SchemaVersion: 1, TokenContract: "goshtoso-theme-v1", Themes: []themes.Theme{{ID: "araihu", CSSPath: "themes/araihu.css"}}},
 		ThemeCSS:  map[string][]byte{"themes/araihu.css": []byte("[data-theme=\"araihu\"] {}\n")},
@@ -479,7 +482,10 @@ func proofInputs() Inputs {
 			CanonicalName: "platform-web-araihu-icon-maskable-512-png", Namespace: "brand", Path: "platform/web/araihu/icon-maskable-512.png", Product: "araihu", Artwork: "icon", Appearance: "light", Surface: "plate", Framing: "launcher", Format: "png",
 			Dimensions: catalog.Dimensions{Width: 512, Height: 512}, ColorBehavior: "protected", License: "Arai Hu Brand Terms", Source: "platform generator", SHA256: hash(master),
 		}}},
-		UI:        provenance.Result{Files: map[string][]byte{"licenses/heroicons-MIT.txt": []byte("MIT\n")}},
+		UI: provenance.Result{Files: map[string][]byte{
+			"licenses/developer-icons-MIT.txt": []byte("MIT\n"),
+			"licenses/heroicons-MIT.txt":       []byte("MIT\n"),
+		}},
 		Campaigns: campaigns.Manifest{SchemaVersion: 1},
 		Themes:    themes.Manifest{SchemaVersion: 1, TokenContract: "goshtoso-theme-v1", Themes: []themes.Theme{{ID: "araihu", CSSPath: "themes/araihu.css"}}},
 		ThemeCSS:  map[string][]byte{"themes/araihu.css": []byte("[data-theme=\"araihu\"] {}\n")},
@@ -515,6 +521,11 @@ func testRepo(t *testing.T) string {
 	mustWrite(t, filepath.Join(repo, "LICENSE"), []byte("Apache License\n"))
 	mustWrite(t, filepath.Join(repo, "site", "proof", "styles.css"), []byte("body {}\n"))
 	mustWrite(t, filepath.Join(repo, "site", "proof", "app.js"), []byte("\"use strict\";\n"))
+	preview, err := os.ReadFile(filepath.Join("..", "..", "site", "proof", "og.png"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	mustWrite(t, filepath.Join(repo, "site", "proof", "og.png"), preview)
 	mustWrite(t, filepath.Join(repo, "runtime", "campaign", "v1.js"), []byte("(function(){})();\n"))
 	return repo
 }
