@@ -7,7 +7,7 @@ entries by canonical name and namespace, and use the catalog's exact
 Before adopting this checkout's `v0.2.0` candidate, require matching release
 values in `catalog.json`, `themes.json`, and `release.json`, then verify the
 inventory hashes in `release.json`. `v0.1.1` remains the published promoted
-default and `v0.1.3` remains the latest published release. `v0.2.0` stays local
+default and `v0.1.4` remains the latest published release. `v0.2.0` stays local
 and offline until integration review accepts it and publishes its tag and
 GitHub Release.
 

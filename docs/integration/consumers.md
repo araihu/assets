@@ -8,7 +8,7 @@ Require `catalog.json.release`, `themes.json.release`, and
 `release.json.release` to agree. Verify `release.json` inventory hashes before
 using a candidate. This checkout's `v0.2.0` files are offline RC inputs;
 they are not a published tag or public download until integration approval.
-`v0.1.3` remains the latest published release, while `v0.1.1` remains the
+`v0.1.4` remains the latest published release, while `v0.1.1` remains the
 independently published promoted default.
 
 Use generated sprite files only with the `spriteSymbol` recorded by the

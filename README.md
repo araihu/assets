@@ -251,7 +251,7 @@ or download. Consumers must wait for integration approval before treating its
 archive names or module version as publicly available.
 
 `v0.1.1` remains the published promoted default until an explicit promotion
-changes `manifests/default.yaml`; `v0.1.3` remains the latest published release
+changes `manifests/default.yaml`; `v0.1.4` remains the latest published release
 until this candidate is tagged. This minor candidate changes the catalog schema
 to preserve literal upstream icon names and adds the complete pinned Heroicons
 and Developer Icons surfaces.
