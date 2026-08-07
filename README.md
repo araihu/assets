@@ -26,15 +26,17 @@ managed tree, including `dist/proof`.
 
 ## Install and verify
 
-Install the CLI when you need to run the repository's offline build and
-catalog commands:
+Install the CLI after the `v0.2.0` tag and GitHub Release are public when you
+need to run the repository's offline build and catalog commands:
 
 ```sh
+# Run only after https://github.com/araihu/assets/releases/tag/v0.2.0 exists.
 go install github.com/araihu/assets/cmd/araihu-assets@v0.2.0
 ```
 
+Until then, use `go run ./cmd/araihu-assets ...` from this candidate checkout.
 `araihu-assets verify` is a source-checkout reproducibility command. Run it
-from the root of the tagged repository checkout; it reads the checkout's
+from the root of the tagged repository checkout; it reads that checkout's
 `.muamba.yaml`, `.muamba.lock.yaml`, acquisition inputs, and `dist/`. An
 installed binary by itself does not download or authenticate a GitHub Release
 archive. Consumers must verify the published archive and its extracted files
@@ -65,9 +67,23 @@ tar -xzf "release-download/araihu-assets-${tag}.tar.gz" -C release-root
 
 On macOS, use `shasum -a 256 -c` in place of `sha256sum --check`. On Windows,
 use `Get-FileHash -Algorithm SHA256` for the downloaded archive and compare
-the result with the matching archive record in `SHA256SUMS`. `release.json`
-binds the catalog and other release inputs; `checksums.txt` remains the
-authoritative member inventory inside the extracted release root.
+the result with the matching archive record in `SHA256SUMS`. Then verify every
+extracted member with PowerShell; the embedded file uses `SHA256  relative/path`
+records:
+
+```powershell
+$root = (Resolve-Path .\release-root).Path
+Get-Content (Join-Path $root checksums.txt) | ForEach-Object {
+  $expected, $relative = $_ -split '  ', 2
+  $actual = (Get-FileHash (Join-Path $root $relative) -Algorithm SHA256).Hash.ToLowerInvariant()
+  if ($actual -ne $expected.ToLowerInvariant()) {
+    throw "checksum mismatch: $relative"
+  }
+}
+```
+
+`release.json` binds the catalog and other release inputs; `checksums.txt`
+remains the authoritative member inventory inside the extracted release root.
 
 ## Typed acquisition overlays
 

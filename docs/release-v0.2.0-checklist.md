@@ -52,9 +52,11 @@ Release, publication, deployment, or consumer integration.
   `a52dda1ac713d6761e80cbf6d69d4acf9f0411348fcce4d20bd95fc4281fee46`.
 - [x] Both archives extract cleanly and all 3,796 records in their embedded
   `checksums.txt` verify.
-- [x] Goshtoso's later input is the verified root extracted from
-  `araihu-assets-v0.2.0.tar.gz` or the byte-equivalent zip, never the vendored
-  source tree. The assets CLI emits no Go or other client-language bindings.
+- [x] Goshtoso's later input is the verified root extracted from either
+  `araihu-assets-v0.2.0.tar.gz` or the zip archive, using that format's own
+  archive digest; the extracted members are equivalent, but the containers are
+  not byte-equivalent. It is never the vendored source tree. The assets CLI
+  emits no Go or other client-language bindings.
 - [x] The generated proof has initial-HTML canonical, description, Open Graph,
   and X-card metadata plus a validated 1280x640 PNG below 1 MiB.
 

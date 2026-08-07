@@ -15,9 +15,11 @@ For the published release, download the immutable tar archive and its
 `SHA256SUMS` file into a disposable directory. Check the archive digest, extract
 into a new empty release root, then run `sha256sum --check --strict
 checksums.txt` from that root before passing it to Goshtoso. The archive URL,
-release value, and all four SHA-256 values belong to the Arai Hû Assets release,
-not to Goshtoso. Do not describe the tar and zip archives as byte-equivalent;
-their extracted members are equivalent release inputs.
+release value, the selected archive's own SHA-256, and the catalog,
+`release.json`, and `checksums.txt` SHA-256 values belong to the Arai Hû Assets
+release, not to Goshtoso. Tar and zip containers are not byte-equivalent;
+verify the digest for the format you downloaded, then use the extracted,
+member-equivalent release root as the input.
 
 Its generic sprite component owns sprite URL or inline mode, symbol, size,
 accessible label, decorative state, CSS classes, and `currentColor` for
@@ -25,10 +27,10 @@ compatible UI icons. Arai Hû Assets owns brand geometry, recipes, designed
 colors, platform padding, provenance, licenses, checksums, and catalog data.
 
 The explicit Goshtoso input is either the verified release root extracted from
-`dist/releases/araihu-assets-v0.2.0.tar.gz` (or the byte-equivalent zip), or the
-verified `dist/` root itself. Verify the archive against its published release
-checksum, then verify `checksums.txt`, `release.json`, and every selected catalog
-artifact before generating bindings. Never point generation at this repository's
+the published tar or zip archive, or the verified `dist/` root itself. Verify
+the selected archive against its own published checksum, then verify
+`checksums.txt`, `release.json`, and every selected catalog artifact before
+generating bindings. Never point generation at this repository's
 `internal/acquisition/vendor/` tree.
 
 Schema v2 consumers preserve `canonicalName`, `path`, and `spriteSymbol`

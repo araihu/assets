@@ -47,8 +47,21 @@ tar -xzf "release-download/araihu-assets-${tag}.tar.gz" -C release-root
 
 On macOS, use `shasum -a 256 -c` in place of `sha256sum --check`. On Windows,
 use `Get-FileHash -Algorithm SHA256` and compare the archive digest with the
-matching `SHA256SUMS` record. The tar and zip files are not byte-equivalent;
-their extracted release members are the interoperable boundary.
+matching `SHA256SUMS` record. Then verify all extracted members, not just the
+archive container:
+
+```powershell
+$root = (Resolve-Path .\release-root).Path
+Get-Content (Join-Path $root checksums.txt) | ForEach-Object {
+  $expected, $relative = $_ -split '  ', 2
+  $actual = (Get-FileHash (Join-Path $root $relative) -Algorithm SHA256).Hash.ToLowerInvariant()
+  if ($actual -ne $expected.ToLowerInvariant()) { throw "checksum mismatch: $relative" }
+}
+```
+
+The tar and zip files are not byte-equivalent; their extracted release members
+are the interoperable boundary, and each archive format requires its own
+`SHA256SUMS` record.
 
 ## Schema v2 migration
 

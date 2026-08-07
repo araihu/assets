@@ -9,12 +9,14 @@ responsibility of `SHA256SUMS`, the extracted `checksums.txt`, and
 
 The release contains one provenance file for each attributed source family:
 
-- `dist/provenance/heroicons.json`
-- `dist/provenance/developer-icons.json`
+- `dist/icons/ui/heroicons/provenance.json`
+- `dist/icons/brand/developer-icons/provenance.json`
 
 Each file records the source family, upstream release, revision, repository,
 archive URL, locked archive SHA-384 integrity, selected variants, and asset
-count. It also records the distributed MIT license path for the source family.
+count. It also records the `licenseRef` used to connect the source family to
+the distributed MIT license record; the license file itself remains in the
+release's `licenses/` tree.
 The release inventory hashes each provenance file as a normal release member.
 
 ## Per-asset records
