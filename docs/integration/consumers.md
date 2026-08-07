@@ -29,8 +29,9 @@ overwrites consumer-owned output.
 
 Use a disposable empty directory and verify the archive before reading its
 catalog or copying an asset. `SHA256SUMS` authenticates the GitHub Release
-asset; the extracted `checksums.txt` authenticates every member inside the
-release root. `release.json` binds the catalog and other release inputs.
+archive; the extracted `checksums.txt` authenticates every listed member inside
+the release root. `release.json` inventories the other managed files; the
+checksum list itself is authenticated by the outer `SHA256SUMS` archive record.
 
 ```sh
 tag=v0.2.0
@@ -47,8 +48,9 @@ tar -xzf "release-download/araihu-assets-${tag}.tar.gz" -C release-root
 
 On macOS, use `shasum -a 256 -c` in place of `sha256sum --check`. On Windows,
 use `Get-FileHash -Algorithm SHA256` and compare the archive digest with the
-matching `SHA256SUMS` record. Then verify all extracted members, not just the
-archive container:
+matching `SHA256SUMS` record. Then verify every path listed in the extracted
+`checksums.txt`; this covers all managed extracted members except the checksum
+list itself:
 
 ```powershell
 $root = (Resolve-Path .\release-root).Path

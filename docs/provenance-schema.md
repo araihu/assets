@@ -12,11 +12,17 @@ The release contains one provenance file for each attributed source family:
 - `dist/icons/ui/heroicons/provenance.json`
 - `dist/icons/brand/developer-icons/provenance.json`
 
-Each file records the source family, upstream release, revision, repository,
-archive URL, locked archive SHA-384 integrity, selected variants, and asset
-count. It also records the `licenseRef` used to connect the source family to
-the distributed MIT license record; the license file itself remains in the
-release's `licenses/` tree.
+Each file has this exact top-level field set:
+`source`, `alias`, `release`, `revision`, `repository`, `license`, `licenseRef`,
+`sourceRef`, `sourceUrl`, `sourcePath`, `integrity`, `hash`, `variants`,
+`assetCount`, and `assets`. `integrity` is the locked archive's base64 SRI value
+(`sha384-...`); `hash` is the corresponding hexadecimal SHA-384 digest with its
+`sha384:` prefix. `assets` is the per-asset record array and `assetCount` is its
+declared length. The other fields identify the source family, upstream release,
+revision, repository, source references, license, and selected variants.
+
+The `licenseRef` connects the source family to the distributed MIT license
+record; the license file itself remains in the release's `licenses/` tree.
 The release inventory hashes each provenance file as a normal release member.
 
 ## Per-asset records
@@ -35,8 +41,9 @@ to alter protected brand colors or imply trademark permission.
 ## Verification order
 
 1. Verify the GitHub Release archive against its `SHA256SUMS` record.
-2. Extract into a new empty directory and verify every member with
-   `checksums.txt`.
+2. Extract into a new empty directory and verify every path listed by
+   `checksums.txt`; the checksum list itself is covered by the outer
+   `SHA256SUMS` archive record.
 3. Verify `release.json` inventory and catalog references.
 4. Use provenance for source and license traceability while preserving the
    distributed `NOTICE` and upstream MIT license files.

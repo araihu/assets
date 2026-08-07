@@ -45,9 +45,10 @@ as described below.
 ### Verify a published release archive
 
 Use a disposable, empty directory for each release verification. `SHA256SUMS`
-authenticates the GitHub Release asset; the embedded `checksums.txt` verifies
-the extracted release members. The tar and zip archives are content-equivalent
-after extraction, not byte-equivalent archives.
+authenticates the GitHub Release archive; the extracted `checksums.txt` verifies
+each listed release file. `release.json` inventories the other managed files,
+while `checksums.txt` is intentionally not self-listed. The tar and zip archives
+are content-equivalent after extraction, not byte-equivalent archives.
 
 ```sh
 tag=v0.2.0
@@ -82,8 +83,10 @@ Get-Content (Join-Path $root checksums.txt) | ForEach-Object {
 }
 ```
 
-`release.json` binds the catalog and other release inputs; `checksums.txt`
-remains the authoritative member inventory inside the extracted release root.
+`release.json` binds the catalog and other release inputs. Together, its file
+inventory and `checksums.txt` cover every managed extracted file except the
+checksum list itself; the outer `SHA256SUMS` record authenticates that checksum
+list as part of the downloaded archive.
 
 ## Typed acquisition overlays
 
