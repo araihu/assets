@@ -12,12 +12,12 @@ Release, publication, deployment, or consumer integration.
 - [x] The lock resolves exactly 1,288 Heroicons SVGs across `16/solid`,
   `20/solid`, `24/outline`, and `24/solid`, plus 318 individual Developer Icons
   SVGs. The upstream aggregate Developer Icons sprite is excluded.
-- [x] Muamba prerequisite consumed from immutable commit
-  `1aaa3a2074dcb65f133df81d6368f0a1c188122c`, tree
-  `3cdb5fd3d43b998d500f4347e8b012e0a8833b33`.
-- [ ] Before integration, publish a Muamba release containing that commit and
-  replace the unpublished pseudo-version while preserving identical vendored
-  source bytes.
+- [x] Muamba prerequisite consumed from the public `v0.0.4` release commit
+  `eb5b5cdc59c0a7ed8a9dde85597005a427870b57`, tree
+  `3e5fcd296e578318bbed43e6fa94eab8394f7c5f`.
+- [x] Muamba `v0.0.4` is published; `go.mod`, `go.sum`, and `vendor/` pin and
+  materialize the public module, while the icon acquisition inputs and their
+  generated outputs remain unchanged.
 
 ## Catalog and generated artifacts
 
@@ -83,5 +83,5 @@ Release, publication, deployment, or consumer integration.
   [`docs/provenance-schema.md`](provenance-schema.md).
 - [x] Candidate status remains explicit: no public tag, archive, or module
   version is advertised until the release is published.
-- [ ] Publish the Muamba release, replace the unpublished pseudo-version, and
+- [x] Publish the Muamba release, replace the unpublished pseudo-version, and
   rerun the full release/archive/checksum gate before tagging Assets.

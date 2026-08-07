@@ -1,4 +1,4 @@
-# github.com/araihu/muamba v0.0.4-0.20260807065551-1aaa3a2074dc
+# github.com/araihu/muamba v0.0.4
 ## explicit; go 1.26.5
 github.com/araihu/muamba/cmd/muamba
 github.com/araihu/muamba/internal/archive
