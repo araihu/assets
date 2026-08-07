@@ -802,11 +802,15 @@ func inputs(ctx context.Context, repoRoot *os.Root, deps Dependencies) (build.In
 	if err != nil {
 		return build.Inputs{}, fmt.Errorf("acquisition inventory: %w", err)
 	}
+	source, err := acquisition.Repository(files, ".muamba.lock.yaml")
+	if err != nil {
+		return build.Inputs{}, err
+	}
 	uiFile, err := files.Open("manifests/icons-ui.yaml")
 	if err != nil {
 		return build.Inputs{}, fmt.Errorf("open manifest manifests/icons-ui.yaml: %w", err)
 	}
-	uiManifest, loadErr := provenance.LoadUI(uiFile, inventory)
+	uiManifest, loadErr := provenance.LoadUI(uiFile, inventory, source)
 	closeErr := uiFile.Close()
 	if loadErr != nil {
 		return build.Inputs{}, fmt.Errorf("manifest manifests/icons-ui.yaml: %w", loadErr)
@@ -821,7 +825,7 @@ func inputs(ctx context.Context, repoRoot *os.Root, deps Dependencies) (build.In
 	if err := ctx.Err(); err != nil {
 		return build.Inputs{}, err
 	}
-	ui, err := provenance.BuildUI(acquisition.Embedded(), uiManifest)
+	ui, err := provenance.BuildUI(source, uiManifest)
 	if err != nil {
 		return build.Inputs{}, fmt.Errorf("ui generator: %w", err)
 	}

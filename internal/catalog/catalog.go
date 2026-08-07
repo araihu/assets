@@ -16,11 +16,14 @@ import (
 	"strings"
 )
 
-// SchemaVersion is the only catalog schema supported by this package.
-const SchemaVersion = 1
+// SchemaVersion is the newest catalog schema emitted by this package. Decode
+// retains schema v1 support for immutable historical releases.
+const SchemaVersion = 2
 
 var (
 	lowerKebab    = regexp.MustCompile(`^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$`)
+	variantKebab  = regexp.MustCompile(`^[a-z0-9]+(?:-[a-z0-9]+)*$`)
+	canonicalV2   = regexp.MustCompile(`^[a-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*$`)
 	sha256Hex     = regexp.MustCompile(`^[0-9a-f]{64}$`)
 	semverNumber  = `(?:0|[1-9][0-9]*)`
 	semverPreID   = `(?:` + semverNumber + `|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)`
@@ -83,7 +86,7 @@ type Asset struct {
 
 // Validate checks that c is a closed schema-v1 catalog of distributable assets.
 func Validate(c Catalog) error {
-	if c.SchemaVersion != SchemaVersion {
+	if c.SchemaVersion != 1 && c.SchemaVersion != SchemaVersion {
 		return fmt.Errorf("unsupported schemaVersion %d", c.SchemaVersion)
 	}
 	if !releaseTag.MatchString(c.Release) {
@@ -99,7 +102,7 @@ func Validate(c Catalog) error {
 	names := make(map[string]struct{}, len(c.Assets))
 	symbols := make(map[string]struct{}, len(c.Assets))
 	for i, asset := range c.Assets {
-		if err := validateAsset(asset); err != nil {
+		if err := validateAsset(c.SchemaVersion, asset); err != nil {
 			return fmt.Errorf("asset[%d] %q: %w", i, asset.CanonicalName, err)
 		}
 		if _, ok := names[asset.CanonicalName]; ok {
@@ -117,8 +120,12 @@ func Validate(c Catalog) error {
 	return nil
 }
 
-func validateAsset(asset Asset) error {
-	if !lowerKebab.MatchString(asset.CanonicalName) {
+func validateAsset(schemaVersion int, asset Asset) error {
+	canonicalPattern := lowerKebab
+	if schemaVersion >= 2 {
+		canonicalPattern = canonicalV2
+	}
+	if !canonicalPattern.MatchString(asset.CanonicalName) {
 		return fmt.Errorf("invalid canonicalName %q", asset.CanonicalName)
 	}
 	if _, ok := allowedNamespaces[asset.Namespace]; !ok {
@@ -130,14 +137,15 @@ func validateAsset(asset Asset) error {
 	for _, field := range []struct {
 		name  string
 		value string
+		valid *regexp.Regexp
 	}{
-		{"product", asset.Product},
-		{"artwork", asset.Artwork},
-		{"appearance", asset.Appearance},
-		{"surface", asset.Surface},
-		{"framing", asset.Framing},
+		{"product", asset.Product, lowerKebab},
+		{"artwork", asset.Artwork, lowerKebab},
+		{"appearance", asset.Appearance, variantKebab},
+		{"surface", asset.Surface, lowerKebab},
+		{"framing", asset.Framing, lowerKebab},
 	} {
-		if !lowerKebab.MatchString(field.value) {
+		if !field.valid.MatchString(field.value) {
 			return fmt.Errorf("invalid %s %q", field.name, field.value)
 		}
 	}

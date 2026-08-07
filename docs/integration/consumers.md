@@ -1,12 +1,12 @@
 # Consumer integration
 
 Start from a released archive or a verified `dist/` tree. Validate
-`catalog.json` as schema v1, verify the selected artifact SHA-256, and keep the
+`catalog.json` as schema v2, verify the selected artifact SHA-256, and keep the
 catalog's relative path under that release root.
 
-For `v0.1.1` and later, also require `catalog.json.release`, `themes.json.release`, and
+Require `catalog.json.release`, `themes.json.release`, and
 `release.json.release` to agree. Verify `release.json` inventory hashes before
-using a patch candidate. This checkout's `v0.1.4` files are offline RC inputs;
+using a candidate. This checkout's `v0.2.0` files are offline RC inputs;
 they are not a published tag or public download until integration approval.
 `v0.1.3` remains the latest published release, while `v0.1.1` remains the
 independently published promoted default.
@@ -39,6 +39,7 @@ validation through explicit `assetmeta.ValidateRefs` calls, ordering, rendering,
 and generated domain APIs. `assetmeta` does not import Muamba, infer metadata
 semantics, or traverse consumer metadata automatically.
 
-This repository demonstrates the boundary directly: `muamba.yaml` and
-`internal/acquisition/muamba_gen.go` own Heroicons acquisition, while
+This repository demonstrates the boundary directly: `.muamba.yaml`,
+`.muamba.lock.yaml`, and
+`internal/acquisition/muamba_gen.go` own icon-pack acquisition, while
 `manifests/icons-ui.yaml` retains only consumer semantics and stable refs.

@@ -1,0 +1,72 @@
+# Arai Hû Assets v0.2.0 release checklist
+
+This is a frozen local candidate record. It does not claim a tag, push, GitHub
+Release, publication, deployment, or consumer integration.
+
+## Acquisition boundary
+
+- [x] `.muamba.yaml` declares Heroicons `v2.2.0` and Developer Icons `v7.0.1`
+  through bounded HTTPS tar.gz directory sources.
+- [x] `.muamba.lock.yaml` SHA-256:
+  `0e018778ec5236bdf5af39c33fcb6291d7e2c307322f78df8e48f41543054b16`.
+- [x] The lock resolves exactly 1,288 Heroicons SVGs across `16/solid`,
+  `20/solid`, `24/outline`, and `24/solid`, plus 318 individual Developer Icons
+  SVGs. The upstream aggregate Developer Icons sprite is excluded.
+- [x] Muamba prerequisite consumed from immutable commit
+  `1aaa3a2074dcb65f133df81d6368f0a1c188122c`, tree
+  `3cdb5fd3d43b998d500f4347e8b012e0a8833b33`.
+- [ ] Before integration, publish a Muamba release containing that commit and
+  replace the unpublished pseudo-version while preserving identical vendored
+  source bytes.
+
+## Catalog and generated artifacts
+
+- [x] Catalog schema v2 explicitly preserves mixed-case canonical-name
+  segments and permits size-prefixed appearance variants. Historical schema v1
+  catalogs remain readable with their lower-kebab canonical-name rule.
+- [x] `dist/catalog.json`: 1,841 assets total; 1,288 Heroicons and 318 Developer
+  Icons; SHA-256
+  `a0e8e5c8928e37de979ce9a60f3d66fad1aa1b4c7d2904f9275f0be9932a33d6`.
+- [x] Literal `brand-developer-icons-tRPC` is preserved while its independent
+  sprite symbol is `devicon-trpc`.
+- [x] Heroicons sprite SHA-256:
+  `65cdb814125787460b548428dd49edd8e29250ee9eba5e6f27f4eb1b746fc3ca`.
+- [x] Developer Icons sprite SHA-256:
+  `be3862d97ca02f2c386d7bb73174290d76ae68b27ff45c8f716d219f8f513a55`.
+- [x] Heroicons provenance SHA-256:
+  `41f649e87d00f2c11f3a55bcb024d15c596f3938ec325f38f4433124edc059c6`.
+- [x] Developer Icons provenance SHA-256:
+  `67b4f6e45ef2bd7778c6b5da108a61ea6f49e4a42808535b4318850d213367f3`.
+- [x] Every locked source member is size- and SHA-384-verified before SVG
+  normalization; generated SVG and sprite validators reject unsafe content.
+
+## Release and consumer boundary
+
+- [x] `dist/release.json` SHA-256:
+  `0650e51dd2b7ec7797622b3cdd9ff75dfd53cb1914155931014223bbd1684fa6`.
+- [x] `dist/checksums.txt` SHA-256:
+  `86dac118901d423117e20bd14ce6ed30717fca9c2a8244909c2be4b926ce1c4e`.
+- [x] Tar archive: 3,797 members; SHA-256
+  `dcb97bbbbf98fb2e3c0e96b63eefb17b9b60eb2b3d8097fa6b4e2876f3f19271`.
+- [x] Zip archive: 3,797 members; SHA-256
+  `a52dda1ac713d6761e80cbf6d69d4acf9f0411348fcce4d20bd95fc4281fee46`.
+- [x] Both archives extract cleanly and all 3,796 records in their embedded
+  `checksums.txt` verify.
+- [x] Goshtoso's later input is the verified root extracted from
+  `araihu-assets-v0.2.0.tar.gz` or the byte-equivalent zip, never the vendored
+  source tree. The assets CLI emits no Go or other client-language bindings.
+- [x] The generated proof has initial-HTML canonical, description, Open Graph,
+  and X-card metadata plus a validated 1280x640 PNG below 1 MiB.
+
+## Gates
+
+- [x] Muamba strict verify and generated-Go drift check.
+- [x] `make check` and deterministic offline build check.
+- [x] `make proof-check`.
+- [x] `go test ./... -count=1`.
+- [x] `go vet ./...`.
+- [x] `make verify`.
+- [x] `make release`.
+- [x] `go test -race ./... -count=1`.
+- [x] CI and release-workflow guard scripts.
+- [x] `git diff --check`.

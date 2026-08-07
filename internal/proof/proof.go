@@ -124,9 +124,16 @@ func build(m Model, fsys fs.FS, output io.Writer, parseTemplate func() (*templat
 			}
 		}
 	}
-	if hasUIScenarios(m, assets) {
+	if hasProduct(m.Catalog, "heroicons") {
 		for _, reference := range []string{"icons/ui/sprite.svg", "licenses/heroicons-MIT.txt", "icons/ui/heroicons/provenance.json"} {
 			if err := validateProofFile(fsys, checked, reference, "UI license or provenance evidence"); err != nil {
+				return err
+			}
+		}
+	}
+	if hasProduct(m.Catalog, "developer-icons") {
+		for _, reference := range []string{"icons/brand/developer-icons/sprite.svg", "licenses/developer-icons-MIT.txt", "icons/brand/developer-icons/provenance.json"} {
+			if err := validateProofFile(fsys, checked, reference, "Developer Icons license or provenance evidence"); err != nil {
 				return err
 			}
 		}
@@ -174,9 +181,9 @@ func validateProofFile(fsys fs.FS, checked map[string]struct{}, proofPath, purpo
 	return nil
 }
 
-func hasUIScenarios(m Model, assets map[string]catalog.Asset) bool {
-	for _, scenario := range m.Scenarios {
-		if assets[scenario.Asset].Namespace == "ui" {
+func hasProduct(c catalog.Catalog, product string) bool {
+	for _, asset := range c.Assets {
+		if asset.Product == product {
 			return true
 		}
 	}
@@ -295,9 +302,12 @@ func newDocumentModel(m Model) (documentModel, error) {
 			ViewBox: asset.Dimensions.ViewBox, Format: asset.Format, Appearance: asset.Appearance, Surface: asset.Surface,
 		})
 		licenseURL, provenanceURL := relativeProofURL("NOTICE"), relativeProofURL("NOTICE")
-		if asset.Namespace == "ui" {
+		if asset.Product == "heroicons" {
 			licenseURL = relativeProofURL("licenses/heroicons-MIT.txt")
 			provenanceURL = relativeProofURL("icons/ui/heroicons/provenance.json")
+		} else if asset.Product == "developer-icons" {
+			licenseURL = relativeProofURL("licenses/developer-icons-MIT.txt")
+			provenanceURL = relativeProofURL("icons/brand/developer-icons/provenance.json")
 		}
 		document.Licenses = append(document.Licenses, documentLicense{
 			Product: productName(asset.Product), Asset: asset.CanonicalName,
@@ -347,6 +357,8 @@ func productName(id string) string {
 		return "Manja"
 	case "heroicons":
 		return "Heroicons"
+	case "developer-icons":
+		return "Developer Icons"
 	default:
 		return id
 	}
@@ -493,6 +505,11 @@ func newModel(c catalog.Catalog, scenarios []Scenario) (Model, error) {
 func newPlatformProofs(products []ProductProof) ([]PlatformProof, error) {
 	result := make([]PlatformProof, 0, len(products))
 	for _, product := range products {
+		// Developer Icons are third-party brand glyphs, not Arai Hû application
+		// identities, so they intentionally have no launcher-package contract.
+		if product.ID == "developer-icons" {
+			continue
+		}
 		if !hasBrandAssets(product) {
 			continue
 		}

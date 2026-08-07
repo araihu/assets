@@ -1,142 +1,30 @@
 schema: 1
 metadata:
-  source: heroicons
-  alias: hi
-  version: v2.2.0
-  license: MIT
-  license_ref: heroicons/license
-  icons:
-    - ref: heroicons/icon-16-solid-arrow-down-tray
-      path: 16/solid/arrow-down-tray.svg
-    - ref: heroicons/icon-16-solid-arrow-down
-      path: 16/solid/arrow-down.svg
-    - ref: heroicons/icon-16-solid-arrow-path
-      path: 16/solid/arrow-path.svg
-    - ref: heroicons/icon-16-solid-arrow-top-right-on-square
-      path: 16/solid/arrow-top-right-on-square.svg
-    - ref: heroicons/icon-16-solid-arrow-up
-      path: 16/solid/arrow-up.svg
-    - ref: heroicons/icon-16-solid-arrow-uturn-left
-      path: 16/solid/arrow-uturn-left.svg
-    - ref: heroicons/icon-16-solid-arrows-up-down
-      path: 16/solid/arrows-up-down.svg
-    - ref: heroicons/icon-16-solid-bars-3
-      path: 16/solid/bars-3.svg
-    - ref: heroicons/icon-16-solid-bell
-      path: 16/solid/bell.svg
-    - ref: heroicons/icon-16-solid-book-open
-      path: 16/solid/book-open.svg
-    - ref: heroicons/icon-16-solid-chart-bar
-      path: 16/solid/chart-bar.svg
-    - ref: heroicons/icon-16-solid-check-circle
-      path: 16/solid/check-circle.svg
-    - ref: heroicons/icon-16-solid-check
-      path: 16/solid/check.svg
-    - ref: heroicons/icon-16-solid-chevron-down
-      path: 16/solid/chevron-down.svg
-    - ref: heroicons/icon-16-solid-chevron-left
-      path: 16/solid/chevron-left.svg
-    - ref: heroicons/icon-16-solid-chevron-right
-      path: 16/solid/chevron-right.svg
-    - ref: heroicons/icon-16-solid-clipboard-document-list
-      path: 16/solid/clipboard-document-list.svg
-    - ref: heroicons/icon-16-solid-clipboard
-      path: 16/solid/clipboard.svg
-    - ref: heroicons/icon-16-solid-clock
-      path: 16/solid/clock.svg
-    - ref: heroicons/icon-16-solid-cloud-arrow-up
-      path: 16/solid/cloud-arrow-up.svg
-    - ref: heroicons/icon-16-solid-code-bracket
-      path: 16/solid/code-bracket.svg
-    - ref: heroicons/icon-16-solid-cog-6-tooth
-      path: 16/solid/cog-6-tooth.svg
-    - ref: heroicons/icon-16-solid-cube
-      path: 16/solid/cube.svg
-    - ref: heroicons/icon-16-solid-document-duplicate
-      path: 16/solid/document-duplicate.svg
-    - ref: heroicons/icon-16-solid-document-text
-      path: 16/solid/document-text.svg
-    - ref: heroicons/icon-16-solid-ellipsis-horizontal
-      path: 16/solid/ellipsis-horizontal.svg
-    - ref: heroicons/icon-16-solid-ellipsis-vertical
-      path: 16/solid/ellipsis-vertical.svg
-    - ref: heroicons/icon-16-solid-exclamation-circle
-      path: 16/solid/exclamation-circle.svg
-    - ref: heroicons/icon-16-solid-eye-slash
-      path: 16/solid/eye-slash.svg
-    - ref: heroicons/icon-16-solid-eye
-      path: 16/solid/eye.svg
-    - ref: heroicons/icon-16-solid-face-smile
-      path: 16/solid/face-smile.svg
-    - ref: heroicons/icon-16-solid-folder
-      path: 16/solid/folder.svg
-    - ref: heroicons/icon-16-solid-funnel
-      path: 16/solid/funnel.svg
-    - ref: heroicons/icon-16-solid-heart
-      path: 16/solid/heart.svg
-    - ref: heroicons/icon-16-solid-home
-      path: 16/solid/home.svg
-    - ref: heroicons/icon-16-solid-identification
-      path: 16/solid/identification.svg
-    - ref: heroicons/icon-16-solid-inbox
-      path: 16/solid/inbox.svg
-    - ref: heroicons/icon-16-solid-information-circle
-      path: 16/solid/information-circle.svg
-    - ref: heroicons/icon-16-solid-language
-      path: 16/solid/language.svg
-    - ref: heroicons/icon-16-solid-link
-      path: 16/solid/link.svg
-    - ref: heroicons/icon-16-solid-lock-closed
-      path: 16/solid/lock-closed.svg
-    - ref: heroicons/icon-16-solid-magnifying-glass
-      path: 16/solid/magnifying-glass.svg
-    - ref: heroicons/icon-16-solid-microphone
-      path: 16/solid/microphone.svg
-    - ref: heroicons/icon-16-solid-moon
-      path: 16/solid/moon.svg
-    - ref: heroicons/icon-16-solid-paint-brush
-      path: 16/solid/paint-brush.svg
-    - ref: heroicons/icon-16-solid-paper-clip
-      path: 16/solid/paper-clip.svg
-    - ref: heroicons/icon-16-solid-pause
-      path: 16/solid/pause.svg
-    - ref: heroicons/icon-16-solid-pencil-square
-      path: 16/solid/pencil-square.svg
-    - ref: heroicons/icon-16-solid-play
-      path: 16/solid/play.svg
-    - ref: heroicons/icon-16-solid-plus
-      path: 16/solid/plus.svg
-    - ref: heroicons/icon-16-solid-printer
-      path: 16/solid/printer.svg
-    - ref: heroicons/icon-16-solid-queue-list
-      path: 16/solid/queue-list.svg
-    - ref: heroicons/icon-16-solid-rectangle-group
-      path: 16/solid/rectangle-group.svg
-    - ref: heroicons/icon-16-solid-scissors
-      path: 16/solid/scissors.svg
-    - ref: heroicons/icon-16-solid-shield-check
-      path: 16/solid/shield-check.svg
-    - ref: heroicons/icon-16-solid-sparkles
-      path: 16/solid/sparkles.svg
-    - ref: heroicons/icon-16-solid-squares-2x2
-      path: 16/solid/squares-2x2.svg
-    - ref: heroicons/icon-16-solid-star
-      path: 16/solid/star.svg
-    - ref: heroicons/icon-16-solid-sun
-      path: 16/solid/sun.svg
-    - ref: heroicons/icon-16-solid-table-cells
-      path: 16/solid/table-cells.svg
-    - ref: heroicons/icon-16-solid-trash
-      path: 16/solid/trash.svg
-    - ref: heroicons/icon-16-solid-user-circle
-      path: 16/solid/user-circle.svg
-    - ref: heroicons/icon-16-solid-user
-      path: 16/solid/user.svg
-    - ref: heroicons/icon-16-solid-users
-      path: 16/solid/users.svg
-    - ref: heroicons/icon-16-solid-window
-      path: 16/solid/window.svg
-    - ref: heroicons/icon-16-solid-x-circle
-      path: 16/solid/x-circle.svg
-    - ref: heroicons/icon-16-solid-x-mark
-      path: 16/solid/x-mark.svg
+  packs:
+    - source: heroicons
+      alias: hi
+      release: v2.2.0
+      revision: 0435d4ca364a608cc75e2f8683d374e55abbae26
+      repository: https://github.com/tailwindlabs/heroicons
+      source_ref: heroicons/optimized
+      license: MIT
+      license_ref: heroicons/license
+      namespace: ui
+      variants:
+        - 16-solid
+        - 20-solid
+        - 24-outline
+        - 24-solid
+    - source: developer-icons
+      alias: devicon
+      release: v7.0.1
+      revision: 28b895aba6a4984b8c43714336fafa5fa832f08f
+      repository: https://github.com/xandemon/developer-icons
+      source_ref: developer-icons/icons
+      license: MIT
+      license_ref: developer-icons/license
+      namespace: brand
+      variants:
+        - default
+        - dark
+        - light

@@ -58,6 +58,33 @@ func TestValidateAllowsIndividualOnlySVG(t *testing.T) {
 	}
 }
 
+func TestSchemaV2PreservesLiteralCanonicalNameWhileV1RejectsIt(t *testing.T) {
+	c := validCatalog(t)
+	c.SchemaVersion = 2
+	c.Assets[0].CanonicalName = "brand-developer-icons-tRPC"
+	c.Assets[0].SpriteSymbol = "devicon-trpc"
+	if err := Validate(c); err != nil {
+		t.Fatalf("Validate(schema v2 mixed-case canonical name) error = %v", err)
+	}
+	c.SchemaVersion = 1
+	if err := Validate(c); err == nil || !strings.Contains(err.Error(), "canonicalName") {
+		t.Fatalf("Validate(schema v1 mixed-case canonical name) error = %v", err)
+	}
+}
+
+func TestValidateAllowsSizePrefixedAppearanceVariant(t *testing.T) {
+	c := validCatalog(t)
+	c.SchemaVersion = 2
+	c.Assets[0].Appearance = "16-solid"
+	if err := Validate(c); err != nil {
+		t.Fatalf("Validate(size-prefixed appearance) error = %v", err)
+	}
+	c.Assets[0].Product = "16-heroicons"
+	if err := Validate(c); err == nil || !strings.Contains(err.Error(), "product") {
+		t.Fatalf("Validate(size-prefixed product) error = %v", err)
+	}
+}
+
 func TestValidateAcceptsOnlyDocumentedSemVerReleaseTags(t *testing.T) {
 	for _, tc := range []struct {
 		release string
@@ -112,7 +139,7 @@ func TestEncodeIsDeterministic(t *testing.T) {
 func TestDecodeRejectsUnknownAndInvalidJSON(t *testing.T) {
 	for _, input := range []string{
 		`{"schemaVersion":1,"release":"v0.1.0","identityRevision":11,"assets":[],"extra":true}`,
-		`{"schemaVersion":2,"release":"v0.1.0","identityRevision":11,"assets":[]}`,
+		`{"schemaVersion":3,"release":"v0.1.0","identityRevision":11,"assets":[]}`,
 		fixture(t, "catalog.json") + ` {}`,
 	} {
 		if _, err := Decode(strings.NewReader(input)); err == nil {

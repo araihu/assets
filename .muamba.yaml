@@ -1,0 +1,47 @@
+schema: 1
+resources:
+  heroicons:
+    # Official immutable upstream release tag. The exact archive and resolved
+    # member set are pinned in .muamba.lock.yaml.
+    version: "v2.2.0"
+    downloads:
+      license:
+        url: https://raw.githubusercontent.com/tailwindlabs/heroicons/${version}/LICENSE
+        path: internal/acquisition/vendor/heroicons/${version}/LICENSE.txt
+        max_size: 64KiB
+    directories:
+      optimized:
+        url: https://github.com/tailwindlabs/heroicons/archive/${version}.tar.gz
+        archive: tar.gz
+        path: internal/acquisition/vendor/heroicons/${version}
+        include:
+          - optimized/16/solid/*.svg
+          - optimized/20/solid/*.svg
+          - optimized/24/outline/*.svg
+          - optimized/24/solid/*.svg
+        strip_components: 1
+        max_size: 32MiB
+        max_files: 2048
+        max_unpacked_size: 32MiB
+  developer-icons:
+    # Official immutable upstream release tag. The aggregate sprite is omitted;
+    # every individual default, dark, and light SVG is locked separately.
+    version: "v7.0.1"
+    downloads:
+      license:
+        url: https://raw.githubusercontent.com/xandemon/developer-icons/${version}/LICENSE
+        path: internal/acquisition/vendor/developer-icons/${version}/LICENSE.txt
+        max_size: 64KiB
+    directories:
+      icons:
+        url: https://github.com/xandemon/developer-icons/archive/${version}.tar.gz
+        archive: tar.gz
+        path: internal/acquisition/vendor/developer-icons/${version}
+        include:
+          - icons/*.svg
+        exclude:
+          - icons/developer-icons.svg
+        strip_components: 1
+        max_size: 32MiB
+        max_files: 512
+        max_unpacked_size: 32MiB

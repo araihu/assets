@@ -18,6 +18,7 @@ var (
 	identifier      = regexp.MustCompile(`^[A-Za-z_][A-Za-z0-9_.:-]*$`)
 	allowedElements = map[string]struct{}{
 		"circle": {}, "clipPath": {}, "defs": {}, "ellipse": {}, "g": {},
+		"feBlend": {}, "feColorMatrix": {}, "feFlood": {}, "feGaussianBlur": {}, "feOffset": {}, "filter": {},
 		"line": {}, "linearGradient": {}, "marker": {}, "mask": {}, "path": {},
 		"polygon": {}, "polyline": {}, "radialGradient": {}, "rect": {}, "stop": {}, "use": {},
 	}
@@ -32,7 +33,7 @@ var (
 	}
 	generatedAdaptiveStyle = regexp.MustCompile(`^<style>@media \(prefers-color-scheme: dark\) \{:root \{--araihu-logo-auto-surface: #[0-9a-f]{6};--araihu-logo-auto-ink: #[0-9a-f]{6};--araihu-logo-auto-signal: #[0-9a-f]{6};\}\}</style>`)
 	mixedCaseAttributes    = map[string]struct{}{
-		"clipPathUnits": {}, "gradientTransform": {}, "gradientUnits": {}, "markerHeight": {}, "markerUnits": {}, "markerWidth": {}, "preserveAspectRatio": {}, "refX": {}, "refY": {}, "viewBox": {},
+		"clipPathUnits": {}, "filterUnits": {}, "gradientTransform": {}, "gradientUnits": {}, "markerHeight": {}, "markerUnits": {}, "markerWidth": {}, "maskUnits": {}, "preserveAspectRatio": {}, "refX": {}, "refY": {}, "spreadMethod": {}, "stdDeviation": {}, "viewBox": {},
 	}
 )
 
