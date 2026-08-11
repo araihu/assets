@@ -2,14 +2,14 @@
 
 Deterministic identity and interface assets for Arai Hû products.
 `dist/catalog.json` is the versioned, language-neutral consumer contract for
-the `v0.2.0` release candidate.
+the `v0.2.1` release.
 
 ## Current checkout
 
 Requires Go `1.26.5`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
-The managed `dist/` tree is the `v0.2.0` release candidate. Its catalog, generated
+The managed `dist/` tree is the `v0.2.1` release. Its catalog, generated
 sprites, catalog-driven proof, and deterministic archives are consumer inputs.
 Use a disposable checkout when regenerating it:
 
@@ -26,15 +26,16 @@ managed tree, including `dist/proof`.
 
 ## Install and verify
 
-Install the CLI after the `v0.2.0` tag and GitHub Release are public when you
-need to run the repository's offline build and catalog commands:
+Install the CLI from the matching public tag when you need to run the
+repository's offline build and catalog commands:
 
 ```sh
-# Run only after https://github.com/araihu/assets/releases/tag/v0.2.0 exists.
-go install github.com/araihu/assets/cmd/araihu-assets@v0.2.0
+# Run only after https://github.com/araihu/assets/releases/tag/v0.2.1 exists.
+go install github.com/araihu/assets/cmd/araihu-assets@v0.2.1
 ```
 
-Until then, use `go run ./cmd/araihu-assets ...` from this candidate checkout.
+Before that public identity exists, use `go run ./cmd/araihu-assets ...` from
+the release checkout.
 `araihu-assets verify` is a source-checkout reproducibility command. Run it
 from the root of the tagged repository checkout; it reads that checkout's
 `.muamba.yaml`, `.muamba.lock.yaml`, acquisition inputs, and `dist/`. An
@@ -51,7 +52,7 @@ while `checksums.txt` is intentionally not self-listed. The tar and zip archives
 are content-equivalent after extraction, not byte-equivalent archives.
 
 ```sh
-tag=v0.2.0
+tag=v0.2.1
 mkdir release-download release-root
 
 gh release download "$tag" --repo araihu/assets \
@@ -208,7 +209,7 @@ not remain in managed `dist/`, and no unpublished release is synthesized.
 
 ## Catalog and sprites
 
-The `v0.2.0` `dist/catalog.json` is schema v2, language-neutral metadata for
+The `v0.2.1` `dist/catalog.json` is schema v2, language-neutral metadata for
 generated files only. It records canonical name,
 namespace, variant dimensions,
 `spriteSymbol`, color behavior, license, source label, and SHA-256. Public
@@ -235,7 +236,7 @@ generation is provided by this CLI; consumers own any project-local bindings.
 
 ## Platform files and archives
 
-The `v0.2.0` build emits individual brand/UI SVGs, web/Android/Apple platform
+The `v0.2.1` build emits individual brand/UI SVGs, web/Android/Apple platform
 packages, catalog, checksums, notices, licenses, the self-contained
 `dist/proof/**` review site, and deterministic `.tar.gz` and `.zip` archives
 under `dist/releases/`. Platform launchers
@@ -246,15 +247,14 @@ The catalog is the current interoperability boundary. Release archives contain
 the complete managed distribution, including all `dist/proof/**` local assets;
 review screenshots and critique files remain outside release membership.
 
-`v0.2.0` is an offline release candidate in this checkout, not a published tag
-or download. Consumers must wait for integration approval before treating its
-archive names or module version as publicly available.
+Local `v0.2.1` files are not publication proof. Consumers must verify the
+matching Git tag, GitHub Release, `SHA256SUMS`, archive, and extracted member
+checksums before treating its archive names or module version as public.
 
-`v0.1.1` remains the published promoted default until an explicit promotion
-changes `manifests/default.yaml`; `v0.1.4` remains the latest published release
-until this candidate is tagged. This minor candidate changes the catalog schema
-to preserve literal upstream icon names and adds the complete pinned Heroicons
-and Developer Icons surfaces.
+`v0.1.1` remains the promoted default until an explicit promotion changes
+`manifests/default.yaml`; `v0.2.0` is the preceding release. This patch keeps
+catalog schema v2 and the published icon inventory unchanged while aligning
+the Arai Hû theme's typography and corner geometry with Goshtoso Modern.
 
 ## Licensing
 
