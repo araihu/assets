@@ -6,10 +6,10 @@ catalog's relative path under that release root.
 
 Require `catalog.json.release`, `themes.json.release`, and
 `release.json.release` to agree. Verify `release.json` inventory hashes before
-using a candidate. This checkout's `v0.2.0` files are offline RC inputs;
-they are not a published tag or public download until integration approval.
-`v0.1.4` remains the latest published release, while `v0.1.1` remains the
-independently published promoted default.
+using a candidate. This checkout identifies its files as `v0.2.1`, but local
+bytes are not publication proof. Verify the matching public tag, GitHub Release,
+archive, and checksums before adoption. `v0.2.0` is the preceding release, while
+`v0.1.1` remains the independently published promoted default.
 
 Use generated sprite files only with the `spriteSymbol` recorded by the
 catalog. Same-origin external sprite references and inline-document rendering
@@ -34,7 +34,7 @@ the release root. `release.json` inventories the other managed files; the
 checksum list itself is authenticated by the outer `SHA256SUMS` archive record.
 
 ```sh
-tag=v0.2.0
+tag=v0.2.1
 mkdir release-download release-root
 gh release download "$tag" --repo araihu/assets \
   --pattern "araihu-assets-${tag}.tar.gz" \

@@ -53,7 +53,8 @@ name; Goshtoso, Manja, Pajé, and X-9/Xisnove are product identities.
 
 - Approved source exports: `source/brand/original/`
 - Temporary V11 calibration scaffold: `source/brand/proof/v11/`
-- Theme contract: `themes/araihu.css`
+- Theme contract: `themes/araihu.css`, using Goshtoso Modern typography and
+  corner geometry with the Arai Hû semantic palette
 - Temporary V11 proof: `review/logo-system-v11.html`
 - Deterministic derivation and validation: `scripts/derive-logo-system-v11.py`
   and `scripts/validate-logo-system-v11.sh`

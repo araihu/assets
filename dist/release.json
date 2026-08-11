@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "release": "v0.2.0",
+  "release": "v0.2.1",
   "identityRevision": 11,
   "runtimeVersion": 1,
-  "catalogSha256": "a0e8e5c8928e37de979ce9a60f3d66fad1aa1b4c7d2904f9275f0be9932a33d6",
-  "themesSha256": "e5cda09d3abc5e0f178238b1353de09e4fa987865f5a15b6e8fded8796f315e7",
+  "catalogSha256": "b2b3ab2ac7e87e2eb333725195c394ebcfb1edc5f89542d89d375f2675a2aead",
+  "themesSha256": "12ed92a78d837f1719a2fdc70aa328bf150b5823b5b409b0cb40c1115fcae619",
   "campaignsSha256": "fd0393fed7bcf92c7323ba88467b042ca14744da93442f8700bb242f1f23756a",
   "files": [
     {
       "path": "catalog.json",
-      "sha256": "a0e8e5c8928e37de979ce9a60f3d66fad1aa1b4c7d2904f9275f0be9932a33d6",
+      "sha256": "b2b3ab2ac7e87e2eb333725195c394ebcfb1edc5f89542d89d375f2675a2aead",
       "size": 1291792
     },
     {
       "path": "themes.json",
-      "sha256": "e5cda09d3abc5e0f178238b1353de09e4fa987865f5a15b6e8fded8796f315e7",
+      "sha256": "12ed92a78d837f1719a2fdc70aa328bf150b5823b5b409b0cb40c1115fcae619",
       "size": 532
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "path": "NOTICE",
-      "sha256": "45d9f14d87dc2290370abea6fd66d5fdb77fa6221aaa96563521322494246133",
+      "sha256": "009a69bac0ec33be3ac54c3e0dcd15656727b5de374d56be4144ee6515fe010b",
       "size": 260
     },
     {
@@ -9484,7 +9484,7 @@
     },
     {
       "path": "proof/assets/NOTICE",
-      "sha256": "45d9f14d87dc2290370abea6fd66d5fdb77fa6221aaa96563521322494246133",
+      "sha256": "009a69bac0ec33be3ac54c3e0dcd15656727b5de374d56be4144ee6515fe010b",
       "size": 260
     },
     {
@@ -18944,7 +18944,7 @@
     },
     {
       "path": "proof/assets/themes.json",
-      "sha256": "e5cda09d3abc5e0f178238b1353de09e4fa987865f5a15b6e8fded8796f315e7",
+      "sha256": "12ed92a78d837f1719a2fdc70aa328bf150b5823b5b409b0cb40c1115fcae619",
       "size": 532
     },
     {
@@ -18954,12 +18954,12 @@
     },
     {
       "path": "proof/assets/themes/araihu.css",
-      "sha256": "9e7756cea751aa95bcf2f0b6545dc32ab9037a47a08a91287502dae52829d265",
-      "size": 2144
+      "sha256": "9ec3f3187b736252b18f3aefef4737ba2025ef1c637611c3d0ecf58748043f1b",
+      "size": 2203
     },
     {
       "path": "proof/index.html",
-      "sha256": "6047c1f785ee8e6a3cf2f82eff09babf83a6c1620fb20998da54a36051e72348",
+      "sha256": "91956ec64bd3c60b7584e6cf5991118c10f25e17e7a7f8183a0f5e50af32b567",
       "size": 2718705
     },
     {
@@ -18979,8 +18979,8 @@
     },
     {
       "path": "themes/araihu.css",
-      "sha256": "9e7756cea751aa95bcf2f0b6545dc32ab9037a47a08a91287502dae52829d265",
-      "size": 2144
+      "sha256": "9ec3f3187b736252b18f3aefef4737ba2025ef1c637611c3d0ecf58748043f1b",
+      "size": 2203
     }
   ]
 }
