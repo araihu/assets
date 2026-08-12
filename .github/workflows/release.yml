@@ -50,6 +50,7 @@ jobs:
         shell: bash
         env:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
           GITHUB_REF_TYPE: ${{ github.ref_type }}
           GITHUB_REF_NAME: ${{ github.ref_name }}
           GITHUB_SHA: ${{ github.sha }}
@@ -58,8 +59,8 @@ jobs:
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
         run: |
           set -euo pipefail
-          scripts/materialize-dagger-input.rb release-build .dagger-inputs/release-build.json
-          scripts/materialize-dagger-input.rb release-publish .dagger-inputs/release-publish.json
+          scripts/materialize-dagger-input.sh release-build .dagger-inputs/release-build.json
+          scripts/materialize-dagger-input.sh release-publish .dagger-inputs/release-publish.json
 
       - name: Preflight fan-out credentials
         id: fanout-credentials

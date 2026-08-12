@@ -31,12 +31,16 @@ RUBY
   fi
 }
 
-mutate_and_reject "pull request cache promoted to trusted" scripts/materialize-dagger-input.rb \
-  'when "pull_request" then "pr"' 'when "pull_request" then "trusted"'
-mutate_and_reject "protected cache demoted to PR" scripts/materialize-dagger-input.rb \
-  'when "push", "workflow_dispatch" then "trusted"' 'when "push", "workflow_dispatch" then "pr"'
-mutate_and_reject "unknown event promoted to trusted" scripts/materialize-dagger-input.rb \
-  'else abort "unsupported CI event"' 'else "trusted"'
+mutate_and_reject "pull request cache promoted to trusted" scripts/materialize-dagger-input.sh \
+  'pull_request) cache_namespace=pr' 'pull_request) cache_namespace=trusted'
+mutate_and_reject "protected cache demoted to PR" scripts/materialize-dagger-input.sh \
+  'push|workflow_dispatch) cache_namespace=trusted' 'push|workflow_dispatch) cache_namespace=pr'
+mutate_and_reject "unknown event promoted to trusted" scripts/materialize-dagger-input.sh \
+  "*) fail 'unsupported CI event' ;;" "*) cache_namespace=trusted ;;"
+mutate_and_reject "numeric prerelease leading zero accepted" scripts/materialize-dagger-input.sh \
+  '|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*' '|[0-9]+'
+mutate_and_reject "provider LF rejection removed" scripts/materialize-dagger-input.sh \
+  'must not end with LF' 'provider value accepted'
 mutate_and_reject "PR cache namespace hard-coded to trusted" .dagger/src/index.ts \
   'araihu-ci-v1-assets-${cacheNamespace}-go-build-1.26.5' 'araihu-ci-v1-assets-trusted-go-build-1.26.5'
 mutate_and_reject "PR runner routed to generic lane" .github/workflows/ci.yml \

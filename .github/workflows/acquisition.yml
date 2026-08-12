@@ -30,9 +30,10 @@ jobs:
         shell: bash
         env:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
-        run: scripts/materialize-dagger-input.rb acquisition .dagger-inputs/acquisition.json
+        run: scripts/materialize-dagger-input.sh acquisition .dagger-inputs/acquisition.json
 
       - name: Synchronize locked static inputs with Dagger
         shell: bash

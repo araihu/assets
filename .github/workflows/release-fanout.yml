@@ -52,13 +52,14 @@ jobs:
         shell: bash
         env:
           RELEASE: ${{ inputs.release }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
         run: |
           set -euo pipefail
-          scripts/materialize-dagger-input.rb fanout-plan .dagger-inputs/fanout-plan.json
-          scripts/materialize-dagger-input.rb fanout-dispatch .dagger-inputs/fanout-dispatch.json
+          scripts/materialize-dagger-input.sh fanout-plan .dagger-inputs/fanout-plan.json
+          scripts/materialize-dagger-input.sh fanout-dispatch .dagger-inputs/fanout-dispatch.json
 
       - name: Verify immutable release handoff with Dagger
         shell: bash

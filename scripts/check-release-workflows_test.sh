@@ -120,5 +120,14 @@ mutate_and_reject "campaign skips archive collision validation" scripts/dagger/c
   'test -s "$download/archive.members"'
 mutate_and_reject "campaign skips published latest hash" scripts/dagger/campaign-plan.sh \
   'sha256sum --check --strict "$latest_download/latest.sha256"' 'test -f "$latest_download/latest.sha256"'
+mutate_and_reject "campaign provider output path drifts" .github/workflows/campaigns.yml \
+  'provider_output="${RUNNER_TEMP}/campaign-plan/provider-output"' 'provider_output="${RUNNER_TEMP}/campaign-plan/plan.json"'
+mutate_and_reject "release materializer permits numeric prerelease leading zero" scripts/materialize-dagger-input.sh \
+  '|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*' '|[0-9]+'
+mutate_and_reject "campaign provider digest is not strict" .github/workflows/campaigns.yml \
+  '[[ "$digest" =~ ^[0-9a-f]{64}$ ]]' 'test -n "$digest"'
+mutate_and_reject "campaign Dagger output omits validated lines" scripts/dagger/campaign-plan.sh \
+  "printf 'changed=%s\\ndigest=%s\\n' \"\$changed\" \"\$bundle_digest\" > /out/provider-output" \
+  "printf 'changed=%s\\n' \"\$changed\" > /out/provider-output"
 
 echo "release workflow checker: runtime archive/state/fan-out and $mutation mutations passed"

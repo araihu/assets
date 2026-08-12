@@ -135,4 +135,8 @@ RELEASE_ARTIFACTS="$release_artifacts" ruby -rjson -e '
     state: {ref: "automation/araihu-assets-state", path: ".automation/araihu-assets/accepted-channel-v1.json"}
   }))
 ' "$changed" "$bundle_digest" "$default_release" "$resolution_date"
+case "$changed" in true|false) ;; *) echo "invalid campaign changed value" >&2; exit 1 ;; esac
+[[ "$bundle_digest" =~ ^[0-9a-f]{64}$ ]] || { echo "invalid campaign bundle digest" >&2; exit 1; }
+printf 'changed=%s\ndigest=%s\n' "$changed" "$bundle_digest" > /out/provider-output
+chmod 0644 /out/provider-output
 echo "campaign plan: digest=$bundle_digest changed=$changed"

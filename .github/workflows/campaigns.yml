@@ -48,6 +48,7 @@ jobs:
         shell: bash
         env:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_SERVER_URL: ${{ github.server_url }}
           GITHUB_API_URL: ${{ github.api_url }}
@@ -56,7 +57,7 @@ jobs:
           AHAIRU_OWNER: ${{ vars.AHAIRU_OWNER }}
           AHAIRU_REPOSITORY: ${{ vars.AHAIRU_REPOSITORY }}
           REQUESTED_DATE: ${{ inputs.date || '' }}
-        run: scripts/materialize-dagger-input.rb campaign-plan .dagger-inputs/campaign-plan.json
+        run: scripts/materialize-dagger-input.sh campaign-plan .dagger-inputs/campaign-plan.json
 
       - name: Mint selected-repository dispatch token
         id: app-token
@@ -83,11 +84,32 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ruby -rjson -e '
-            plan = JSON.parse(File.read(ARGV.fetch(0)))
-            puts "changed=#{plan.fetch("changed")}"
-            puts "digest=#{plan.fetch("bundle_digest")}"
-          ' "${RUNNER_TEMP}/campaign-plan/plan.json" >> "$GITHUB_OUTPUT"
+          provider_output="${RUNNER_TEMP}/campaign-plan/provider-output"
+          test -f "$provider_output"
+          changed=''
+          digest=''
+          line_count=0
+          while IFS= read -r line || [[ -n "$line" ]]; do
+            line_count=$((line_count + 1))
+            case "$line" in
+              changed=true|changed=false)
+                test -z "$changed"
+                changed=${line#changed=}
+                ;;
+              digest=*)
+                test -z "$digest"
+                digest=${line#digest=}
+                [[ "$digest" =~ ^[0-9a-f]{64}$ ]]
+                ;;
+              *)
+                echo 'invalid Dagger provider output' >&2
+                exit 1
+                ;;
+            esac
+          done < "$provider_output"
+          test "$line_count" -eq 2
+          test -n "$changed" -a -n "$digest"
+          printf 'changed=%s\ndigest=%s\n' "$changed" "$digest" >> "$GITHUB_OUTPUT"
 
       - name: Upload changed immutable channel bundle
         id: changed
@@ -114,7 +136,7 @@ jobs:
           CHANNEL_ARTIFACT_ID: ${{ steps.changed.outputs.artifact-id }}
           CHANNEL_ARTIFACT_URL: ${{ steps.changed.outputs.artifact-url }}
           CHANNEL_ARTIFACT_SHA256: ${{ steps.changed.outputs.artifact-digest }}
-        run: scripts/materialize-dagger-input.rb campaign-dispatch .dagger-inputs/campaign-dispatch.json
+        run: scripts/materialize-dagger-input.sh campaign-dispatch .dagger-inputs/campaign-dispatch.json
 
       - name: Dispatch changed candidate with Dagger
         if: steps.plan.outputs.changed == 'true'

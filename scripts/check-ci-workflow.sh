@@ -47,6 +47,10 @@ workflows.each do |path|
     require_contract.call(!step["run"].include?("${{"), "provider expression reached Dagger command in #{File.basename(path)}")
     require_contract.call(step["run"].include?("--payload=.dagger-inputs/"), "Dagger call lacks materialized File input in #{File.basename(path)}")
   end
+  steps.each do |step|
+    run = step["run"].to_s
+    require_contract.call(!run.match?(%r{\b(?:ruby|python(?:3)?|jq)\b}), "host scripting runtime in #{File.basename(path)}")
+  end
   if steps.any? { |step| step["run"].to_s.include?("dagger call") }
     exact = steps.select { |step| step["run"].to_s.include?("dagger version") }
     require_contract.call(exact.length == 1 && exact.first["run"].include?("= v0.21.8"), "exact Dagger CLI gate differs in #{File.basename(path)}")
@@ -65,12 +69,14 @@ require_contract.call(ci_runner.include?(%q{fromJSON('["self-hosted","Linux","X6
 require_contract.call(!ci_runner.include?("github.event.pull_request") && !ci_runner.include?("HOSTINGER_PR_ACTORS"), "PR runner isolation still depends on fork/internal/actor workflow guards")
 installer = ci_steps.find { |step| step["uses"]&.start_with?("dagger/dagger-for-github@") }
 require_contract.call(installer["if"] == "runner.environment == 'github-hosted'", "hosted installer routing differs")
-require_contract.call(ci_steps.any? { |step| step["run"].to_s.include?("materialize-dagger-input.rb ci") }, "CI provider boundary missing")
+require_contract.call(ci_steps.any? { |step| step["run"].to_s.include?("materialize-dagger-input.sh ci") }, "CI provider boundary missing")
 require_contract.call(ci_steps.any? { |step| step["run"] == "npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high" }, "locked Dagger runtime audit missing")
 require_contract.call(ci_steps.any? { |step| step["run"].to_s.include?("dagger call ci --source=. --payload=.dagger-inputs/ci.json") }, "CI Dagger call differs")
 
-materializer = File.read(File.join(repo, "scripts/materialize-dagger-input.rb"))
-require_contract.call(materializer.include?('when "pull_request" then "pr"') && materializer.include?('when "push", "workflow_dispatch" then "trusted"') && materializer.include?('else abort "unsupported CI event"'), "cache namespace routing must map PR/protected events and fail closed")
+materializer = File.read(File.join(repo, "scripts/materialize-dagger-input.sh"))
+require_contract.call(materializer.include?('pull_request) cache_namespace=pr') && materializer.include?('push|workflow_dispatch) cache_namespace=trusted') && materializer.include?("*) fail 'unsupported CI event'"), "cache namespace routing must map PR/protected events and fail closed")
+require_contract.call(materializer.include?("strict_semver='") && materializer.scan('|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*').length == 2, "strict SemVer prerelease validation differs")
+require_contract.call(materializer.scan('must not end with LF').length == 2 && !materializer.match?(/\w+=\$\(required/), "provider env transport must preserve exact values")
 source = File.read(File.join(repo, ".dagger/src/index.ts"))
 require_contract.call(!source.include?("TrustDomain") && !source.include?("trustDomain") && !source.include?("untrusted"), "workflow trust argument remains in Dagger module")
 require_contract.call(source.include?('value !== "trusted" && value !== "pr"') && source.include?('throw new Error("unknown cache namespace")'), "cache namespace validation differs")

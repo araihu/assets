@@ -101,11 +101,19 @@ upload = campaign_steps.find { |step| step["id"] == "changed" }
 dispatch = campaign_steps.find { |step| step["run"].to_s.include?("dagger call campaign-dispatch") }
 require_contract.call(upload["if"] == "steps.plan.outputs.changed == 'true'" && dispatch["if"] == "steps.plan.outputs.changed == 'true'", "unchanged campaign must not upload or dispatch")
 require_contract.call(campaign_steps.none? { |step| step.dig("with", "name").to_s.start_with?("accepted-channel-") }, "Actions artifact cannot represent accepted state")
+require_contract.call(campaign_steps.any? { |step| step["run"].to_s.include?("materialize-dagger-input.sh campaign-plan") }, "campaign provider boundary missing")
+require_contract.call(campaign_steps.any? { |step| step["run"].to_s.include?("provider-output") }, "campaign provider output boundary missing")
+require_contract.call(campaign_steps.none? { |step| step["run"].to_s.match?(%r{\b(?:ruby|python(?:3)?|jq)\b}) }, "campaign workflow invokes host scripting runtime")
+provider_step = campaign_steps.find { |step| step["run"].to_s.include?("provider-output") }
+require_contract.call(provider_step["run"].include?(%q{[[ "$digest" =~ ^[0-9a-f]{64}$ ]]}), "campaign provider digest validation differs")
+materializer = read.call("scripts/materialize-dagger-input.sh")
+require_contract.call(materializer.include?("strict_semver='") && materializer.scan('|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*').length == 2, "release materializer SemVer validation differs")
 
 campaign_plan = read.call("scripts/dagger/campaign-plan.sh")
 require_contract.call(campaign_plan.include?("contents/${state_path}?ref=${state_ref}") && campaign_plan.include?("automation/araihu-assets-state") && campaign_plan.include?(".automation/araihu-assets/accepted-channel-v1.json"), "durable accepted-state read differs")
 require_contract.call(campaign_plan.include?('sha256sum --check --strict "$download/archive.sha256"') && campaign_plan.include?('sha256sum --check --strict "$latest_download/latest.sha256"'), "campaign published hashes are not verified")
 require_contract.call(campaign_plan.include?('ruby scripts/validate-release-archive-members.rb "$download/archive.members"'), "campaign archive collision validation missing")
+require_contract.call(campaign_plan.include?('/out/provider-output') && campaign_plan.include?('changed=%s\\ndigest=%s'), "campaign provider output is not validated")
 state = read.call("scripts/accepted-channel-state.rb")
 require_contract.call(state.include?('accepted_digest != bundle_digest') && state.include?('state.fetch("sourceRepository") == source_repository') && state.include?('state.fetch("sourceWorkflow") == source_workflow'), "accepted-state digest/provenance differs")
 campaign_dispatch = read.call("scripts/dagger/campaign-dispatch.sh")
