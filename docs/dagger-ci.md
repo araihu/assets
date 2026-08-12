@@ -45,6 +45,10 @@ The runner needs only Bash and the exact Dagger CLI. CI first runs
 project `dagger call ci` starts only after that preflight succeeds. The CI
 container repeats the audit as defense in depth.
 
+Inside the Dagger runtime, `scripts/check-ci-workflow.sh` requires Git, grep,
+and Ruby. Git remains mandatory even when the mounted source deliberately omits
+`.git`; tracked generated-SDK checks activate only when Git metadata is present.
+
 ## External reads and effects
 
 Remote GitHub reads and every mutation are separate functions with function

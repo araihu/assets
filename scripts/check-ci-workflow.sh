@@ -2,11 +2,21 @@
 set -euo pipefail
 repo=${1:-.}
 
+for required_tool in git grep ruby; do
+  if ! command -v "$required_tool" >/dev/null 2>&1; then
+    echo "CI workflow checker: required command unavailable: $required_tool" >&2
+    exit 1
+  fi
+done
+
 test "$(ruby -rjson -e 'puts JSON.parse(File.read(ARGV[0])).fetch("engineVersion")' "$repo/dagger.json")" = v0.21.8
 grep -Fx 'go 1.26.5' "$repo/go.mod"
-if [[ -n "$(git -C "$repo" ls-files -- '.dagger/sdk' '.dagger/sdk/**')" ]]; then
-  echo 'generated Dagger SDK fixtures must not be versioned' >&2
-  exit 1
+if [[ -e "$repo/.git" ]]; then
+  tracked_sdk=$(git -C "$repo" ls-files -- '.dagger/sdk' '.dagger/sdk/**')
+  if [[ -n "$tracked_sdk" ]]; then
+    echo 'generated Dagger SDK fixtures must not be versioned' >&2
+    exit 1
+  fi
 fi
 
 ruby -rjson -ryaml - "$repo" <<'RUBY'
@@ -148,6 +158,7 @@ end
 
 docs = File.read(File.join(repo, "docs/dagger-ci.md"))
 require_contract.call(docs.include?("Cache namespace is an efficiency hint, not a security boundary.") && docs.include?("isolated Engine socket/data") && docs.include?("hostinger-vps-pr") && docs.include?("hostinger-vps-trusted") && docs.include?("preflight-audit.sh") && docs.include?("Dagger Core container"), "runner isolation/cache/preflight documentation missing")
+require_contract.call(docs.include?("requires Git, grep,") && docs.include?("Git remains mandatory") && docs.include?("source deliberately omits") && docs.include?("tracked generated-SDK checks activate only when Git metadata is present"), "checker tool and Git metadata documentation missing")
 
 acquisition = load_yaml.call(".github/workflows/acquisition.yml")
 acquisition_on = acquisition["on"] || acquisition[true]
@@ -157,7 +168,17 @@ RUBY
 
 forbidden_compact='code''rabbit'
 forbidden_spaced='code'' rabbit'
-if rg -n -i --glob '!node_modules/**' --glob '!.git/**' "$forbidden_compact|$forbidden_spaced" "$repo"; then
-  echo 'retired review automation remains in the repository' >&2
-  exit 1
-fi
+scan_status=0
+grep -R -I -n -i -E --exclude=.git --exclude-dir=.git --exclude-dir=node_modules \
+  "$forbidden_compact|$forbidden_spaced" "$repo" || scan_status=$?
+case "$scan_status" in
+  0)
+    echo 'retired review automation remains in the repository' >&2
+    exit 1
+    ;;
+  1) ;;
+  *)
+    echo "CI workflow checker: retired automation scan failed with status $scan_status" >&2
+    exit 1
+    ;;
+esac

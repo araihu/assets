@@ -28,13 +28,19 @@ text = File.read(path)
 abort "test fixture marker missing: #{before}" unless text.include?(before)
 File.write(path, text.sub(before, after))
 RUBY
-  if "$checker" "$fixture" >/dev/null 2>&1; then
+  mutation_log="$scratch/mutation-$mutation.log"
+  if "$checker" "$fixture" >/dev/null 2>"$mutation_log"; then
     echo "CI checker accepted mutation: $label" >&2
+    exit 1
+  fi
+  if grep -E 'command not found|fatal: not a git repository' "$mutation_log"; then
+    echo "CI checker mutation failed through a masked tool error: $label" >&2
     exit 1
   fi
 }
 
 pristine="$scratch/pristine"
+retired_marker='code'' rabbit'
 mkdir -p "$pristine/.github" "$pristine/docs"
 cp -R "$repo/.github/workflows" "$pristine/.github/workflows"
 cp "$repo/.github/actionlint.yaml" "$pristine/.github/actionlint.yaml"
@@ -42,9 +48,76 @@ cp "$repo/docs/dagger-ci.md" "$pristine/docs/dagger-ci.md"
 cp -R "$repo/.dagger" "$pristine/.dagger"
 cp -R "$repo/scripts" "$pristine/scripts"
 cp "$repo/dagger.json" "$repo/go.mod" "$pristine/"
+non_git_log="$scratch/non-git.log"
+if ! "$checker" "$pristine" >/dev/null 2>"$non_git_log"; then
+  echo 'CI checker rejected the deliberate Dagger source snapshot without .git' >&2
+  cat "$non_git_log" >&2
+  exit 1
+fi
+if [[ -s "$non_git_log" ]]; then
+  echo 'CI checker emitted a masked error for the Dagger source snapshot without .git' >&2
+  cat "$non_git_log" >&2
+  exit 1
+fi
 git -C "$pristine" init --quiet
 git -C "$pristine" add -A
+linked_git_dir="$scratch/linked-$retired_marker-gitdir"
+mv "$pristine/.git" "$linked_git_dir"
+printf 'gitdir: %s\n' "$linked_git_dir" > "$pristine/.git"
 "$checker" "$pristine" >/dev/null
+
+no_rg_path=/usr/bin:/bin:/usr/sbin:/sbin
+no_rg_log="$scratch/no-rg.log"
+if ! env PATH="$no_rg_path" "$checker" "$pristine" >/dev/null 2>"$no_rg_log"; then
+  echo 'CI checker requires unavailable ripgrep' >&2
+  cat "$no_rg_log" >&2
+  exit 1
+fi
+if [[ -s "$no_rg_log" ]]; then
+  echo 'CI checker masked a missing command without ripgrep' >&2
+  cat "$no_rg_log" >&2
+  exit 1
+fi
+
+no_grep_bin="$scratch/no-grep-bin"
+mkdir -p "$no_grep_bin"
+ln -s "$(command -v bash)" "$no_grep_bin/bash"
+ln -s "$(command -v git)" "$no_grep_bin/git"
+no_grep_log="$scratch/no-grep.log"
+if env PATH="$no_grep_bin" "$checker" "$pristine" >/dev/null 2>"$no_grep_log"; then
+  echo 'CI checker accepted an environment without grep' >&2
+  exit 1
+fi
+if ! grep -F 'required command unavailable: grep' "$no_grep_log" >/dev/null; then
+  echo 'CI checker did not fail closed when grep was unavailable' >&2
+  cat "$no_grep_log" >&2
+  exit 1
+fi
+
+ignored_fixture="$scratch/ignored-retired-no-rg"
+cp -R "$pristine" "$ignored_fixture"
+mkdir -p "$ignored_fixture/node_modules/ignored"
+printf '%s\n' "$retired_marker" > "$ignored_fixture/node_modules/ignored/review.txt"
+ignored_log="$scratch/ignored-retired-no-rg.log"
+if ! env PATH="$no_rg_path" "$checker" "$ignored_fixture" >/dev/null 2>"$ignored_log"; then
+  echo 'CI checker scanned an excluded node_modules directory' >&2
+  cat "$ignored_log" >&2
+  exit 1
+fi
+
+retired_fixture="$scratch/retired-no-rg"
+cp -R "$pristine" "$retired_fixture"
+printf '\nretired-review: %s\n' "$retired_marker" >> "$retired_fixture/docs/dagger-ci.md"
+retired_log="$scratch/retired-no-rg.log"
+if env PATH="$no_rg_path" "$checker" "$retired_fixture" >/dev/null 2>"$retired_log"; then
+  echo 'CI checker accepted retired review automation without ripgrep' >&2
+  exit 1
+fi
+if ! grep -F 'retired review automation remains in the repository' "$retired_log" >/dev/null; then
+  echo 'CI checker rejected retired review automation for the wrong reason' >&2
+  cat "$retired_log" >&2
+  exit 1
+fi
 
 mutate_and_reject "Core preflight removed" .github/workflows/ci.yml \
   '        run: scripts/dagger/preflight-audit.sh' '        run: true'
@@ -57,6 +130,8 @@ mutate_and_reject "Core preflight image unpinned" scripts/dagger/preflight-audit
   'node:22.14.0-bookworm-slim@sha256:1c18d9ab3af4585870b92e4dbc5cac5a0dc77dd13df1a5905cea89fc720eb05b' 'node:22.14.0-bookworm-slim'
 mutate_and_reject "preflight docs removed" docs/dagger-ci.md \
   'scripts/dagger/preflight-audit.sh' 'scripts/dagger/removed-audit.sh'
+mutate_and_reject "checker Git requirement docs removed" docs/dagger-ci.md \
+  'Git remains mandatory' 'Git may be omitted'
 mutate_and_reject "audit commented out" scripts/dagger/ci.sh \
   'npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high' '# npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high'
 mutate_and_reject "audit reordered after runtime command" scripts/dagger/ci.sh \
