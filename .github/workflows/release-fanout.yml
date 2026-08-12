@@ -27,7 +27,7 @@ concurrency:
 
 jobs:
   dispatch:
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, Linux, X64, hostinger-vps-trusted]
     permissions:
       contents: read
     steps:
@@ -37,72 +37,42 @@ jobs:
           ref: ${{ github.sha }}
           persist-credentials: false
 
-      - name: Verify immutable GitHub Release handoff
-        id: release
+      - name: Install exact Dagger CLI
+        uses: dagger/dagger-for-github@456fc3af63a2ba6f9789af9c55045b459115541b # v8.3.0
+        with:
+          version: "0.21.8"
+
+      - name: Require exact Dagger CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(dagger version | awk 'NR == 1 { print $2 }')" = v0.21.8
+
+      - name: Materialize provider-owned fan-out inputs
         shell: bash
         env:
-          GH_TOKEN: ${{ github.token }}
           RELEASE: ${{ inputs.release }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
         run: |
           set -euo pipefail
-          ruby -e '
-            pattern = /\Av(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?\z/
-            abort "release must be a strict SemVer tag" unless ARGV.fetch(0).match?(pattern)
-          ' "$RELEASE"
+          scripts/materialize-dagger-input.sh fanout-plan .dagger-inputs/fanout-plan.json
+          scripts/materialize-dagger-input.sh fanout-dispatch .dagger-inputs/fanout-dispatch.json
 
-          published="${RUNNER_TEMP}/published-release"
-          mkdir -p "$published"
-          release_record="${RUNNER_TEMP}/github-release.json"
-          gh release view "$RELEASE" --repo "$GITHUB_REPOSITORY" --json tagName,isDraft > "$release_record"
-          ruby -rjson -e '
-            document = JSON.parse(File.read(ARGV.fetch(0)))
-            abort "GitHub Release tag mismatch" unless document.fetch("tagName") == ARGV.fetch(1)
-            abort "GitHub Release is still a draft" if document.fetch("isDraft")
-          ' "$release_record" "$RELEASE"
+      - name: Verify immutable release handoff with Dagger
+        shell: bash
+        env:
+          RELEASE_GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          dagger call release-fanout-plan --source=. --payload=.dagger-inputs/fanout-plan.json
+          --github-token=env://RELEASE_GITHUB_TOKEN export --path="${RUNNER_TEMP}/fanout-plan"
 
-          archive_name="araihu-assets-${RELEASE}.tar.gz"
-          gh release download "$RELEASE" --repo "$GITHUB_REPOSITORY" \
-            --pattern "$archive_name" --pattern release.json --pattern SHA256SUMS \
-            --dir "$published"
-
-          assets_revision=$(gh api "repos/${GITHUB_REPOSITORY}/commits/${RELEASE}" --jq .sha)
-          metadata="${RUNNER_TEMP}/release-dispatch.json"
-          selected_checks="${RUNNER_TEMP}/release-dispatch.sha256"
-          ruby -rjson - "$published" "$archive_name" "$RELEASE" "$assets_revision" "$metadata" "$selected_checks" <<'RUBY'
-          root, archive_name, release, revision, metadata_path, checks_path = ARGV
-          abort "assets repository mismatch" unless ENV.fetch("GITHUB_REPOSITORY") == "araihu/assets"
-          abort "assets revision is not a commit SHA" unless revision.match?(/\A[0-9a-f]{40}\z/)
-          lines = File.readlines(File.join(root, "SHA256SUMS"), chomp: true)
-          entries = lines.to_h do |line|
-            match = line.match(/\A([0-9a-f]{64})  ([^\x00-\x1f\x7f]+)\z/) or abort "invalid SHA256SUMS record"
-            [match[2], match[1]]
-          end
-          abort "duplicate SHA256SUMS record" unless entries.length == lines.length
-          required = [archive_name, "release.json"]
-          abort "missing dispatch checksum" unless required.all? { |name| entries.key?(name) }
-          release_document = JSON.parse(File.read(File.join(root, "release.json")))
-          abort "release.json tag mismatch" unless release_document.fetch("release") == release
-          File.write(checks_path, required.map { |name| "#{entries.fetch(name)}  #{File.join(root, name)}\n" }.join)
-          release_url = "https://github.com/araihu/assets/releases/download/#{release}/#{archive_name}"
-          File.write(metadata_path, JSON.generate({
-            assets_repository: "araihu/assets",
-            assets_revision: revision,
-            release: release,
-            release_url: release_url,
-            release_sha256: entries.fetch(archive_name),
-            release_json_sha256: entries.fetch("release.json")
-          }))
-          RUBY
-          sha256sum --check --strict "$selected_checks"
-          echo "metadata=$metadata" >> "$GITHUB_OUTPUT"
-
-      - name: Resolve selected consumer repositories
+      - name: Expose verified consumer selection
         id: consumers
         shell: bash
-        run: |
-          set -euo pipefail
-          repositories=$(scripts/release-consumer-fanout.rb repositories manifests/release-consumers.yaml)
-          echo "repositories=$repositories" >> "$GITHUB_OUTPUT"
+        run: echo "repositories=$(cat "${RUNNER_TEMP}/fanout-plan/repositories")" >> "$GITHUB_OUTPUT"
 
       - name: Mint selected-repository GitHub App token
         id: app-token
@@ -114,8 +84,10 @@ jobs:
           repositories: ${{ steps.consumers.outputs.repositories }}
           permission-contents: write
 
-      - name: Dispatch enrolled fallback consumers
+      - name: Dispatch enrolled fallback consumers with Dagger
         shell: bash
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: scripts/release-consumer-fanout.rb dispatch manifests/release-consumers.yaml "${{ steps.release.outputs.metadata }}"
+          CONSUMER_GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: >-
+          dagger call release-fanout --source=. --plan="${RUNNER_TEMP}/fanout-plan"
+          --payload=.dagger-inputs/fanout-dispatch.json --consumer-token=env://CONSUMER_GITHUB_TOKEN
