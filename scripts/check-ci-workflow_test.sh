@@ -82,6 +82,8 @@ mutate_and_reject "provider LF rejection removed" scripts/materialize-dagger-inp
   'must not end with LF' 'provider value accepted'
 mutate_and_reject "PR cache namespace hard-coded to trusted" .dagger/src/index.ts \
   'araihu-ci-v1-assets-${cacheNamespace}-go-build-1.26.5' 'araihu-ci-v1-assets-trusted-go-build-1.26.5'
+mutate_and_reject "Dagger base image made mutable" .dagger/src/index.ts \
+  'golang:1.26.5-trixie@sha256:98988b42f3293b627bf07c884ff17181a59501769cd8c06c7ba901e0ce2c9853' 'golang:1.26.5-trixie'
 mutate_and_reject "mutable rustup-init URL restored" scripts/dagger/install-rsvg.sh \
   'rustup/archive/${RUSTUP_VERSION}/${RUSTUP_TARGET}/rustup-init' 'rustup/dist/${RUSTUP_TARGET}/rustup-init'
 mutate_and_reject "rustup-init digest changed" scripts/dagger/install-rsvg.sh \
@@ -108,6 +110,12 @@ mutate_and_reject "distro Meson dependency restored" scripts/dagger/install-rsvg
   'python3-venv ninja-build pkg-config' 'meson ninja-build pkg-config'
 mutate_and_reject "exact Meson gate removed" scripts/dagger/install-rsvg.sh \
   'test "$(meson --version)" = "$MESON_VERSION"' 'meson --version'
+mutate_and_reject "Cairo minimum gate removed" scripts/dagger/install-rsvg.sh \
+  'pkg-config --atleast-version=1.18.0 cairo' 'pkg-config --exists cairo'
+mutate_and_reject "Cairo minimum weakened" scripts/dagger/install-rsvg.sh \
+  'pkg-config --atleast-version=1.18.0 cairo' 'pkg-config --atleast-version=1.16.0 cairo'
+mutate_and_reject "Cairo exact version changed" scripts/dagger/install-rsvg.sh \
+  'CAIRO_VERSION=1.18.4' 'CAIRO_VERSION=1.18.2'
 mutate_and_reject "PR runner routed to generic lane" .github/workflows/ci.yml \
   'hostinger-vps-pr' 'hostinger-vps'
 mutate_and_reject "protected runner routed to generic lane" .github/workflows/acquisition.yml \

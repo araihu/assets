@@ -13,6 +13,7 @@ RUST_TOOLCHAIN_VERSION=1.92.0
 MESON_VERSION=1.3.2
 MESON_WHEEL=meson-${MESON_VERSION}-py3-none-any.whl
 MESON_WHEEL_SHA256=0ba4a71fbc060c44721c7b674807598c5af9ea51335073cae7a3e9a95b375c89
+CAIRO_VERSION=1.18.4
 
 if [[ -x /opt/librsvg/bin/rsvg-convert ]] && /opt/librsvg/bin/rsvg-convert --version | grep --fixed-strings --quiet "rsvg-convert version ${RSVG_VERSION}"; then
   exit 0
@@ -23,6 +24,8 @@ apt-get install --yes --no-install-recommends \
   build-essential libglib2.0-dev libcairo2-dev libpango1.0-dev libssl-dev \
   libgdk-pixbuf-2.0-dev libxml2-dev python3-venv ninja-build pkg-config
 rm -rf /var/lib/apt/lists/*
+test "$(pkg-config --modversion cairo)" = "$CAIRO_VERSION"
+pkg-config --atleast-version=1.18.0 cairo
 
 work=/tmp/rsvg-build
 mkdir -p "$work"

@@ -10,7 +10,7 @@ import {
 } from "@dagger.io/dagger"
 
 const GO_IMAGE =
-  "golang:1.26.5-bookworm@sha256:53eeac89074db483fdf0ab3be1df32bf6e47562263d2d0d6baa7f26acb4957dd"
+  "golang:1.26.5-trixie@sha256:98988b42f3293b627bf07c884ff17181a59501769cd8c06c7ba901e0ce2c9853"
 
 const SOURCE_EXCLUDES = [
   ".git",

@@ -92,6 +92,8 @@ source = File.read(File.join(repo, ".dagger/src/index.ts"))
 require_contract.call(!source.include?("TrustDomain") && !source.include?("trustDomain") && !source.include?("untrusted"), "workflow trust argument remains in Dagger module")
 require_contract.call(source.include?('value !== "trusted" && value !== "pr"') && source.include?('throw new Error("unknown cache namespace")'), "cache namespace validation differs")
 require_contract.call(source.include?('make nodejs npm python3 ruby'), "Dagger-owned CI runtimes differ")
+go_image = 'golang:1.26.5-trixie@sha256:98988b42f3293b627bf07c884ff17181a59501769cd8c06c7ba901e0ce2c9853'
+require_contract.call(source.scan(go_image).length == 1, "Dagger base must be exact Go 1.26.5 on pinned Debian trixie image")
 %w[go-build go-mod muamba cargo].each do |kind|
   require_contract.call(source.include?("araihu-ci-v1-assets-${cacheNamespace}-#{kind}"), "#{kind} cache lacks stable PR/trusted namespace")
 end
@@ -119,6 +121,13 @@ require_contract.call(rsvg_installer.include?(meson_install), "Meson wheel insta
 require_contract.call(rsvg_installer.index('sha256sum --check --strict "$work/meson-wheel.sha256"') < rsvg_installer.index(meson_install), "Meson wheel must be verified before installation")
 require_contract.call(rsvg_installer.include?('export PATH="/opt/meson/bin:/opt/cargo-c/bin:${CARGO_HOME}/bin:$PATH"'), "pinned Meson must precede distro tools")
 require_contract.call(rsvg_installer.include?('test "$(meson --version)" = "$MESON_VERSION"'), "exact Meson version gate missing")
+require_contract.call(rsvg_installer.include?("CAIRO_VERSION=1.18.4"), "Cairo version differs")
+cairo_exact = 'test "$(pkg-config --modversion cairo)" = "$CAIRO_VERSION"'
+cairo_minimum = 'pkg-config --atleast-version=1.18.0 cairo'
+require_contract.call(rsvg_installer.include?(cairo_exact), "exact Cairo version gate missing")
+require_contract.call(rsvg_installer.include?(cairo_minimum), "Cairo minimum version gate missing")
+require_contract.call(rsvg_installer.index(cairo_exact) < rsvg_installer.index('meson setup "$work/librsvg-out"'), "Cairo must be verified before librsvg configuration")
+require_contract.call(rsvg_installer.index(cairo_minimum) < rsvg_installer.index('meson setup "$work/librsvg-out"'), "Cairo minimum must be verified before librsvg configuration")
 apt_start = rsvg_installer.lines.index { |line| line.start_with?("apt-get install ") }
 require_contract.call(!apt_start.nil?, "librsvg APT dependency install missing")
 apt_lines = [rsvg_installer.lines.fetch(apt_start)]
