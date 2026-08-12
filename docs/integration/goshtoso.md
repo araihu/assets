@@ -4,12 +4,14 @@ Goshtoso stays brand-neutral. Read a validated `dist/catalog.json`, select
 entries by canonical name and namespace, and use the catalog's exact
 `spriteSymbol`; never derive a symbol from a filename.
 
-Before adopting this checkout's `v0.2.1` files, require matching release
-values in `catalog.json`, `themes.json`, and `release.json`, then verify the
-inventory hashes in `release.json`. `v0.1.1` remains the published promoted
-default and `v0.2.0` is the preceding release. Local `v0.2.1` bytes remain
-unpublished evidence until the matching tag, GitHub Release, archive, and
-checksums are publicly verifiable.
+Use the public `v0.2.1` [immutable Git tag](https://github.com/araihu/assets/tree/v0.2.1),
+[GitHub Release](https://github.com/araihu/assets/releases/tag/v0.2.1),
+[tar archive](https://github.com/araihu/assets/releases/download/v0.2.1/araihu-assets-v0.2.1.tar.gz),
+and [SHA256SUMS](https://github.com/araihu/assets/releases/download/v0.2.1/SHA256SUMS).
+Before adopting its files, require matching release values in `catalog.json`,
+`themes.json`, and `release.json`, then verify the inventory hashes in
+`release.json`. `v0.1.1` remains the published promoted default and `v0.2.0`
+is the preceding release.
 
 For the published release, download the immutable tar archive and its
 `SHA256SUMS` file into a disposable directory. Check the archive digest, extract
