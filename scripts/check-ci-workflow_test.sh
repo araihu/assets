@@ -82,6 +82,18 @@ mutate_and_reject "provider LF rejection removed" scripts/materialize-dagger-inp
   'must not end with LF' 'provider value accepted'
 mutate_and_reject "PR cache namespace hard-coded to trusted" .dagger/src/index.ts \
   'araihu-ci-v1-assets-${cacheNamespace}-go-build-1.26.5' 'araihu-ci-v1-assets-trusted-go-build-1.26.5'
+mutate_and_reject "mutable rustup-init URL restored" scripts/dagger/install-rsvg.sh \
+  'rustup/archive/${RUSTUP_VERSION}/${RUSTUP_TARGET}/rustup-init' 'rustup/dist/${RUSTUP_TARGET}/rustup-init'
+mutate_and_reject "rustup-init digest changed" scripts/dagger/install-rsvg.sh \
+  '20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c' '0000000000000000000000000000000000000000000000000000000000000000'
+mutate_and_reject "rustup-init digest verification removed" scripts/dagger/install-rsvg.sh \
+  'sha256sum --check --strict "$work/rustup-init.sha256"' 'true # rustup-init digest check removed'
+mutate_and_reject "Rust toolchain made mutable" scripts/dagger/install-rsvg.sh \
+  'RUST_TOOLCHAIN_VERSION=1.92.0' 'RUST_TOOLCHAIN_VERSION=stable'
+mutate_and_reject "Rust toolchain moved outside existing cache" scripts/dagger/install-rsvg.sh \
+  'export RUSTUP_HOME=/root/.cargo/rustup' 'export RUSTUP_HOME=/root/.rustup'
+mutate_and_reject "distro rustup dependency restored" scripts/dagger/install-rsvg.sh \
+  'libgdk-pixbuf-2.0-dev libxml2-dev meson ninja-build pkg-config' 'libgdk-pixbuf-2.0-dev libxml2-dev meson ninja-build pkg-config rustup'
 mutate_and_reject "PR runner routed to generic lane" .github/workflows/ci.yml \
   'hostinger-vps-pr' 'hostinger-vps'
 mutate_and_reject "protected runner routed to generic lane" .github/workflows/acquisition.yml \

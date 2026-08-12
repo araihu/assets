@@ -97,6 +97,23 @@ require_contract.call(source.include?('make nodejs npm python3 ruby'), "Dagger-o
 end
 require_contract.call(source.scan(".withMountedCache").length == 4, "persistent cache mount set must remain deps/build/tools only")
 
+rsvg_installer = File.read(File.join(repo, "scripts/dagger/install-rsvg.sh"))
+require_contract.call(system("bash", "-n", File.join(repo, "scripts/dagger/install-rsvg.sh"), out: File::NULL, err: File::NULL), "librsvg installer shell syntax differs")
+require_contract.call(rsvg_installer.include?("RUSTUP_VERSION=1.28.2"), "rustup version differs")
+require_contract.call(rsvg_installer.include?("RUSTUP_TARGET=x86_64-unknown-linux-gnu"), "rustup target differs")
+require_contract.call(rsvg_installer.include?("RUSTUP_INIT_SHA256=20a06e644b0d9bd2fbdbfd52d42540bdde820ea7df86e92e533c073da0cdd43c"), "rustup-init digest differs")
+require_contract.call(rsvg_installer.include?("RUST_TOOLCHAIN_VERSION=1.92.0"), "Rust toolchain version differs")
+require_contract.call(rsvg_installer.include?('https://static.rust-lang.org/rustup/archive/${RUSTUP_VERSION}/${RUSTUP_TARGET}/rustup-init'), "rustup-init URL must use a versioned archive")
+require_contract.call(rsvg_installer.include?('sha256sum --check --strict "$work/rustup-init.sha256"'), "rustup-init digest verification missing")
+require_contract.call(rsvg_installer.index('sha256sum --check --strict "$work/rustup-init.sha256"') < rsvg_installer.index('"$work/rustup-init" --no-modify-path'), "rustup-init must be verified before execution")
+require_contract.call(rsvg_installer.include?("export RUSTUP_HOME=/root/.cargo/rustup"), "Rust toolchain must remain inside the existing cargo cache")
+require_contract.call(rsvg_installer.include?('test "$(rustup run "$RUST_TOOLCHAIN_VERSION" rustc --version | awk \'{print $2}\')" = "$RUST_TOOLCHAIN_VERSION"'), "exact Rust toolchain gate missing")
+apt_start = rsvg_installer.lines.index { |line| line.start_with?("apt-get install ") }
+require_contract.call(!apt_start.nil?, "librsvg APT dependency install missing")
+apt_lines = [rsvg_installer.lines.fetch(apt_start)]
+apt_lines << rsvg_installer.lines.fetch(apt_start + apt_lines.length) while apt_lines.last.rstrip.end_with?("\\")
+require_contract.call(!apt_lines.join.match?(/\brustup\b/), "librsvg installer must not depend on distro rustup")
+
 trusted_lane = ["self-hosted", "Linux", "X64", "hostinger-vps-trusted"]
 {
   ".github/workflows/acquisition.yml" => ["acquisition"],
