@@ -26,16 +26,20 @@ managed tree, including `dist/proof`.
 
 ## Install and verify
 
-Install the CLI from the matching public tag when you need to run the
+The public `v0.2.1` release has an [immutable Git tag](https://github.com/araihu/assets/tree/v0.2.1),
+[GitHub Release](https://github.com/araihu/assets/releases/tag/v0.2.1),
+[tar archive](https://github.com/araihu/assets/releases/download/v0.2.1/araihu-assets-v0.2.1.tar.gz),
+and [SHA256SUMS](https://github.com/araihu/assets/releases/download/v0.2.1/SHA256SUMS).
+
+Install the CLI from that matching public tag when you need to run the
 repository's offline build and catalog commands:
 
 ```sh
-# Run only after https://github.com/araihu/assets/releases/tag/v0.2.1 exists.
 go install github.com/araihu/assets/cmd/araihu-assets@v0.2.1
 ```
 
-Before that public identity exists, use `go run ./cmd/araihu-assets ...` from
-the release checkout.
+Use `go run ./cmd/araihu-assets ...` from a matching release checkout for
+source-local work.
 `araihu-assets verify` is a source-checkout reproducibility command. Run it
 from the root of the tagged repository checkout; it reads that checkout's
 `.muamba.yaml`, `.muamba.lock.yaml`, acquisition inputs, and `dist/`. An
@@ -247,9 +251,10 @@ The catalog is the current interoperability boundary. Release archives contain
 the complete managed distribution, including all `dist/proof/**` local assets;
 review screenshots and critique files remain outside release membership.
 
-Local `v0.2.1` files are not publication proof. Consumers must verify the
-matching Git tag, GitHub Release, `SHA256SUMS`, archive, and extracted member
-checksums before treating its archive names or module version as public.
+A local `v0.2.1` checkout is not a substitute for published-release
+verification. Consumers must verify the matching Git tag, GitHub Release,
+`SHA256SUMS`, archive, and extracted member checksums before treating its
+archive names or module version as public.
 
 `v0.1.1` remains the promoted default until an explicit promotion changes
 `manifests/default.yaml`; `v0.2.0` is the preceding release. This patch keeps
