@@ -5,7 +5,6 @@ checker="$repo/scripts/check-ci-workflow.sh"
 
 "$checker" "$repo"
 "$repo/scripts/materialize-dagger-input_test.sh"
-npm --prefix "$repo/.dagger" audit --package-lock-only --omit=dev --audit-level=high
 
 scratch=$(mktemp -d)
 trap 'rm -rf -- "$scratch"' EXIT
@@ -14,11 +13,15 @@ mutate_and_reject() {
   label=$1 relative=$2 before=$3 after=$4
   mutation=$((mutation + 1))
   fixture="$scratch/mutation-$mutation"
-  mkdir -p "$fixture/.github"
+  mkdir -p "$fixture/.github" "$fixture/docs"
   cp -R "$repo/.github/workflows" "$fixture/.github/workflows"
+  cp "$repo/.github/actionlint.yaml" "$fixture/.github/actionlint.yaml"
+  cp "$repo/docs/dagger-ci.md" "$fixture/docs/dagger-ci.md"
   cp -R "$repo/.dagger" "$fixture/.dagger"
   cp -R "$repo/scripts" "$fixture/scripts"
   cp "$repo/dagger.json" "$repo/go.mod" "$fixture/"
+  git -C "$fixture" init --quiet
+  git -C "$fixture" add -A
   ruby - "$fixture/$relative" "$before" "$after" <<'RUBY'
 path, before, after = ARGV
 text = File.read(path)
@@ -31,12 +34,48 @@ RUBY
   fi
 }
 
+pristine="$scratch/pristine"
+mkdir -p "$pristine/.github" "$pristine/docs"
+cp -R "$repo/.github/workflows" "$pristine/.github/workflows"
+cp "$repo/.github/actionlint.yaml" "$pristine/.github/actionlint.yaml"
+cp "$repo/docs/dagger-ci.md" "$pristine/docs/dagger-ci.md"
+cp -R "$repo/.dagger" "$pristine/.dagger"
+cp -R "$repo/scripts" "$pristine/scripts"
+cp "$repo/dagger.json" "$repo/go.mod" "$pristine/"
+git -C "$pristine" init --quiet
+git -C "$pristine" add -A
+"$checker" "$pristine" >/dev/null
+
+mutate_and_reject "Core preflight removed" .github/workflows/ci.yml \
+  '        run: scripts/dagger/preflight-audit.sh' '        run: true'
+mutate_and_reject "Core preflight reordered after project module" .github/workflows/ci.yml \
+  $'      - name: Audit locked Dagger runtime dependencies in Core container\n        shell: bash\n        run: scripts/dagger/preflight-audit.sh\n\n      - name: Run complete CI with Dagger\n        shell: bash\n        run: dagger call ci --source=. --payload=.dagger-inputs/ci.json' \
+  $'      - name: Run complete CI with Dagger\n        shell: bash\n        run: dagger call ci --source=. --payload=.dagger-inputs/ci.json\n\n      - name: Audit locked Dagger runtime dependencies in Core container\n        shell: bash\n        run: scripts/dagger/preflight-audit.sh'
+mutate_and_reject "Core preflight uses project module" scripts/dagger/preflight-audit.sh \
+  'dagger core container' 'dagger call ci'
+mutate_and_reject "Core preflight image unpinned" scripts/dagger/preflight-audit.sh \
+  'node:22.14.0-bookworm-slim@sha256:1c18d9ab3af4585870b92e4dbc5cac5a0dc77dd13df1a5905cea89fc720eb05b' 'node:22.14.0-bookworm-slim'
+mutate_and_reject "preflight docs removed" docs/dagger-ci.md \
+  'scripts/dagger/preflight-audit.sh' 'scripts/dagger/removed-audit.sh'
+mutate_and_reject "audit commented out" scripts/dagger/ci.sh \
+  'npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high' '# npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high'
+mutate_and_reject "audit reordered after runtime command" scripts/dagger/ci.sh \
+  'npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high' $'test -n "$NETWORK_NONCE"\nnpm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high'
+
 mutate_and_reject "pull request cache promoted to trusted" scripts/materialize-dagger-input.sh \
   'pull_request) cache_namespace=pr' 'pull_request) cache_namespace=trusted'
 mutate_and_reject "protected cache demoted to PR" scripts/materialize-dagger-input.sh \
   'push|workflow_dispatch) cache_namespace=trusted' 'push|workflow_dispatch) cache_namespace=pr'
 mutate_and_reject "unknown event promoted to trusted" scripts/materialize-dagger-input.sh \
   "*) fail 'unsupported CI event' ;;" "*) cache_namespace=trusted ;;"
+mutate_and_reject "Dagger runtime audit removed" scripts/dagger/ci.sh \
+  'npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high' 'true'
+mutate_and_reject "Dagger npm runtime removed" .dagger/src/index.ts \
+  'make nodejs npm python3 ruby' 'make python3 ruby'
+mutate_and_reject "host npm runtime restored" .github/workflows/ci.yml \
+  '      - name: Run complete CI with Dagger' $'      - name: Host npm\n        run: npm --version\n\n      - name: Run complete CI with Dagger'
+mutate_and_reject "host node runtime restored" .github/workflows/ci.yml \
+  '      - name: Run complete CI with Dagger' $'      - name: Host node\n        run: node --version\n\n      - name: Run complete CI with Dagger'
 mutate_and_reject "numeric prerelease leading zero accepted" scripts/materialize-dagger-input.sh \
   '|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*' '|[0-9]+'
 mutate_and_reject "provider LF rejection removed" scripts/materialize-dagger-input.sh \
@@ -56,8 +95,10 @@ mutate_and_reject "remote TypeScript SDK dependency restored" .dagger/package.js
   '"@dagger.io/dagger": "./sdk"' '"@dagger.io/dagger": "0.21.8"'
 
 sdk_fixture="$scratch/versioned-sdk"
-mkdir -p "$sdk_fixture/.github" "$sdk_fixture/.dagger/sdk"
+mkdir -p "$sdk_fixture/.github" "$sdk_fixture/.dagger/sdk" "$sdk_fixture/docs"
 cp -R "$repo/.github/workflows" "$sdk_fixture/.github/workflows"
+cp "$repo/.github/actionlint.yaml" "$sdk_fixture/.github/actionlint.yaml"
+cp "$repo/docs/dagger-ci.md" "$sdk_fixture/docs/dagger-ci.md"
 cp -R "$repo/.dagger/." "$sdk_fixture/.dagger/"
 cp -R "$repo/scripts" "$sdk_fixture/scripts"
 cp "$repo/dagger.json" "$repo/go.mod" "$sdk_fixture/"

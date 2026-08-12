@@ -49,7 +49,7 @@ workflows.each do |path|
   end
   steps.each do |step|
     run = step["run"].to_s
-    require_contract.call(!run.match?(%r{\b(?:ruby|python(?:3)?|jq)\b}), "host scripting runtime in #{File.basename(path)}")
+    require_contract.call(!run.match?(%r{\b(?:ruby|python(?:3)?|jq|npm|node)\b}), "host scripting runtime in #{File.basename(path)}")
   end
   if steps.any? { |step| step["run"].to_s.include?("dagger call") }
     exact = steps.select { |step| step["run"].to_s.include?("dagger version") }
@@ -70,8 +70,19 @@ require_contract.call(!ci_runner.include?("github.event.pull_request") && !ci_ru
 installer = ci_steps.find { |step| step["uses"]&.start_with?("dagger/dagger-for-github@") }
 require_contract.call(installer["if"] == "runner.environment == 'github-hosted'", "hosted installer routing differs")
 require_contract.call(ci_steps.any? { |step| step["run"].to_s.include?("materialize-dagger-input.sh ci") }, "CI provider boundary missing")
-require_contract.call(ci_steps.any? { |step| step["run"] == "npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high" }, "locked Dagger runtime audit missing")
 require_contract.call(ci_steps.any? { |step| step["run"].to_s.include?("dagger call ci --source=. --payload=.dagger-inputs/ci.json") }, "CI Dagger call differs")
+dagger_ci = File.read(File.join(repo, "scripts/dagger/ci.sh"))
+audit_command = "npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high"
+executable_lines = dagger_ci.lines.map(&:strip).reject { |line| line.empty? || line.start_with?("#") || line == "set -euo pipefail" }
+require_contract.call(executable_lines.first == audit_command && dagger_ci.lines.count { |line| line.strip == audit_command } == 1, "Dagger runtime audit must be first executable command")
+preflight = File.read(File.join(repo, "scripts/dagger/preflight-audit.sh"))
+require_contract.call(preflight.include?("dagger core --help") && preflight.include?("dagger core container") && preflight.include?("with-directory --path=/src/.dagger --source=.dagger") && preflight.include?("with-exec --args=npm,--prefix,.dagger,audit,--package-lock-only,--omit=dev,--audit-level=high"), "Core container preflight differs")
+require_contract.call(preflight.include?("node:22.14.0-bookworm-slim@sha256:1c18d9ab3af4585870b92e4dbc5cac5a0dc77dd13df1a5905cea89fc720eb05b"), "Core preflight image is not pinned")
+require_contract.call(!preflight.include?("dagger call") && !preflight.include?(".dagger/src"), "Core preflight must not load project module")
+ci_run_steps = ci_steps.each_with_index.map { |step, index| [index, step["run"].to_s] }
+preflight_index = ci_run_steps.find { |_, run| run.include?("scripts/dagger/preflight-audit.sh") }&.first
+dagger_index = ci_run_steps.find { |_, run| run.include?("dagger call ci --source=. --payload=.dagger-inputs/ci.json") }&.first
+require_contract.call(preflight_index && dagger_index && preflight_index < dagger_index, "Core preflight must precede project Dagger module")
 
 materializer = File.read(File.join(repo, "scripts/materialize-dagger-input.sh"))
 require_contract.call(materializer.include?('pull_request) cache_namespace=pr') && materializer.include?('push|workflow_dispatch) cache_namespace=trusted') && materializer.include?("*) fail 'unsupported CI event'"), "cache namespace routing must map PR/protected events and fail closed")
@@ -80,6 +91,7 @@ require_contract.call(materializer.scan('must not end with LF').length == 2 && !
 source = File.read(File.join(repo, ".dagger/src/index.ts"))
 require_contract.call(!source.include?("TrustDomain") && !source.include?("trustDomain") && !source.include?("untrusted"), "workflow trust argument remains in Dagger module")
 require_contract.call(source.include?('value !== "trusted" && value !== "pr"') && source.include?('throw new Error("unknown cache namespace")'), "cache namespace validation differs")
+require_contract.call(source.include?('make nodejs npm python3 ruby'), "Dagger-owned CI runtimes differ")
 %w[go-build go-mod muamba cargo].each do |kind|
   require_contract.call(source.include?("araihu-ci-v1-assets-${cacheNamespace}-#{kind}"), "#{kind} cache lacks stable PR/trusted namespace")
 end
@@ -97,7 +109,7 @@ trusted_lane = ["self-hosted", "Linux", "X64", "hostinger-vps-trusted"]
 end
 
 docs = File.read(File.join(repo, "docs/dagger-ci.md"))
-require_contract.call(docs.include?("Cache namespace is an efficiency hint, not a security boundary.") && docs.include?("isolated Engine socket/data") && docs.include?("hostinger-vps-pr") && docs.include?("hostinger-vps-trusted"), "runner isolation/cache boundary documentation missing")
+require_contract.call(docs.include?("Cache namespace is an efficiency hint, not a security boundary.") && docs.include?("isolated Engine socket/data") && docs.include?("hostinger-vps-pr") && docs.include?("hostinger-vps-trusted") && docs.include?("preflight-audit.sh") && docs.include?("Dagger Core container"), "runner isolation/cache/preflight documentation missing")
 
 acquisition = load_yaml.call(".github/workflows/acquisition.yml")
 acquisition_on = acquisition["on"] || acquisition[true]

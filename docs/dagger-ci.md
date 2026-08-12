@@ -33,6 +33,13 @@ ACLs prevent PR workloads from reaching trusted cache storage even if PR-owned
 code requests another cache name. Workflow arguments must never be treated as
 authorization. PR cache rollout remains gated on that host isolation.
 
+The runner needs only Bash and the exact Dagger CLI. CI first runs
+`scripts/dagger/preflight-audit.sh`, a Dagger Core container call that mounts
+`.dagger` and runs the locked npm audit inside pinned
+`node:22.14.0-bookworm-slim@sha256:1c18d9ab3af4585870b92e4dbc5cac5a0dc77dd13df1a5905cea89fc720eb05b`; it does not load this TypeScript module. The
+project `dagger call ci` starts only after that preflight succeeds. The CI
+container repeats the audit as defense in depth.
+
 ## External reads and effects
 
 Remote GitHub reads and every mutation are separate functions with function

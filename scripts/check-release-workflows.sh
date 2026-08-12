@@ -131,6 +131,9 @@ require_contract.call(read.call("scripts/dagger/ci.sh").include?("./scripts/chec
   steps.call(workflow).select { |step| step["run"].to_s.include?("dagger call") }.each do |step|
     require_contract.call(!step["run"].include?("${{"), "provider expression reached Dagger CLI")
   end
+  steps.call(workflow).each do |step|
+    require_contract.call(!step["run"].to_s.match?(%r{\b(?:ruby|python(?:3)?|jq|npm|node)\b}), "host scripting runtime in release workflow")
+  end
 end
 puts "release workflows: provenance, publication, campaign, and fan-out contracts valid"
 RUBY

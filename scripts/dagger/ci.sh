@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high
 test "$(go version | awk '{print $3}')" = go1.26.5
 go tool muamba verify --strict
 go tool muamba generate-go --strict --check --dir internal/acquisition --output muamba_gen.go

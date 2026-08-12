@@ -122,6 +122,8 @@ mutate_and_reject "campaign skips published latest hash" scripts/dagger/campaign
   'sha256sum --check --strict "$latest_download/latest.sha256"' 'test -f "$latest_download/latest.sha256"'
 mutate_and_reject "campaign provider output path drifts" .github/workflows/campaigns.yml \
   'provider_output="${RUNNER_TEMP}/campaign-plan/provider-output"' 'provider_output="${RUNNER_TEMP}/campaign-plan/plan.json"'
+mutate_and_reject "host node runtime restored" .github/workflows/campaigns.yml \
+  '      - name: Expose campaign plan to provider boundary' $'      - name: Host node\n        run: node --version\n\n      - name: Expose campaign plan to provider boundary'
 mutate_and_reject "release materializer permits numeric prerelease leading zero" scripts/materialize-dagger-input.sh \
   '|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*' '|[0-9]+'
 mutate_and_reject "campaign provider digest is not strict" .github/workflows/campaigns.yml \

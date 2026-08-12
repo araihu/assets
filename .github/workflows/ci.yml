@@ -33,10 +33,6 @@ jobs:
           GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
         run: scripts/materialize-dagger-input.sh ci .dagger-inputs/ci.json
 
-      - name: Audit locked Dagger runtime dependencies
-        shell: bash
-        run: npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high
-
       - name: Install exact Dagger CLI on GitHub-hosted runner
         if: runner.environment == 'github-hosted'
         uses: dagger/dagger-for-github@456fc3af63a2ba6f9789af9c55045b459115541b # v8.3.0
@@ -48,6 +44,10 @@ jobs:
         run: |
           set -euo pipefail
           test "$(dagger version | awk 'NR == 1 { print $2 }')" = v0.21.8
+
+      - name: Audit locked Dagger runtime dependencies in Core container
+        shell: bash
+        run: scripts/dagger/preflight-audit.sh
 
       - name: Run complete CI with Dagger
         shell: bash

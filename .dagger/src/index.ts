@@ -245,7 +245,7 @@ export class Assets {
       .from(GO_IMAGE)
       .withExec([
         "bash", "-euo", "pipefail", "-c",
-        "apt-get update && apt-get install --yes --no-install-recommends ca-certificates curl git gh make python3 ruby unzip xz-utils && rm -rf /var/lib/apt/lists/*",
+        "apt-get update && apt-get install --yes --no-install-recommends ca-certificates curl git gh make nodejs npm python3 ruby unzip xz-utils && rm -rf /var/lib/apt/lists/*",
       ])
       .withDirectory("/src", source)
       .withDirectory("/baseline", source)
