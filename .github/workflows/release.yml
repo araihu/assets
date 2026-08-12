@@ -8,14 +8,9 @@ on:
 permissions:
   contents: read
 
-env:
-  GOPROXY: off
-  GOSUMDB: off
-  GONOSUMDB: '*'
-
 jobs:
   publish:
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, Linux, X64, hostinger-vps-trusted]
     permissions:
       contents: write
     outputs:
@@ -29,14 +24,8 @@ jobs:
           fetch-tags: true
           persist-credentials: false
 
-      - name: Set up exact Go toolchain
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version: '1.26.5'
-          check-latest: false
-          cache: false
-
-      - name: Assert exact tag and Go version
+      - name: Bind triggering tag to exact event commit
+        id: release
         shell: bash
         run: |
           set -euo pipefail
@@ -44,24 +33,35 @@ jobs:
           test "$(git rev-parse HEAD)" = "$event_sha"
           tag_sha=$(git rev-parse "refs/tags/${GITHUB_REF_NAME}^{commit}")
           test "$tag_sha" = "$event_sha"
-          test "$(go version | awk '{print $3}')" = go1.26.5
+          printf 'tag=%s\n' "$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
 
-      - name: Restore Muamba acquisition cache
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - name: Install exact Dagger CLI
+        uses: dagger/dagger-for-github@456fc3af63a2ba6f9789af9c55045b459115541b # v8.3.0
         with:
-          path: .cache/muamba
-          key: muamba-${{ runner.os }}-${{ hashFiles('.muamba.yaml', '.muamba.lock.yaml') }}
-          restore-keys: |
-            muamba-${{ runner.os }}-
+          version: "0.21.8"
 
-      - name: Verify embedded acquisition inventory offline
+      - name: Require exact Dagger CLI
         shell: bash
         run: |
           set -euo pipefail
-          go tool muamba verify --strict
-          go tool muamba generate-go --strict --check --dir internal/acquisition --output muamba_gen.go
+          test "$(dagger version | awk 'NR == 1 { print $2 }')" = v0.21.8
 
-      - name: Require release fan-out credentials
+      - name: Materialize provider-owned release inputs
+        shell: bash
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_REF_TYPE: ${{ github.ref_type }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          scripts/materialize-dagger-input.rb release-build .dagger-inputs/release-build.json
+          scripts/materialize-dagger-input.rb release-publish .dagger-inputs/release-publish.json
+
+      - name: Preflight fan-out credentials
         id: fanout-credentials
         shell: bash
         env:
@@ -69,218 +69,34 @@ jobs:
           ARAIHU_ASSETS_APP_PRIVATE_KEY: ${{ secrets.ARAIHU_ASSETS_APP_PRIVATE_KEY }}
         run: |
           set -euo pipefail
-          if [[ -z "$ARAIHU_ASSETS_APP_ID" ]]; then
-            echo "::error title=Missing release credential::ARAIHU_ASSETS_APP_ID must be configured before tagging a release"
-            exit 1
-          fi
-          if [[ -z "$ARAIHU_ASSETS_APP_PRIVATE_KEY" ]]; then
-            echo "::error title=Missing release credential::ARAIHU_ASSETS_APP_PRIVATE_KEY must be configured before tagging a release"
-            exit 1
-          fi
+          if [[ -z "$ARAIHU_ASSETS_APP_ID" ]]; then echo 'ARAIHU_ASSETS_APP_ID is required' >&2; exit 1; fi
+          if [[ -z "$ARAIHU_ASSETS_APP_PRIVATE_KEY" ]]; then echo 'ARAIHU_ASSETS_APP_PRIVATE_KEY is required' >&2; exit 1; fi
 
-      - name: Build verified rsvg-convert 2.62.1
+      - name: Build and verify release bundle with Dagger
         shell: bash
         env:
-          RSVG_VERSION: 2.62.1
-          RSVG_SHA256: b41ca84206242fddd826a2bf76348d7cdf52c1050cbfa060b866e81a252145c3
-          CARGO_C_VERSION: 0.10.10
-          CARGO_C_SOURCE_SHA256: da2101c5bee6c4bc0d62785c7b79d74a22dd566f93f0530b70d82531d4340b80
-          CARGO_C_LOCK_SHA256: 3d9107cb39d4d3c3503eed03fd668f8c24ad94d2a836f7e8c31f782c31b4a548
-        run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends \
-            build-essential ca-certificates curl \
-            libglib2.0-dev libcairo2-dev libpango1.0-dev libssl-dev \
-            libgdk-pixbuf-2.0-dev libxml2-dev meson ninja-build pkg-config
-          command -v rustup
-          rustup toolchain install 1.92.0 --profile minimal
-          CARGO_C_ARCHIVE="${RUNNER_TEMP}/cargo-c-v${CARGO_C_VERSION}.tar.gz"
-          CARGO_C_LOCK="${RUNNER_TEMP}/cargo-c-v${CARGO_C_VERSION}.lock"
-          CARGO_C_CHECKSUM="${RUNNER_TEMP}/cargo-c.sha256"
-          CARGO_C_LOCK_CHECKSUM="${RUNNER_TEMP}/cargo-c.lock.sha256"
-          CARGO_C_ROOT="${RUNNER_TEMP}/cargo-c-root"
-          CARGO_C_SOURCE="${RUNNER_TEMP}/cargo-c-${CARGO_C_VERSION}"
-          curl --fail --location --show-error --silent --retry 3 \
-            --output "$CARGO_C_ARCHIVE" \
-            "https://github.com/lu-zero/cargo-c/archive/refs/tags/v${CARGO_C_VERSION}.tar.gz"
-          curl --fail --location --show-error --silent --retry 3 \
-            --output "$CARGO_C_LOCK" \
-            "https://github.com/lu-zero/cargo-c/releases/download/v${CARGO_C_VERSION}/Cargo.lock"
-          printf '%s  %s\n' "$CARGO_C_SOURCE_SHA256" "$CARGO_C_ARCHIVE" > "$CARGO_C_CHECKSUM"
-          printf '%s  %s\n' "$CARGO_C_LOCK_SHA256" "$CARGO_C_LOCK" > "$CARGO_C_LOCK_CHECKSUM"
-          sha256sum --check --strict "$CARGO_C_CHECKSUM"
-          sha256sum --check --strict "$CARGO_C_LOCK_CHECKSUM"
-          tar --extract --gzip --file "$CARGO_C_ARCHIVE" --directory "$RUNNER_TEMP"
-          install -m 0644 "$CARGO_C_LOCK" "$CARGO_C_SOURCE/Cargo.lock"
-          rustup run 1.92.0 rustc --version | grep --fixed-strings "rustc 1.92.0"
-          rustup run 1.92.0 cargo install --locked --path "$CARGO_C_SOURCE" --root "$CARGO_C_ROOT"
-          export PATH="$CARGO_C_ROOT/bin:$HOME/.rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH"
-          test "$(command -v cargo-cbuild)" = "$CARGO_C_ROOT/bin/cargo-cbuild"
-          test "$(cargo-cbuild --version)" = "cargo-c 0.10.10+cargo-0.86.0"
-          RSVG_ARCHIVE="${RUNNER_TEMP}/librsvg-${RSVG_VERSION}.tar.xz"
-          RSVG_CHECKSUM="${RUNNER_TEMP}/librsvg.sha256"
-          curl --fail --location --show-error --silent --retry 3 \
-            --output "$RSVG_ARCHIVE" \
-            "https://download.gnome.org/sources/librsvg/2.62/librsvg-${RSVG_VERSION}.tar.xz"
-          printf '%s  %s\n' "$RSVG_SHA256" "$RSVG_ARCHIVE" > "$RSVG_CHECKSUM"
-          sha256sum --check --strict "$RSVG_CHECKSUM"
-          tar --extract --file "$RSVG_ARCHIVE" --directory "$RUNNER_TEMP"
-          meson setup "${RUNNER_TEMP}/librsvg-build" "${RUNNER_TEMP}/librsvg-${RSVG_VERSION}" \
-            --prefix "${RUNNER_TEMP}/librsvg" --buildtype release \
-            -Ddocs=disabled -Dintrospection=disabled -Dtests=false
-          meson compile -C "${RUNNER_TEMP}/librsvg-build"
-          meson install -C "${RUNNER_TEMP}/librsvg-build"
-          "${RUNNER_TEMP}/librsvg/bin/rsvg-convert" --version | grep --fixed-strings "rsvg-convert version ${RSVG_VERSION}"
-          echo "${RUNNER_TEMP}/librsvg/bin" >> "$GITHUB_PATH"
+          RELEASE_GITHUB_TOKEN: ${{ github.token }}
+          FANOUT_APP_ID: ${{ secrets.ARAIHU_ASSETS_APP_ID }}
+          FANOUT_APP_PRIVATE_KEY: ${{ secrets.ARAIHU_ASSETS_APP_PRIVATE_KEY }}
+        run: >-
+          dagger call release-bundle --source=. --payload=.dagger-inputs/release-build.json
+          --github-token=env://RELEASE_GITHUB_TOKEN --fanout-app-id=env://FANOUT_APP_ID
+          --fanout-app-private-key=env://FANOUT_APP_PRIVATE_KEY
+          export --path="${RUNNER_TEMP}/release-output"
 
-      - name: Run complete offline release gate
-        shell: bash
-        run: |
-          set -euo pipefail
-          env -u HTTPS_PROXY -u HTTP_PROXY make check
-          env -u HTTPS_PROXY -u HTTP_PROXY make proof-check
-          go test ./... -count=1
-          go vet ./...
-          make verify
-          make release
-          git diff --exit-code
-          (cd dist && sha256sum --check --strict checksums.txt)
-
-      - name: Verify archives and stage immutable bundles
-        id: release
+      - name: Create or safely update matching GitHub Release with Dagger
         shell: bash
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          tag="$GITHUB_REF_NAME"
-          built_tag=$(ruby -rjson -e 'puts JSON.parse(File.read("dist/release.json")).fetch("release")')
-          test "$built_tag" = "$tag"
-          archive_base="araihu-assets-${tag}"
-          tar_archive="dist/releases/${archive_base}.tar.gz"
-          zip_archive="dist/releases/${archive_base}.zip"
-          test -f "$tar_archive"
-          test -f "$zip_archive"
-
-          tar_root="${RUNNER_TEMP}/verify-tar"
-          zip_root="${RUNNER_TEMP}/verify-zip"
-          mkdir -p "$tar_root" "$zip_root"
-          tar --extract --gzip --file "$tar_archive" --directory "$tar_root"
-          unzip -q "$zip_archive" -d "$zip_root"
-          (cd "$tar_root" && sha256sum --check --strict checksums.txt)
-          (cd "$zip_root" && sha256sum --check --strict checksums.txt)
-
-          bundle="${RUNNER_TEMP}/release-bundle"
-          latest="${RUNNER_TEMP}/latest-candidate"
-          channel_candidate="${RUNNER_TEMP}/release-channel-candidate"
-          mkdir -p "$bundle" "$latest"
-
-          default_release=$(ruby -ryaml -e 'puts YAML.safe_load(File.read("manifests/default.yaml")).fetch("release")')
-          if [[ "$default_release" != "$tag" ]]; then
-            default_download="${RUNNER_TEMP}/default-release/download"
-            default_root="${RUNNER_TEMP}/default-release/root"
-            default_archive="araihu-assets-${default_release}.tar.gz"
-            mkdir -p "$default_download" "$default_root"
-            gh release download "$default_release" --repo "$GITHUB_REPOSITORY" \
-              --pattern "$default_archive" --pattern SHA256SUMS --dir "$default_download"
-            default_sha256=$(ruby -e '
-              name, path = ARGV
-              matches = File.readlines(path, chomp: true).filter_map do |line|
-                hash, candidate = line.split(/\s+/, 2)
-                hash if candidate == name
-              end
-              abort "default release archive hash must appear exactly once" unless matches.length == 1 && matches.first.match?(/\A[0-9a-f]{64}\z/)
-              puts matches.first
-            ' "$default_archive" "$default_download/SHA256SUMS")
-            printf '%s  %s\n' "$default_sha256" "$default_download/$default_archive" > "$default_download/archive.sha256"
-            sha256sum --check --strict "$default_download/archive.sha256"
-            tar --list --gzip --file "$default_download/$default_archive" > "$default_download/archive.members"
-            ruby scripts/validate-release-archive-members.rb "$default_download/archive.members"
-            tar --list --verbose --gzip --file "$default_download/$default_archive" |
-              awk 'substr($1, 1, 1) != "-" { exit 1 }'
-            tar --extract --gzip --file "$default_download/$default_archive" --directory "$default_root"
-            (cd "$default_root" && sha256sum --check --strict checksums.txt)
-            ruby -rjson -e '
-              document = JSON.parse(File.read(ARGV.fetch(0)))
-              abort "default release metadata mismatch" unless document.fetch("release") == ARGV.fetch(1)
-            ' "$default_root/release.json" "$default_release"
-            mkdir -p "releases/${default_release}/campaign"
-            for contract in release.json catalog.json themes.json campaigns.json; do
-              install -m 0644 "$default_root/$contract" "releases/${default_release}/$contract"
-            done
-            install -m 0644 "$default_root/campaign/v1.js" "releases/${default_release}/campaign/v1.js"
-          fi
-
-          CHANNEL_DATE=1970-01-01
-          go run ./cmd/araihu-assets campaigns publish --date "$CHANNEL_DATE" --output "$channel_candidate"
-          ruby -rjson -e '
-            document = JSON.parse(File.read(ARGV.fetch(0)))
-            abort "latest release mismatch" unless document.fetch("release") == ARGV.fetch(1)
-            abort "latest must resolve a baseline" unless document.fetch("source") == "default" && !document.key?("campaign")
-          ' "$channel_candidate/releases/latest.json" "$tag"
-          install -m 0644 "$tar_archive" "$bundle/${archive_base}.tar.gz"
-          install -m 0644 "$zip_archive" "$bundle/${archive_base}.zip"
-          install -m 0644 dist/release.json "$bundle/release.json"
-          install -m 0644 dist/checksums.txt "$bundle/checksums.txt"
-          install -m 0644 "$channel_candidate/releases/latest.json" "$bundle/latest.json"
-          (cd "$bundle" && sha256sum "${archive_base}.tar.gz" "${archive_base}.zip" release.json latest.json checksums.txt > SHA256SUMS)
-          (cd "$bundle" && sha256sum --check --strict SHA256SUMS)
-          install -m 0644 "$channel_candidate/releases/latest.json" "$latest/latest.json"
-
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-          echo "bundle=$bundle" >> "$GITHUB_OUTPUT"
-          echo "latest=$latest" >> "$GITHUB_OUTPUT"
-
-      - name: Create or safely update matching GitHub Release
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          BUNDLE: ${{ steps.release.outputs.bundle }}
-          TAG: ${{ steps.release.outputs.tag }}
-        run: |
-          set -euo pipefail
-          assets=(
-            "$BUNDLE/araihu-assets-${TAG}.tar.gz"
-            "$BUNDLE/araihu-assets-${TAG}.zip"
-            "$BUNDLE/release.json"
-            "$BUNDLE/latest.json"
-            "$BUNDLE/checksums.txt"
-            "$BUNDLE/SHA256SUMS"
-          )
-          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            existing="${RUNNER_TEMP}/existing-release"
-            mkdir -p "$existing"
-            existing_names="${RUNNER_TEMP}/existing-release-assets"
-            gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets \
-              --jq '.assets[].name' > "$existing_names"
-            missing=()
-            for asset in "${assets[@]}"; do
-              name=$(basename "$asset")
-              if grep --fixed-strings --line-regexp --quiet "$name" "$existing_names"; then
-                gh release download "$TAG" --repo "$GITHUB_REPOSITORY" \
-                  --pattern "$name" --dir "$existing"
-                cmp --silent "$asset" "$existing/$name" || {
-                  echo "GitHub Release asset differs: $name" >&2
-                  exit 1
-                }
-              else
-                missing+=("$asset")
-              fi
-            done
-            for asset in "${missing[@]}"; do
-              gh release upload "$TAG" "$asset" --repo "$GITHUB_REPOSITORY"
-            done
-          else
-            gh release create "$TAG" "${assets[@]}" --repo "$GITHUB_REPOSITORY" \
-              --verify-tag --title "$TAG" --generate-notes
-          fi
+          RELEASE_GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          dagger call release-publish --source=. --release-output="${RUNNER_TEMP}/release-output"
+          --payload=.dagger-inputs/release-publish.json --github-token=env://RELEASE_GITHUB_TOKEN
 
       - name: Publish immutable release-bundle artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: release-bundle-${{ steps.release.outputs.tag }}
-          path: ${{ steps.release.outputs.bundle }}
+          path: ${{ runner.temp }}/release-output/release-bundle
           if-no-files-found: error
           compression-level: 0
           retention-days: 90
@@ -289,7 +105,7 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: latest-candidate-${{ steps.release.outputs.tag }}
-          path: ${{ steps.release.outputs.latest }}
+          path: ${{ runner.temp }}/release-output/latest-candidate
           if-no-files-found: error
           retention-days: 90
 

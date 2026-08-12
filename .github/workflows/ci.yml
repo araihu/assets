@@ -10,143 +10,44 @@ on:
 permissions:
   contents: read
 
-env:
-  # All Go commands run with module network access disabled. `vendor` is the
-  # sole networked CLI command and is deliberately absent from this workflow.
-  GOPROXY: off
-  GOSUMDB: off
-  GONOSUMDB: '*'
-
 jobs:
   verify:
     runs-on: >-
       ${{
         github.event_name == 'pull_request' &&
-        contains(fromJSON('["opened","synchronize","reopened","ready_for_review"]'), github.event.action) &&
-        github.event.pull_request.draft == false &&
-        github.event.pull_request.user.login == github.actor &&
-        github.event.pull_request.base.repo.full_name == github.repository &&
-        github.event.pull_request.head.repo.full_name == github.repository &&
-        github.event.pull_request.head.repo.fork == false &&
-        contains(fromJSON(vars.HOSTINGER_PR_ACTORS_JSON || '[]'), github.actor) &&
-        fromJSON('["self-hosted","Linux","X64","hostinger-vps"]') ||
-        'ubuntu-24.04'
+        fromJSON('["self-hosted","Linux","X64","hostinger-vps-pr"]') ||
+        fromJSON('["self-hosted","Linux","X64","hostinger-vps-trusted"]')
       }}
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Set up exact Go toolchain
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: '1.26.5'
-          check-latest: false
-          cache: false
+          persist-credentials: false
 
-      - name: Assert exact Go version
-        shell: bash
-        run: test "$(go version | awk '{print $3}')" = go1.26.5
-
-      - name: Install self-hosted workflow tooling
-        if: runner.environment == 'self-hosted'
-        shell: bash
-        run: |
-          apt-get update
-          apt-get install --yes --no-install-recommends ruby rustup
-          install -d -m 0755 "$HOME/.cargo/bin"
-          ln -s /usr/bin/rustup "$HOME/.cargo/bin/rustup"
-          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
-
-      - name: Restore Muamba acquisition cache
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: .cache/muamba
-          key: muamba-${{ runner.os }}-${{ hashFiles('.muamba.yaml', '.muamba.lock.yaml') }}
-          restore-keys: |
-            muamba-${{ runner.os }}-
-
-      - name: Verify embedded acquisition inventory offline
-        shell: bash
-        run: |
-          set -euo pipefail
-          go tool muamba verify --strict
-          go tool muamba generate-go --strict --check --dir internal/acquisition --output muamba_gen.go
-
-      - name: Lint immutable CI bootstrap contract
-        shell: bash
-        run: ./scripts/check-ci-workflow.sh
-
-      - name: Test guarded release workflow contracts
-        shell: bash
-        run: ./scripts/check-release-workflows_test.sh
-
-      - name: Build verified rsvg-convert 2.62.1
+      - name: Materialize provider-owned CI input
         shell: bash
         env:
-          RSVG_VERSION: 2.62.1
-          RSVG_SHA256: b41ca84206242fddd826a2bf76348d7cdf52c1050cbfa060b866e81a252145c3
-          CARGO_C_VERSION: 0.10.10
-          CARGO_C_SOURCE_SHA256: da2101c5bee6c4bc0d62785c7b79d74a22dd566f93f0530b70d82531d4340b80
-          CARGO_C_LOCK_SHA256: 3d9107cb39d4d3c3503eed03fd668f8c24ad94d2a836f7e8c31f782c31b4a548
-        run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends \
-            build-essential ca-certificates curl \
-            libglib2.0-dev libcairo2-dev libpango1.0-dev libssl-dev \
-            libgdk-pixbuf-2.0-dev libxml2-dev meson ninja-build pkg-config
-          command -v rustup
-          rustup toolchain install 1.92.0 --profile minimal
-          CARGO_C_ARCHIVE="${RUNNER_TEMP}/cargo-c-v${CARGO_C_VERSION}.tar.gz"
-          CARGO_C_LOCK="${RUNNER_TEMP}/cargo-c-v${CARGO_C_VERSION}.lock"
-          CARGO_C_CHECKSUM="${RUNNER_TEMP}/cargo-c.sha256"
-          CARGO_C_LOCK_CHECKSUM="${RUNNER_TEMP}/cargo-c.lock.sha256"
-          CARGO_C_ROOT="${RUNNER_TEMP}/cargo-c-root"
-          CARGO_C_SOURCE="${RUNNER_TEMP}/cargo-c-${CARGO_C_VERSION}"
-          curl --fail --location --show-error --silent --retry 3 \
-            --output "$CARGO_C_ARCHIVE" \
-            "https://github.com/lu-zero/cargo-c/archive/refs/tags/v${CARGO_C_VERSION}.tar.gz"
-          curl --fail --location --show-error --silent --retry 3 \
-            --output "$CARGO_C_LOCK" \
-            "https://github.com/lu-zero/cargo-c/releases/download/v${CARGO_C_VERSION}/Cargo.lock"
-          printf '%s  %s\n' "$CARGO_C_SOURCE_SHA256" "$CARGO_C_ARCHIVE" > "$CARGO_C_CHECKSUM"
-          printf '%s  %s\n' "$CARGO_C_LOCK_SHA256" "$CARGO_C_LOCK" > "$CARGO_C_LOCK_CHECKSUM"
-          test "$(tail -c 1 "$CARGO_C_CHECKSUM" | od -An -t x1 | tr -d ' ')" = 0a
-          sha256sum --check --strict "$CARGO_C_CHECKSUM"
-          test "$(tail -c 1 "$CARGO_C_LOCK_CHECKSUM" | od -An -t x1 | tr -d ' ')" = 0a
-          sha256sum --check --strict "$CARGO_C_LOCK_CHECKSUM"
-          tar --extract --gzip --file "$CARGO_C_ARCHIVE" --directory "$RUNNER_TEMP"
-          install -m 0644 "$CARGO_C_LOCK" "$CARGO_C_SOURCE/Cargo.lock"
-          rustup run 1.92.0 rustc --version | grep --fixed-strings "rustc 1.92.0"
-          rustup run 1.92.0 cargo install --locked --path "$CARGO_C_SOURCE" --root "$CARGO_C_ROOT"
-          export PATH="$CARGO_C_ROOT/bin:$HOME/.rustup/toolchains/1.92.0-x86_64-unknown-linux-gnu/bin:$PATH"
-          test "$(command -v cargo-cbuild)" = "$CARGO_C_ROOT/bin/cargo-cbuild"
-          test "$(cargo-cbuild --version)" = "cargo-c 0.10.10+cargo-0.86.0"
-          RSVG_ARCHIVE="${RUNNER_TEMP}/librsvg-${RSVG_VERSION}.tar.xz"
-          RSVG_CHECKSUM="${RUNNER_TEMP}/librsvg.sha256"
-          curl --fail --location --show-error --silent --retry 3 \
-            --output "$RSVG_ARCHIVE" \
-            "https://download.gnome.org/sources/librsvg/2.62/librsvg-${RSVG_VERSION}.tar.xz"
-          printf '%s  %s\n' "$RSVG_SHA256" "$RSVG_ARCHIVE" > "$RSVG_CHECKSUM"
-          test "$(tail -c 1 "$RSVG_CHECKSUM" | od -An -t x1 | tr -d ' ')" = 0a
-          sha256sum --check --strict "$RSVG_CHECKSUM"
-          tar --extract --file "$RSVG_ARCHIVE" --directory "$RUNNER_TEMP"
-          meson setup "${RUNNER_TEMP}/librsvg-build" "${RUNNER_TEMP}/librsvg-${RSVG_VERSION}" \
-            --prefix "${RUNNER_TEMP}/librsvg" --buildtype release \
-            -Ddocs=disabled -Dintrospection=disabled -Dtests=false
-          meson compile -C "${RUNNER_TEMP}/librsvg-build"
-          meson install -C "${RUNNER_TEMP}/librsvg-build"
-          "${RUNNER_TEMP}/librsvg/bin/rsvg-convert" --version | grep --fixed-strings "rsvg-convert version ${RSVG_VERSION}"
-          echo "${RUNNER_TEMP}/librsvg/bin" >> "$GITHUB_PATH"
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: scripts/materialize-dagger-input.rb ci .dagger-inputs/ci.json
 
-      - name: Test offline generated-artifact contract
+      - name: Audit locked Dagger runtime dependencies
+        shell: bash
+        run: npm --prefix .dagger audit --package-lock-only --omit=dev --audit-level=high
+
+      - name: Install exact Dagger CLI on GitHub-hosted runner
+        if: runner.environment == 'github-hosted'
+        uses: dagger/dagger-for-github@456fc3af63a2ba6f9789af9c55045b459115541b # v8.3.0
+        with:
+          version: "0.21.8"
+
+      - name: Require exact Dagger CLI
         shell: bash
         run: |
           set -euo pipefail
-          env -u HTTPS_PROXY -u HTTP_PROXY make check
-          env -u HTTPS_PROXY -u HTTP_PROXY make proof-check
-          go test ./... -count=1
-          go vet ./...
-          make verify
-          make release
-          git diff --exit-code
+          test "$(dagger version | awk 'NR == 1 { print $2 }')" = v0.21.8
+
+      - name: Run complete CI with Dagger
+        shell: bash
+        run: dagger call ci --source=. --payload=.dagger-inputs/ci.json

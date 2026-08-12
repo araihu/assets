@@ -1,3 +1,7 @@
 .superpowers/sdd/
 docs/superpowers/
 .cache/muamba/
+.dagger/node_modules/
+/.dagger/sdk/
+.dagger-inputs/
+.dagger-out/

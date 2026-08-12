@@ -49,11 +49,16 @@ success_log="$scratch/success"
 mkdir -p "$success_log"
 PATH="$fake_bin:$PATH" GH_LOG_DIR="$success_log" \
   "$fanout" dispatch "$manifest" "$metadata" > "$scratch/success-summary.md"
+retry_log="$scratch/retry"
+mkdir -p "$retry_log"
+PATH="$fake_bin:$PATH" GH_LOG_DIR="$retry_log" \
+  "$fanout" dispatch "$manifest" "$metadata" > "$scratch/retry-summary.md"
 
 IFS=, read -r -a repositories <<< "$expected_repositories"
 for repository in "${repositories[@]}"; do
   test -f "$success_log/$repository.args"
   test -f "$success_log/$repository.json"
+  test -f "$retry_log/$repository.json"
   grep --fixed-strings --line-regexp --quiet "/repos/araihu/$repository/dispatches" "$success_log/$repository.args"
   ruby -rjson - "$success_log/$repository.json" <<'RUBY'
 payload = JSON.parse(File.read(ARGV.fetch(0)))

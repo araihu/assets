@@ -6,38 +6,34 @@ on:
 permissions:
   contents: read
 
-env:
-  GOPROXY: off
-  GOSUMDB: off
-  GONOSUMDB: '*'
-
 jobs:
   acquisition:
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, Linux, X64, hostinger-vps-trusted]
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Set up exact Go toolchain
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
-          go-version: '1.26.5'
-          check-latest: false
-          cache: false
+          persist-credentials: false
 
-      - name: Restore Muamba acquisition cache
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      - name: Install exact Dagger CLI
+        uses: dagger/dagger-for-github@456fc3af63a2ba6f9789af9c55045b459115541b # v8.3.0
         with:
-          path: .cache/muamba
-          key: muamba-${{ runner.os }}-${{ hashFiles('.muamba.yaml', '.muamba.lock.yaml') }}
-          restore-keys: |
-            muamba-${{ runner.os }}-
+          version: "0.21.8"
 
-      - name: Synchronize locked static inputs
+      - name: Require exact Dagger CLI
         shell: bash
         run: |
           set -euo pipefail
-          go tool muamba sync --strict --cache-dir .cache/muamba
-          go tool muamba verify --strict --cache-dir .cache/muamba
-          go tool muamba generate-go --strict --check --dir internal/acquisition --output muamba_gen.go
-          git diff --exit-code
+          test "$(dagger version | awk 'NR == 1 { print $2 }')" = v0.21.8
+
+      - name: Materialize provider-owned acquisition input
+        shell: bash
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: scripts/materialize-dagger-input.rb acquisition .dagger-inputs/acquisition.json
+
+      - name: Synchronize locked static inputs with Dagger
+        shell: bash
+        run: dagger call acquisition --source=. --payload=.dagger-inputs/acquisition.json
