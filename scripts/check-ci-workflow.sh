@@ -108,11 +108,23 @@ require_contract.call(rsvg_installer.include?('sha256sum --check --strict "$work
 require_contract.call(rsvg_installer.index('sha256sum --check --strict "$work/rustup-init.sha256"') < rsvg_installer.index('"$work/rustup-init" --no-modify-path'), "rustup-init must be verified before execution")
 require_contract.call(rsvg_installer.include?("export RUSTUP_HOME=/root/.cargo/rustup"), "Rust toolchain must remain inside the existing cargo cache")
 require_contract.call(rsvg_installer.include?('test "$(rustup run "$RUST_TOOLCHAIN_VERSION" rustc --version | awk \'{print $2}\')" = "$RUST_TOOLCHAIN_VERSION"'), "exact Rust toolchain gate missing")
+require_contract.call(rsvg_installer.include?("MESON_VERSION=1.3.2"), "Meson version differs")
+require_contract.call(rsvg_installer.include?('MESON_WHEEL=meson-${MESON_VERSION}-py3-none-any.whl'), "Meson wheel filename differs")
+require_contract.call(rsvg_installer.include?("MESON_WHEEL_SHA256=0ba4a71fbc060c44721c7b674807598c5af9ea51335073cae7a3e9a95b375c89"), "Meson wheel digest differs")
+require_contract.call(rsvg_installer.include?('https://files.pythonhosted.org/packages/39/7c/ff115bec047c5127567048db40818b83b47fd0d3bfcfd0d87630d44ed66f/${MESON_WHEEL}'), "Meson wheel URL differs")
+require_contract.call(rsvg_installer.include?('sha256sum --check --strict "$work/meson-wheel.sha256"'), "Meson wheel digest verification missing")
+require_contract.call(rsvg_installer.include?('python3 -m venv /opt/meson'), "Meson virtual environment missing")
+meson_install = '"/opt/meson/bin/pip" install --no-index --no-deps "$work/$MESON_WHEEL"'
+require_contract.call(rsvg_installer.include?(meson_install), "Meson wheel install must remain offline and dependency-free")
+require_contract.call(rsvg_installer.index('sha256sum --check --strict "$work/meson-wheel.sha256"') < rsvg_installer.index(meson_install), "Meson wheel must be verified before installation")
+require_contract.call(rsvg_installer.include?('export PATH="/opt/meson/bin:/opt/cargo-c/bin:${CARGO_HOME}/bin:$PATH"'), "pinned Meson must precede distro tools")
+require_contract.call(rsvg_installer.include?('test "$(meson --version)" = "$MESON_VERSION"'), "exact Meson version gate missing")
 apt_start = rsvg_installer.lines.index { |line| line.start_with?("apt-get install ") }
 require_contract.call(!apt_start.nil?, "librsvg APT dependency install missing")
 apt_lines = [rsvg_installer.lines.fetch(apt_start)]
 apt_lines << rsvg_installer.lines.fetch(apt_start + apt_lines.length) while apt_lines.last.rstrip.end_with?("\\")
 require_contract.call(!apt_lines.join.match?(/\brustup\b/), "librsvg installer must not depend on distro rustup")
+require_contract.call(!apt_lines.join.match?(/\bmeson\b/) && apt_lines.join.match?(/\bpython3-venv\b/), "librsvg installer must use pinned Meson in a Python virtual environment")
 
 trusted_lane = ["self-hosted", "Linux", "X64", "hostinger-vps-trusted"]
 {

@@ -93,7 +93,21 @@ mutate_and_reject "Rust toolchain made mutable" scripts/dagger/install-rsvg.sh \
 mutate_and_reject "Rust toolchain moved outside existing cache" scripts/dagger/install-rsvg.sh \
   'export RUSTUP_HOME=/root/.cargo/rustup' 'export RUSTUP_HOME=/root/.rustup'
 mutate_and_reject "distro rustup dependency restored" scripts/dagger/install-rsvg.sh \
-  'libgdk-pixbuf-2.0-dev libxml2-dev meson ninja-build pkg-config' 'libgdk-pixbuf-2.0-dev libxml2-dev meson ninja-build pkg-config rustup'
+  'python3-venv ninja-build pkg-config' 'python3-venv ninja-build pkg-config rustup'
+mutate_and_reject "Meson wheel digest changed" scripts/dagger/install-rsvg.sh \
+  '0ba4a71fbc060c44721c7b674807598c5af9ea51335073cae7a3e9a95b375c89' '0000000000000000000000000000000000000000000000000000000000000000'
+mutate_and_reject "Meson wheel digest verification removed" scripts/dagger/install-rsvg.sh \
+  'sha256sum --check --strict "$work/meson-wheel.sha256"' 'true # Meson wheel digest check removed'
+mutate_and_reject "Meson version changed" scripts/dagger/install-rsvg.sh \
+  'MESON_VERSION=1.3.2' 'MESON_VERSION=1.3.0'
+mutate_and_reject "Meson wheel filename made noncanonical" scripts/dagger/install-rsvg.sh \
+  'MESON_WHEEL=meson-${MESON_VERSION}-py3-none-any.whl' 'MESON_WHEEL=meson.whl'
+mutate_and_reject "Meson index access restored" scripts/dagger/install-rsvg.sh \
+  'pip" install --no-index --no-deps' 'pip" install --no-deps'
+mutate_and_reject "distro Meson dependency restored" scripts/dagger/install-rsvg.sh \
+  'python3-venv ninja-build pkg-config' 'meson ninja-build pkg-config'
+mutate_and_reject "exact Meson gate removed" scripts/dagger/install-rsvg.sh \
+  'test "$(meson --version)" = "$MESON_VERSION"' 'meson --version'
 mutate_and_reject "PR runner routed to generic lane" .github/workflows/ci.yml \
   'hostinger-vps-pr' 'hostinger-vps'
 mutate_and_reject "protected runner routed to generic lane" .github/workflows/acquisition.yml \
