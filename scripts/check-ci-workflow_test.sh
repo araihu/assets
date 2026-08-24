@@ -156,9 +156,9 @@ mutate_and_reject "numeric prerelease leading zero accepted" scripts/materialize
 mutate_and_reject "provider LF rejection removed" scripts/materialize-dagger-input.sh \
   'must not end with LF' 'provider value accepted'
 mutate_and_reject "PR cache namespace hard-coded to trusted" .dagger/src/index.ts \
-  'araihu-ci-v1-assets-${cacheNamespace}-go-build-1.26.5' 'araihu-ci-v1-assets-trusted-go-build-1.26.5'
+  'araihu-ci-v1-assets-${cacheNamespace}-go-build-1.27.0' 'araihu-ci-v1-assets-trusted-go-build-1.27.0'
 mutate_and_reject "Dagger base image made mutable" .dagger/src/index.ts \
-  'golang:1.26.5-trixie@sha256:98988b42f3293b627bf07c884ff17181a59501769cd8c06c7ba901e0ce2c9853' 'golang:1.26.5-trixie'
+  'golang:1.27.0-trixie@sha256:6212da3924947f4b6a939df02ea627c13f338f1a41d6c3fcb0dd9d076eef46c4' 'golang:1.27.0-trixie'
 mutate_and_reject "mutable rustup-init URL restored" scripts/dagger/install-rsvg.sh \
   'rustup/archive/${RUSTUP_VERSION}/${RUSTUP_TARGET}/rustup-init' 'rustup/dist/${RUSTUP_TARGET}/rustup-init'
 mutate_and_reject "rustup-init digest changed" scripts/dagger/install-rsvg.sh \
