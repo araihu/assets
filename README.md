@@ -6,7 +6,7 @@ the `v0.2.1` release.
 
 ## Current checkout
 
-Requires Go `1.26.5`. A supported older local Go installation may select that
+Requires Go `1.27.0`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
 The managed `dist/` tree is the `v0.2.1` release. Its catalog, generated
