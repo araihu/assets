@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "release": "v0.2.1",
+  "release": "v0.2.3",
   "identityRevision": 11,
   "runtimeVersion": 1,
-  "catalogSha256": "b2b3ab2ac7e87e2eb333725195c394ebcfb1edc5f89542d89d375f2675a2aead",
-  "themesSha256": "12ed92a78d837f1719a2fdc70aa328bf150b5823b5b409b0cb40c1115fcae619",
+  "catalogSha256": "df1cafb4c6e0605dc780aeaa091d18d13e2335ba90909976966149af57b70710",
+  "themesSha256": "78b718b2b351359c7d66cab64f43a109a12319b82946f5ec2be99a90da1874b7",
   "campaignsSha256": "fd0393fed7bcf92c7323ba88467b042ca14744da93442f8700bb242f1f23756a",
   "files": [
     {
       "path": "catalog.json",
-      "sha256": "b2b3ab2ac7e87e2eb333725195c394ebcfb1edc5f89542d89d375f2675a2aead",
+      "sha256": "df1cafb4c6e0605dc780aeaa091d18d13e2335ba90909976966149af57b70710",
       "size": 1291792
     },
     {
       "path": "themes.json",
-      "sha256": "12ed92a78d837f1719a2fdc70aa328bf150b5823b5b409b0cb40c1115fcae619",
+      "sha256": "78b718b2b351359c7d66cab64f43a109a12319b82946f5ec2be99a90da1874b7",
       "size": 532
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "path": "NOTICE",
-      "sha256": "009a69bac0ec33be3ac54c3e0dcd15656727b5de374d56be4144ee6515fe010b",
+      "sha256": "2bdde09a5077844c43f40f5afb8925acfc5640bdfca8dd0d23ad8695638e6dfe",
       "size": 260
     },
     {
@@ -9484,7 +9484,7 @@
     },
     {
       "path": "proof/assets/NOTICE",
-      "sha256": "009a69bac0ec33be3ac54c3e0dcd15656727b5de374d56be4144ee6515fe010b",
+      "sha256": "2bdde09a5077844c43f40f5afb8925acfc5640bdfca8dd0d23ad8695638e6dfe",
       "size": 260
     },
     {
@@ -18944,7 +18944,7 @@
     },
     {
       "path": "proof/assets/themes.json",
-      "sha256": "12ed92a78d837f1719a2fdc70aa328bf150b5823b5b409b0cb40c1115fcae619",
+      "sha256": "78b718b2b351359c7d66cab64f43a109a12319b82946f5ec2be99a90da1874b7",
       "size": 532
     },
     {
@@ -18959,7 +18959,7 @@
     },
     {
       "path": "proof/index.html",
-      "sha256": "91956ec64bd3c60b7584e6cf5991118c10f25e17e7a7f8183a0f5e50af32b567",
+      "sha256": "4a4d85de1f88e66cf810e67d3ec58b5b778e143c2f41a562cbd421a87b5771c7",
       "size": 2718705
     },
     {

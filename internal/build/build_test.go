@@ -101,7 +101,7 @@ func TestRunPublishesReleaseInventoryBeforeChecksumsAndArchives(t *testing.T) {
 	}
 }
 
-func TestRunEmitsConsistentV021ReleaseFields(t *testing.T) {
+func TestRunEmitsConsistentV023ReleaseFields(t *testing.T) {
 	repo := testRepo(t)
 	if err := Run(repo, testInputs([]byte("asset"))); err != nil {
 		t.Fatal(err)
@@ -132,7 +132,7 @@ func TestRunEmitsConsistentV021ReleaseFields(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	const wantRelease = "v0.2.1"
+	const wantRelease = "v0.2.3"
 	for name, got := range map[string]string{
 		"catalog":  assetCatalog.Release,
 		"themes":   themeCatalog.Release,

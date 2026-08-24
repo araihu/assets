@@ -347,7 +347,7 @@ func TestProductionProofHasCompleteSocialMetadataAndPreview(t *testing.T) {
 			t.Fatalf("metadata token %q count = %d, want 1", token, count)
 		}
 	}
-	const base = "https://cdn.jsdelivr.net/gh/araihu/assets@v0.2.1/dist/proof/"
+	const base = "https://cdn.jsdelivr.net/gh/araihu/assets@v0.2.3/dist/proof/"
 	const documentURL = base + "index.html"
 	if !strings.Contains(html, `rel="canonical" href="`+documentURL+`"`) ||
 		!strings.Contains(html, `property="og:url" content="`+documentURL+`"`) ||
