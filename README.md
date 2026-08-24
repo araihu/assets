@@ -2,14 +2,14 @@
 
 Deterministic identity and interface assets for Arai Hû products.
 `dist/catalog.json` is the versioned, language-neutral consumer contract for
-the `v0.2.1` release.
+the `v0.2.3` release.
 
 ## Current checkout
 
 Requires Go `1.27.0`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
-The managed `dist/` tree is the `v0.2.1` release. Its catalog, generated
+The managed `dist/` tree is the `v0.2.3` release. Its catalog, generated
 sprites, catalog-driven proof, and deterministic archives are consumer inputs.
 Use a disposable checkout when regenerating it:
 
@@ -26,16 +26,16 @@ managed tree, including `dist/proof`.
 
 ## Install and verify
 
-The public `v0.2.1` release has an [immutable Git tag](https://github.com/araihu/assets/tree/v0.2.1),
-[GitHub Release](https://github.com/araihu/assets/releases/tag/v0.2.1),
-[tar archive](https://github.com/araihu/assets/releases/download/v0.2.1/araihu-assets-v0.2.1.tar.gz),
-and [SHA256SUMS](https://github.com/araihu/assets/releases/download/v0.2.1/SHA256SUMS).
+The public `v0.2.3` release has an [immutable Git tag](https://github.com/araihu/assets/tree/v0.2.3),
+[GitHub Release](https://github.com/araihu/assets/releases/tag/v0.2.3),
+[tar archive](https://github.com/araihu/assets/releases/download/v0.2.3/araihu-assets-v0.2.3.tar.gz),
+and [SHA256SUMS](https://github.com/araihu/assets/releases/download/v0.2.3/SHA256SUMS).
 
 Install the CLI from that matching public tag when you need to run the
 repository's offline build and catalog commands:
 
 ```sh
-go install github.com/araihu/assets/cmd/araihu-assets@v0.2.1
+go install github.com/araihu/assets/cmd/araihu-assets@v0.2.3
 ```
 
 Use `go run ./cmd/araihu-assets ...` from a matching release checkout for
@@ -56,7 +56,7 @@ while `checksums.txt` is intentionally not self-listed. The tar and zip archives
 are content-equivalent after extraction, not byte-equivalent archives.
 
 ```sh
-tag=v0.2.1
+tag=v0.2.3
 mkdir release-download release-root
 
 gh release download "$tag" --repo araihu/assets \
@@ -213,7 +213,7 @@ not remain in managed `dist/`, and no unpublished release is synthesized.
 
 ## Catalog and sprites
 
-The `v0.2.1` `dist/catalog.json` is schema v2, language-neutral metadata for
+The `v0.2.3` `dist/catalog.json` is schema v2, language-neutral metadata for
 generated files only. It records canonical name,
 namespace, variant dimensions,
 `spriteSymbol`, color behavior, license, source label, and SHA-256. Public
@@ -240,7 +240,7 @@ generation is provided by this CLI; consumers own any project-local bindings.
 
 ## Platform files and archives
 
-The `v0.2.1` build emits individual brand/UI SVGs, web/Android/Apple platform
+The `v0.2.3` build emits individual brand/UI SVGs, web/Android/Apple platform
 packages, catalog, checksums, notices, licenses, the self-contained
 `dist/proof/**` review site, and deterministic `.tar.gz` and `.zip` archives
 under `dist/releases/`. Platform launchers
@@ -251,15 +251,15 @@ The catalog is the current interoperability boundary. Release archives contain
 the complete managed distribution, including all `dist/proof/**` local assets;
 review screenshots and critique files remain outside release membership.
 
-A local `v0.2.1` checkout is not a substitute for published-release
+A local `v0.2.3` checkout is not a substitute for published-release
 verification. Consumers must verify the matching Git tag, GitHub Release,
 `SHA256SUMS`, archive, and extracted member checksums before treating its
 archive names or module version as public.
 
 `v0.1.1` remains the promoted default until an explicit promotion changes
-`manifests/default.yaml`; `v0.2.0` is the preceding release. This patch keeps
-catalog schema v2 and the published icon inventory unchanged while aligning
-the Arai Hû theme's typography and corner geometry with Goshtoso Modern.
+`manifests/default.yaml`; `v0.2.1` is the preceding release. This patch keeps
+catalog schema v2 and the published asset inventory unchanged while upgrading
+the release toolchain to Go 1.27.0.
 
 ## Licensing
 
