@@ -74,6 +74,7 @@ require_contract.call(ci["permissions"] == {"contents"=>"read"}, "CI permissions
 ci_steps = ci.dig("jobs", "verify", "steps")
 ci_runner = ci.dig("jobs", "verify", "runs-on")
 require_contract.call(ci_runner.include?(%q{github.event_name == 'pull_request'}), "CI PR routing missing")
+require_contract.call(ci_runner.include?(%q{github.actor == 'dependabot[bot]'}) && ci_runner.include?(%q{'ubuntu-24.04'}), "Dependabot GitHub-hosted routing differs")
 require_contract.call(ci_runner.include?(%q{fromJSON('["self-hosted","Linux","X64","hostinger-vps-pr"]')}), "CI PR runner lane differs")
 require_contract.call(ci_runner.include?(%q{fromJSON('["self-hosted","Linux","X64","hostinger-vps-trusted"]')}), "CI protected runner lane differs")
 require_contract.call(!ci_runner.include?("github.event.pull_request") && !ci_runner.include?("HOSTINGER_PR_ACTORS"), "PR runner isolation still depends on fork/internal/actor workflow guards")

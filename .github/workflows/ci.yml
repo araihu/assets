@@ -15,6 +15,9 @@ jobs:
     runs-on: >-
       ${{
         github.event_name == 'pull_request' &&
+        github.actor == 'dependabot[bot]' &&
+        'ubuntu-24.04' ||
+        github.event_name == 'pull_request' &&
         fromJSON('["self-hosted","Linux","X64","hostinger-vps-pr"]') ||
         fromJSON('["self-hosted","Linux","X64","hostinger-vps-trusted"]')
       }}

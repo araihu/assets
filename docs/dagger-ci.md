@@ -31,12 +31,13 @@ librsvg bootstrap rejects any distro Cairo other than exact `1.18.4` and also
 checks librsvg's `>=1.18.0` floor before configuration. Meson, Rust, cargo-c,
 and librsvg remain independently versioned and digest-verified.
 
-Cache namespace is an efficiency hint, not a security boundary. Pull requests
-run only on label `hostinger-vps-pr`; protected runs use
-`hostinger-vps-trusted`. Runner admission, isolated Engine socket/data, and host
-ACLs prevent PR workloads from reaching trusted cache storage even if PR-owned
-code requests another cache name. Workflow arguments must never be treated as
-authorization. PR cache rollout remains gated on that host isolation.
+Cache namespace is an efficiency hint, not a security boundary. Dependabot pull
+requests run on `ubuntu-24.04`; other pull requests use `hostinger-vps-pr`, and
+protected runs use `hostinger-vps-trusted`. Runner admission,
+isolated Engine socket/data, and host ACLs prevent PR workloads from reaching
+trusted cache storage even if PR-owned code requests another cache name. Workflow arguments
+must never be treated as authorization. PR cache rollout remains gated on that
+host isolation.
 
 The runner needs only Bash and the exact Dagger CLI. CI first runs
 `scripts/dagger/preflight-audit.sh`, a Dagger Core container call that mounts
