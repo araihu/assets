@@ -15,7 +15,7 @@ validated catalog.
 ```json
 {
   "schemaVersion": 2,
-  "release": "v0.2.1",
+  "release": "v0.2.3",
   "identityRevision": 11,
   "assets": []
 }

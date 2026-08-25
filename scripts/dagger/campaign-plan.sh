@@ -87,7 +87,7 @@ release_artifacts=$(ruby -rjson -e '
   print JSON.generate(records.sort_by { |record| record.fetch("release") })
 ' "$records")
 
-test "$(go version | awk '{print $3}')" = go1.26.5
+test "$(go version | awk '{print $3}')" = go1.27.0
 go run ./cmd/araihu-assets themes validate
 go run ./cmd/araihu-assets campaigns validate
 mkdir -p /out/bundle

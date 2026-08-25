@@ -8,7 +8,7 @@ ruby -e '
 ' "$RELEASE_TAG" "$SOURCE_REVISION"
 test -n "$ARAIHU_ASSETS_APP_ID" || { echo "ARAIHU_ASSETS_APP_ID is required" >&2; exit 1; }
 test -n "$ARAIHU_ASSETS_APP_PRIVATE_KEY" || { echo "ARAIHU_ASSETS_APP_PRIVATE_KEY is required" >&2; exit 1; }
-test "$(go version | awk '{print $3}')" = go1.26.5
+test "$(go version | awk '{print $3}')" = go1.27.0
 go tool muamba verify --strict
 go tool muamba generate-go --strict --check --dir internal/acquisition --output muamba_gen.go
 env -u HTTPS_PROXY -u HTTP_PROXY make check

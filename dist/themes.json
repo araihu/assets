@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "release": "v0.2.1",
+  "release": "v0.2.3",
   "tokenContract": "goshtoso-theme-v1",
   "themes": [
     {

@@ -26,7 +26,7 @@ for dependencies, build output, and tools. Pull requests use stable namespace
 `pr`; protected push, manual, scheduled, tag, and reusable-workflow runs use
 namespace `trusted`.
 
-The Dagger runtime uses the digest-pinned Go 1.26.5 Debian trixie image. Its
+The Dagger runtime uses the digest-pinned Go 1.27.0 Debian trixie image. Its
 librsvg bootstrap rejects any distro Cairo other than exact `1.18.4` and also
 checks librsvg's `>=1.18.0` floor before configuration. Meson, Rust, cargo-c,
 and librsvg remain independently versioned and digest-verified.
