@@ -193,6 +193,8 @@ mutate_and_reject "Cairo exact version changed" scripts/dagger/install-rsvg.sh \
   'CAIRO_VERSION=1.18.4' 'CAIRO_VERSION=1.18.2'
 mutate_and_reject "PR runner routed to generic lane" .github/workflows/ci.yml \
   'hostinger-vps-pr' 'hostinger-vps'
+mutate_and_reject "Dependabot routed to PR runner" .github/workflows/ci.yml \
+  "github.actor == 'dependabot[bot]'" "github.actor == 'never'"
 mutate_and_reject "protected runner routed to generic lane" .github/workflows/acquisition.yml \
   'hostinger-vps-trusted' 'hostinger-vps'
 mutate_and_reject "provider expression enters Dagger args" .github/workflows/ci.yml \
