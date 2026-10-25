@@ -1,0 +1,37 @@
+{{- define "item" }}
+  {{- $ := index . 0 }}
+  {{- $cfg := index . 1 }}
+  {{- if $.Doc }}
+    {{- template "doc.lines" (list $.Doc "#") }}
+  {{- end }}
+  {{- if $.EnvName }}
+    {{- print "\n" }}
+    {{- template "item.options" (list $ $cfg "# (%s)\n") }}
+    {{- if $.EnvDefault }}
+      {{- printf `%s="%s"` $.EnvName $.EnvDefault }}
+    {{- else }}
+      {{- printf `%s="<FIXME>"` $.EnvName }}
+    {{- end }}
+    {{- print "\n" }}
+  {{- end }}
+  {{- $children := $.IndentChildren 0 }}
+  {{- if $children }}
+    {{- range $child := $children }}
+      {{- template "item" (list $child $cfg) }}
+    {{- end }}
+  {{- end }}
+{{- end -}}
+
+{{- $cfg := $.Config -}}
+# {{ .Title }}
+{{ range .Sections }}
+{{- print "\n" }}
+  {{- if .Name }}
+## {{ .Name }}
+  {{- end }}
+  {{- template "doc.lines" (list .Doc "##") }}
+#
+  {{- range $item := .Items }}
+    {{- template "item" (list $item $cfg.Item) }}
+  {{- end }}
+{{- end }}
