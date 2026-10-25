@@ -353,6 +353,8 @@ func productName(id string) string {
 		return "X9"
 	case "goshtoso":
 		return "Goshtoso"
+	case "balemoh":
+		return "Balemoh"
 	case "manja":
 		return "Manja"
 	case "heroicons":

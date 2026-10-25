@@ -72,6 +72,20 @@ products:
       icon-transparent: b46e017b569b84f0214ae5073bc2f4c1915e51faeb45563b7655cf01aef41995
       logo-background: e0576e55837d759fa14407d8092f5c78aa715e9542bb5943a4d14cda81994344
       logo-transparent: 7fcb30796a70c98e28a38a9a91e80a006f1766cac0996c717198ebeeea96e880
+  - id: balemoh
+    display_name: Balemoh
+    aliases: []
+    sources:
+      original:
+        icon-background: source/brand/original/balemoh-icon-background.svg
+        icon-transparent: source/brand/original/balemoh-icon-transparent.svg
+        logo-background: source/brand/original/balemoh-logo-background.svg
+        logo-transparent: source/brand/original/balemoh-logo-transparent.svg
+    source_hashes:
+      icon-background: 7df43f3c840a07f52c5cbf85394f9033f3f6b518be5f0972ef5f32e1d792e021
+      icon-transparent: 8ad267d033cc75b9470b91b1447502ef169c05654026ef8bd342558dd7913b64
+      logo-background: 5bfc0f507a0103d73699fce22c005bd73f7142243ac04b471f035eeadfed084b
+      logo-transparent: aae41059ef73d7dfbcf3557c714a2bde6d45f47f8408cb91ea81a04106e8fb4c
 palettes:
   light:
     name: light

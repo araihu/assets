@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "release": "v0.2.3",
+  "release": "v0.2.4",
   "identityRevision": 11,
   "assets": [
     {
@@ -458,6 +458,462 @@
       "license": "Arai Hu Brand Terms",
       "source": "source/brand/original/araihu-logo-transparent.svg#sha256=2099cc1096624ca10e707d5a565f8142b7ba875d148ca288b79a5cc2e61ccf16",
       "sha256": "130e60d34bb7f8b904279013ed49c69a9960c4351c6473763a4c995f0a182a47"
+    },
+    {
+      "canonicalName": "balemoh-icon-adaptive-plate-launcher",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-adaptive-plate-launcher.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "-129.453956 -129.453956 1282.907913 1282.907913"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-background.svg#sha256=7df43f3c840a07f52c5cbf85394f9033f3f6b518be5f0972ef5f32e1d792e021",
+      "sha256": "6aa6f57742898a3b41efc5723b2c3e9d49b983dbfb41e39aecfc170f1fe55dc8"
+    },
+    {
+      "canonicalName": "balemoh-icon-adaptive-plate-optical",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-adaptive-plate-optical.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 1024 1024"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-background.svg#sha256=7df43f3c840a07f52c5cbf85394f9033f3f6b518be5f0972ef5f32e1d792e021",
+      "sha256": "2652aa10da73711e1350fd733ca2bd797a84e54946a62aa6323cd23ab526560e"
+    },
+    {
+      "canonicalName": "balemoh-icon-adaptive-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-adaptive-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "-3.789 -3.789 1031.578 1031.578"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-transparent.svg#sha256=8ad267d033cc75b9470b91b1447502ef169c05654026ef8bd342558dd7913b64",
+      "sha256": "3c49d7d9fa2bcb56c66d6eb9e880aa6781ae49ce811fe8b4b60dce61ccc100d7"
+    },
+    {
+      "canonicalName": "balemoh-icon-dark-plate-optical",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-dark-plate-optical.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 1024 1024"
+      },
+      "spriteSymbol": "balemoh-icon-dark-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-background.svg#sha256=7df43f3c840a07f52c5cbf85394f9033f3f6b518be5f0972ef5f32e1d792e021",
+      "sha256": "6433291c9a0bdf2dd4fea06c482506099a5700fac6c4a62a85cd61a8455b633b"
+    },
+    {
+      "canonicalName": "balemoh-icon-dark-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-dark-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "-3.789 -3.789 1031.578 1031.578"
+      },
+      "spriteSymbol": "balemoh-icon-dark-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-transparent.svg#sha256=8ad267d033cc75b9470b91b1447502ef169c05654026ef8bd342558dd7913b64",
+      "sha256": "0c80aa0ef7aeab59754ab0ee2c9d4589e03c7dc0e70b2b4e1e20ba723dc34040"
+    },
+    {
+      "canonicalName": "balemoh-icon-grayscale-plate-optical",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-grayscale-plate-optical.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 1024 1024"
+      },
+      "spriteSymbol": "balemoh-icon-grayscale-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-background.svg#sha256=7df43f3c840a07f52c5cbf85394f9033f3f6b518be5f0972ef5f32e1d792e021",
+      "sha256": "9280ec7882397b079c0c398fe853abf88f2eab9c8e4d60bf08afbcaafa46492b"
+    },
+    {
+      "canonicalName": "balemoh-icon-grayscale-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-grayscale-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "-3.789 -3.789 1031.578 1031.578"
+      },
+      "spriteSymbol": "balemoh-icon-grayscale-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-transparent.svg#sha256=8ad267d033cc75b9470b91b1447502ef169c05654026ef8bd342558dd7913b64",
+      "sha256": "57bb7aeeec4e54ce646f7732a2a73f77f827fd9456b05b7306fe7f85ea751ce9"
+    },
+    {
+      "canonicalName": "balemoh-icon-light-plate-optical",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-light-plate-optical.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 1024 1024"
+      },
+      "spriteSymbol": "balemoh-icon-light-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-background.svg#sha256=7df43f3c840a07f52c5cbf85394f9033f3f6b518be5f0972ef5f32e1d792e021",
+      "sha256": "72bcc6eb563a0b641453e4dbe6b8667b60ae8f6a8ce19f8c099e4015503e7f1e"
+    },
+    {
+      "canonicalName": "balemoh-icon-light-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-light-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "-3.789 -3.789 1031.578 1031.578"
+      },
+      "spriteSymbol": "balemoh-icon-light-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-transparent.svg#sha256=8ad267d033cc75b9470b91b1447502ef169c05654026ef8bd342558dd7913b64",
+      "sha256": "bb91cec70b8bd6bffcad73b0e5bf59dcafc344ec9b20e6c270940e8bea772c82"
+    },
+    {
+      "canonicalName": "balemoh-icon-monochrome-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-monochrome-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "-3.789 -3.789 1031.578 1031.578"
+      },
+      "spriteSymbol": "balemoh-icon-monochrome-transparent-optical",
+      "colorBehavior": "monochrome",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-transparent.svg#sha256=8ad267d033cc75b9470b91b1447502ef169c05654026ef8bd342558dd7913b64",
+      "sha256": "4d11a997e5c50b33d8c3c96a3f85a97f3330874247d3b11f8315d198cf1cd9e0"
+    },
+    {
+      "canonicalName": "balemoh-icon-tinted-plate-launcher",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-tinted-plate-launcher.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "-129.453956 -129.453956 1282.907913 1282.907913"
+      },
+      "spriteSymbol": "balemoh-icon-tinted-plate-launcher",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-background.svg#sha256=7df43f3c840a07f52c5cbf85394f9033f3f6b518be5f0972ef5f32e1d792e021",
+      "sha256": "2ff35b5729c9a9aef5b12c971278f503083fe73cbc19d294697d7ca2653179b6"
+    },
+    {
+      "canonicalName": "balemoh-icon-tinted-plate-optical",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-tinted-plate-optical.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 1024 1024"
+      },
+      "spriteSymbol": "balemoh-icon-tinted-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-background.svg#sha256=7df43f3c840a07f52c5cbf85394f9033f3f6b518be5f0972ef5f32e1d792e021",
+      "sha256": "ca153fa273be1e60784aa8a7e6ffa10bb393f6e23907f30485c6689e3622d816"
+    },
+    {
+      "canonicalName": "balemoh-icon-tinted-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/balemoh-icon-tinted-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "-3.789 -3.789 1031.578 1031.578"
+      },
+      "spriteSymbol": "balemoh-icon-tinted-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-icon-transparent.svg#sha256=8ad267d033cc75b9470b91b1447502ef169c05654026ef8bd342558dd7913b64",
+      "sha256": "ac5b4bcb001c58b48c46092169b0ad938ca886b287005ca59332cfd88e22b6f8"
+    },
+    {
+      "canonicalName": "balemoh-logo-adaptive-plate-optical",
+      "namespace": "brand",
+      "path": "brand/balemoh/logo/adaptive-plate-optical.svg",
+      "product": "balemoh",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 2048 508"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-logo-background.svg#sha256=5bfc0f507a0103d73699fce22c005bd73f7142243ac04b471f035eeadfed084b",
+      "sha256": "364bc2564b38d56265a1abe4767518c1eddf732379353b2405048ef810291a8e"
+    },
+    {
+      "canonicalName": "balemoh-logo-adaptive-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/balemoh/logo/adaptive-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "60 40 1940 428"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-logo-transparent.svg#sha256=aae41059ef73d7dfbcf3557c714a2bde6d45f47f8408cb91ea81a04106e8fb4c",
+      "sha256": "2410cbdd8057ed713c3da90d714ab8bf8be486d31e85e931e6ca8225d5ae3d0c"
+    },
+    {
+      "canonicalName": "balemoh-logo-dark-plate-optical",
+      "namespace": "brand",
+      "path": "brand/balemoh/logo/dark-plate-optical.svg",
+      "product": "balemoh",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 2048 508"
+      },
+      "spriteSymbol": "balemoh-logo-dark-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-logo-background.svg#sha256=5bfc0f507a0103d73699fce22c005bd73f7142243ac04b471f035eeadfed084b",
+      "sha256": "00417b8260ad5edf291d8214fab932a64331a68739c9c7b5ffb0f51365629d02"
+    },
+    {
+      "canonicalName": "balemoh-logo-dark-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/balemoh/logo/dark-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "60 40 1940 428"
+      },
+      "spriteSymbol": "balemoh-logo-dark-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-logo-transparent.svg#sha256=aae41059ef73d7dfbcf3557c714a2bde6d45f47f8408cb91ea81a04106e8fb4c",
+      "sha256": "26b550316dec253a642c943bd6402daf62f927a916f5a5fa469e00a497a801c1"
+    },
+    {
+      "canonicalName": "balemoh-logo-grayscale-plate-optical",
+      "namespace": "brand",
+      "path": "brand/balemoh/logo/grayscale-plate-optical.svg",
+      "product": "balemoh",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 2048 508"
+      },
+      "spriteSymbol": "balemoh-logo-grayscale-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-logo-background.svg#sha256=5bfc0f507a0103d73699fce22c005bd73f7142243ac04b471f035eeadfed084b",
+      "sha256": "17a532ab632f95767040848f2c9a9f79e11a0c07cc38cb27d53841e645264023"
+    },
+    {
+      "canonicalName": "balemoh-logo-grayscale-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/balemoh/logo/grayscale-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "60 40 1940 428"
+      },
+      "spriteSymbol": "balemoh-logo-grayscale-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-logo-transparent.svg#sha256=aae41059ef73d7dfbcf3557c714a2bde6d45f47f8408cb91ea81a04106e8fb4c",
+      "sha256": "ee34ffd93a5f038f997de91261eb3494494ed6e754e8850aadbd5fd4105bf1a9"
+    },
+    {
+      "canonicalName": "balemoh-logo-light-plate-optical",
+      "namespace": "brand",
+      "path": "brand/balemoh/logo/light-plate-optical.svg",
+      "product": "balemoh",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 2048 508"
+      },
+      "spriteSymbol": "balemoh-logo-light-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-logo-background.svg#sha256=5bfc0f507a0103d73699fce22c005bd73f7142243ac04b471f035eeadfed084b",
+      "sha256": "b26cca2274bfee39ad90094b73f6def02bebda923aba2aef4ae227d379dc045f"
+    },
+    {
+      "canonicalName": "balemoh-logo-light-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/balemoh/logo/light-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "60 40 1940 428"
+      },
+      "spriteSymbol": "balemoh-logo-light-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-logo-transparent.svg#sha256=aae41059ef73d7dfbcf3557c714a2bde6d45f47f8408cb91ea81a04106e8fb4c",
+      "sha256": "dbc417232c9c9e1ba41848cc14b3936b2b489fb9cb51c7baef1914a9dffd18ae"
+    },
+    {
+      "canonicalName": "balemoh-logo-monochrome-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/balemoh/logo/monochrome-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "logo",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "60 40 1940 428"
+      },
+      "spriteSymbol": "balemoh-logo-monochrome-transparent-optical",
+      "colorBehavior": "monochrome",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-logo-transparent.svg#sha256=aae41059ef73d7dfbcf3557c714a2bde6d45f47f8408cb91ea81a04106e8fb4c",
+      "sha256": "7c138c19676a030df2adecc4958836e28d687fd58c312688456b6109aa909d72"
+    },
+    {
+      "canonicalName": "balemoh-logo-tinted-plate-optical",
+      "namespace": "brand",
+      "path": "brand/balemoh/logo/tinted-plate-optical.svg",
+      "product": "balemoh",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 2048 508"
+      },
+      "spriteSymbol": "balemoh-logo-tinted-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-logo-background.svg#sha256=5bfc0f507a0103d73699fce22c005bd73f7142243ac04b471f035eeadfed084b",
+      "sha256": "770b4fd9f6ba30584dab2e00a6f60aa118b2af0dbb734d9ae0e30334f92fcde7"
+    },
+    {
+      "canonicalName": "balemoh-logo-tinted-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/balemoh/logo/tinted-transparent-optical.svg",
+      "product": "balemoh",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "60 40 1940 428"
+      },
+      "spriteSymbol": "balemoh-logo-tinted-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/balemoh-logo-transparent.svg#sha256=aae41059ef73d7dfbcf3557c714a2bde6d45f47f8408cb91ea81a04106e8fb4c",
+      "sha256": "510f2df0867d66d99d32e2813917704b033ffcc4df9a0676585a5af6cb33bd15"
     },
     {
       "canonicalName": "brand-developer-icons-android",
@@ -8110,6 +8566,246 @@
       "sha256": "c2d82111361d9ebc2a0835462921ce8f68b86b823b37554498dab890405e49e6"
     },
     {
+      "canonicalName": "platform-android-balemoh-res-drawable-xxxhdpi-ic-launcher-foreground-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/drawable-xxxhdpi/ic_launcher_foreground.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 432,
+        "height": 432
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "b57110b3f702d7aedc73031ccb615ec212d6e4d10bbd9efba9ab4950adbb09aa"
+    },
+    {
+      "canonicalName": "platform-android-balemoh-res-drawable-xxxhdpi-ic-launcher-monochrome-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/drawable-xxxhdpi/ic_launcher_monochrome.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 432,
+        "height": 432
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "monochrome",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "05b6d1165f8380cecb3687e246eafa3afc587b80cf162622a755e63bdd3d5c1c"
+    },
+    {
+      "canonicalName": "platform-android-balemoh-res-mipmap-hdpi-ic-launcher-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/mipmap-hdpi/ic_launcher.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 72,
+        "height": 72
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "638f08b1356d4281918633710740218f72a93a1f806cbb4f66d65f43de08a3f4"
+    },
+    {
+      "canonicalName": "platform-android-balemoh-res-mipmap-hdpi-ic-launcher-round-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/mipmap-hdpi/ic_launcher_round.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 72,
+        "height": 72
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "638f08b1356d4281918633710740218f72a93a1f806cbb4f66d65f43de08a3f4"
+    },
+    {
+      "canonicalName": "platform-android-balemoh-res-mipmap-mdpi-ic-launcher-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/mipmap-mdpi/ic_launcher.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 48,
+        "height": 48
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "9f1bf79caf4c64a446396271ea496736101ba1d7b8714b16eeef7720e1727ce6"
+    },
+    {
+      "canonicalName": "platform-android-balemoh-res-mipmap-mdpi-ic-launcher-round-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/mipmap-mdpi/ic_launcher_round.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 48,
+        "height": 48
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "9f1bf79caf4c64a446396271ea496736101ba1d7b8714b16eeef7720e1727ce6"
+    },
+    {
+      "canonicalName": "platform-android-balemoh-res-mipmap-xhdpi-ic-launcher-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/mipmap-xhdpi/ic_launcher.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 96,
+        "height": 96
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "d8fe94bc205ac9c9113d762fe62e4501862aa6c5fde9999c247f219548d31115"
+    },
+    {
+      "canonicalName": "platform-android-balemoh-res-mipmap-xhdpi-ic-launcher-round-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/mipmap-xhdpi/ic_launcher_round.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 96,
+        "height": 96
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "d8fe94bc205ac9c9113d762fe62e4501862aa6c5fde9999c247f219548d31115"
+    },
+    {
+      "canonicalName": "platform-android-balemoh-res-mipmap-xxhdpi-ic-launcher-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/mipmap-xxhdpi/ic_launcher.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 144,
+        "height": 144
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "e6d57850b6c86e18360f5a77d99f232631c2e06547b43d4f22f8496de1652864"
+    },
+    {
+      "canonicalName": "platform-android-balemoh-res-mipmap-xxhdpi-ic-launcher-round-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 144,
+        "height": 144
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "e6d57850b6c86e18360f5a77d99f232631c2e06547b43d4f22f8496de1652864"
+    },
+    {
+      "canonicalName": "platform-android-balemoh-res-mipmap-xxxhdpi-ic-launcher-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/mipmap-xxxhdpi/ic_launcher.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 192,
+        "height": 192
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "407e46d50de87e4d375e87775eebfc9fdf32fef723591177dbb7af6baa168371"
+    },
+    {
+      "canonicalName": "platform-android-balemoh-res-mipmap-xxxhdpi-ic-launcher-round-png",
+      "namespace": "brand",
+      "path": "platform/android/balemoh/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 192,
+        "height": 192
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "407e46d50de87e4d375e87775eebfc9fdf32fef723591177dbb7af6baa168371"
+    },
+    {
       "canonicalName": "platform-android-goshtoso-res-drawable-xxxhdpi-ic-launcher-foreground-png",
       "namespace": "brand",
       "path": "platform/android/goshtoso/res/drawable-xxxhdpi/ic_launcher_foreground.png",
@@ -9130,6 +9826,66 @@
       "sha256": "7602232b0fcec7b29a8cf130235e7697e27dabd28073bf4899f24b185f3da6d9"
     },
     {
+      "canonicalName": "platform-apple-balemoh-assets-xcassets-appicon-appiconset-appicon-1024-dark-png",
+      "namespace": "brand",
+      "path": "platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "99f4b7a36d14db1087389cafa0292b5f661550d6919a6fe6d558d78788f4c62a"
+    },
+    {
+      "canonicalName": "platform-apple-balemoh-assets-xcassets-appicon-appiconset-appicon-1024-png",
+      "namespace": "brand",
+      "path": "platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "61e8b1e3a498f2ec8d46ca7dbd67f65758a3ac6f9c6bb01465c7d94f064fcf21"
+    },
+    {
+      "canonicalName": "platform-apple-balemoh-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png",
+      "namespace": "brand",
+      "path": "platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-tinted.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "b56bd51f89439e4af588a65ddb2047350c345f673b5b5ac759dc9136d0a63144"
+    },
+    {
       "canonicalName": "platform-apple-goshtoso-assets-xcassets-appicon-appiconset-appicon-1024-dark-png",
       "namespace": "brand",
       "path": "platform/apple/goshtoso/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
@@ -9527,6 +10283,165 @@
       "license": "Arai Hu Brand Terms",
       "source": "platform generator v0.1.0",
       "sha256": "a5e7399e7ba44a73b5fb18694a2cad24c5aad0e00a78035d2cb6e6e9a714facc"
+    },
+    {
+      "canonicalName": "platform-web-balemoh-apple-touch-icon-180-png",
+      "namespace": "brand",
+      "path": "platform/web/balemoh/apple-touch-icon-180.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 180,
+        "height": 180
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "defc44f36a53b6636488a55bae4a13a0a8a4842ce03588390e81a98b935acf93"
+    },
+    {
+      "canonicalName": "platform-web-balemoh-favicon-16-png",
+      "namespace": "brand",
+      "path": "platform/web/balemoh/favicon-16.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "png",
+      "dimensions": {
+        "width": 16,
+        "height": 16
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "c67112214f73f0deb9b67db4b459c15501869706c583419f69deffc9f83856e3"
+    },
+    {
+      "canonicalName": "platform-web-balemoh-favicon-32-png",
+      "namespace": "brand",
+      "path": "platform/web/balemoh/favicon-32.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "png",
+      "dimensions": {
+        "width": 32,
+        "height": 32
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "773e32c2210120a6993f4e3342d49f20f6ae5a4a7c2d5e348966e0879dd8f08c"
+    },
+    {
+      "canonicalName": "platform-web-balemoh-favicon-svg",
+      "namespace": "brand",
+      "path": "platform/web/balemoh/favicon.svg",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "-3.789 -3.789 1031.578 1031.578"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "3c49d7d9fa2bcb56c66d6eb9e880aa6781ae49ce811fe8b4b60dce61ccc100d7"
+    },
+    {
+      "canonicalName": "platform-web-balemoh-icon-192-png",
+      "namespace": "brand",
+      "path": "platform/web/balemoh/icon-192.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "png",
+      "dimensions": {
+        "width": 192,
+        "height": 192
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "7704da1a47c632d423472d3716500dc7ad694706341434371fcbc40409da47de"
+    },
+    {
+      "canonicalName": "platform-web-balemoh-icon-512-png",
+      "namespace": "brand",
+      "path": "platform/web/balemoh/icon-512.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "png",
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "304389318ee6d1c6e378b7a701d64fab07ace205c42fef2c7416bd13e84bd664"
+    },
+    {
+      "canonicalName": "platform-web-balemoh-icon-maskable-192-png",
+      "namespace": "brand",
+      "path": "platform/web/balemoh/icon-maskable-192.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 192,
+        "height": 192
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "407e46d50de87e4d375e87775eebfc9fdf32fef723591177dbb7af6baa168371"
+    },
+    {
+      "canonicalName": "platform-web-balemoh-icon-maskable-512-png",
+      "namespace": "brand",
+      "path": "platform/web/balemoh/icon-maskable-512.png",
+      "product": "balemoh",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "990cca8cd1e488c8a0cc52eb4fe81b4f3b19165ddad8289d54d2e2860aa6cebb"
     },
     {
       "canonicalName": "platform-web-goshtoso-apple-touch-icon-180-png",

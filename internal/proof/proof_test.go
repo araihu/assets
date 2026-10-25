@@ -265,7 +265,7 @@ func TestProductionScenariosCoverLiteral512AndEveryProduct(t *testing.T) {
 	if !slices.Contains(m.ExactSizes, 512) {
 		t.Fatalf("ExactSizes = %v, want 512", m.ExactSizes)
 	}
-	for _, id := range []string{"araihu", "developer-icons", "goshtoso", "heroicons", "manja", "paje", "x9"} {
+	for _, id := range []string{"araihu", "balemoh", "developer-icons", "goshtoso", "heroicons", "manja", "paje", "x9"} {
 		if !m.HasProduct(id) {
 			t.Fatalf("HasProduct(%q) = false", id)
 		}
@@ -347,7 +347,7 @@ func TestProductionProofHasCompleteSocialMetadataAndPreview(t *testing.T) {
 			t.Fatalf("metadata token %q count = %d, want 1", token, count)
 		}
 	}
-	const base = "https://cdn.jsdelivr.net/gh/araihu/assets@v0.2.3/dist/proof/"
+	const base = "https://cdn.jsdelivr.net/gh/araihu/assets@v0.2.4/dist/proof/"
 	const documentURL = base + "index.html"
 	if !strings.Contains(html, `rel="canonical" href="`+documentURL+`"`) ||
 		!strings.Contains(html, `property="og:url" content="`+documentURL+`"`) ||

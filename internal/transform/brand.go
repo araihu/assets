@@ -33,6 +33,8 @@ var (
 	hexColor       = regexp.MustCompile(`(?i)^#[0-9a-f]{6}$`)
 
 	opticalViewBoxes = map[string]string{
+		"balemoh/icon":  "-3.789 -3.789 1031.578 1031.578",
+		"balemoh/logo":  "60 40 1940 428",
 		"araihu/icon":   "262.510 263.185 498.904 498.904",
 		"goshtoso/icon": "237.162 237.080 550.558 550.558",
 		"manja/icon":    "167.325 123.377 776.662 776.662",

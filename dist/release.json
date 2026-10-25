@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "release": "v0.2.3",
+  "release": "v0.2.4",
   "identityRevision": 11,
   "runtimeVersion": 1,
-  "catalogSha256": "df1cafb4c6e0605dc780aeaa091d18d13e2335ba90909976966149af57b70710",
-  "themesSha256": "78b718b2b351359c7d66cab64f43a109a12319b82946f5ec2be99a90da1874b7",
+  "catalogSha256": "993e84956a28835519a7f50b298cd7c5595f35016b54ec87210f869899dbba5c",
+  "themesSha256": "82f2bf61b2fd85d13a1f4f9da104019476d4adc47a686915b2f5c0b391e90b1e",
   "campaignsSha256": "fd0393fed7bcf92c7323ba88467b042ca14744da93442f8700bb242f1f23756a",
   "files": [
     {
       "path": "catalog.json",
-      "sha256": "df1cafb4c6e0605dc780aeaa091d18d13e2335ba90909976966149af57b70710",
-      "size": 1291792
+      "sha256": "993e84956a28835519a7f50b298cd7c5595f35016b54ec87210f869899dbba5c",
+      "size": 1325432
     },
     {
       "path": "themes.json",
-      "sha256": "78b718b2b351359c7d66cab64f43a109a12319b82946f5ec2be99a90da1874b7",
+      "sha256": "82f2bf61b2fd85d13a1f4f9da104019476d4adc47a686915b2f5c0b391e90b1e",
       "size": 532
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "path": "NOTICE",
-      "sha256": "2bdde09a5077844c43f40f5afb8925acfc5640bdfca8dd0d23ad8695638e6dfe",
+      "sha256": "125f7081e63d45ddc0f466b68b88bd332f08dbb2622ba191fece868e5f93ed2c",
       "size": 260
     },
     {
@@ -81,6 +81,61 @@
       "path": "brand/araihu/logo/tinted-transparent-optical.svg",
       "sha256": "130e60d34bb7f8b904279013ed49c69a9960c4351c6473763a4c995f0a182a47",
       "size": 4050
+    },
+    {
+      "path": "brand/balemoh/logo/adaptive-plate-optical.svg",
+      "sha256": "364bc2564b38d56265a1abe4767518c1eddf732379353b2405048ef810291a8e",
+      "size": 5625
+    },
+    {
+      "path": "brand/balemoh/logo/adaptive-transparent-optical.svg",
+      "sha256": "2410cbdd8057ed713c3da90d714ab8bf8be486d31e85e931e6ca8225d5ae3d0c",
+      "size": 5512
+    },
+    {
+      "path": "brand/balemoh/logo/dark-plate-optical.svg",
+      "sha256": "00417b8260ad5edf291d8214fab932a64331a68739c9c7b5ffb0f51365629d02",
+      "size": 4759
+    },
+    {
+      "path": "brand/balemoh/logo/dark-transparent-optical.svg",
+      "sha256": "26b550316dec253a642c943bd6402daf62f927a916f5a5fa469e00a497a801c1",
+      "size": 4707
+    },
+    {
+      "path": "brand/balemoh/logo/grayscale-plate-optical.svg",
+      "sha256": "17a532ab632f95767040848f2c9a9f79e11a0c07cc38cb27d53841e645264023",
+      "size": 4759
+    },
+    {
+      "path": "brand/balemoh/logo/grayscale-transparent-optical.svg",
+      "sha256": "ee34ffd93a5f038f997de91261eb3494494ed6e754e8850aadbd5fd4105bf1a9",
+      "size": 4707
+    },
+    {
+      "path": "brand/balemoh/logo/light-plate-optical.svg",
+      "sha256": "b26cca2274bfee39ad90094b73f6def02bebda923aba2aef4ae227d379dc045f",
+      "size": 4759
+    },
+    {
+      "path": "brand/balemoh/logo/light-transparent-optical.svg",
+      "sha256": "dbc417232c9c9e1ba41848cc14b3936b2b489fb9cb51c7baef1914a9dffd18ae",
+      "size": 4707
+    },
+    {
+      "path": "brand/balemoh/logo/monochrome-transparent-optical.svg",
+      "sha256": "7c138c19676a030df2adecc4958836e28d687fd58c312688456b6109aa909d72",
+      "size": 4682
+    },
+    {
+      "path": "brand/balemoh/logo/tinted-plate-optical.svg",
+      "sha256": "770b4fd9f6ba30584dab2e00a6f60aa118b2af0dbb734d9ae0e30334f92fcde7",
+      "size": 4759
+    },
+    {
+      "path": "brand/balemoh/logo/tinted-transparent-optical.svg",
+      "sha256": "510f2df0867d66d99d32e2813917704b033ffcc4df9a0676585a5af6cb33bd15",
+      "size": 4707
     },
     {
       "path": "brand/goshtoso/logo/adaptive-plate-optical.svg",
@@ -371,6 +426,71 @@
       "path": "icons/brand/araihu-icon-tinted-transparent-optical.svg",
       "sha256": "229cc6f57c32188dd86ed0dd06f4138fb55e6f9bb0e263503921bf3288f71c71",
       "size": 1859
+    },
+    {
+      "path": "icons/brand/balemoh-icon-adaptive-plate-launcher.svg",
+      "sha256": "6aa6f57742898a3b41efc5723b2c3e9d49b983dbfb41e39aecfc170f1fe55dc8",
+      "size": 848
+    },
+    {
+      "path": "icons/brand/balemoh-icon-adaptive-plate-optical.svg",
+      "sha256": "2652aa10da73711e1350fd733ca2bd797a84e54946a62aa6323cd23ab526560e",
+      "size": 814
+    },
+    {
+      "path": "icons/brand/balemoh-icon-adaptive-transparent-optical.svg",
+      "sha256": "3c49d7d9fa2bcb56c66d6eb9e880aa6781ae49ce811fe8b4b60dce61ccc100d7",
+      "size": 716
+    },
+    {
+      "path": "icons/brand/balemoh-icon-dark-plate-optical.svg",
+      "sha256": "6433291c9a0bdf2dd4fea06c482506099a5700fac6c4a62a85cd61a8455b633b",
+      "size": 477
+    },
+    {
+      "path": "icons/brand/balemoh-icon-dark-transparent-optical.svg",
+      "sha256": "0c80aa0ef7aeab59754ab0ee2c9d4589e03c7dc0e70b2b4e1e20ba723dc34040",
+      "size": 440
+    },
+    {
+      "path": "icons/brand/balemoh-icon-grayscale-plate-optical.svg",
+      "sha256": "9280ec7882397b079c0c398fe853abf88f2eab9c8e4d60bf08afbcaafa46492b",
+      "size": 477
+    },
+    {
+      "path": "icons/brand/balemoh-icon-grayscale-transparent-optical.svg",
+      "sha256": "57bb7aeeec4e54ce646f7732a2a73f77f827fd9456b05b7306fe7f85ea751ce9",
+      "size": 440
+    },
+    {
+      "path": "icons/brand/balemoh-icon-light-plate-optical.svg",
+      "sha256": "72bcc6eb563a0b641453e4dbe6b8667b60ae8f6a8ce19f8c099e4015503e7f1e",
+      "size": 477
+    },
+    {
+      "path": "icons/brand/balemoh-icon-light-transparent-optical.svg",
+      "sha256": "bb91cec70b8bd6bffcad73b0e5bf59dcafc344ec9b20e6c270940e8bea772c82",
+      "size": 440
+    },
+    {
+      "path": "icons/brand/balemoh-icon-monochrome-transparent-optical.svg",
+      "sha256": "4d11a997e5c50b33d8c3c96a3f85a97f3330874247d3b11f8315d198cf1cd9e0",
+      "size": 430
+    },
+    {
+      "path": "icons/brand/balemoh-icon-tinted-plate-launcher.svg",
+      "sha256": "2ff35b5729c9a9aef5b12c971278f503083fe73cbc19d294697d7ca2653179b6",
+      "size": 511
+    },
+    {
+      "path": "icons/brand/balemoh-icon-tinted-plate-optical.svg",
+      "sha256": "ca153fa273be1e60784aa8a7e6ffa10bb393f6e23907f30485c6689e3622d816",
+      "size": 477
+    },
+    {
+      "path": "icons/brand/balemoh-icon-tinted-transparent-optical.svg",
+      "sha256": "ac5b4bcb001c58b48c46092169b0ad938ca886b287005ca59332cfd88e22b6f8",
+      "size": 440
     },
     {
       "path": "icons/brand/developer-icons/android.svg",
@@ -2169,8 +2289,8 @@
     },
     {
       "path": "icons/brand/sprite.svg",
-      "sha256": "e0c98a783cf65cf52b0a57cca47b84704499200a7fdb113b751d8f6c5828ba45",
-      "size": 275212
+      "sha256": "70f37fcc078b724380852833d6998b9c148aca62cf287a898fbdd37feefbafbc",
+      "size": 322607
     },
     {
       "path": "icons/brand/x9-icon-adaptive-plate-launcher.svg",
@@ -8788,6 +8908,91 @@
       "size": 119
     },
     {
+      "path": "platform/android/balemoh/res/drawable-xxxhdpi/ic_launcher_foreground.png",
+      "sha256": "b57110b3f702d7aedc73031ccb615ec212d6e4d10bbd9efba9ab4950adbb09aa",
+      "size": 6933
+    },
+    {
+      "path": "platform/android/balemoh/res/drawable-xxxhdpi/ic_launcher_monochrome.png",
+      "sha256": "05b6d1165f8380cecb3687e246eafa3afc587b80cf162622a755e63bdd3d5c1c",
+      "size": 3648
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-anydpi-v33/ic_launcher.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-anydpi-v33/ic_launcher_round.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-hdpi/ic_launcher.png",
+      "sha256": "638f08b1356d4281918633710740218f72a93a1f806cbb4f66d65f43de08a3f4",
+      "size": 1258
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-hdpi/ic_launcher_round.png",
+      "sha256": "638f08b1356d4281918633710740218f72a93a1f806cbb4f66d65f43de08a3f4",
+      "size": 1258
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-mdpi/ic_launcher.png",
+      "sha256": "9f1bf79caf4c64a446396271ea496736101ba1d7b8714b16eeef7720e1727ce6",
+      "size": 868
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-mdpi/ic_launcher_round.png",
+      "sha256": "9f1bf79caf4c64a446396271ea496736101ba1d7b8714b16eeef7720e1727ce6",
+      "size": 868
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-xhdpi/ic_launcher.png",
+      "sha256": "d8fe94bc205ac9c9113d762fe62e4501862aa6c5fde9999c247f219548d31115",
+      "size": 1675
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-xhdpi/ic_launcher_round.png",
+      "sha256": "d8fe94bc205ac9c9113d762fe62e4501862aa6c5fde9999c247f219548d31115",
+      "size": 1675
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-xxhdpi/ic_launcher.png",
+      "sha256": "e6d57850b6c86e18360f5a77d99f232631c2e06547b43d4f22f8496de1652864",
+      "size": 2431
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "sha256": "e6d57850b6c86e18360f5a77d99f232631c2e06547b43d4f22f8496de1652864",
+      "size": 2431
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-xxxhdpi/ic_launcher.png",
+      "sha256": "407e46d50de87e4d375e87775eebfc9fdf32fef723591177dbb7af6baa168371",
+      "size": 3148
+    },
+    {
+      "path": "platform/android/balemoh/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "sha256": "407e46d50de87e4d375e87775eebfc9fdf32fef723591177dbb7af6baa168371",
+      "size": 3148
+    },
+    {
+      "path": "platform/android/balemoh/res/values/colors.xml",
+      "sha256": "5ff60af86c09ba6de6a41bccbf4efe80c5c5b4296b639fcf8bbac653f54b2c71",
+      "size": 119
+    },
+    {
       "path": "platform/android/goshtoso/res/drawable-xxxhdpi/ic_launcher_foreground.png",
       "sha256": "4935cbec694f95834bb31bd59de454f854ca5ed17ce155b09b8c0b7f928933de",
       "size": 15981
@@ -9153,6 +9358,31 @@
       "size": 41
     },
     {
+      "path": "platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
+      "sha256": "99f4b7a36d14db1087389cafa0292b5f661550d6919a6fe6d558d78788f4c62a",
+      "size": 18661
+    },
+    {
+      "path": "platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-tinted.png",
+      "sha256": "b56bd51f89439e4af588a65ddb2047350c345f673b5b5ac759dc9136d0a63144",
+      "size": 16869
+    },
+    {
+      "path": "platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "sha256": "61e8b1e3a498f2ec8d46ca7dbd67f65758a3ac6f9c6bb01465c7d94f064fcf21",
+      "size": 18099
+    },
+    {
+      "path": "platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "6cfa296f7b0d78219f6cc2d1db6fd6d626633e5216f8538483567992d3bdb2f1",
+      "size": 448
+    },
+    {
+      "path": "platform/apple/balemoh/Assets.xcassets/Contents.json",
+      "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
+      "size": 41
+    },
+    {
       "path": "platform/apple/goshtoso/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
       "sha256": "04b759a6b3168e770c4542d35003afcbb2948fb8270b9c501f5713917f5ca1f2",
       "size": 42937
@@ -9294,6 +9524,51 @@
     },
     {
       "path": "platform/web/araihu/manifest-icons.json",
+      "sha256": "46522597d9c995b795ca75f7cb250b4fabb4eb9810d162c8cd1142b3c44f6bf6",
+      "size": 344
+    },
+    {
+      "path": "platform/web/balemoh/apple-touch-icon-180.png",
+      "sha256": "defc44f36a53b6636488a55bae4a13a0a8a4842ce03588390e81a98b935acf93",
+      "size": 3027
+    },
+    {
+      "path": "platform/web/balemoh/favicon-16.png",
+      "sha256": "c67112214f73f0deb9b67db4b459c15501869706c583419f69deffc9f83856e3",
+      "size": 421
+    },
+    {
+      "path": "platform/web/balemoh/favicon-32.png",
+      "sha256": "773e32c2210120a6993f4e3342d49f20f6ae5a4a7c2d5e348966e0879dd8f08c",
+      "size": 704
+    },
+    {
+      "path": "platform/web/balemoh/favicon.svg",
+      "sha256": "3c49d7d9fa2bcb56c66d6eb9e880aa6781ae49ce811fe8b4b60dce61ccc100d7",
+      "size": 716
+    },
+    {
+      "path": "platform/web/balemoh/icon-192.png",
+      "sha256": "7704da1a47c632d423472d3716500dc7ad694706341434371fcbc40409da47de",
+      "size": 3605
+    },
+    {
+      "path": "platform/web/balemoh/icon-512.png",
+      "sha256": "304389318ee6d1c6e378b7a701d64fab07ace205c42fef2c7416bd13e84bd664",
+      "size": 9793
+    },
+    {
+      "path": "platform/web/balemoh/icon-maskable-192.png",
+      "sha256": "407e46d50de87e4d375e87775eebfc9fdf32fef723591177dbb7af6baa168371",
+      "size": 3148
+    },
+    {
+      "path": "platform/web/balemoh/icon-maskable-512.png",
+      "sha256": "990cca8cd1e488c8a0cc52eb4fe81b4f3b19165ddad8289d54d2e2860aa6cebb",
+      "size": 8066
+    },
+    {
+      "path": "platform/web/balemoh/manifest-icons.json",
       "sha256": "46522597d9c995b795ca75f7cb250b4fabb4eb9810d162c8cd1142b3c44f6bf6",
       "size": 344
     },
@@ -9484,7 +9759,7 @@
     },
     {
       "path": "proof/assets/NOTICE",
-      "sha256": "2bdde09a5077844c43f40f5afb8925acfc5640bdfca8dd0d23ad8695638e6dfe",
+      "sha256": "125f7081e63d45ddc0f466b68b88bd332f08dbb2622ba191fece868e5f93ed2c",
       "size": 260
     },
     {
@@ -9541,6 +9816,61 @@
       "path": "proof/assets/brand/araihu/logo/tinted-transparent-optical.svg",
       "sha256": "130e60d34bb7f8b904279013ed49c69a9960c4351c6473763a4c995f0a182a47",
       "size": 4050
+    },
+    {
+      "path": "proof/assets/brand/balemoh/logo/adaptive-plate-optical.svg",
+      "sha256": "364bc2564b38d56265a1abe4767518c1eddf732379353b2405048ef810291a8e",
+      "size": 5625
+    },
+    {
+      "path": "proof/assets/brand/balemoh/logo/adaptive-transparent-optical.svg",
+      "sha256": "2410cbdd8057ed713c3da90d714ab8bf8be486d31e85e931e6ca8225d5ae3d0c",
+      "size": 5512
+    },
+    {
+      "path": "proof/assets/brand/balemoh/logo/dark-plate-optical.svg",
+      "sha256": "00417b8260ad5edf291d8214fab932a64331a68739c9c7b5ffb0f51365629d02",
+      "size": 4759
+    },
+    {
+      "path": "proof/assets/brand/balemoh/logo/dark-transparent-optical.svg",
+      "sha256": "26b550316dec253a642c943bd6402daf62f927a916f5a5fa469e00a497a801c1",
+      "size": 4707
+    },
+    {
+      "path": "proof/assets/brand/balemoh/logo/grayscale-plate-optical.svg",
+      "sha256": "17a532ab632f95767040848f2c9a9f79e11a0c07cc38cb27d53841e645264023",
+      "size": 4759
+    },
+    {
+      "path": "proof/assets/brand/balemoh/logo/grayscale-transparent-optical.svg",
+      "sha256": "ee34ffd93a5f038f997de91261eb3494494ed6e754e8850aadbd5fd4105bf1a9",
+      "size": 4707
+    },
+    {
+      "path": "proof/assets/brand/balemoh/logo/light-plate-optical.svg",
+      "sha256": "b26cca2274bfee39ad90094b73f6def02bebda923aba2aef4ae227d379dc045f",
+      "size": 4759
+    },
+    {
+      "path": "proof/assets/brand/balemoh/logo/light-transparent-optical.svg",
+      "sha256": "dbc417232c9c9e1ba41848cc14b3936b2b489fb9cb51c7baef1914a9dffd18ae",
+      "size": 4707
+    },
+    {
+      "path": "proof/assets/brand/balemoh/logo/monochrome-transparent-optical.svg",
+      "sha256": "7c138c19676a030df2adecc4958836e28d687fd58c312688456b6109aa909d72",
+      "size": 4682
+    },
+    {
+      "path": "proof/assets/brand/balemoh/logo/tinted-plate-optical.svg",
+      "sha256": "770b4fd9f6ba30584dab2e00a6f60aa118b2af0dbb734d9ae0e30334f92fcde7",
+      "size": 4759
+    },
+    {
+      "path": "proof/assets/brand/balemoh/logo/tinted-transparent-optical.svg",
+      "sha256": "510f2df0867d66d99d32e2813917704b033ffcc4df9a0676585a5af6cb33bd15",
+      "size": 4707
     },
     {
       "path": "proof/assets/brand/goshtoso/logo/adaptive-plate-optical.svg",
@@ -9836,6 +10166,71 @@
       "path": "proof/assets/icons/brand/araihu-icon-tinted-transparent-optical.svg",
       "sha256": "229cc6f57c32188dd86ed0dd06f4138fb55e6f9bb0e263503921bf3288f71c71",
       "size": 1859
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-adaptive-plate-launcher.svg",
+      "sha256": "6aa6f57742898a3b41efc5723b2c3e9d49b983dbfb41e39aecfc170f1fe55dc8",
+      "size": 848
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-adaptive-plate-optical.svg",
+      "sha256": "2652aa10da73711e1350fd733ca2bd797a84e54946a62aa6323cd23ab526560e",
+      "size": 814
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-adaptive-transparent-optical.svg",
+      "sha256": "3c49d7d9fa2bcb56c66d6eb9e880aa6781ae49ce811fe8b4b60dce61ccc100d7",
+      "size": 716
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-dark-plate-optical.svg",
+      "sha256": "6433291c9a0bdf2dd4fea06c482506099a5700fac6c4a62a85cd61a8455b633b",
+      "size": 477
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-dark-transparent-optical.svg",
+      "sha256": "0c80aa0ef7aeab59754ab0ee2c9d4589e03c7dc0e70b2b4e1e20ba723dc34040",
+      "size": 440
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-grayscale-plate-optical.svg",
+      "sha256": "9280ec7882397b079c0c398fe853abf88f2eab9c8e4d60bf08afbcaafa46492b",
+      "size": 477
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-grayscale-transparent-optical.svg",
+      "sha256": "57bb7aeeec4e54ce646f7732a2a73f77f827fd9456b05b7306fe7f85ea751ce9",
+      "size": 440
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-light-plate-optical.svg",
+      "sha256": "72bcc6eb563a0b641453e4dbe6b8667b60ae8f6a8ce19f8c099e4015503e7f1e",
+      "size": 477
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-light-transparent-optical.svg",
+      "sha256": "bb91cec70b8bd6bffcad73b0e5bf59dcafc344ec9b20e6c270940e8bea772c82",
+      "size": 440
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-monochrome-transparent-optical.svg",
+      "sha256": "4d11a997e5c50b33d8c3c96a3f85a97f3330874247d3b11f8315d198cf1cd9e0",
+      "size": 430
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-tinted-plate-launcher.svg",
+      "sha256": "2ff35b5729c9a9aef5b12c971278f503083fe73cbc19d294697d7ca2653179b6",
+      "size": 511
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-tinted-plate-optical.svg",
+      "sha256": "ca153fa273be1e60784aa8a7e6ffa10bb393f6e23907f30485c6689e3622d816",
+      "size": 477
+    },
+    {
+      "path": "proof/assets/icons/brand/balemoh-icon-tinted-transparent-optical.svg",
+      "sha256": "ac5b4bcb001c58b48c46092169b0ad938ca886b287005ca59332cfd88e22b6f8",
+      "size": 440
     },
     {
       "path": "proof/assets/icons/brand/developer-icons/android.svg",
@@ -11634,8 +12029,8 @@
     },
     {
       "path": "proof/assets/icons/brand/sprite.svg",
-      "sha256": "e0c98a783cf65cf52b0a57cca47b84704499200a7fdb113b751d8f6c5828ba45",
-      "size": 275212
+      "sha256": "70f37fcc078b724380852833d6998b9c148aca62cf287a898fbdd37feefbafbc",
+      "size": 322607
     },
     {
       "path": "proof/assets/icons/brand/x9-icon-adaptive-plate-launcher.svg",
@@ -18253,6 +18648,91 @@
       "size": 119
     },
     {
+      "path": "proof/assets/platform/android/balemoh/res/drawable-xxxhdpi/ic_launcher_foreground.png",
+      "sha256": "b57110b3f702d7aedc73031ccb615ec212d6e4d10bbd9efba9ab4950adbb09aa",
+      "size": 6933
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/drawable-xxxhdpi/ic_launcher_monochrome.png",
+      "sha256": "05b6d1165f8380cecb3687e246eafa3afc587b80cf162622a755e63bdd3d5c1c",
+      "size": 3648
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-anydpi-v33/ic_launcher.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-anydpi-v33/ic_launcher_round.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-hdpi/ic_launcher.png",
+      "sha256": "638f08b1356d4281918633710740218f72a93a1f806cbb4f66d65f43de08a3f4",
+      "size": 1258
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-hdpi/ic_launcher_round.png",
+      "sha256": "638f08b1356d4281918633710740218f72a93a1f806cbb4f66d65f43de08a3f4",
+      "size": 1258
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-mdpi/ic_launcher.png",
+      "sha256": "9f1bf79caf4c64a446396271ea496736101ba1d7b8714b16eeef7720e1727ce6",
+      "size": 868
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-mdpi/ic_launcher_round.png",
+      "sha256": "9f1bf79caf4c64a446396271ea496736101ba1d7b8714b16eeef7720e1727ce6",
+      "size": 868
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-xhdpi/ic_launcher.png",
+      "sha256": "d8fe94bc205ac9c9113d762fe62e4501862aa6c5fde9999c247f219548d31115",
+      "size": 1675
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-xhdpi/ic_launcher_round.png",
+      "sha256": "d8fe94bc205ac9c9113d762fe62e4501862aa6c5fde9999c247f219548d31115",
+      "size": 1675
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-xxhdpi/ic_launcher.png",
+      "sha256": "e6d57850b6c86e18360f5a77d99f232631c2e06547b43d4f22f8496de1652864",
+      "size": 2431
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "sha256": "e6d57850b6c86e18360f5a77d99f232631c2e06547b43d4f22f8496de1652864",
+      "size": 2431
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-xxxhdpi/ic_launcher.png",
+      "sha256": "407e46d50de87e4d375e87775eebfc9fdf32fef723591177dbb7af6baa168371",
+      "size": 3148
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "sha256": "407e46d50de87e4d375e87775eebfc9fdf32fef723591177dbb7af6baa168371",
+      "size": 3148
+    },
+    {
+      "path": "proof/assets/platform/android/balemoh/res/values/colors.xml",
+      "sha256": "5ff60af86c09ba6de6a41bccbf4efe80c5c5b4296b639fcf8bbac653f54b2c71",
+      "size": 119
+    },
+    {
       "path": "proof/assets/platform/android/goshtoso/res/drawable-xxxhdpi/ic_launcher_foreground.png",
       "sha256": "4935cbec694f95834bb31bd59de454f854ca5ed17ce155b09b8c0b7f928933de",
       "size": 15981
@@ -18618,6 +19098,31 @@
       "size": 41
     },
     {
+      "path": "proof/assets/platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
+      "sha256": "99f4b7a36d14db1087389cafa0292b5f661550d6919a6fe6d558d78788f4c62a",
+      "size": 18661
+    },
+    {
+      "path": "proof/assets/platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-tinted.png",
+      "sha256": "b56bd51f89439e4af588a65ddb2047350c345f673b5b5ac759dc9136d0a63144",
+      "size": 16869
+    },
+    {
+      "path": "proof/assets/platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "sha256": "61e8b1e3a498f2ec8d46ca7dbd67f65758a3ac6f9c6bb01465c7d94f064fcf21",
+      "size": 18099
+    },
+    {
+      "path": "proof/assets/platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "6cfa296f7b0d78219f6cc2d1db6fd6d626633e5216f8538483567992d3bdb2f1",
+      "size": 448
+    },
+    {
+      "path": "proof/assets/platform/apple/balemoh/Assets.xcassets/Contents.json",
+      "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
+      "size": 41
+    },
+    {
       "path": "proof/assets/platform/apple/goshtoso/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
       "sha256": "04b759a6b3168e770c4542d35003afcbb2948fb8270b9c501f5713917f5ca1f2",
       "size": 42937
@@ -18759,6 +19264,51 @@
     },
     {
       "path": "proof/assets/platform/web/araihu/manifest-icons.json",
+      "sha256": "46522597d9c995b795ca75f7cb250b4fabb4eb9810d162c8cd1142b3c44f6bf6",
+      "size": 344
+    },
+    {
+      "path": "proof/assets/platform/web/balemoh/apple-touch-icon-180.png",
+      "sha256": "defc44f36a53b6636488a55bae4a13a0a8a4842ce03588390e81a98b935acf93",
+      "size": 3027
+    },
+    {
+      "path": "proof/assets/platform/web/balemoh/favicon-16.png",
+      "sha256": "c67112214f73f0deb9b67db4b459c15501869706c583419f69deffc9f83856e3",
+      "size": 421
+    },
+    {
+      "path": "proof/assets/platform/web/balemoh/favicon-32.png",
+      "sha256": "773e32c2210120a6993f4e3342d49f20f6ae5a4a7c2d5e348966e0879dd8f08c",
+      "size": 704
+    },
+    {
+      "path": "proof/assets/platform/web/balemoh/favicon.svg",
+      "sha256": "3c49d7d9fa2bcb56c66d6eb9e880aa6781ae49ce811fe8b4b60dce61ccc100d7",
+      "size": 716
+    },
+    {
+      "path": "proof/assets/platform/web/balemoh/icon-192.png",
+      "sha256": "7704da1a47c632d423472d3716500dc7ad694706341434371fcbc40409da47de",
+      "size": 3605
+    },
+    {
+      "path": "proof/assets/platform/web/balemoh/icon-512.png",
+      "sha256": "304389318ee6d1c6e378b7a701d64fab07ace205c42fef2c7416bd13e84bd664",
+      "size": 9793
+    },
+    {
+      "path": "proof/assets/platform/web/balemoh/icon-maskable-192.png",
+      "sha256": "407e46d50de87e4d375e87775eebfc9fdf32fef723591177dbb7af6baa168371",
+      "size": 3148
+    },
+    {
+      "path": "proof/assets/platform/web/balemoh/icon-maskable-512.png",
+      "sha256": "990cca8cd1e488c8a0cc52eb4fe81b4f3b19165ddad8289d54d2e2860aa6cebb",
+      "size": 8066
+    },
+    {
+      "path": "proof/assets/platform/web/balemoh/manifest-icons.json",
       "sha256": "46522597d9c995b795ca75f7cb250b4fabb4eb9810d162c8cd1142b3c44f6bf6",
       "size": 344
     },
@@ -18944,7 +19494,7 @@
     },
     {
       "path": "proof/assets/themes.json",
-      "sha256": "78b718b2b351359c7d66cab64f43a109a12319b82946f5ec2be99a90da1874b7",
+      "sha256": "82f2bf61b2fd85d13a1f4f9da104019476d4adc47a686915b2f5c0b391e90b1e",
       "size": 532
     },
     {
@@ -18959,8 +19509,8 @@
     },
     {
       "path": "proof/index.html",
-      "sha256": "4a4d85de1f88e66cf810e67d3ec58b5b778e143c2f41a562cbd421a87b5771c7",
-      "size": 2718705
+      "sha256": "e7f161d172b5acba9a7c4de92524e5a6b29f21d6108dba223b1041f63e5355f9",
+      "size": 3088191
     },
     {
       "path": "proof/og.png",
