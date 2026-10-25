@@ -21,6 +21,13 @@ const SOURCE_EXCLUDES = [
   ".cache/**",
 ]
 
+// Fan-out compiles only the Go adapter and reads its enrollment manifest.
+// Artwork and generated bundles are fetched from the immutable release instead.
+const FANOUT_SOURCE_EXCLUDES = [
+  ...SOURCE_EXCLUDES, ".dagger", "dist", "source", "site", "review",
+  "internal/acquisition", "docs",
+]
+
 type Input = Record<string, string>
 type CacheNamespace = "trusted" | "pr"
 
@@ -173,7 +180,7 @@ export class Assets {
   /** Verify published release bytes and produce immutable fan-out metadata. */
   @func({ cache: "never" })
   async releaseFanoutPlan(
-    @argument({ defaultPath: ".", ignore: SOURCE_EXCLUDES }) source: Directory,
+    @argument({ defaultPath: ".", ignore: FANOUT_SOURCE_EXCLUDES }) source: Directory,
     release: string,
     runNonce: string,
     githubToken: Secret,
@@ -192,7 +199,7 @@ export class Assets {
   /** Dispatch already-verified metadata to every enrolled fallback consumer. */
   @func({ cache: "never" })
   async releaseFanout(
-    @argument({ defaultPath: ".", ignore: SOURCE_EXCLUDES }) source: Directory,
+    @argument({ defaultPath: ".", ignore: FANOUT_SOURCE_EXCLUDES }) source: Directory,
     plan: Directory,
     runNonce: string,
     consumerToken: Secret,
