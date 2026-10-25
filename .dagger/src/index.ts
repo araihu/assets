@@ -21,6 +21,14 @@ const SOURCE_EXCLUDES = [
   ".cache/**",
 ]
 
+// Fan-out compiles only the Go adapter and reads its enrollment manifest.
+// Artwork and generated bundles are fetched from the immutable release instead.
+const FANOUT_SOURCE_EXCLUDES = [
+  ".git", ".git/**", ".dagger", ".dagger/**", ".cache", ".cache/**",
+  "dist", "source", "site", "review",
+  "internal/acquisition", "docs",
+]
+
 type Input = Record<string, string>
 type CacheNamespace = "trusted" | "pr"
 
@@ -173,39 +181,46 @@ export class Assets {
   /** Verify published release bytes and produce immutable fan-out metadata. */
   @func({ cache: "never" })
   async releaseFanoutPlan(
-    @argument({ defaultPath: ".", ignore: SOURCE_EXCLUDES }) source: Directory,
-    payload: File,
+    @argument({ defaultPath: ".", ignore: FANOUT_SOURCE_EXCLUDES }) source: Directory,
+    release: string,
+    runNonce: string,
     githubToken: Secret,
   ): Promise<Directory> {
-    const input = await this.input(payload, ["release", "repository", "refresh_nonce"])
-    this.repository(input.repository)
-    this.nonce(input.refresh_nonce)
-    return this.base(source, "trusted")
-      .withSecretVariable("RELEASE_GITHUB_TOKEN", githubToken)
-      .withEnvVariable("RELEASE", input.release)
-      .withEnvVariable("NETWORK_NONCE", input.refresh_nonce)
-      .withEnvVariable("GITHUB_REPOSITORY", input.repository)
-      .withExec(["bash", "scripts/dagger/release-fanout-plan.sh"])
+    this.nonce(runNonce)
+    return this.fanoutTool(source)
+      .withMountedSecret("/run/secrets/github-token", githubToken)
+      .withEnvVariable("NETWORK_NONCE", runNonce)
+      .withExec(["/usr/local/bin/releasefanout", "plan", "--release", release,
+        "--plan", "/out", "--token-file", "/run/secrets/github-token"])
+      .withFile("/out/releasefanout", this.fanoutTool(source).file("/usr/local/bin/releasefanout"))
+      .withFile("/out/release-consumers.yaml", source.file("manifests/release-consumers.yaml"))
       .directory("/out")
   }
 
   /** Dispatch already-verified metadata to every enrolled fallback consumer. */
   @func({ cache: "never" })
   async releaseFanout(
-    @argument({ defaultPath: ".", ignore: SOURCE_EXCLUDES }) source: Directory,
+    @argument({ defaultPath: ".", ignore: FANOUT_SOURCE_EXCLUDES }) source: Directory,
     plan: Directory,
-    payload: File,
+    runNonce: string,
     consumerToken: Secret,
   ): Promise<string> {
-    const input = await this.input(payload, ["effect_nonce"])
-    this.nonce(input.effect_nonce)
-    return this.base(source, "trusted")
+    this.nonce(runNonce)
+    return this.fanoutTool(source)
       .withDirectory("/fanout", plan)
-      .withSecretVariable("GH_TOKEN", consumerToken)
-      .withEnvVariable("EFFECT_NONCE", input.effect_nonce)
-      .withEnvVariable("NETWORK_NONCE", input.effect_nonce)
-      .withExec(["bash", "scripts/dagger/release-fanout.sh"])
+      .withMountedSecret("/run/secrets/github-token", consumerToken)
+      .withEnvVariable("NETWORK_NONCE", runNonce)
+      .withExec(["/usr/local/bin/releasefanout", "dispatch", "--plan", "/fanout",
+        "--token-file", "/run/secrets/github-token"])
       .stdout()
+  }
+
+  private fanoutTool(source: Directory): Container {
+    return dag.container().from(GO_IMAGE)
+      .withDirectory("/src", source).withWorkdir("/src")
+      .withEnvVariable("GOWORK", "off")
+      .withEnvVariable("CGO_ENABLED", "0")
+      .withExec(["go", "build", "-mod=readonly", "-trimpath", "-o", "/usr/local/bin/releasefanout", "./cmd/releasefanout"])
   }
 
   private async input(file: File, keys: string[]): Promise<Input> {

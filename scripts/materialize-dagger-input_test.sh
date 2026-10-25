@@ -138,17 +138,6 @@ expect_reject "release source revision trailing LF" env "${release_env[@]}" \
   GITHUB_SHA=$'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n' "$materialize" release-build "$scratch/reject-release-sha.json"
 expect_reject "release repository trailing LF" env "${release_env[@]}" \
   GITHUB_REPOSITORY=$'araihu/assets\n' "$materialize" release-build "$scratch/reject-release-repository.json"
-fanout_env=(
-  GITHUB_EVENT_NAME=workflow_dispatch
-  GITHUB_REPOSITORY=araihu/assets
-  GITHUB_RUN_ID=123
-  GITHUB_RUN_ATTEMPT=4
-  RELEASE=v1.2.3
-)
-expect_reject "fan-out release trailing LF" env "${fanout_env[@]}" \
-  RELEASE=$'v1.2.3\n' "$materialize" fanout-plan "$scratch/reject-fanout-release.json"
-expect_reject "fan-out repository trailing LF" env "${fanout_env[@]}" \
-  GITHUB_REPOSITORY=$'araihu/assets\n' "$materialize" fanout-plan "$scratch/reject-fanout-repository.json"
 touch "$scratch/empty-event.json"
 if GITHUB_EVENT_NAME=push GITHUB_EVENT_PATH="$scratch/empty-event.json" GITHUB_RUN_ID=123 GITHUB_RUN_ATTEMPT=4 \
   "$materialize" ci "$scratch/empty.json" >/dev/null 2>&1; then

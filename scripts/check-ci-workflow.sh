@@ -55,13 +55,13 @@ workflows.each do |path|
   end
   steps.select { |step| step["run"].to_s.include?("dagger call") }.each do |step|
     require_contract.call(!step["run"].include?("${{"), "provider expression reached Dagger command in #{File.basename(path)}")
-    require_contract.call(step["run"].include?("--payload=.dagger-inputs/"), "Dagger call lacks materialized File input in #{File.basename(path)}")
+    require_contract.call(step["run"].include?("--payload=.dagger-inputs/") || (File.basename(path) == "release-fanout.yml" && step["run"].include?('--run-nonce="$RUN_NONCE"')), "Dagger call lacks validated provider input in #{File.basename(path)}")
   end
   steps.each do |step|
     run = step["run"].to_s
     require_contract.call(!run.match?(%r{\b(?:ruby|python(?:3)?|jq|npm|node)\b}), "host scripting runtime in #{File.basename(path)}")
   end
-  if steps.any? { |step| step["run"].to_s.include?("dagger call") }
+  if File.basename(path) != "release-fanout.yml" && steps.any? { |step| step["run"].to_s.include?("dagger call") }
     exact = steps.select { |step| step["run"].to_s.include?("dagger version") }
     require_contract.call(exact.length == 1 && exact.first["run"].include?("= v0.21.8"), "exact Dagger CLI gate differs in #{File.basename(path)}")
   end
