@@ -57,6 +57,29 @@ func LoadManifest(data []byte) (Manifest, error) {
 	if err := rejectAliases(&document); err != nil {
 		return m, err
 	}
+	if len(document.Content) != 1 || document.Content[0].Kind != yaml.MappingNode {
+		return m, errors.New("consumer manifest must be a mapping")
+	}
+	fields := document.Content[0].Content
+	for i := 0; i < len(fields); i += 2 {
+		key, value := fields[i], fields[i+1]
+		if key.Tag != "!!str" {
+			return m, errors.New("consumer manifest keys must be strings")
+		}
+		if key.Value == "owner" && value.Tag != "!!str" {
+			return m, errors.New("consumer owner must be a string")
+		}
+		if key.Value == "repositories" {
+			if value.Kind != yaml.SequenceNode {
+				return m, errors.New("consumer repositories must be an array")
+			}
+			for _, name := range value.Content {
+				if name.Kind != yaml.ScalarNode || name.Tag != "!!str" {
+					return m, errors.New("consumer repository names must be strings")
+				}
+			}
+		}
+	}
 	decoder := yaml.NewDecoder(bytes.NewReader(data))
 	decoder.KnownFields(true)
 	if err := decoder.Decode(&m); err != nil {

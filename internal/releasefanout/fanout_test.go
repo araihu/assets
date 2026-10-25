@@ -33,6 +33,8 @@ func TestManifest(t *testing.T) {
 		{"valid", valid, true},
 		{"unknown", valid + "unexpected: true\n", false},
 		{"alias", "schema_version: 1\nowner: &owner araihu\nrepositories: [*owner]\n", false},
+		{"numeric name", strings.Replace(valid, "[alpha, beta]", "[1]", 1), false},
+		{"boolean name", strings.Replace(valid, "[alpha, beta]", "[true]", 1), false},
 		{"duplicate key", valid + "owner: araihu\n", false},
 		{"duplicate repo", strings.Replace(valid, "alpha, beta", "alpha, alpha", 1), false},
 		{"unsorted", strings.Replace(valid, "alpha, beta", "beta, alpha", 1), false},
