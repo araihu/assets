@@ -168,16 +168,6 @@ case "$mode" in
     matches GITHUB_REPOSITORY "$repository" '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$'
     payload=$(json_object tag "$tag" repository "$repository" effect_nonce "$run_nonce")
     ;;
-  fanout-plan)
-    read_provider_env release RELEASE
-    read_provider_env repository GITHUB_REPOSITORY
-    matches RELEASE "$release" "$strict_semver"
-    matches GITHUB_REPOSITORY "$repository" '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$'
-    payload=$(json_object release "$release" repository "$repository" refresh_nonce "$run_nonce")
-    ;;
-  fanout-dispatch)
-    payload=$(json_object effect_nonce "$run_nonce")
-    ;;
   *)
     fail 'unsupported input mode'
     ;;

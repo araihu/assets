@@ -42,37 +42,21 @@ jobs:
         with:
           version: "0.21.8"
 
-      - name: Require exact Dagger CLI
-        shell: bash
-        run: |
-          set -euo pipefail
-          test "$(dagger version | awk 'NR == 1 { print $2 }')" = v0.21.8
-
-      - name: Materialize provider-owned fan-out inputs
-        shell: bash
+      - name: Verify immutable release handoff with Dagger
         env:
           RELEASE: ${{ inputs.release }}
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_RUN_ID: ${{ github.run_id }}
-          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
-        run: |
-          set -euo pipefail
-          scripts/materialize-dagger-input.sh fanout-plan .dagger-inputs/fanout-plan.json
-          scripts/materialize-dagger-input.sh fanout-dispatch .dagger-inputs/fanout-dispatch.json
-
-      - name: Verify immutable release handoff with Dagger
-        shell: bash
-        env:
+          RUN_NONCE: ${{ github.run_id }}-${{ github.run_attempt }}
           RELEASE_GITHUB_TOKEN: ${{ github.token }}
         run: >-
-          dagger call release-fanout-plan --source=. --payload=.dagger-inputs/fanout-plan.json
+          dagger call release-fanout-plan --source=. --release="$RELEASE" --run-nonce="$RUN_NONCE"
           --github-token=env://RELEASE_GITHUB_TOKEN export --path="${RUNNER_TEMP}/fanout-plan"
 
       - name: Expose verified consumer selection
         id: consumers
-        shell: bash
-        run: echo "repositories=$(cat "${RUNNER_TEMP}/fanout-plan/repositories")" >> "$GITHUB_OUTPUT"
+        run: >-
+          "${RUNNER_TEMP}/fanout-plan/releasefanout" outputs
+          --manifest="${RUNNER_TEMP}/fanout-plan/release-consumers.yaml"
+          --plan="${RUNNER_TEMP}/fanout-plan" --github-output="$GITHUB_OUTPUT"
 
       - name: Mint selected-repository GitHub App token
         id: app-token
@@ -85,9 +69,9 @@ jobs:
           permission-contents: write
 
       - name: Dispatch enrolled fallback consumers with Dagger
-        shell: bash
         env:
+          RUN_NONCE: ${{ github.run_id }}-${{ github.run_attempt }}
           CONSUMER_GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         run: >-
           dagger call release-fanout --source=. --plan="${RUNNER_TEMP}/fanout-plan"
-          --payload=.dagger-inputs/fanout-dispatch.json --consumer-token=env://CONSUMER_GITHUB_TOKEN
+          --run-nonce="$RUN_NONCE" --consumer-token=env://CONSUMER_GITHUB_TOKEN

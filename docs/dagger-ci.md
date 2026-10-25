@@ -60,14 +60,28 @@ arguments and environment secret providers:
 ```sh
 dagger call release-fanout-plan \
   --source=. \
-  --payload=.dagger-inputs/fanout-plan.json \
+  --release=v0.2.4 --run-nonce=123-1 \
   --github-token=env://GITHUB_TOKEN \
   export --path=.dagger-out/fanout
 ```
 
-The payload is strict JSON with `release`, `repository`, and `refresh_nonce`
-string fields. GitHub Actions materializes these files from quoted environment
-values before exposing privileged tokens; Dagger CLI arguments remain literal.
+Fan-out uses the Go `cmd/releasefanout` tool in the existing
+`github.com/araihu/assets` module. Dagger compiles it with the pinned Go image;
+planning and dispatch mount token files only after compilation. No shell or Ruby
+scripts implement the fan-out. Actions passes quoted arguments to Dagger, then
+uses the exported Go binary to append the verified repository selection to its
+output file. The repository is fixed to `araihu/assets` in the Go implementation.
+
+The `plan` command verifies the published tag, release.json, archive hashes, and
+tag stability before writing `plan.json`. `dispatch` validates that plan against
+the current enrollment manifest before sending the six-field release envelope.
+It attempts every enrolled consumer, aggregates failures, and replays all
+consumers on an explicit retry. A successful dispatch means GitHub accepted the
+event, not that a downstream workflow finished or merged a change.
+
+Local checks are `go test ./internal/releasefanout ./cmd/releasefanout` and
+`go vet ./internal/releasefanout ./cmd/releasefanout`. The CLI accepts flags and
+mounted token files; it does not parse environment variables or log credentials.
 
 Publication and dispatch functions cause external writes. Run them only with an
 explicit operator-approved `effect-nonce`. Local safe validation does not need

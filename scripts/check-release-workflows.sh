@@ -81,16 +81,8 @@ require_contract.call([verify_index, consumers_index, token_index, dispatch_inde
 token = fanout_steps.fetch(token_index)
 require_contract.call(token["with"] == {"app-id"=>"${{ secrets.ARAIHU_ASSETS_APP_ID }}", "private-key"=>"${{ secrets.ARAIHU_ASSETS_APP_PRIVATE_KEY }}", "owner"=>"araihu", "repositories"=>"${{ steps.consumers.outputs.repositories }}", "permission-contents"=>"write"}, "fan-out token scope differs")
 
-fanout_plan = read.call("scripts/dagger/release-fanout-plan.sh")
-require_contract.call(fanout_plan.include?('gh release download "$RELEASE"') && fanout_plan.include?("SHA256SUMS") && fanout_plan.include?("sha256sum --check --strict /tmp/release-dispatch.sha256"), "fan-out published bytes are not verified")
-require_contract.call(fanout_plan.include?('release_document.fetch("release") == release') && fanout_plan.include?('commits/${RELEASE}'), "fan-out tag/metadata provenance differs")
 manifest = YAML.safe_load(read.call("manifests/release-consumers.yaml"), aliases: false)
 require_contract.call(manifest == {"schema_version"=>1, "owner"=>"araihu", "repositories"=>%w[goshtoso goshtoso-app-shells goshtoso-charts manja xisnove]}, "fan-out enrollment differs")
-consumer = read.call("scripts/release-consumer-fanout.rb")
-require_contract.call(consumer.include?('"event_type" => "araihu-assets-released"'), "fan-out event differs")
-require_contract.call(consumer.include?("results = repositories.map") && consumer.include?('failed = results.reject'), "fan-out must attempt every consumer and aggregate failures on every retry")
-consumer_test = read.call("scripts/release-consumer-fanout_test.sh")
-require_contract.call(consumer_test.scan('"$fanout" dispatch "$manifest" "$metadata"').length >= 3 && consumer_test.include?('test -f "$retry_log/$repository.json"'), "manual retry must redispatch every enrolled consumer")
 
 campaign_on = trigger.call(campaigns)
 require_contract.call(campaign_on.dig("schedule", 0, "cron") == "0 0 * * *", "campaign schedule differs")

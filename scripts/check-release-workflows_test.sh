@@ -4,7 +4,6 @@ repo=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 checker="$repo/scripts/check-release-workflows.sh"
 
 "$checker" "$repo"
-"$repo/scripts/release-consumer-fanout_test.sh"
 for script in "$repo"/scripts/dagger/*.sh; do bash -n "$script"; done
 
 scratch=$(mktemp -d)
@@ -103,10 +102,6 @@ mutate_and_reject "manual fan-out retry removed" .github/workflows/release-fanou
   'workflow_dispatch:' 'disabled_workflow_dispatch:'
 mutate_and_reject "fan-out token is not consumer-scoped" .github/workflows/release-fanout.yml \
   'repositories: ${{ steps.consumers.outputs.repositories }}' 'repositories: ""'
-mutate_and_reject "fan-out event type drifts" scripts/release-consumer-fanout.rb \
-  '"event_type" => "araihu-assets-released"' '"event_type" => "araihu-assets-current"'
-mutate_and_reject "fan-out stops aggregating all consumers" scripts/release-consumer-fanout.rb \
-  'results = repositories.map do |repository|' 'results = repositories.take(1).map do |repository|'
 mutate_and_reject "fallback enrollment drifts" manifests/release-consumers.yaml \
   '  - xisnove' '  - metaru'
 mutate_and_reject "accepted digest comparison inverted" scripts/accepted-channel-state.rb \
