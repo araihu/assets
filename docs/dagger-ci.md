@@ -67,7 +67,8 @@ dagger call release-fanout-plan \
 
 Fan-out uses the Go `cmd/releasefanout` tool in the existing
 `github.com/araihu/assets` module. Dagger compiles it with the pinned Go image;
-planning and dispatch mount token files only after compilation. No shell or Ruby
+the exported binary is static so the Actions runner needs no matching libc.
+Planning and dispatch mount token files only after compilation. No shell or Ruby
 scripts implement the fan-out. Actions passes quoted arguments to Dagger, then
 uses the exported Go binary to append the verified repository selection to its
 output file. The repository is fixed to `araihu/assets` in the Go implementation.

@@ -219,6 +219,7 @@ export class Assets {
     return dag.container().from(GO_IMAGE)
       .withDirectory("/src", source).withWorkdir("/src")
       .withEnvVariable("GOWORK", "off")
+      .withEnvVariable("CGO_ENABLED", "0")
       .withExec(["go", "build", "-mod=readonly", "-trimpath", "-o", "/usr/local/bin/releasefanout", "./cmd/releasefanout"])
   }
 
