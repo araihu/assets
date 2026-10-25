@@ -4,10 +4,10 @@ Goshtoso stays brand-neutral. Read a validated `dist/catalog.json`, select
 entries by canonical name and namespace, and use the catalog's exact
 `spriteSymbol`; never derive a symbol from a filename.
 
-Use the public `v0.2.3` [immutable Git tag](https://github.com/araihu/assets/tree/v0.2.3),
-[GitHub Release](https://github.com/araihu/assets/releases/tag/v0.2.3),
-[tar archive](https://github.com/araihu/assets/releases/download/v0.2.3/araihu-assets-v0.2.3.tar.gz),
-and [SHA256SUMS](https://github.com/araihu/assets/releases/download/v0.2.3/SHA256SUMS).
+Use the public `v0.2.4` [immutable Git tag](https://github.com/araihu/assets/tree/v0.2.4),
+[GitHub Release](https://github.com/araihu/assets/releases/tag/v0.2.4),
+[tar archive](https://github.com/araihu/assets/releases/download/v0.2.4/araihu-assets-v0.2.4.tar.gz),
+and [SHA256SUMS](https://github.com/araihu/assets/releases/download/v0.2.4/SHA256SUMS).
 Before adopting its files, require matching release values in `catalog.json`,
 `themes.json`, and `release.json`, then verify the inventory hashes in
 `release.json`. `v0.1.1` remains the published promoted default and `v0.2.1`

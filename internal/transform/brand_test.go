@@ -21,7 +21,7 @@ import (
 func TestBuildBrandProducesCompleteDeclaredMatrix(t *testing.T) {
 	result := mustBuildBrand(t)
 
-	const products = 5
+	const products = 6
 	const variantsPerProduct = 24 // icon: 13; logo: 11
 	if got, want := len(result.Files), products*variantsPerProduct+1; got != want {
 		t.Fatalf("BuildBrand() files = %d, want %d", got, want)
@@ -38,6 +38,9 @@ func TestBuildBrandProducesCompleteDeclaredMatrix(t *testing.T) {
 		"dist/icons/brand/araihu-icon-adaptive-transparent-optical.svg",
 		"dist/icons/brand/araihu-icon-tinted-plate-launcher.svg",
 		"dist/icons/brand/araihu-icon-monochrome-transparent-optical.svg",
+		"dist/icons/brand/balemoh-icon-adaptive-transparent-optical.svg",
+		"dist/icons/brand/balemoh-icon-tinted-plate-launcher.svg",
+		"dist/brand/balemoh/logo/dark-transparent-optical.svg",
 		"dist/brand/araihu/logo/dark-transparent-optical.svg",
 		"dist/brand/araihu/logo/grayscale-plate-optical.svg",
 		"dist/icons/brand/sprite.svg",
@@ -51,6 +54,30 @@ func TestBuildBrandProducesCompleteDeclaredMatrix(t *testing.T) {
 		if asset.ColorBehavior == "protected" && strings.Contains(string(result.Files["dist/"+asset.Path]), "currentColor") {
 			t.Errorf("protected asset %q uses currentColor", asset.CanonicalName)
 		}
+	}
+}
+
+func TestBalemohPreservesRoofAndChimneySignalAcrossSchemes(t *testing.T) {
+	result := mustBuildBrand(t)
+	for _, tc := range []struct {
+		appearance string
+		ink        string
+	}{
+		{appearance: "light", ink: "#07111f"},
+		{appearance: "dark", ink: "#f3f2e9"},
+	} {
+		t.Run(tc.appearance, func(t *testing.T) {
+			path := "dist/icons/brand/balemoh-icon-" + tc.appearance + "-transparent-optical.svg"
+			svg := result.Files[path]
+			for _, color := range []string{tc.ink, "#c7ff4a"} {
+				if !bytes.Contains(svg, []byte(`fill="`+color+`"`)) {
+					t.Errorf("Balemoh %s is missing palette color %s", tc.appearance, color)
+				}
+			}
+			if got := bytes.Count(svg, []byte("<path ")); got != 2 {
+				t.Errorf("Balemoh has %d paths, want home and roof with chimney", got)
+			}
+		})
 	}
 }
 
@@ -75,7 +102,7 @@ func TestBuildBrandCatalogAssetsValidate(t *testing.T) {
 func TestBuildBrandMonochromeSpriteSymbolsRemainTintable(t *testing.T) {
 	result := mustBuildBrand(t)
 	spriteSVG := result.Files["dist/icons/brand/sprite.svg"]
-	for _, product := range []string{"araihu", "goshtoso", "manja", "paje", "x9"} {
+	for _, product := range []string{"araihu", "balemoh", "goshtoso", "manja", "paje", "x9"} {
 		want := `<symbol id="` + product + `-icon-monochrome-transparent-optical"`
 		start := bytes.Index(spriteSVG, []byte(want))
 		if start < 0 {

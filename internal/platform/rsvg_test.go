@@ -102,7 +102,7 @@ func TestRSVGIntegrationPinnedBinary(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Build with pinned rsvg-convert: %v", err)
 	}
-	if got, want := len(result.Files), 155; got != want {
+	if got, want := len(result.Files), 186; got != want {
 		t.Fatalf("generated file count = %d, want %d", got, want)
 	}
 	favicon := result.Files["dist/platform/web/araihu/favicon.svg"]

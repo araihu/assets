@@ -8,10 +8,10 @@ import (
 )
 
 const (
-	v023TagURL       = "https://github.com/araihu/assets/tree/v0.2.3"
-	v023ReleaseURL   = "https://github.com/araihu/assets/releases/tag/v0.2.3"
-	v023ArchiveURL   = "https://github.com/araihu/assets/releases/download/v0.2.3/araihu-assets-v0.2.3.tar.gz"
-	v023ChecksumsURL = "https://github.com/araihu/assets/releases/download/v0.2.3/SHA256SUMS"
+	v024TagURL       = "https://github.com/araihu/assets/tree/v0.2.4"
+	v024ReleaseURL   = "https://github.com/araihu/assets/releases/tag/v0.2.4"
+	v024ArchiveURL   = "https://github.com/araihu/assets/releases/download/v0.2.4/araihu-assets-v0.2.4.tar.gz"
+	v024ChecksumsURL = "https://github.com/araihu/assets/releases/download/v0.2.4/SHA256SUMS"
 )
 
 func TestPublicationTruthDocumentation(t *testing.T) {
@@ -26,10 +26,10 @@ func TestPublicationTruthDocumentation(t *testing.T) {
 	} {
 		contents := mustRead(t, filepath.Join(root, path))
 		for _, want := range []string{
-			v023TagURL,
-			v023ReleaseURL,
-			v023ArchiveURL,
-			v023ChecksumsURL,
+			v024TagURL,
+			v024ReleaseURL,
+			v024ArchiveURL,
+			v024ChecksumsURL,
 		} {
 			if !strings.Contains(contents, want) {
 				t.Errorf("%s does not link %q", path, want)
@@ -39,12 +39,12 @@ func TestPublicationTruthDocumentation(t *testing.T) {
 
 	goshtoso := mustRead(t, filepath.Join(root, "docs", "integration", "goshtoso.md"))
 	if strings.Contains(goshtoso, "unpublished evidence") {
-		t.Error("Goshtoso integration guide still calls public v0.2.3 unpublished")
+		t.Error("Goshtoso integration guide still calls public v0.2.4 unpublished")
 	}
 
 	readme := mustRead(t, filepath.Join(root, "README.md"))
 	if strings.Contains(readme, "Before that public identity exists") {
-		t.Error("README still treats public v0.2.3 identity as unavailable")
+		t.Error("README still treats public v0.2.4 identity as unavailable")
 	}
 
 	consumers := mustRead(t, filepath.Join(root, "docs", "integration", "consumers.md"))
