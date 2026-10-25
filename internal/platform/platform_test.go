@@ -24,7 +24,7 @@ func TestBuildIncludesAllPlatformContracts(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Build(): %v", err)
 	}
-	if got, want := len(result.Files), 186; got != want {
+	if got, want := len(result.Files), 155; got != want {
 		t.Fatalf("generated file count = %d, want %d", got, want)
 	}
 	for path, data := range result.Files {
@@ -294,7 +294,7 @@ func pngChunk(kind string, payload []byte) []byte {
 
 func testIcons() []BrandIcon {
 	icons := make([]BrandIcon, 0, 5)
-	for _, product := range []string{"araihu", "balemoh", "goshtoso", "manja", "paje", "x9"} {
+	for _, product := range []string{"araihu", "balemoh", "goshtoso", "manja", "x9"} {
 		icons = append(icons, BrandIcon{
 			Product:       product,
 			LightSVG:      []byte(`<svg viewBox="0 0 108 108"><path d="M21 21h66v66"/></svg>`),

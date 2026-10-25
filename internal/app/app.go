@@ -869,7 +869,7 @@ func themeInputs(files fs.FS) (themes.Manifest, map[string][]byte, error) {
 }
 
 func platformIcons(brand transform.Result) ([]platform.BrandIcon, error) {
-	products := []string{"araihu", "balemoh", "goshtoso", "manja", "paje", "x9"}
+	products := []string{"araihu", "balemoh", "goshtoso", "manja", "x9"}
 	icons := make([]platform.BrandIcon, 0, len(products))
 	for _, product := range products {
 		get := func(name string) ([]byte, error) {

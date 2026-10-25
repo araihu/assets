@@ -20,7 +20,7 @@ ET.register_namespace("", SVG)
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "source" / "brand" / "proof" / "v11"
 TARGET = ROOT / "dist" / "v11"
-PRODUCTS = ("araihu", "goshtoso", "manja", "paje", "x9")
+PRODUCTS = ("araihu", "goshtoso", "manja", "x9")
 SAFE_ART_RATIO = 66 / 108
 OPTICAL_ART_RATIO = 0.76
 PALETTES = {

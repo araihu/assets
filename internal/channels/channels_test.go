@@ -90,8 +90,8 @@ func TestSourceDefaultRemainsV011WhileLatestResolvesBaseline(t *testing.T) {
 	if err != nil {
 		t.Fatalf("LoadDefault() error = %v", err)
 	}
-	if defaultPromotion.Release != "v0.1.1" {
-		t.Fatalf("default release = %q, want retained v0.1.1", defaultPromotion.Release)
+	if defaultPromotion.Release != "v0.2.5" {
+		t.Fatalf("default release = %q, want retained v0.2.5", defaultPromotion.Release)
 	}
 	snapshot := "dist"
 	catalogFile, err := root.Open(snapshot + "/catalog.json")
@@ -112,7 +112,7 @@ func TestSourceDefaultRemainsV011WhileLatestResolvesBaseline(t *testing.T) {
 	if err := json.NewDecoder(themeFile).Decode(&themeCatalog); err != nil {
 		t.Fatal(err)
 	}
-	if assetCatalog.Release != "v0.2.4" || themeCatalog.Release != "v0.2.4" {
+	if assetCatalog.Release != "v0.2.5" || themeCatalog.Release != "v0.2.5" {
 		t.Fatalf("latest release mismatch: catalog=%q themes=%q", assetCatalog.Release, themeCatalog.Release)
 	}
 	latestPromotion := defaultPromotion

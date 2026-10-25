@@ -48,13 +48,13 @@ func TestPublicationTruthDocumentation(t *testing.T) {
 	}
 
 	consumers := mustRead(t, filepath.Join(root, "docs", "integration", "consumers.md"))
-	if !strings.Contains(consumers, "`v0.1.1` remains the independently published promoted default.") {
-		t.Error("consumer guide no longer distinguishes the independently promoted v0.1.1 default")
+	if !strings.Contains(consumers, "`manifests/default.yaml` promotes `v0.2.5`.") {
+		t.Error("consumer guide does not identify the current promoted default")
 	}
 
 	defaultManifest := mustRead(t, filepath.Join(root, "manifests", "default.yaml"))
-	if !strings.Contains(defaultManifest, "release: v0.1.1\n") {
-		t.Error("default channel changed; T-AS-007 documents publication truth only")
+	if !strings.Contains(defaultManifest, "release: v0.2.5\n") {
+		t.Error("default channel does not select the current release")
 	}
 }
 

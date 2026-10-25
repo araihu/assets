@@ -10,7 +10,6 @@ icons occupied inconsistent fractions of a nominal square slot:
 | Arai Hû | 37% | 26% |
 | Goshtoso | 41% | 40% |
 | Manja | 58% | 48% |
-| Pajé | 53% | 45% |
 | X-9 / Xisnove | 63% | 66% |
 
 At 16–32 CSS px this made Arai Hû and Goshtoso appear materially smaller than

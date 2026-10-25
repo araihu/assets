@@ -12,7 +12,7 @@ if [ "$count" -ne 20 ]; then
   exit 1
 fi
 
-for product in araihu goshtoso manja paje x9; do
+for product in araihu goshtoso manja x9; do
   for kind in icon logo; do
     for mode in background transparent; do
       asset="$target/$product-$kind-$mode.svg"
@@ -62,7 +62,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 target = Path(sys.argv[1])
-for product in ("araihu", "goshtoso", "manja", "paje", "x9"):
+for product in ("araihu", "goshtoso", "manja", "x9"):
     for kind in ("icon", "logo"):
         background = ET.parse(target / f"{product}-{kind}-background.svg").getroot().get("viewBox")
         transparent = ET.parse(target / f"{product}-{kind}-transparent.svg").getroot().get("viewBox")

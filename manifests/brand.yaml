@@ -43,20 +43,6 @@ products:
       icon-transparent: 6172ecc67580effc04c82745e6b4c7d0ef30e8bc2051074727be2011fa71fb2f
       logo-background: d7a0f57cbb572995af55e74e279bbc57e2b7a5d3225e1e2c9f2b6aecd4fb7f23
       logo-transparent: a0fb864be83d2c0e406fe2a53eb49d1a2754faf2d8751fe1fdbf20d4b85c1db4
-  - id: paje
-    display_name: Paje
-    aliases: []
-    sources:
-      original:
-        icon-background: source/brand/original/paje-icon-background.svg
-        icon-transparent: source/brand/original/paje-icon-transparent.svg
-        logo-background: source/brand/original/paje-logo-background.svg
-        logo-transparent: source/brand/original/paje-logo-transparent.svg
-    source_hashes:
-      icon-background: 0644f9189b03d96946dff57fe85dddea6233f349904d6c8a1d6a7835768e9810
-      icon-transparent: a0058946d8cca65af531627e007e2e87a9917bc74b0013b40e1831ebf667c124
-      logo-background: 44af91ecc9427ec720675178cc7dca719d0ce16b7bbed53533061c9fca6f6e60
-      logo-transparent: 04479dee394020a917397ce08a3a5a4b247e58f7a07643f542839ae2370ed8e0
   - id: x9
     display_name: X9
     aliases:

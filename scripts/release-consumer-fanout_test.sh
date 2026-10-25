@@ -8,7 +8,7 @@ manifest="$repo/manifests/release-consumers.yaml"
 scratch=$(mktemp -d)
 trap 'rm -rf -- "$scratch"' EXIT
 
-expected_repositories='goshtoso,goshtoso-app-shells,goshtoso-charts,manja,paje,xisnove'
+expected_repositories='goshtoso,goshtoso-app-shells,goshtoso-charts,manja,xisnove'
 test "$("$fanout" repositories "$manifest")" = "$expected_repositories"
 
 metadata="$scratch/release.json"

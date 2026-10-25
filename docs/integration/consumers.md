@@ -6,10 +6,10 @@ catalog's relative path under that release root.
 
 Require `catalog.json.release`, `themes.json.release`, and
 `release.json.release` to agree. Verify `release.json` inventory hashes before
-using a candidate. This checkout identifies its files as `v0.2.4`, but local
+using a candidate. This checkout identifies its files as `v0.2.5`, but local
 bytes are not publication proof. Verify the matching public tag, GitHub Release,
 archive, and checksums before adoption. `v0.2.3` is the preceding release, while
-`v0.1.1` remains the independently published promoted default.
+`manifests/default.yaml` promotes `v0.2.5`.
 
 Use generated sprite files only with the `spriteSymbol` recorded by the
 catalog. Same-origin external sprite references and inline-document rendering

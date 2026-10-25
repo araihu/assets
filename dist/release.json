@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "release": "v0.2.4",
+  "release": "v0.2.5",
   "identityRevision": 11,
   "runtimeVersion": 1,
-  "catalogSha256": "993e84956a28835519a7f50b298cd7c5595f35016b54ec87210f869899dbba5c",
-  "themesSha256": "82f2bf61b2fd85d13a1f4f9da104019476d4adc47a686915b2f5c0b391e90b1e",
+  "catalogSha256": "c448e94d02ee3d8727ffa40fa38fae3319f178547c12376968c3ad58ff0b758b",
+  "themesSha256": "6a40788b5753264890323e7349316c916f0cae110358100ee326726548a9e011",
   "campaignsSha256": "fd0393fed7bcf92c7323ba88467b042ca14744da93442f8700bb242f1f23756a",
   "files": [
     {
       "path": "catalog.json",
-      "sha256": "993e84956a28835519a7f50b298cd7c5595f35016b54ec87210f869899dbba5c",
-      "size": 1325432
+      "sha256": "c448e94d02ee3d8727ffa40fa38fae3319f178547c12376968c3ad58ff0b758b",
+      "size": 1292260
     },
     {
       "path": "themes.json",
-      "sha256": "82f2bf61b2fd85d13a1f4f9da104019476d4adc47a686915b2f5c0b391e90b1e",
+      "sha256": "6a40788b5753264890323e7349316c916f0cae110358100ee326726548a9e011",
       "size": 532
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "path": "NOTICE",
-      "sha256": "125f7081e63d45ddc0f466b68b88bd332f08dbb2622ba191fece868e5f93ed2c",
+      "sha256": "95d41ad1aab5b3602cdf99231543a6527e04018d08d12fb0b1e39456373c4a9c",
       "size": 260
     },
     {
@@ -246,61 +246,6 @@
       "path": "brand/manja/logo/tinted-transparent-optical.svg",
       "sha256": "ed4a5d37f7ea2473a1631bc9d684d0b65bd389c86043d8ab699bfb23765dbe5c",
       "size": 3401
-    },
-    {
-      "path": "brand/paje/logo/adaptive-plate-optical.svg",
-      "sha256": "daa90226fbf996cd12a6a65728e3539e73fe6a9cd7fee1fbd78441a526d637c7",
-      "size": 3733
-    },
-    {
-      "path": "brand/paje/logo/adaptive-transparent-optical.svg",
-      "sha256": "09010e092c6550a3b9fa95c0fdcc7e3108aa32215291d8f4e456ff92ce4bf310",
-      "size": 3627
-    },
-    {
-      "path": "brand/paje/logo/dark-plate-optical.svg",
-      "sha256": "cbfcb347564bd71369234782e7c49d28c620be66d7e857ecf6f4deb3ae414ab9",
-      "size": 2895
-    },
-    {
-      "path": "brand/paje/logo/dark-transparent-optical.svg",
-      "sha256": "f09f355cab7e703a021932364d14b8878da9fb87198e1f2fe900294330677f89",
-      "size": 3033
-    },
-    {
-      "path": "brand/paje/logo/grayscale-plate-optical.svg",
-      "sha256": "72c0c0ba5656dd1e7970a9fe50f5d025d334b0ec765b6e3a10179db4ff9dc204",
-      "size": 2895
-    },
-    {
-      "path": "brand/paje/logo/grayscale-transparent-optical.svg",
-      "sha256": "aeaa4e8dfb618da088378690667b9c1c96bd0ebb68546b7f2b7abb873d2e8f6c",
-      "size": 3033
-    },
-    {
-      "path": "brand/paje/logo/light-plate-optical.svg",
-      "sha256": "f6be3a7438bfe09e51ced0109900beb997a621b7b3fc1632a9007500f016457d",
-      "size": 2895
-    },
-    {
-      "path": "brand/paje/logo/light-transparent-optical.svg",
-      "sha256": "88ee339d310b8097505d5580f99ce72c8fe39e679fb4122b33eaf34c49ac8020",
-      "size": 3033
-    },
-    {
-      "path": "brand/paje/logo/monochrome-transparent-optical.svg",
-      "sha256": "317f265584293886d0159d3db0723321cd9180dffeecdfeb69d34cce7a87d725",
-      "size": 2933
-    },
-    {
-      "path": "brand/paje/logo/tinted-plate-optical.svg",
-      "sha256": "b8f9b9293be4ef11a8fe3df7118cd10448c4bfe8e5ea61ca6d314935cf25acc8",
-      "size": 2895
-    },
-    {
-      "path": "brand/paje/logo/tinted-transparent-optical.svg",
-      "sha256": "35b8ad8e412787f3767084d0e3a234f37a0952a34f018d3e919792e6da4e0add",
-      "size": 3033
     },
     {
       "path": "brand/x9/logo/adaptive-plate-optical.svg",
@@ -2223,74 +2168,9 @@
       "size": 1510
     },
     {
-      "path": "icons/brand/paje-icon-adaptive-plate-launcher.svg",
-      "sha256": "d284fc117e1f3050a0c9658d36bb1519fd7096564aef0fffe061d8e9f2dcd8fd",
-      "size": 1473
-    },
-    {
-      "path": "icons/brand/paje-icon-adaptive-plate-optical.svg",
-      "sha256": "9c1b2003c15828e10311c56211f389daf4a837322b8758b9ae8d8c7e6950e9f4",
-      "size": 1445
-    },
-    {
-      "path": "icons/brand/paje-icon-adaptive-transparent-optical.svg",
-      "sha256": "54863bc1aea56d54b5b64d22b8783b836b18616b6c70216fff5f18baadce85ca",
-      "size": 1413
-    },
-    {
-      "path": "icons/brand/paje-icon-dark-plate-optical.svg",
-      "sha256": "96aeb41e08997aa1ec27c2ce8647965de91342d50b31dce33d46f1a513dd479b",
-      "size": 1108
-    },
-    {
-      "path": "icons/brand/paje-icon-dark-transparent-optical.svg",
-      "sha256": "ac07fc84a9ed917c74497fab1e9cfa3e6c95401a82b8bbd918629f3b15cd6429",
-      "size": 1137
-    },
-    {
-      "path": "icons/brand/paje-icon-grayscale-plate-optical.svg",
-      "sha256": "11f0d96f3483cf2252b68b600ba85e4437c30c80089a93a8f26a776a0d82ce45",
-      "size": 1108
-    },
-    {
-      "path": "icons/brand/paje-icon-grayscale-transparent-optical.svg",
-      "sha256": "6328a9655178486f5a317315eb2e7349419d85c8d077d041a350d37b54ad64a8",
-      "size": 1137
-    },
-    {
-      "path": "icons/brand/paje-icon-light-plate-optical.svg",
-      "sha256": "904e77a393a6260ea4d00a13bdc099d02036dcd99a5a5cfa1afc808d7165f575",
-      "size": 1108
-    },
-    {
-      "path": "icons/brand/paje-icon-light-transparent-optical.svg",
-      "sha256": "e99dc0e684edaa95e8faed03e17f4cffd1de12c9e56f013f7cfefb75882a80ef",
-      "size": 1137
-    },
-    {
-      "path": "icons/brand/paje-icon-monochrome-transparent-optical.svg",
-      "sha256": "9a9ceb3859f4551b254e2f0e1c9a7a3842d382c7576e05290147f0e5eb1fe410",
-      "size": 1127
-    },
-    {
-      "path": "icons/brand/paje-icon-tinted-plate-launcher.svg",
-      "sha256": "ca101643f9466db4563522b5c6b6f6d5cee4c989f283667126e48cbad9db4b97",
-      "size": 1136
-    },
-    {
-      "path": "icons/brand/paje-icon-tinted-plate-optical.svg",
-      "sha256": "440a33509f98354feb0930ff0b256a7f501db1e7dfbf15ba59f873d6767ab00c",
-      "size": 1108
-    },
-    {
-      "path": "icons/brand/paje-icon-tinted-transparent-optical.svg",
-      "sha256": "4404eaa471d28df6d87a73d456ab9f224abc57aa7e5a94a3e83445b9af6786e6",
-      "size": 1137
-    },
-    {
       "path": "icons/brand/sprite.svg",
-      "sha256": "70f37fcc078b724380852833d6998b9c148aca62cf287a898fbdd37feefbafbc",
-      "size": 322607
+      "sha256": "2a0832eaa44148c89bb9edc4be768fb2c12058279ad8dec69062f5b0241b5970",
+      "size": 284536
     },
     {
       "path": "icons/brand/x9-icon-adaptive-plate-launcher.svg",
@@ -9163,91 +9043,6 @@
       "size": 119
     },
     {
-      "path": "platform/android/paje/res/drawable-xxxhdpi/ic_launcher_foreground.png",
-      "sha256": "d8539ff75957948e16405add2dcf71a6d3e2c4ba9f87ae558743de4b98a3472f",
-      "size": 7786
-    },
-    {
-      "path": "platform/android/paje/res/drawable-xxxhdpi/ic_launcher_monochrome.png",
-      "sha256": "e0f1856e58ee0afd00747b642657546fc169738bdd8aa48241c001095da688c3",
-      "size": 4829
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-anydpi-v26/ic_launcher.xml",
-      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
-      "size": 266
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-anydpi-v26/ic_launcher_round.xml",
-      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
-      "size": 266
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-anydpi-v33/ic_launcher.xml",
-      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
-      "size": 335
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-anydpi-v33/ic_launcher_round.xml",
-      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
-      "size": 335
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-hdpi/ic_launcher.png",
-      "sha256": "6aa8fbb36746a991fe01d98355107ad8ab25c283ce8823af7add072bb60d1e7a",
-      "size": 1156
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-hdpi/ic_launcher_round.png",
-      "sha256": "6aa8fbb36746a991fe01d98355107ad8ab25c283ce8823af7add072bb60d1e7a",
-      "size": 1156
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-mdpi/ic_launcher.png",
-      "sha256": "c81946f533c3ea93ffa5a43ce7ab20b0b7ed3d59e60321b6a3bb2b0ec2cee539",
-      "size": 777
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-mdpi/ic_launcher_round.png",
-      "sha256": "c81946f533c3ea93ffa5a43ce7ab20b0b7ed3d59e60321b6a3bb2b0ec2cee539",
-      "size": 777
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-xhdpi/ic_launcher.png",
-      "sha256": "6f4ad385fd73dd9fa09fc7f0825ad76a2df6e9b87d72a0001d14f4db1db0d314",
-      "size": 1582
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-xhdpi/ic_launcher_round.png",
-      "sha256": "6f4ad385fd73dd9fa09fc7f0825ad76a2df6e9b87d72a0001d14f4db1db0d314",
-      "size": 1582
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-xxhdpi/ic_launcher.png",
-      "sha256": "90ad72615392876337ee75bd72ed7fb73a06a1de3a498b787560e405693d0def",
-      "size": 2340
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-xxhdpi/ic_launcher_round.png",
-      "sha256": "90ad72615392876337ee75bd72ed7fb73a06a1de3a498b787560e405693d0def",
-      "size": 2340
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-xxxhdpi/ic_launcher.png",
-      "sha256": "ce879880fdc058801e4618ebb10d750fffd953a8067043bdcccc0177e1717fac",
-      "size": 3123
-    },
-    {
-      "path": "platform/android/paje/res/mipmap-xxxhdpi/ic_launcher_round.png",
-      "sha256": "ce879880fdc058801e4618ebb10d750fffd953a8067043bdcccc0177e1717fac",
-      "size": 3123
-    },
-    {
-      "path": "platform/android/paje/res/values/colors.xml",
-      "sha256": "5ff60af86c09ba6de6a41bccbf4efe80c5c5b4296b639fcf8bbac653f54b2c71",
-      "size": 119
-    },
-    {
       "path": "platform/android/x9/res/drawable-xxxhdpi/ic_launcher_foreground.png",
       "sha256": "c3a7710ad776c287d1a427bbbd5c5add52aa66bbfc6ca7236472ac72c07af6b4",
       "size": 8036
@@ -9429,31 +9224,6 @@
     },
     {
       "path": "platform/apple/manja/Assets.xcassets/Contents.json",
-      "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
-      "size": 41
-    },
-    {
-      "path": "platform/apple/paje/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
-      "sha256": "c79ed0807ed03cd0b83614d3d997617ae9ec846a4facaef5921b51c9246b6608",
-      "size": 20492
-    },
-    {
-      "path": "platform/apple/paje/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-tinted.png",
-      "sha256": "2d311666d89b83d3c8e6347eee00f6b0ed278e24799bf700fec2feeb9337183e",
-      "size": 18482
-    },
-    {
-      "path": "platform/apple/paje/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
-      "sha256": "1195531d09948908f606c6d44bd51593acf4b5e10853551efb26927eb157e640",
-      "size": 19518
-    },
-    {
-      "path": "platform/apple/paje/Assets.xcassets/AppIcon.appiconset/Contents.json",
-      "sha256": "6cfa296f7b0d78219f6cc2d1db6fd6d626633e5216f8538483567992d3bdb2f1",
-      "size": 448
-    },
-    {
-      "path": "platform/apple/paje/Assets.xcassets/Contents.json",
       "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
       "size": 41
     },
@@ -9663,51 +9433,6 @@
       "size": 344
     },
     {
-      "path": "platform/web/paje/apple-touch-icon-180.png",
-      "sha256": "eefb3957aa51e4fc282830fcbfdfc9a8ccb3e800949b2b03307fee22c073aede",
-      "size": 2923
-    },
-    {
-      "path": "platform/web/paje/favicon-16.png",
-      "sha256": "9f692464cb28b4353b7143f698d4539ebb10cc91ebc976e8ace0c080868465af",
-      "size": 340
-    },
-    {
-      "path": "platform/web/paje/favicon-32.png",
-      "sha256": "277c5e608848cdb9c1358e1babc9aa74726fc64ab89103895e65ebf5f72da9dd",
-      "size": 602
-    },
-    {
-      "path": "platform/web/paje/favicon.svg",
-      "sha256": "54863bc1aea56d54b5b64d22b8783b836b18616b6c70216fff5f18baadce85ca",
-      "size": 1413
-    },
-    {
-      "path": "platform/web/paje/icon-192.png",
-      "sha256": "15c0c4728122a6e5524970630f927bed9d19c81b67c1b9c88f600108ad5857cf",
-      "size": 3906
-    },
-    {
-      "path": "platform/web/paje/icon-512.png",
-      "sha256": "eac220fff35ba052a2bbe2db102d76d6ec59f262ad949db19a86dbd7c14e62a9",
-      "size": 11458
-    },
-    {
-      "path": "platform/web/paje/icon-maskable-192.png",
-      "sha256": "ce879880fdc058801e4618ebb10d750fffd953a8067043bdcccc0177e1717fac",
-      "size": 3123
-    },
-    {
-      "path": "platform/web/paje/icon-maskable-512.png",
-      "sha256": "3b0a91c85505b26ee56ba6347d1cd3930842e62266583a95f99379b941d6d1a3",
-      "size": 8911
-    },
-    {
-      "path": "platform/web/paje/manifest-icons.json",
-      "sha256": "46522597d9c995b795ca75f7cb250b4fabb4eb9810d162c8cd1142b3c44f6bf6",
-      "size": 344
-    },
-    {
       "path": "platform/web/x9/apple-touch-icon-180.png",
       "sha256": "a93ce84be320156fc9bde45a8fd49751f9418962e17d9a9143ae0e87414e99c2",
       "size": 3181
@@ -9759,7 +9484,7 @@
     },
     {
       "path": "proof/assets/NOTICE",
-      "sha256": "125f7081e63d45ddc0f466b68b88bd332f08dbb2622ba191fece868e5f93ed2c",
+      "sha256": "95d41ad1aab5b3602cdf99231543a6527e04018d08d12fb0b1e39456373c4a9c",
       "size": 260
     },
     {
@@ -9981,61 +9706,6 @@
       "path": "proof/assets/brand/manja/logo/tinted-transparent-optical.svg",
       "sha256": "ed4a5d37f7ea2473a1631bc9d684d0b65bd389c86043d8ab699bfb23765dbe5c",
       "size": 3401
-    },
-    {
-      "path": "proof/assets/brand/paje/logo/adaptive-plate-optical.svg",
-      "sha256": "daa90226fbf996cd12a6a65728e3539e73fe6a9cd7fee1fbd78441a526d637c7",
-      "size": 3733
-    },
-    {
-      "path": "proof/assets/brand/paje/logo/adaptive-transparent-optical.svg",
-      "sha256": "09010e092c6550a3b9fa95c0fdcc7e3108aa32215291d8f4e456ff92ce4bf310",
-      "size": 3627
-    },
-    {
-      "path": "proof/assets/brand/paje/logo/dark-plate-optical.svg",
-      "sha256": "cbfcb347564bd71369234782e7c49d28c620be66d7e857ecf6f4deb3ae414ab9",
-      "size": 2895
-    },
-    {
-      "path": "proof/assets/brand/paje/logo/dark-transparent-optical.svg",
-      "sha256": "f09f355cab7e703a021932364d14b8878da9fb87198e1f2fe900294330677f89",
-      "size": 3033
-    },
-    {
-      "path": "proof/assets/brand/paje/logo/grayscale-plate-optical.svg",
-      "sha256": "72c0c0ba5656dd1e7970a9fe50f5d025d334b0ec765b6e3a10179db4ff9dc204",
-      "size": 2895
-    },
-    {
-      "path": "proof/assets/brand/paje/logo/grayscale-transparent-optical.svg",
-      "sha256": "aeaa4e8dfb618da088378690667b9c1c96bd0ebb68546b7f2b7abb873d2e8f6c",
-      "size": 3033
-    },
-    {
-      "path": "proof/assets/brand/paje/logo/light-plate-optical.svg",
-      "sha256": "f6be3a7438bfe09e51ced0109900beb997a621b7b3fc1632a9007500f016457d",
-      "size": 2895
-    },
-    {
-      "path": "proof/assets/brand/paje/logo/light-transparent-optical.svg",
-      "sha256": "88ee339d310b8097505d5580f99ce72c8fe39e679fb4122b33eaf34c49ac8020",
-      "size": 3033
-    },
-    {
-      "path": "proof/assets/brand/paje/logo/monochrome-transparent-optical.svg",
-      "sha256": "317f265584293886d0159d3db0723321cd9180dffeecdfeb69d34cce7a87d725",
-      "size": 2933
-    },
-    {
-      "path": "proof/assets/brand/paje/logo/tinted-plate-optical.svg",
-      "sha256": "b8f9b9293be4ef11a8fe3df7118cd10448c4bfe8e5ea61ca6d314935cf25acc8",
-      "size": 2895
-    },
-    {
-      "path": "proof/assets/brand/paje/logo/tinted-transparent-optical.svg",
-      "sha256": "35b8ad8e412787f3767084d0e3a234f37a0952a34f018d3e919792e6da4e0add",
-      "size": 3033
     },
     {
       "path": "proof/assets/brand/x9/logo/adaptive-plate-optical.svg",
@@ -11963,74 +11633,9 @@
       "size": 1510
     },
     {
-      "path": "proof/assets/icons/brand/paje-icon-adaptive-plate-launcher.svg",
-      "sha256": "d284fc117e1f3050a0c9658d36bb1519fd7096564aef0fffe061d8e9f2dcd8fd",
-      "size": 1473
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-adaptive-plate-optical.svg",
-      "sha256": "9c1b2003c15828e10311c56211f389daf4a837322b8758b9ae8d8c7e6950e9f4",
-      "size": 1445
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-adaptive-transparent-optical.svg",
-      "sha256": "54863bc1aea56d54b5b64d22b8783b836b18616b6c70216fff5f18baadce85ca",
-      "size": 1413
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-dark-plate-optical.svg",
-      "sha256": "96aeb41e08997aa1ec27c2ce8647965de91342d50b31dce33d46f1a513dd479b",
-      "size": 1108
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-dark-transparent-optical.svg",
-      "sha256": "ac07fc84a9ed917c74497fab1e9cfa3e6c95401a82b8bbd918629f3b15cd6429",
-      "size": 1137
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-grayscale-plate-optical.svg",
-      "sha256": "11f0d96f3483cf2252b68b600ba85e4437c30c80089a93a8f26a776a0d82ce45",
-      "size": 1108
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-grayscale-transparent-optical.svg",
-      "sha256": "6328a9655178486f5a317315eb2e7349419d85c8d077d041a350d37b54ad64a8",
-      "size": 1137
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-light-plate-optical.svg",
-      "sha256": "904e77a393a6260ea4d00a13bdc099d02036dcd99a5a5cfa1afc808d7165f575",
-      "size": 1108
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-light-transparent-optical.svg",
-      "sha256": "e99dc0e684edaa95e8faed03e17f4cffd1de12c9e56f013f7cfefb75882a80ef",
-      "size": 1137
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-monochrome-transparent-optical.svg",
-      "sha256": "9a9ceb3859f4551b254e2f0e1c9a7a3842d382c7576e05290147f0e5eb1fe410",
-      "size": 1127
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-tinted-plate-launcher.svg",
-      "sha256": "ca101643f9466db4563522b5c6b6f6d5cee4c989f283667126e48cbad9db4b97",
-      "size": 1136
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-tinted-plate-optical.svg",
-      "sha256": "440a33509f98354feb0930ff0b256a7f501db1e7dfbf15ba59f873d6767ab00c",
-      "size": 1108
-    },
-    {
-      "path": "proof/assets/icons/brand/paje-icon-tinted-transparent-optical.svg",
-      "sha256": "4404eaa471d28df6d87a73d456ab9f224abc57aa7e5a94a3e83445b9af6786e6",
-      "size": 1137
-    },
-    {
       "path": "proof/assets/icons/brand/sprite.svg",
-      "sha256": "70f37fcc078b724380852833d6998b9c148aca62cf287a898fbdd37feefbafbc",
-      "size": 322607
+      "sha256": "2a0832eaa44148c89bb9edc4be768fb2c12058279ad8dec69062f5b0241b5970",
+      "size": 284536
     },
     {
       "path": "proof/assets/icons/brand/x9-icon-adaptive-plate-launcher.svg",
@@ -18903,91 +18508,6 @@
       "size": 119
     },
     {
-      "path": "proof/assets/platform/android/paje/res/drawable-xxxhdpi/ic_launcher_foreground.png",
-      "sha256": "d8539ff75957948e16405add2dcf71a6d3e2c4ba9f87ae558743de4b98a3472f",
-      "size": 7786
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/drawable-xxxhdpi/ic_launcher_monochrome.png",
-      "sha256": "e0f1856e58ee0afd00747b642657546fc169738bdd8aa48241c001095da688c3",
-      "size": 4829
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-anydpi-v26/ic_launcher.xml",
-      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
-      "size": 266
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-anydpi-v26/ic_launcher_round.xml",
-      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
-      "size": 266
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-anydpi-v33/ic_launcher.xml",
-      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
-      "size": 335
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-anydpi-v33/ic_launcher_round.xml",
-      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
-      "size": 335
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-hdpi/ic_launcher.png",
-      "sha256": "6aa8fbb36746a991fe01d98355107ad8ab25c283ce8823af7add072bb60d1e7a",
-      "size": 1156
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-hdpi/ic_launcher_round.png",
-      "sha256": "6aa8fbb36746a991fe01d98355107ad8ab25c283ce8823af7add072bb60d1e7a",
-      "size": 1156
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-mdpi/ic_launcher.png",
-      "sha256": "c81946f533c3ea93ffa5a43ce7ab20b0b7ed3d59e60321b6a3bb2b0ec2cee539",
-      "size": 777
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-mdpi/ic_launcher_round.png",
-      "sha256": "c81946f533c3ea93ffa5a43ce7ab20b0b7ed3d59e60321b6a3bb2b0ec2cee539",
-      "size": 777
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-xhdpi/ic_launcher.png",
-      "sha256": "6f4ad385fd73dd9fa09fc7f0825ad76a2df6e9b87d72a0001d14f4db1db0d314",
-      "size": 1582
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-xhdpi/ic_launcher_round.png",
-      "sha256": "6f4ad385fd73dd9fa09fc7f0825ad76a2df6e9b87d72a0001d14f4db1db0d314",
-      "size": 1582
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-xxhdpi/ic_launcher.png",
-      "sha256": "90ad72615392876337ee75bd72ed7fb73a06a1de3a498b787560e405693d0def",
-      "size": 2340
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-xxhdpi/ic_launcher_round.png",
-      "sha256": "90ad72615392876337ee75bd72ed7fb73a06a1de3a498b787560e405693d0def",
-      "size": 2340
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-xxxhdpi/ic_launcher.png",
-      "sha256": "ce879880fdc058801e4618ebb10d750fffd953a8067043bdcccc0177e1717fac",
-      "size": 3123
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/mipmap-xxxhdpi/ic_launcher_round.png",
-      "sha256": "ce879880fdc058801e4618ebb10d750fffd953a8067043bdcccc0177e1717fac",
-      "size": 3123
-    },
-    {
-      "path": "proof/assets/platform/android/paje/res/values/colors.xml",
-      "sha256": "5ff60af86c09ba6de6a41bccbf4efe80c5c5b4296b639fcf8bbac653f54b2c71",
-      "size": 119
-    },
-    {
       "path": "proof/assets/platform/android/x9/res/drawable-xxxhdpi/ic_launcher_foreground.png",
       "sha256": "c3a7710ad776c287d1a427bbbd5c5add52aa66bbfc6ca7236472ac72c07af6b4",
       "size": 8036
@@ -19169,31 +18689,6 @@
     },
     {
       "path": "proof/assets/platform/apple/manja/Assets.xcassets/Contents.json",
-      "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
-      "size": 41
-    },
-    {
-      "path": "proof/assets/platform/apple/paje/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
-      "sha256": "c79ed0807ed03cd0b83614d3d997617ae9ec846a4facaef5921b51c9246b6608",
-      "size": 20492
-    },
-    {
-      "path": "proof/assets/platform/apple/paje/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-tinted.png",
-      "sha256": "2d311666d89b83d3c8e6347eee00f6b0ed278e24799bf700fec2feeb9337183e",
-      "size": 18482
-    },
-    {
-      "path": "proof/assets/platform/apple/paje/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
-      "sha256": "1195531d09948908f606c6d44bd51593acf4b5e10853551efb26927eb157e640",
-      "size": 19518
-    },
-    {
-      "path": "proof/assets/platform/apple/paje/Assets.xcassets/AppIcon.appiconset/Contents.json",
-      "sha256": "6cfa296f7b0d78219f6cc2d1db6fd6d626633e5216f8538483567992d3bdb2f1",
-      "size": 448
-    },
-    {
-      "path": "proof/assets/platform/apple/paje/Assets.xcassets/Contents.json",
       "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
       "size": 41
     },
@@ -19403,51 +18898,6 @@
       "size": 344
     },
     {
-      "path": "proof/assets/platform/web/paje/apple-touch-icon-180.png",
-      "sha256": "eefb3957aa51e4fc282830fcbfdfc9a8ccb3e800949b2b03307fee22c073aede",
-      "size": 2923
-    },
-    {
-      "path": "proof/assets/platform/web/paje/favicon-16.png",
-      "sha256": "9f692464cb28b4353b7143f698d4539ebb10cc91ebc976e8ace0c080868465af",
-      "size": 340
-    },
-    {
-      "path": "proof/assets/platform/web/paje/favicon-32.png",
-      "sha256": "277c5e608848cdb9c1358e1babc9aa74726fc64ab89103895e65ebf5f72da9dd",
-      "size": 602
-    },
-    {
-      "path": "proof/assets/platform/web/paje/favicon.svg",
-      "sha256": "54863bc1aea56d54b5b64d22b8783b836b18616b6c70216fff5f18baadce85ca",
-      "size": 1413
-    },
-    {
-      "path": "proof/assets/platform/web/paje/icon-192.png",
-      "sha256": "15c0c4728122a6e5524970630f927bed9d19c81b67c1b9c88f600108ad5857cf",
-      "size": 3906
-    },
-    {
-      "path": "proof/assets/platform/web/paje/icon-512.png",
-      "sha256": "eac220fff35ba052a2bbe2db102d76d6ec59f262ad949db19a86dbd7c14e62a9",
-      "size": 11458
-    },
-    {
-      "path": "proof/assets/platform/web/paje/icon-maskable-192.png",
-      "sha256": "ce879880fdc058801e4618ebb10d750fffd953a8067043bdcccc0177e1717fac",
-      "size": 3123
-    },
-    {
-      "path": "proof/assets/platform/web/paje/icon-maskable-512.png",
-      "sha256": "3b0a91c85505b26ee56ba6347d1cd3930842e62266583a95f99379b941d6d1a3",
-      "size": 8911
-    },
-    {
-      "path": "proof/assets/platform/web/paje/manifest-icons.json",
-      "sha256": "46522597d9c995b795ca75f7cb250b4fabb4eb9810d162c8cd1142b3c44f6bf6",
-      "size": 344
-    },
-    {
       "path": "proof/assets/platform/web/x9/apple-touch-icon-180.png",
       "sha256": "a93ce84be320156fc9bde45a8fd49751f9418962e17d9a9143ae0e87414e99c2",
       "size": 3181
@@ -19494,7 +18944,7 @@
     },
     {
       "path": "proof/assets/themes.json",
-      "sha256": "82f2bf61b2fd85d13a1f4f9da104019476d4adc47a686915b2f5c0b391e90b1e",
+      "sha256": "6a40788b5753264890323e7349316c916f0cae110358100ee326726548a9e011",
       "size": 532
     },
     {
@@ -19509,8 +18959,8 @@
     },
     {
       "path": "proof/index.html",
-      "sha256": "e7f161d172b5acba9a7c4de92524e5a6b29f21d6108dba223b1041f63e5355f9",
-      "size": 3088191
+      "sha256": "f101db33ce2fd045594b534a53a6ef5f087b21ac49c5405799d9a772110456fb",
+      "size": 2726479
     },
     {
       "path": "proof/og.png",

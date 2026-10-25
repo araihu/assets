@@ -10,8 +10,8 @@ Use the public `v0.2.4` [immutable Git tag](https://github.com/araihu/assets/tre
 and [SHA256SUMS](https://github.com/araihu/assets/releases/download/v0.2.4/SHA256SUMS).
 Before adopting its files, require matching release values in `catalog.json`,
 `themes.json`, and `release.json`, then verify the inventory hashes in
-`release.json`. `v0.1.1` remains the published promoted default and `v0.2.1`
-is the preceding release.
+`release.json`. The default manifest now selects `v0.2.5`; verify that release
+before adopting its files.
 
 For the published release, download the immutable tar archive and its
 `SHA256SUMS` file into a disposable directory. Check the archive digest, extract
