@@ -21,7 +21,7 @@ import (
 func TestBuildBrandProducesCompleteDeclaredMatrix(t *testing.T) {
 	result := mustBuildBrand(t)
 
-	const products = 6
+	const products = 5
 	const variantsPerProduct = 24 // icon: 13; logo: 11
 	if got, want := len(result.Files), products*variantsPerProduct+1; got != want {
 		t.Fatalf("BuildBrand() files = %d, want %d", got, want)
@@ -102,7 +102,7 @@ func TestBuildBrandCatalogAssetsValidate(t *testing.T) {
 func TestBuildBrandMonochromeSpriteSymbolsRemainTintable(t *testing.T) {
 	result := mustBuildBrand(t)
 	spriteSVG := result.Files["dist/icons/brand/sprite.svg"]
-	for _, product := range []string{"araihu", "balemoh", "goshtoso", "manja", "paje", "x9"} {
+	for _, product := range []string{"araihu", "balemoh", "goshtoso", "manja", "x9"} {
 		want := `<symbol id="` + product + `-icon-monochrome-transparent-optical"`
 		start := bytes.Index(spriteSVG, []byte(want))
 		if start < 0 {

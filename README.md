@@ -2,14 +2,14 @@
 
 Deterministic identity and interface assets for Arai Hû products.
 `dist/catalog.json` is the versioned, language-neutral consumer contract for
-the `v0.2.4` release.
+the `v0.2.5` release.
 
 ## Current checkout
 
 Requires Go `1.27.0`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
-The managed `dist/` tree is the `v0.2.4` release. Its catalog, generated
+The managed `dist/` tree is the `v0.2.5` release. Its catalog, generated
 sprites, catalog-driven proof, and deterministic archives are consumer inputs.
 Use a disposable checkout when regenerating it:
 
@@ -213,7 +213,7 @@ not remain in managed `dist/`, and no unpublished release is synthesized.
 
 ## Catalog and sprites
 
-The `v0.2.4` `dist/catalog.json` is schema v2, language-neutral metadata for
+The `v0.2.5` `dist/catalog.json` is schema v2, language-neutral metadata for
 generated files only. It records canonical name,
 namespace, variant dimensions,
 `spriteSymbol`, color behavior, license, source label, and SHA-256. Public
@@ -240,7 +240,7 @@ generation is provided by this CLI; consumers own any project-local bindings.
 
 ## Platform files and archives
 
-The `v0.2.4` build emits individual brand/UI SVGs, web/Android/Apple platform
+The `v0.2.5` build emits individual brand/UI SVGs, web/Android/Apple platform
 packages, catalog, checksums, notices, licenses, the self-contained
 `dist/proof/**` review site, and deterministic `.tar.gz` and `.zip` archives
 under `dist/releases/`. Platform launchers
@@ -256,10 +256,9 @@ verification. Consumers must verify the matching Git tag, GitHub Release,
 `SHA256SUMS`, archive, and extracted member checksums before treating its
 archive names or module version as public.
 
-`v0.1.1` remains the promoted default until an explicit promotion changes
-`manifests/default.yaml`; `v0.2.1` is the preceding release. This patch keeps
-catalog schema v2 and the published asset inventory unchanged while upgrading
-the release toolchain to Go 1.27.0.
+`manifests/default.yaml` promotes `v0.2.5`. This release removes the retired
+product identity from catalogs, sprites, platform packages, and consumer fan-out
+while retaining catalog schema v2.
 
 ## Licensing
 

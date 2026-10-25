@@ -347,8 +347,6 @@ func productName(id string) string {
 	switch id {
 	case "araihu":
 		return "Arai Hû"
-	case "paje":
-		return "Pajé"
 	case "x9":
 		return "X9"
 	case "goshtoso":

@@ -47,7 +47,7 @@ light and dark surfaces plus adaptive-background and transparent variants.
 
 Use Arai Hû paper, midnight, cobalt, and lime signal palette. Preserve distinct
 product signs and canonical outlined wordmark paths. Arai Hû is the organization
-name; Goshtoso, Manja, Pajé, and X-9/Xisnove are product identities.
+name; Balemoh, Goshtoso, Manja, and X-9/Xisnove are product identities.
 
 ## Evidence on Hand
 

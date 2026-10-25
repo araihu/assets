@@ -6,7 +6,7 @@ target="$root/dist/v11"
 
 python3 "$root/scripts/build-platform-assets-v11.py" --check
 
-for product in araihu goshtoso manja paje x9; do
+for product in araihu goshtoso manja x9; do
   web="$target/web/$product"
   test -f "$web/favicon.svg"
   xmllint --noout "$web/favicon.svg"
@@ -125,7 +125,7 @@ expected = {
     "icon-512.png": 512, "icon-maskable-192.png": 192,
     "icon-maskable-512.png": 512, "apple-touch-icon-180.png": 180,
 }
-for product in ("araihu", "goshtoso", "manja", "paje", "x9"):
+for product in ("araihu", "goshtoso", "manja", "x9"):
     web = target / "web" / product
     for name, size in expected.items():
         data = (web / name).read_bytes()[:24]
