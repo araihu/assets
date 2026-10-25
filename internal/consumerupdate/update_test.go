@@ -150,7 +150,7 @@ func TestRejectTamperingAndUnsafeArchives(t *testing.T) {
 
 func TestStrictConsumerManifest(t *testing.T) {
 	m, _, _ := fixture(t)
-	for _, name := range []string{"unknown", "duplicate key", "traversal", "collision", "unselected visual", "git path"} {
+	for _, name := range []string{"unknown", "duplicate key", "traversal", "collision", "unselected visual", "git path", "mixed case git path", "mixed case receipt"} {
 		t.Run(name, func(t *testing.T) {
 			copy := m
 			copy.Mappings = append([]Mapping(nil), m.Mappings...)
@@ -163,6 +163,10 @@ func TestStrictConsumerManifest(t *testing.T) {
 				copy.Mappings[0].CanonicalName = ""
 			case "git path":
 				copy.Mappings[0].Destination = ".git/config"
+			case "mixed case git path":
+				copy.Mappings[0].Destination = ".GIT/config"
+			case "mixed case receipt":
+				copy.Mappings[0].Destination = "ARAIHU-ASSETS.JSON"
 			}
 			data, _ := json.Marshal(copy)
 			if name == "unknown" {

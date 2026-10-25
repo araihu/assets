@@ -53,7 +53,7 @@ func Load(data []byte) (Manifest, error) {
 	}
 	seen := map[string]bool{}
 	for _, mapping := range m.Mappings {
-		if !safePath(mapping.Source) || !safePath(mapping.Destination) || mapping.Destination == ManifestPath || strings.HasPrefix(mapping.Destination, ".git/") || strings.EqualFold(mapping.Destination, ".git") || seen[strings.ToLower(mapping.Destination)] {
+		if !safePath(mapping.Source) || !safePath(mapping.Destination) || strings.EqualFold(mapping.Destination, ManifestPath) || strings.EqualFold(strings.Split(mapping.Destination, "/")[0], ".git") || seen[strings.ToLower(mapping.Destination)] {
 			return m, errors.New("unsafe or duplicate consumer mapping")
 		}
 		seen[strings.ToLower(mapping.Destination)] = true
