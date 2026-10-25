@@ -24,7 +24,8 @@ const SOURCE_EXCLUDES = [
 // Fan-out compiles only the Go adapter and reads its enrollment manifest.
 // Artwork and generated bundles are fetched from the immutable release instead.
 const FANOUT_SOURCE_EXCLUDES = [
-  ...SOURCE_EXCLUDES, ".dagger", "dist", "source", "site", "review",
+  ".git", ".git/**", ".dagger", ".dagger/**", ".cache", ".cache/**",
+  "dist", "source", "site", "review",
   "internal/acquisition", "docs",
 ]
 

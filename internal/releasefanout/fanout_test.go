@@ -263,6 +263,7 @@ func TestPlanStrictJSONAndProvenance(t *testing.T) {
 	data, _ := os.ReadFile(filepath.Join(directory, "plan.json"))
 	for _, invalid := range []string{
 		`null`, string(data) + `{}`, strings.Replace(string(data), `"metadata":`, `"unknown":0,"metadata":`, 1),
+		strings.Replace(string(data), `"owner":"araihu"`, "\"owner\":\"araih"+string([]byte{0xff})+"\"", 1),
 		strings.Replace(string(data), `"release":"v0.2.4"`, `"release":"v0.2.3","release":"v0.2.4"`, 1),
 		strings.Replace(string(data), `"release":"v0.2.4"`, `"Release":"v0.2.4"`, 1),
 		strings.Replace(string(data), "https://github.com/araihu/assets/", "https://other.invalid/", 1),
