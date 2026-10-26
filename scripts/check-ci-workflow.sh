@@ -10,7 +10,7 @@ for required_tool in git grep ruby; do
 done
 
 test "$(ruby -rjson -e 'puts JSON.parse(File.read(ARGV[0])).fetch("engineVersion")' "$repo/dagger.json")" = v0.21.8
-grep -Fx 'go 1.27.0' "$repo/go.mod"
+grep -Fx 'go 1.27.3' "$repo/go.mod"
 if [[ -e "$repo/.git" ]]; then
   tracked_sdk=$(git -C "$repo" ls-files -- '.dagger/sdk' '.dagger/sdk/**')
   if [[ -n "$tracked_sdk" ]]; then
@@ -103,8 +103,8 @@ source = File.read(File.join(repo, ".dagger/src/index.ts"))
 require_contract.call(!source.include?("TrustDomain") && !source.include?("trustDomain") && !source.include?("untrusted"), "workflow trust argument remains in Dagger module")
 require_contract.call(source.include?('value !== "trusted" && value !== "pr"') && source.include?('throw new Error("unknown cache namespace")'), "cache namespace validation differs")
 require_contract.call(source.include?('make nodejs npm python3 ruby'), "Dagger-owned CI runtimes differ")
-go_image = 'golang:1.27.0-trixie@sha256:6212da3924947f4b6a939df02ea627c13f338f1a41d6c3fcb0dd9d076eef46c4'
-require_contract.call(source.scan(go_image).length == 1, "Dagger base must be exact Go 1.27.0 on pinned Debian trixie image")
+go_image = 'golang:1.27.3-trixie@sha256:fbb7ae40b62ff8afe31662df570d39b4f5052ac32b90dae8e60d7657a20a74f4'
+require_contract.call(source.scan(go_image).length == 1, "Dagger base must be exact Go 1.27.3 on pinned Debian trixie image")
 %w[go-build go-mod muamba cargo].each do |kind|
   require_contract.call(source.include?("araihu-ci-v1-assets-${cacheNamespace}-#{kind}"), "#{kind} cache lacks stable PR/trusted namespace")
 end

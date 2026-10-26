@@ -10,7 +10,7 @@ import {
 } from "@dagger.io/dagger"
 
 const GO_IMAGE =
-  "golang:1.27.0-trixie@sha256:6212da3924947f4b6a939df02ea627c13f338f1a41d6c3fcb0dd9d076eef46c4"
+  "golang:1.27.3-trixie@sha256:fbb7ae40b62ff8afe31662df570d39b4f5052ac32b90dae8e60d7657a20a74f4"
 
 const SOURCE_EXCLUDES = [
   ".git",
@@ -269,8 +269,8 @@ export class Assets {
       .withEnvVariable("GOSUMDB", "off")
       .withEnvVariable("GONOSUMDB", "*")
       .withEnvVariable("MUAMBA_CACHE_DIR", "/root/.cache/muamba")
-      .withMountedCache("/root/.cache/go-build", dag.cacheVolume(`araihu-ci-v1-assets-${cacheNamespace}-go-build-1.27.0`))
-      .withMountedCache("/go/pkg/mod", dag.cacheVolume(`araihu-ci-v1-assets-${cacheNamespace}-go-mod-1.27.0`))
+      .withMountedCache("/root/.cache/go-build", dag.cacheVolume(`araihu-ci-v1-assets-${cacheNamespace}-go-build-1.27.3`))
+      .withMountedCache("/go/pkg/mod", dag.cacheVolume(`araihu-ci-v1-assets-${cacheNamespace}-go-mod-1.27.3`))
       .withMountedCache("/root/.cache/muamba", dag.cacheVolume(`araihu-ci-v1-assets-${cacheNamespace}-muamba-v0.0.4`))
   }
 
