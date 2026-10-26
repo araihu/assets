@@ -1,7 +1,7 @@
 # Runner admission
 
 `cmd/runneradmission` owns Hostinger job admission and maintenance coordination.
-Compile with Go 1.27 and `CGO_ENABLED=0`; install the executable outside the
+Compile with Go 1.27.3 and `CGO_ENABLED=0`; install the executable outside the
 runner workspace, owned by root. The GitHub hook must be a `.sh` file, so its
 entire adapter is `exec /opt/hostinger-hooks/runneradmission`.
 
