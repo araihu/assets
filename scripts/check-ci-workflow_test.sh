@@ -198,12 +198,12 @@ mutate_and_reject "Dependabot routed to PR runner" .github/workflows/ci.yml \
 mutate_and_reject "protected runner routed to generic lane" .github/workflows/acquisition.yml \
   'hostinger-vps-trusted' 'hostinger-vps'
 mutate_and_reject "provider expression enters Dagger args" .github/workflows/ci.yml \
-  'version: "0.21.8"' $'version: "0.21.8"\n          args: ci --trust-domain=${{ github.event_name }}'
+  'version: "0.21.11"' $'version: "0.21.11"\n          args: ci --trust-domain=${{ github.event_name }}'
 mutate_and_reject "self-hosted exact version gate removed" .github/workflows/ci.yml \
-  'test "$(dagger version | awk '\''NR == 1 { print $2 }'\'')" = v0.21.8' \
+  'test "$(dagger version | awk '\''NR == 1 { print $2 }'\'')" = v0.21.11' \
   'dagger version'
 mutate_and_reject "remote TypeScript SDK dependency restored" .dagger/package.json \
-  '"@dagger.io/dagger": "./sdk"' '"@dagger.io/dagger": "0.21.8"'
+  '"@dagger.io/dagger": "./sdk"' '"@dagger.io/dagger": "0.21.11"'
 
 sdk_fixture="$scratch/versioned-sdk"
 mkdir -p "$sdk_fixture/.github" "$sdk_fixture/.dagger/sdk" "$sdk_fixture/docs"

@@ -25,6 +25,9 @@ concurrency:
   group: release-consumer-fanout-${{ inputs.release }}
   cancel-in-progress: false
 
+env:
+  _EXPERIMENTAL_DAGGER_RUNNER_HOST: docker-image://registry.dagger.io/engine:v0.21.11@sha256:6b557cc8b5fdfee0e2e8c82d451ac922097a1255482143e1b96c0be3ff2a303c
+
 jobs:
   dispatch:
     runs-on: [self-hosted, Linux, X64, hostinger-vps-trusted]
@@ -40,7 +43,7 @@ jobs:
       - name: Install exact Dagger CLI
         uses: dagger/dagger-for-github@27b130bf0f79a7f6fbbbe0fbca6760dc9bb40a77 # v8.4.1
         with:
-          version: "0.21.8"
+          version: "0.21.11"
 
       - name: Verify immutable release handoff with Dagger
         env:
