@@ -34,7 +34,7 @@ light and dark surfaces plus adaptive-background and transparent variants.
 
 ## Capabilities and Constraints
 
-- v11 contains five products, each with icon and horizontal logo assets in
+- v11 contains six products, each with icon and horizontal logo assets in
   background and transparent modes.
 - SVGs remain self-contained, scalable through `viewBox`, accessible, and
   theme-adaptive through semantic `surface`, `ink`, and `signal` roles.

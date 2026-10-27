@@ -44,7 +44,7 @@ func TestLoadManifests(t *testing.T) {
 
 func TestBrandRequiresPinnedOriginalSourceHashes(t *testing.T) {
 	m := validBrand(t)
-	if got, want := len(m.Products), 5; got != want {
+	if got, want := len(m.Products), 6; got != want {
 		t.Fatalf("products = %d, want %d", got, want)
 	}
 	for _, product := range m.Products {

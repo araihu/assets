@@ -2,14 +2,14 @@
 
 Deterministic identity and interface assets for Arai Hû products.
 `dist/catalog.json` is the versioned, language-neutral consumer contract for
-the `v0.2.5` release.
+the `v0.2.6` release.
 
 ## Current checkout
 
 Requires Go `1.27.3`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
-The managed `dist/` tree is the `v0.2.5` release. Its catalog, generated
+The managed `dist/` tree is the `v0.2.6` release. Its catalog, generated
 sprites, catalog-driven proof, and deterministic archives are consumer inputs.
 Use a disposable checkout when regenerating it:
 
@@ -211,9 +211,17 @@ GitHub Release archive, verifies `SHA256SUMS`, safely extracts it, and stages
 only those immutable contracts for channel generation. Historical releases do
 not remain in managed `dist/`, and no unpublished release is synthesized.
 
+## Product identities
+
+[Balemoh](docs/brand/balemoh.md) and [Mocó](docs/brand/moco.md) document their
+source geometry, palette and generated variants. Release `v0.2.6` adds the
+Mocó identity and its platform packages.
+Consumers must select `v0.2.6` or newer to use it; the immutable `v0.2.5`
+archive remains unchanged.
+
 ## Catalog and sprites
 
-The `v0.2.5` `dist/catalog.json` is schema v2, language-neutral metadata for
+The `v0.2.6` `dist/catalog.json` is schema v2, language-neutral metadata for
 generated files only. It records canonical name,
 namespace, variant dimensions,
 `spriteSymbol`, color behavior, license, source label, and SHA-256. Public
@@ -240,7 +248,7 @@ generation is provided by this CLI; consumers own any project-local bindings.
 
 ## Platform files and archives
 
-The `v0.2.5` build emits individual brand/UI SVGs, web/Android/Apple platform
+The `v0.2.6` build emits individual brand/UI SVGs, web/Android/Apple platform
 packages, catalog, checksums, notices, licenses, the self-contained
 `dist/proof/**` review site, and deterministic `.tar.gz` and `.zip` archives
 under `dist/releases/`. Platform launchers
@@ -251,12 +259,13 @@ The catalog is the current interoperability boundary. Release archives contain
 the complete managed distribution, including all `dist/proof/**` local assets;
 review screenshots and critique files remain outside release membership.
 
-A local `v0.2.4` checkout is not a substitute for published-release
+A local `v0.2.6` checkout is not a substitute for published-release
 verification. Consumers must verify the matching Git tag, GitHub Release,
 `SHA256SUMS`, archive, and extracted member checksums before treating its
 archive names or module version as public.
 
-`manifests/default.yaml` promotes `v0.2.5`. This release removes the retired
+`manifests/default.yaml` still promotes `v0.2.5`, independently of the newest
+release. Version `v0.2.5` removed the retired
 product identity from catalogs, sprites, platform packages, and consumer fan-out
 while retaining catalog schema v2.
 

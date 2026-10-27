@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "release": "v0.2.5",
+  "release": "v0.2.6",
   "identityRevision": 11,
   "runtimeVersion": 1,
-  "catalogSha256": "c448e94d02ee3d8727ffa40fa38fae3319f178547c12376968c3ad58ff0b758b",
-  "themesSha256": "6a40788b5753264890323e7349316c916f0cae110358100ee326726548a9e011",
+  "catalogSha256": "172fab5947b0aa1f3cb72113e9f8a91af353bd733da2102f4844b5d20b847121",
+  "themesSha256": "fd6c16d918f52d764694ec9d3f15d9f745ee82bac572072d1c30f3a8f96cbcac",
   "campaignsSha256": "fd0393fed7bcf92c7323ba88467b042ca14744da93442f8700bb242f1f23756a",
   "files": [
     {
       "path": "catalog.json",
-      "sha256": "c448e94d02ee3d8727ffa40fa38fae3319f178547c12376968c3ad58ff0b758b",
-      "size": 1292260
+      "sha256": "172fab5947b0aa1f3cb72113e9f8a91af353bd733da2102f4844b5d20b847121",
+      "size": 1325328
     },
     {
       "path": "themes.json",
-      "sha256": "6a40788b5753264890323e7349316c916f0cae110358100ee326726548a9e011",
+      "sha256": "fd6c16d918f52d764694ec9d3f15d9f745ee82bac572072d1c30f3a8f96cbcac",
       "size": 532
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "path": "NOTICE",
-      "sha256": "95d41ad1aab5b3602cdf99231543a6527e04018d08d12fb0b1e39456373c4a9c",
+      "sha256": "a2352282b84512d3d19605db486143ae092bc54a0b26e87f3ee4b0968fbf998e",
       "size": 260
     },
     {
@@ -246,6 +246,61 @@
       "path": "brand/manja/logo/tinted-transparent-optical.svg",
       "sha256": "ed4a5d37f7ea2473a1631bc9d684d0b65bd389c86043d8ab699bfb23765dbe5c",
       "size": 3401
+    },
+    {
+      "path": "brand/moco/logo/adaptive-plate-optical.svg",
+      "sha256": "45a05c8ae317cc9ac2d8edede7626b522f13d9399aa14138ff9e3723060f1fef",
+      "size": 2193
+    },
+    {
+      "path": "brand/moco/logo/adaptive-transparent-optical.svg",
+      "sha256": "c9a4fcd4d92b85f09c60056d7110840849f6d8e778bcef8e51a3bc269c39a289",
+      "size": 2079
+    },
+    {
+      "path": "brand/moco/logo/dark-plate-optical.svg",
+      "sha256": "08fce4653f0b85106efca26f2d569c44a7daed1900840e0622edc716f2c2e5f7",
+      "size": 1463
+    },
+    {
+      "path": "brand/moco/logo/dark-transparent-optical.svg",
+      "sha256": "39285ed157868d9f66261c9a2ea24fdb55ba0eba82ce839372d45de7e3801bee",
+      "size": 1410
+    },
+    {
+      "path": "brand/moco/logo/grayscale-plate-optical.svg",
+      "sha256": "8acb8a8fe79ed0267578a78344a803bd97ec89cd318c643f650953722ec798fe",
+      "size": 1463
+    },
+    {
+      "path": "brand/moco/logo/grayscale-transparent-optical.svg",
+      "sha256": "e1b277f4199e43815d7d5e7c4049f0eb81de6e75bfdc22e57ef21275aeabb866",
+      "size": 1410
+    },
+    {
+      "path": "brand/moco/logo/light-plate-optical.svg",
+      "sha256": "5aabf59bdaf327a611058d80e7fdce87d9cc40f6f24a50e6abc859ce684d9616",
+      "size": 1463
+    },
+    {
+      "path": "brand/moco/logo/light-transparent-optical.svg",
+      "sha256": "4c525e7186e20b7ef289c2e967e4c5c15180d70b124681759401615a4c0e5bb5",
+      "size": 1410
+    },
+    {
+      "path": "brand/moco/logo/monochrome-transparent-optical.svg",
+      "sha256": "f54a62473e020d67f95670cdf9633e71bccc18997efdce5e5894a6a6f587a709",
+      "size": 1385
+    },
+    {
+      "path": "brand/moco/logo/tinted-plate-optical.svg",
+      "sha256": "ab9cf89bbe27dea884b88840981e159b76d7a8dff65d47e98ead9b818a904e7a",
+      "size": 1463
+    },
+    {
+      "path": "brand/moco/logo/tinted-transparent-optical.svg",
+      "sha256": "6abf67d33984b57542b23ec59ccd655aefce1e4aa678c5baa29a9ad971b338b6",
+      "size": 1410
     },
     {
       "path": "brand/x9/logo/adaptive-plate-optical.svg",
@@ -2168,9 +2223,74 @@
       "size": 1510
     },
     {
+      "path": "icons/brand/moco-icon-adaptive-plate-launcher.svg",
+      "sha256": "5f30a9f669876ef6ef5e68b7b7a61a2a351f67e160c263d905f817972ae719be",
+      "size": 782
+    },
+    {
+      "path": "icons/brand/moco-icon-adaptive-plate-optical.svg",
+      "sha256": "bfcf852e31601ff578be872ce10d1a6b9ea6a024dbc9e7ae5c8a4963f6a48767",
+      "size": 748
+    },
+    {
+      "path": "icons/brand/moco-icon-adaptive-transparent-optical.svg",
+      "sha256": "99830f5f48b986658cc4ede72c9ce97600aecfa7c0fc0debbe3f673c8aa63590",
+      "size": 648
+    },
+    {
+      "path": "icons/brand/moco-icon-dark-plate-optical.svg",
+      "sha256": "3f0ad4320f7581ef25ba454596e83ce679d4b633512eb342e41847bdf2702c38",
+      "size": 411
+    },
+    {
+      "path": "icons/brand/moco-icon-dark-transparent-optical.svg",
+      "sha256": "5f9aa1b96ac0ae788566616cb27f8517863d7fb4821691bfbd0924b026d76998",
+      "size": 372
+    },
+    {
+      "path": "icons/brand/moco-icon-grayscale-plate-optical.svg",
+      "sha256": "d8638994be13407100e6720a20169a481de93de5e997cae232e1703ca7cb176b",
+      "size": 411
+    },
+    {
+      "path": "icons/brand/moco-icon-grayscale-transparent-optical.svg",
+      "sha256": "46edfa8f7e261d2770ef2fe4a649c6113f0b50ef9362567dc3a40b68d1dfa7fb",
+      "size": 372
+    },
+    {
+      "path": "icons/brand/moco-icon-light-plate-optical.svg",
+      "sha256": "064b85d6b97d55c8b3656a872b3d0ab7fc6b65300e2bc9816019b2f0b3b87cb8",
+      "size": 411
+    },
+    {
+      "path": "icons/brand/moco-icon-light-transparent-optical.svg",
+      "sha256": "2f08db650611dba618736fd68acf5469f5ebc8b55a24c8e99b6caed43de1a7b6",
+      "size": 372
+    },
+    {
+      "path": "icons/brand/moco-icon-monochrome-transparent-optical.svg",
+      "sha256": "735679e4f23649613b7d1ec0cec7424601ac876141c5313b115578797176981d",
+      "size": 362
+    },
+    {
+      "path": "icons/brand/moco-icon-tinted-plate-launcher.svg",
+      "sha256": "b7338330101405a32e6814c5790af64965109574cbea9176fa326d8e5c95ffda",
+      "size": 445
+    },
+    {
+      "path": "icons/brand/moco-icon-tinted-plate-optical.svg",
+      "sha256": "a4ea6805d3242557a81695153afa9c654945449005a565f3e3ed6ed95923ee12",
+      "size": 411
+    },
+    {
+      "path": "icons/brand/moco-icon-tinted-transparent-optical.svg",
+      "sha256": "4e8d43bd2bd6cd3a1e3130072c3a78df5022dd57c71d71d029df51a4247adce8",
+      "size": 372
+    },
+    {
       "path": "icons/brand/sprite.svg",
-      "sha256": "2a0832eaa44148c89bb9edc4be768fb2c12058279ad8dec69062f5b0241b5970",
-      "size": 284536
+      "sha256": "f861c22c113f84ae5b03929425e196f1edbfdbe612193fb78c3f27a0018fafa3",
+      "size": 301535
     },
     {
       "path": "icons/brand/x9-icon-adaptive-plate-launcher.svg",
@@ -9043,6 +9163,91 @@
       "size": 119
     },
     {
+      "path": "platform/android/moco/res/drawable-xxxhdpi/ic_launcher_foreground.png",
+      "sha256": "ad1b362cc7ff4782bd6476cc7c7b03b88a0fad465177987328737676e7f61805",
+      "size": 5252
+    },
+    {
+      "path": "platform/android/moco/res/drawable-xxxhdpi/ic_launcher_monochrome.png",
+      "sha256": "f349f00af73f671cbc0b33bbd648486851f06380e5e1eb8a31850b5faffbcca1",
+      "size": 4697
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-anydpi-v33/ic_launcher.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-anydpi-v33/ic_launcher_round.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-hdpi/ic_launcher.png",
+      "sha256": "959283efff5fb1db5224018f1c0f302ec5dc1ba9e5cf348b7b0f8b8b3c849cf9",
+      "size": 988
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-hdpi/ic_launcher_round.png",
+      "sha256": "959283efff5fb1db5224018f1c0f302ec5dc1ba9e5cf348b7b0f8b8b3c849cf9",
+      "size": 988
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-mdpi/ic_launcher.png",
+      "sha256": "dd05e5f195a0a60a1123c7d162aa0fd39506cc3d94a067f3ad7858b194b34ced",
+      "size": 744
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-mdpi/ic_launcher_round.png",
+      "sha256": "dd05e5f195a0a60a1123c7d162aa0fd39506cc3d94a067f3ad7858b194b34ced",
+      "size": 744
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-xhdpi/ic_launcher.png",
+      "sha256": "8e7d7a5e155157a3a6814be63461f2cc71cfdd4f7b0f5de8d499a3aa405d9dd6",
+      "size": 1415
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-xhdpi/ic_launcher_round.png",
+      "sha256": "8e7d7a5e155157a3a6814be63461f2cc71cfdd4f7b0f5de8d499a3aa405d9dd6",
+      "size": 1415
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-xxhdpi/ic_launcher.png",
+      "sha256": "2eafc964a9c2d70f8fb66721d4e2f91950085b279bada534e0c5591ad735416c",
+      "size": 1906
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "sha256": "2eafc964a9c2d70f8fb66721d4e2f91950085b279bada534e0c5591ad735416c",
+      "size": 1906
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-xxxhdpi/ic_launcher.png",
+      "sha256": "f092d1a17e07ccae1a709641ace19ebe50cf6067a2b41b41c263dc12c8196063",
+      "size": 2592
+    },
+    {
+      "path": "platform/android/moco/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "sha256": "f092d1a17e07ccae1a709641ace19ebe50cf6067a2b41b41c263dc12c8196063",
+      "size": 2592
+    },
+    {
+      "path": "platform/android/moco/res/values/colors.xml",
+      "sha256": "5ff60af86c09ba6de6a41bccbf4efe80c5c5b4296b639fcf8bbac653f54b2c71",
+      "size": 119
+    },
+    {
       "path": "platform/android/x9/res/drawable-xxxhdpi/ic_launcher_foreground.png",
       "sha256": "c3a7710ad776c287d1a427bbbd5c5add52aa66bbfc6ca7236472ac72c07af6b4",
       "size": 8036
@@ -9224,6 +9429,31 @@
     },
     {
       "path": "platform/apple/manja/Assets.xcassets/Contents.json",
+      "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
+      "size": 41
+    },
+    {
+      "path": "platform/apple/moco/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
+      "sha256": "4fc22c460e0cafe7b60775fec25d3dc79baec9d660ae997f22309fc8ab85b2da",
+      "size": 15101
+    },
+    {
+      "path": "platform/apple/moco/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-tinted.png",
+      "sha256": "a127fc6542dbf724cce9eaf96df3085a11a21f75859d1c559044f145f34d64dc",
+      "size": 14662
+    },
+    {
+      "path": "platform/apple/moco/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "sha256": "e3d068ab96e63a8bc2262bb69595cdcb56c33a000a61e484c82b3dbf7644108c",
+      "size": 14890
+    },
+    {
+      "path": "platform/apple/moco/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "6cfa296f7b0d78219f6cc2d1db6fd6d626633e5216f8538483567992d3bdb2f1",
+      "size": 448
+    },
+    {
+      "path": "platform/apple/moco/Assets.xcassets/Contents.json",
       "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
       "size": 41
     },
@@ -9433,6 +9663,51 @@
       "size": 344
     },
     {
+      "path": "platform/web/moco/apple-touch-icon-180.png",
+      "sha256": "afceac586120641da5f206e80365bc90b9296bbcb3c677630811be801cf6e250",
+      "size": 2403
+    },
+    {
+      "path": "platform/web/moco/favicon-16.png",
+      "sha256": "995dda80b9f544ccbbbce20b15174aa25622bd7d16d995c1985ca48ce51abaf2",
+      "size": 389
+    },
+    {
+      "path": "platform/web/moco/favicon-32.png",
+      "sha256": "588b1ef5a4b91d4ca3ded46b0b75270a391ce4b7a2e3731cd5baeb0c088585a8",
+      "size": 673
+    },
+    {
+      "path": "platform/web/moco/favicon.svg",
+      "sha256": "99830f5f48b986658cc4ede72c9ce97600aecfa7c0fc0debbe3f673c8aa63590",
+      "size": 648
+    },
+    {
+      "path": "platform/web/moco/icon-192.png",
+      "sha256": "a5bbf9de12170e56281d49b1cd0f036bd3c088b99dee4133e988be1ae55df4bd",
+      "size": 2856
+    },
+    {
+      "path": "platform/web/moco/icon-512.png",
+      "sha256": "42e246f975131db3fb58380b9ef98fcb960a98e0d7cd868ef02396e9ebf09a10",
+      "size": 7810
+    },
+    {
+      "path": "platform/web/moco/icon-maskable-192.png",
+      "sha256": "f092d1a17e07ccae1a709641ace19ebe50cf6067a2b41b41c263dc12c8196063",
+      "size": 2592
+    },
+    {
+      "path": "platform/web/moco/icon-maskable-512.png",
+      "sha256": "5611592f364962ca4f549d3bec23e93d854aac555970f082d80404babccdb9b9",
+      "size": 6864
+    },
+    {
+      "path": "platform/web/moco/manifest-icons.json",
+      "sha256": "46522597d9c995b795ca75f7cb250b4fabb4eb9810d162c8cd1142b3c44f6bf6",
+      "size": 344
+    },
+    {
       "path": "platform/web/x9/apple-touch-icon-180.png",
       "sha256": "a93ce84be320156fc9bde45a8fd49751f9418962e17d9a9143ae0e87414e99c2",
       "size": 3181
@@ -9484,7 +9759,7 @@
     },
     {
       "path": "proof/assets/NOTICE",
-      "sha256": "95d41ad1aab5b3602cdf99231543a6527e04018d08d12fb0b1e39456373c4a9c",
+      "sha256": "a2352282b84512d3d19605db486143ae092bc54a0b26e87f3ee4b0968fbf998e",
       "size": 260
     },
     {
@@ -9706,6 +9981,61 @@
       "path": "proof/assets/brand/manja/logo/tinted-transparent-optical.svg",
       "sha256": "ed4a5d37f7ea2473a1631bc9d684d0b65bd389c86043d8ab699bfb23765dbe5c",
       "size": 3401
+    },
+    {
+      "path": "proof/assets/brand/moco/logo/adaptive-plate-optical.svg",
+      "sha256": "45a05c8ae317cc9ac2d8edede7626b522f13d9399aa14138ff9e3723060f1fef",
+      "size": 2193
+    },
+    {
+      "path": "proof/assets/brand/moco/logo/adaptive-transparent-optical.svg",
+      "sha256": "c9a4fcd4d92b85f09c60056d7110840849f6d8e778bcef8e51a3bc269c39a289",
+      "size": 2079
+    },
+    {
+      "path": "proof/assets/brand/moco/logo/dark-plate-optical.svg",
+      "sha256": "08fce4653f0b85106efca26f2d569c44a7daed1900840e0622edc716f2c2e5f7",
+      "size": 1463
+    },
+    {
+      "path": "proof/assets/brand/moco/logo/dark-transparent-optical.svg",
+      "sha256": "39285ed157868d9f66261c9a2ea24fdb55ba0eba82ce839372d45de7e3801bee",
+      "size": 1410
+    },
+    {
+      "path": "proof/assets/brand/moco/logo/grayscale-plate-optical.svg",
+      "sha256": "8acb8a8fe79ed0267578a78344a803bd97ec89cd318c643f650953722ec798fe",
+      "size": 1463
+    },
+    {
+      "path": "proof/assets/brand/moco/logo/grayscale-transparent-optical.svg",
+      "sha256": "e1b277f4199e43815d7d5e7c4049f0eb81de6e75bfdc22e57ef21275aeabb866",
+      "size": 1410
+    },
+    {
+      "path": "proof/assets/brand/moco/logo/light-plate-optical.svg",
+      "sha256": "5aabf59bdaf327a611058d80e7fdce87d9cc40f6f24a50e6abc859ce684d9616",
+      "size": 1463
+    },
+    {
+      "path": "proof/assets/brand/moco/logo/light-transparent-optical.svg",
+      "sha256": "4c525e7186e20b7ef289c2e967e4c5c15180d70b124681759401615a4c0e5bb5",
+      "size": 1410
+    },
+    {
+      "path": "proof/assets/brand/moco/logo/monochrome-transparent-optical.svg",
+      "sha256": "f54a62473e020d67f95670cdf9633e71bccc18997efdce5e5894a6a6f587a709",
+      "size": 1385
+    },
+    {
+      "path": "proof/assets/brand/moco/logo/tinted-plate-optical.svg",
+      "sha256": "ab9cf89bbe27dea884b88840981e159b76d7a8dff65d47e98ead9b818a904e7a",
+      "size": 1463
+    },
+    {
+      "path": "proof/assets/brand/moco/logo/tinted-transparent-optical.svg",
+      "sha256": "6abf67d33984b57542b23ec59ccd655aefce1e4aa678c5baa29a9ad971b338b6",
+      "size": 1410
     },
     {
       "path": "proof/assets/brand/x9/logo/adaptive-plate-optical.svg",
@@ -11633,9 +11963,74 @@
       "size": 1510
     },
     {
+      "path": "proof/assets/icons/brand/moco-icon-adaptive-plate-launcher.svg",
+      "sha256": "5f30a9f669876ef6ef5e68b7b7a61a2a351f67e160c263d905f817972ae719be",
+      "size": 782
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-adaptive-plate-optical.svg",
+      "sha256": "bfcf852e31601ff578be872ce10d1a6b9ea6a024dbc9e7ae5c8a4963f6a48767",
+      "size": 748
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-adaptive-transparent-optical.svg",
+      "sha256": "99830f5f48b986658cc4ede72c9ce97600aecfa7c0fc0debbe3f673c8aa63590",
+      "size": 648
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-dark-plate-optical.svg",
+      "sha256": "3f0ad4320f7581ef25ba454596e83ce679d4b633512eb342e41847bdf2702c38",
+      "size": 411
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-dark-transparent-optical.svg",
+      "sha256": "5f9aa1b96ac0ae788566616cb27f8517863d7fb4821691bfbd0924b026d76998",
+      "size": 372
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-grayscale-plate-optical.svg",
+      "sha256": "d8638994be13407100e6720a20169a481de93de5e997cae232e1703ca7cb176b",
+      "size": 411
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-grayscale-transparent-optical.svg",
+      "sha256": "46edfa8f7e261d2770ef2fe4a649c6113f0b50ef9362567dc3a40b68d1dfa7fb",
+      "size": 372
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-light-plate-optical.svg",
+      "sha256": "064b85d6b97d55c8b3656a872b3d0ab7fc6b65300e2bc9816019b2f0b3b87cb8",
+      "size": 411
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-light-transparent-optical.svg",
+      "sha256": "2f08db650611dba618736fd68acf5469f5ebc8b55a24c8e99b6caed43de1a7b6",
+      "size": 372
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-monochrome-transparent-optical.svg",
+      "sha256": "735679e4f23649613b7d1ec0cec7424601ac876141c5313b115578797176981d",
+      "size": 362
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-tinted-plate-launcher.svg",
+      "sha256": "b7338330101405a32e6814c5790af64965109574cbea9176fa326d8e5c95ffda",
+      "size": 445
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-tinted-plate-optical.svg",
+      "sha256": "a4ea6805d3242557a81695153afa9c654945449005a565f3e3ed6ed95923ee12",
+      "size": 411
+    },
+    {
+      "path": "proof/assets/icons/brand/moco-icon-tinted-transparent-optical.svg",
+      "sha256": "4e8d43bd2bd6cd3a1e3130072c3a78df5022dd57c71d71d029df51a4247adce8",
+      "size": 372
+    },
+    {
       "path": "proof/assets/icons/brand/sprite.svg",
-      "sha256": "2a0832eaa44148c89bb9edc4be768fb2c12058279ad8dec69062f5b0241b5970",
-      "size": 284536
+      "sha256": "f861c22c113f84ae5b03929425e196f1edbfdbe612193fb78c3f27a0018fafa3",
+      "size": 301535
     },
     {
       "path": "proof/assets/icons/brand/x9-icon-adaptive-plate-launcher.svg",
@@ -18508,6 +18903,91 @@
       "size": 119
     },
     {
+      "path": "proof/assets/platform/android/moco/res/drawable-xxxhdpi/ic_launcher_foreground.png",
+      "sha256": "ad1b362cc7ff4782bd6476cc7c7b03b88a0fad465177987328737676e7f61805",
+      "size": 5252
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/drawable-xxxhdpi/ic_launcher_monochrome.png",
+      "sha256": "f349f00af73f671cbc0b33bbd648486851f06380e5e1eb8a31850b5faffbcca1",
+      "size": 4697
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-anydpi-v33/ic_launcher.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-anydpi-v33/ic_launcher_round.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-hdpi/ic_launcher.png",
+      "sha256": "959283efff5fb1db5224018f1c0f302ec5dc1ba9e5cf348b7b0f8b8b3c849cf9",
+      "size": 988
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-hdpi/ic_launcher_round.png",
+      "sha256": "959283efff5fb1db5224018f1c0f302ec5dc1ba9e5cf348b7b0f8b8b3c849cf9",
+      "size": 988
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-mdpi/ic_launcher.png",
+      "sha256": "dd05e5f195a0a60a1123c7d162aa0fd39506cc3d94a067f3ad7858b194b34ced",
+      "size": 744
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-mdpi/ic_launcher_round.png",
+      "sha256": "dd05e5f195a0a60a1123c7d162aa0fd39506cc3d94a067f3ad7858b194b34ced",
+      "size": 744
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-xhdpi/ic_launcher.png",
+      "sha256": "8e7d7a5e155157a3a6814be63461f2cc71cfdd4f7b0f5de8d499a3aa405d9dd6",
+      "size": 1415
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-xhdpi/ic_launcher_round.png",
+      "sha256": "8e7d7a5e155157a3a6814be63461f2cc71cfdd4f7b0f5de8d499a3aa405d9dd6",
+      "size": 1415
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-xxhdpi/ic_launcher.png",
+      "sha256": "2eafc964a9c2d70f8fb66721d4e2f91950085b279bada534e0c5591ad735416c",
+      "size": 1906
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "sha256": "2eafc964a9c2d70f8fb66721d4e2f91950085b279bada534e0c5591ad735416c",
+      "size": 1906
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-xxxhdpi/ic_launcher.png",
+      "sha256": "f092d1a17e07ccae1a709641ace19ebe50cf6067a2b41b41c263dc12c8196063",
+      "size": 2592
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "sha256": "f092d1a17e07ccae1a709641ace19ebe50cf6067a2b41b41c263dc12c8196063",
+      "size": 2592
+    },
+    {
+      "path": "proof/assets/platform/android/moco/res/values/colors.xml",
+      "sha256": "5ff60af86c09ba6de6a41bccbf4efe80c5c5b4296b639fcf8bbac653f54b2c71",
+      "size": 119
+    },
+    {
       "path": "proof/assets/platform/android/x9/res/drawable-xxxhdpi/ic_launcher_foreground.png",
       "sha256": "c3a7710ad776c287d1a427bbbd5c5add52aa66bbfc6ca7236472ac72c07af6b4",
       "size": 8036
@@ -18689,6 +19169,31 @@
     },
     {
       "path": "proof/assets/platform/apple/manja/Assets.xcassets/Contents.json",
+      "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
+      "size": 41
+    },
+    {
+      "path": "proof/assets/platform/apple/moco/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
+      "sha256": "4fc22c460e0cafe7b60775fec25d3dc79baec9d660ae997f22309fc8ab85b2da",
+      "size": 15101
+    },
+    {
+      "path": "proof/assets/platform/apple/moco/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-tinted.png",
+      "sha256": "a127fc6542dbf724cce9eaf96df3085a11a21f75859d1c559044f145f34d64dc",
+      "size": 14662
+    },
+    {
+      "path": "proof/assets/platform/apple/moco/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "sha256": "e3d068ab96e63a8bc2262bb69595cdcb56c33a000a61e484c82b3dbf7644108c",
+      "size": 14890
+    },
+    {
+      "path": "proof/assets/platform/apple/moco/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "6cfa296f7b0d78219f6cc2d1db6fd6d626633e5216f8538483567992d3bdb2f1",
+      "size": 448
+    },
+    {
+      "path": "proof/assets/platform/apple/moco/Assets.xcassets/Contents.json",
       "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
       "size": 41
     },
@@ -18898,6 +19403,51 @@
       "size": 344
     },
     {
+      "path": "proof/assets/platform/web/moco/apple-touch-icon-180.png",
+      "sha256": "afceac586120641da5f206e80365bc90b9296bbcb3c677630811be801cf6e250",
+      "size": 2403
+    },
+    {
+      "path": "proof/assets/platform/web/moco/favicon-16.png",
+      "sha256": "995dda80b9f544ccbbbce20b15174aa25622bd7d16d995c1985ca48ce51abaf2",
+      "size": 389
+    },
+    {
+      "path": "proof/assets/platform/web/moco/favicon-32.png",
+      "sha256": "588b1ef5a4b91d4ca3ded46b0b75270a391ce4b7a2e3731cd5baeb0c088585a8",
+      "size": 673
+    },
+    {
+      "path": "proof/assets/platform/web/moco/favicon.svg",
+      "sha256": "99830f5f48b986658cc4ede72c9ce97600aecfa7c0fc0debbe3f673c8aa63590",
+      "size": 648
+    },
+    {
+      "path": "proof/assets/platform/web/moco/icon-192.png",
+      "sha256": "a5bbf9de12170e56281d49b1cd0f036bd3c088b99dee4133e988be1ae55df4bd",
+      "size": 2856
+    },
+    {
+      "path": "proof/assets/platform/web/moco/icon-512.png",
+      "sha256": "42e246f975131db3fb58380b9ef98fcb960a98e0d7cd868ef02396e9ebf09a10",
+      "size": 7810
+    },
+    {
+      "path": "proof/assets/platform/web/moco/icon-maskable-192.png",
+      "sha256": "f092d1a17e07ccae1a709641ace19ebe50cf6067a2b41b41c263dc12c8196063",
+      "size": 2592
+    },
+    {
+      "path": "proof/assets/platform/web/moco/icon-maskable-512.png",
+      "sha256": "5611592f364962ca4f549d3bec23e93d854aac555970f082d80404babccdb9b9",
+      "size": 6864
+    },
+    {
+      "path": "proof/assets/platform/web/moco/manifest-icons.json",
+      "sha256": "46522597d9c995b795ca75f7cb250b4fabb4eb9810d162c8cd1142b3c44f6bf6",
+      "size": 344
+    },
+    {
       "path": "proof/assets/platform/web/x9/apple-touch-icon-180.png",
       "sha256": "a93ce84be320156fc9bde45a8fd49751f9418962e17d9a9143ae0e87414e99c2",
       "size": 3181
@@ -18944,7 +19494,7 @@
     },
     {
       "path": "proof/assets/themes.json",
-      "sha256": "6a40788b5753264890323e7349316c916f0cae110358100ee326726548a9e011",
+      "sha256": "fd6c16d918f52d764694ec9d3f15d9f745ee82bac572072d1c30f3a8f96cbcac",
       "size": 532
     },
     {
@@ -18959,8 +19509,8 @@
     },
     {
       "path": "proof/index.html",
-      "sha256": "f101db33ce2fd045594b534a53a6ef5f087b21ac49c5405799d9a772110456fb",
-      "size": 2726479
+      "sha256": "e6a216c9458492df595ac025a79dac7fe9a1cb7b326caf25a310d5213994d82e",
+      "size": 3088077
     },
     {
       "path": "proof/og.png",
