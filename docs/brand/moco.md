@@ -73,6 +73,8 @@ make verify
 ```
 
 These commands require the repository-pinned `rsvg-convert` 2.62.1 for platform
-rasters and reproducibility checks. This addition does not publish a release or
-change a consumer's dependency. The existing published v0.2.5 archive remains
-unchanged; a subsequent release is required to distribute Mocó to consumers.
+rasters and reproducibility checks. Release v0.2.6 distributes this identity.
+Consumers must pin that release or
+a newer one and verify the archive and catalog checksums before importing
+files. The existing v0.2.5 archive and the independently promoted default
+channel remain unchanged.

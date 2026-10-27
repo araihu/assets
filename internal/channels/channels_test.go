@@ -84,7 +84,7 @@ func TestEncodeIsDeterministicAndDigestCoversEmptyDigest(t *testing.T) {
 	}
 }
 
-func TestSourceDefaultRemainsV011WhileLatestResolvesBaseline(t *testing.T) {
+func TestSourceDefaultRemainsV025WhileLatestResolvesBaseline(t *testing.T) {
 	root := os.DirFS("../..")
 	defaultPromotion, err := LoadDefault(root, "manifests/default.yaml")
 	if err != nil {
@@ -112,7 +112,7 @@ func TestSourceDefaultRemainsV011WhileLatestResolvesBaseline(t *testing.T) {
 	if err := json.NewDecoder(themeFile).Decode(&themeCatalog); err != nil {
 		t.Fatal(err)
 	}
-	if assetCatalog.Release != "v0.2.5" || themeCatalog.Release != "v0.2.5" {
+	if assetCatalog.Release != "v0.2.6" || themeCatalog.Release != "v0.2.6" {
 		t.Fatalf("latest release mismatch: catalog=%q themes=%q", assetCatalog.Release, themeCatalog.Release)
 	}
 	latestPromotion := defaultPromotion
