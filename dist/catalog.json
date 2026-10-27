@@ -7870,6 +7870,462 @@
       "sha256": "ed4a5d37f7ea2473a1631bc9d684d0b65bd389c86043d8ab699bfb23765dbe5c"
     },
     {
+      "canonicalName": "moco-icon-adaptive-plate-launcher",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-adaptive-plate-launcher.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "-116.363440 -116.363440 1256.726880 1256.726880"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-background.svg#sha256=1e7fb3e03c25c4bc2343a583b6cdbbb5213b94bc40d7d9c3f2fb156f915a67f5",
+      "sha256": "5f30a9f669876ef6ef5e68b7b7a61a2a351f67e160c263d905f817972ae719be"
+    },
+    {
+      "canonicalName": "moco-icon-adaptive-plate-optical",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-adaptive-plate-optical.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 1024 1024"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-background.svg#sha256=1e7fb3e03c25c4bc2343a583b6cdbbb5213b94bc40d7d9c3f2fb156f915a67f5",
+      "sha256": "bfcf852e31601ff578be872ce10d1a6b9ea6a024dbc9e7ae5c8a4963f6a48767"
+    },
+    {
+      "canonicalName": "moco-icon-adaptive-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-adaptive-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "6.737 6.737 1010.526 1010.526"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-transparent.svg#sha256=47c5fb0df6bfd639230d79888c7d2b5ac68a2f1aa871cd4c075a1464a50685aa",
+      "sha256": "99830f5f48b986658cc4ede72c9ce97600aecfa7c0fc0debbe3f673c8aa63590"
+    },
+    {
+      "canonicalName": "moco-icon-dark-plate-optical",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-dark-plate-optical.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 1024 1024"
+      },
+      "spriteSymbol": "moco-icon-dark-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-background.svg#sha256=1e7fb3e03c25c4bc2343a583b6cdbbb5213b94bc40d7d9c3f2fb156f915a67f5",
+      "sha256": "3f0ad4320f7581ef25ba454596e83ce679d4b633512eb342e41847bdf2702c38"
+    },
+    {
+      "canonicalName": "moco-icon-dark-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-dark-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "6.737 6.737 1010.526 1010.526"
+      },
+      "spriteSymbol": "moco-icon-dark-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-transparent.svg#sha256=47c5fb0df6bfd639230d79888c7d2b5ac68a2f1aa871cd4c075a1464a50685aa",
+      "sha256": "5f9aa1b96ac0ae788566616cb27f8517863d7fb4821691bfbd0924b026d76998"
+    },
+    {
+      "canonicalName": "moco-icon-grayscale-plate-optical",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-grayscale-plate-optical.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 1024 1024"
+      },
+      "spriteSymbol": "moco-icon-grayscale-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-background.svg#sha256=1e7fb3e03c25c4bc2343a583b6cdbbb5213b94bc40d7d9c3f2fb156f915a67f5",
+      "sha256": "d8638994be13407100e6720a20169a481de93de5e997cae232e1703ca7cb176b"
+    },
+    {
+      "canonicalName": "moco-icon-grayscale-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-grayscale-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "6.737 6.737 1010.526 1010.526"
+      },
+      "spriteSymbol": "moco-icon-grayscale-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-transparent.svg#sha256=47c5fb0df6bfd639230d79888c7d2b5ac68a2f1aa871cd4c075a1464a50685aa",
+      "sha256": "46edfa8f7e261d2770ef2fe4a649c6113f0b50ef9362567dc3a40b68d1dfa7fb"
+    },
+    {
+      "canonicalName": "moco-icon-light-plate-optical",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-light-plate-optical.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 1024 1024"
+      },
+      "spriteSymbol": "moco-icon-light-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-background.svg#sha256=1e7fb3e03c25c4bc2343a583b6cdbbb5213b94bc40d7d9c3f2fb156f915a67f5",
+      "sha256": "064b85d6b97d55c8b3656a872b3d0ab7fc6b65300e2bc9816019b2f0b3b87cb8"
+    },
+    {
+      "canonicalName": "moco-icon-light-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-light-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "6.737 6.737 1010.526 1010.526"
+      },
+      "spriteSymbol": "moco-icon-light-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-transparent.svg#sha256=47c5fb0df6bfd639230d79888c7d2b5ac68a2f1aa871cd4c075a1464a50685aa",
+      "sha256": "2f08db650611dba618736fd68acf5469f5ebc8b55a24c8e99b6caed43de1a7b6"
+    },
+    {
+      "canonicalName": "moco-icon-monochrome-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-monochrome-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "6.737 6.737 1010.526 1010.526"
+      },
+      "spriteSymbol": "moco-icon-monochrome-transparent-optical",
+      "colorBehavior": "monochrome",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-transparent.svg#sha256=47c5fb0df6bfd639230d79888c7d2b5ac68a2f1aa871cd4c075a1464a50685aa",
+      "sha256": "735679e4f23649613b7d1ec0cec7424601ac876141c5313b115578797176981d"
+    },
+    {
+      "canonicalName": "moco-icon-tinted-plate-launcher",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-tinted-plate-launcher.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "-116.363440 -116.363440 1256.726880 1256.726880"
+      },
+      "spriteSymbol": "moco-icon-tinted-plate-launcher",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-background.svg#sha256=1e7fb3e03c25c4bc2343a583b6cdbbb5213b94bc40d7d9c3f2fb156f915a67f5",
+      "sha256": "b7338330101405a32e6814c5790af64965109574cbea9176fa326d8e5c95ffda"
+    },
+    {
+      "canonicalName": "moco-icon-tinted-plate-optical",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-tinted-plate-optical.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 1024 1024"
+      },
+      "spriteSymbol": "moco-icon-tinted-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-background.svg#sha256=1e7fb3e03c25c4bc2343a583b6cdbbb5213b94bc40d7d9c3f2fb156f915a67f5",
+      "sha256": "a4ea6805d3242557a81695153afa9c654945449005a565f3e3ed6ed95923ee12"
+    },
+    {
+      "canonicalName": "moco-icon-tinted-transparent-optical",
+      "namespace": "brand",
+      "path": "icons/brand/moco-icon-tinted-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "6.737 6.737 1010.526 1010.526"
+      },
+      "spriteSymbol": "moco-icon-tinted-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-icon-transparent.svg#sha256=47c5fb0df6bfd639230d79888c7d2b5ac68a2f1aa871cd4c075a1464a50685aa",
+      "sha256": "4e8d43bd2bd6cd3a1e3130072c3a78df5022dd57c71d71d029df51a4247adce8"
+    },
+    {
+      "canonicalName": "moco-logo-adaptive-plate-optical",
+      "namespace": "brand",
+      "path": "brand/moco/logo/adaptive-plate-optical.svg",
+      "product": "moco",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 2048 508"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-logo-background.svg#sha256=7953dc2516ab819ad8a38040270a92d3b4ae66c6a288f79cb0aa579a2fb99970",
+      "sha256": "45a05c8ae317cc9ac2d8edede7626b522f13d9399aa14138ff9e3723060f1fef"
+    },
+    {
+      "canonicalName": "moco-logo-adaptive-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/moco/logo/adaptive-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "logo",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "48 0 1912 474"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-logo-transparent.svg#sha256=244712d95e0c3c69bb7ea9cc8520417bc74e95f88398a2ed52bb48d9f09dee0e",
+      "sha256": "c9a4fcd4d92b85f09c60056d7110840849f6d8e778bcef8e51a3bc269c39a289"
+    },
+    {
+      "canonicalName": "moco-logo-dark-plate-optical",
+      "namespace": "brand",
+      "path": "brand/moco/logo/dark-plate-optical.svg",
+      "product": "moco",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 2048 508"
+      },
+      "spriteSymbol": "moco-logo-dark-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-logo-background.svg#sha256=7953dc2516ab819ad8a38040270a92d3b4ae66c6a288f79cb0aa579a2fb99970",
+      "sha256": "08fce4653f0b85106efca26f2d569c44a7daed1900840e0622edc716f2c2e5f7"
+    },
+    {
+      "canonicalName": "moco-logo-dark-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/moco/logo/dark-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "logo",
+      "appearance": "dark",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "48 0 1912 474"
+      },
+      "spriteSymbol": "moco-logo-dark-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-logo-transparent.svg#sha256=244712d95e0c3c69bb7ea9cc8520417bc74e95f88398a2ed52bb48d9f09dee0e",
+      "sha256": "39285ed157868d9f66261c9a2ea24fdb55ba0eba82ce839372d45de7e3801bee"
+    },
+    {
+      "canonicalName": "moco-logo-grayscale-plate-optical",
+      "namespace": "brand",
+      "path": "brand/moco/logo/grayscale-plate-optical.svg",
+      "product": "moco",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 2048 508"
+      },
+      "spriteSymbol": "moco-logo-grayscale-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-logo-background.svg#sha256=7953dc2516ab819ad8a38040270a92d3b4ae66c6a288f79cb0aa579a2fb99970",
+      "sha256": "8acb8a8fe79ed0267578a78344a803bd97ec89cd318c643f650953722ec798fe"
+    },
+    {
+      "canonicalName": "moco-logo-grayscale-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/moco/logo/grayscale-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "logo",
+      "appearance": "grayscale",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "48 0 1912 474"
+      },
+      "spriteSymbol": "moco-logo-grayscale-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-logo-transparent.svg#sha256=244712d95e0c3c69bb7ea9cc8520417bc74e95f88398a2ed52bb48d9f09dee0e",
+      "sha256": "e1b277f4199e43815d7d5e7c4049f0eb81de6e75bfdc22e57ef21275aeabb866"
+    },
+    {
+      "canonicalName": "moco-logo-light-plate-optical",
+      "namespace": "brand",
+      "path": "brand/moco/logo/light-plate-optical.svg",
+      "product": "moco",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 2048 508"
+      },
+      "spriteSymbol": "moco-logo-light-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-logo-background.svg#sha256=7953dc2516ab819ad8a38040270a92d3b4ae66c6a288f79cb0aa579a2fb99970",
+      "sha256": "5aabf59bdaf327a611058d80e7fdce87d9cc40f6f24a50e6abc859ce684d9616"
+    },
+    {
+      "canonicalName": "moco-logo-light-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/moco/logo/light-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "logo",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "48 0 1912 474"
+      },
+      "spriteSymbol": "moco-logo-light-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-logo-transparent.svg#sha256=244712d95e0c3c69bb7ea9cc8520417bc74e95f88398a2ed52bb48d9f09dee0e",
+      "sha256": "4c525e7186e20b7ef289c2e967e4c5c15180d70b124681759401615a4c0e5bb5"
+    },
+    {
+      "canonicalName": "moco-logo-monochrome-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/moco/logo/monochrome-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "logo",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "48 0 1912 474"
+      },
+      "spriteSymbol": "moco-logo-monochrome-transparent-optical",
+      "colorBehavior": "monochrome",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-logo-transparent.svg#sha256=244712d95e0c3c69bb7ea9cc8520417bc74e95f88398a2ed52bb48d9f09dee0e",
+      "sha256": "f54a62473e020d67f95670cdf9633e71bccc18997efdce5e5894a6a6f587a709"
+    },
+    {
+      "canonicalName": "moco-logo-tinted-plate-optical",
+      "namespace": "brand",
+      "path": "brand/moco/logo/tinted-plate-optical.svg",
+      "product": "moco",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "0 0 2048 508"
+      },
+      "spriteSymbol": "moco-logo-tinted-plate-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-logo-background.svg#sha256=7953dc2516ab819ad8a38040270a92d3b4ae66c6a288f79cb0aa579a2fb99970",
+      "sha256": "ab9cf89bbe27dea884b88840981e159b76d7a8dff65d47e98ead9b818a904e7a"
+    },
+    {
+      "canonicalName": "moco-logo-tinted-transparent-optical",
+      "namespace": "brand",
+      "path": "brand/moco/logo/tinted-transparent-optical.svg",
+      "product": "moco",
+      "artwork": "logo",
+      "appearance": "tinted",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "48 0 1912 474"
+      },
+      "spriteSymbol": "moco-logo-tinted-transparent-optical",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "source/brand/original/moco-logo-transparent.svg#sha256=244712d95e0c3c69bb7ea9cc8520417bc74e95f88398a2ed52bb48d9f09dee0e",
+      "sha256": "6abf67d33984b57542b23ec59ccd655aefce1e4aa678c5baa29a9ad971b338b6"
+    },
+    {
       "canonicalName": "platform-android-araihu-res-drawable-xxxhdpi-ic-launcher-foreground-png",
       "namespace": "brand",
       "path": "platform/android/araihu/res/drawable-xxxhdpi/ic_launcher_foreground.png",
@@ -8830,6 +9286,246 @@
       "sha256": "c5c41c8fbf920faf46740a7133e62b83ba6bc119ccf27a41654d01f8c87b6a9e"
     },
     {
+      "canonicalName": "platform-android-moco-res-drawable-xxxhdpi-ic-launcher-foreground-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/drawable-xxxhdpi/ic_launcher_foreground.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 432,
+        "height": 432
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "ad1b362cc7ff4782bd6476cc7c7b03b88a0fad465177987328737676e7f61805"
+    },
+    {
+      "canonicalName": "platform-android-moco-res-drawable-xxxhdpi-ic-launcher-monochrome-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/drawable-xxxhdpi/ic_launcher_monochrome.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "monochrome",
+      "surface": "transparent",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 432,
+        "height": 432
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "monochrome",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "f349f00af73f671cbc0b33bbd648486851f06380e5e1eb8a31850b5faffbcca1"
+    },
+    {
+      "canonicalName": "platform-android-moco-res-mipmap-hdpi-ic-launcher-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/mipmap-hdpi/ic_launcher.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 72,
+        "height": 72
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "959283efff5fb1db5224018f1c0f302ec5dc1ba9e5cf348b7b0f8b8b3c849cf9"
+    },
+    {
+      "canonicalName": "platform-android-moco-res-mipmap-hdpi-ic-launcher-round-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/mipmap-hdpi/ic_launcher_round.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 72,
+        "height": 72
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "959283efff5fb1db5224018f1c0f302ec5dc1ba9e5cf348b7b0f8b8b3c849cf9"
+    },
+    {
+      "canonicalName": "platform-android-moco-res-mipmap-mdpi-ic-launcher-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/mipmap-mdpi/ic_launcher.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 48,
+        "height": 48
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "dd05e5f195a0a60a1123c7d162aa0fd39506cc3d94a067f3ad7858b194b34ced"
+    },
+    {
+      "canonicalName": "platform-android-moco-res-mipmap-mdpi-ic-launcher-round-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/mipmap-mdpi/ic_launcher_round.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 48,
+        "height": 48
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "dd05e5f195a0a60a1123c7d162aa0fd39506cc3d94a067f3ad7858b194b34ced"
+    },
+    {
+      "canonicalName": "platform-android-moco-res-mipmap-xhdpi-ic-launcher-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/mipmap-xhdpi/ic_launcher.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 96,
+        "height": 96
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "8e7d7a5e155157a3a6814be63461f2cc71cfdd4f7b0f5de8d499a3aa405d9dd6"
+    },
+    {
+      "canonicalName": "platform-android-moco-res-mipmap-xhdpi-ic-launcher-round-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/mipmap-xhdpi/ic_launcher_round.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 96,
+        "height": 96
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "8e7d7a5e155157a3a6814be63461f2cc71cfdd4f7b0f5de8d499a3aa405d9dd6"
+    },
+    {
+      "canonicalName": "platform-android-moco-res-mipmap-xxhdpi-ic-launcher-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/mipmap-xxhdpi/ic_launcher.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 144,
+        "height": 144
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "2eafc964a9c2d70f8fb66721d4e2f91950085b279bada534e0c5591ad735416c"
+    },
+    {
+      "canonicalName": "platform-android-moco-res-mipmap-xxhdpi-ic-launcher-round-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 144,
+        "height": 144
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "2eafc964a9c2d70f8fb66721d4e2f91950085b279bada534e0c5591ad735416c"
+    },
+    {
+      "canonicalName": "platform-android-moco-res-mipmap-xxxhdpi-ic-launcher-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/mipmap-xxxhdpi/ic_launcher.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 192,
+        "height": 192
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "f092d1a17e07ccae1a709641ace19ebe50cf6067a2b41b41c263dc12c8196063"
+    },
+    {
+      "canonicalName": "platform-android-moco-res-mipmap-xxxhdpi-ic-launcher-round-png",
+      "namespace": "brand",
+      "path": "platform/android/moco/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 192,
+        "height": 192
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "f092d1a17e07ccae1a709641ace19ebe50cf6067a2b41b41c263dc12c8196063"
+    },
+    {
       "canonicalName": "platform-android-x9-res-drawable-xxxhdpi-ic-launcher-foreground-png",
       "namespace": "brand",
       "path": "platform/android/x9/res/drawable-xxxhdpi/ic_launcher_foreground.png",
@@ -9308,6 +10004,66 @@
       "license": "Arai Hu Brand Terms",
       "source": "platform generator v0.1.0",
       "sha256": "92fbbed43906b8d96518443171ebe2599b57ff82b414149f8b8aeefd0e7339db"
+    },
+    {
+      "canonicalName": "platform-apple-moco-assets-xcassets-appicon-appiconset-appicon-1024-dark-png",
+      "namespace": "brand",
+      "path": "platform/apple/moco/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "dark",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "4fc22c460e0cafe7b60775fec25d3dc79baec9d660ae997f22309fc8ab85b2da"
+    },
+    {
+      "canonicalName": "platform-apple-moco-assets-xcassets-appicon-appiconset-appicon-1024-png",
+      "namespace": "brand",
+      "path": "platform/apple/moco/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "e3d068ab96e63a8bc2262bb69595cdcb56c33a000a61e484c82b3dbf7644108c"
+    },
+    {
+      "canonicalName": "platform-apple-moco-assets-xcassets-appicon-appiconset-appicon-1024-tinted-png",
+      "namespace": "brand",
+      "path": "platform/apple/moco/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-tinted.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "grayscale",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1024
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "a127fc6542dbf724cce9eaf96df3085a11a21f75859d1c559044f145f34d64dc"
     },
     {
       "canonicalName": "platform-apple-x9-assets-xcassets-appicon-appiconset-appicon-1024-dark-png",
@@ -10004,6 +10760,165 @@
       "license": "Arai Hu Brand Terms",
       "source": "platform generator v0.1.0",
       "sha256": "4ef76752168dc59da1c326b69a360ce40d20b9f3241dd77ffbf125d5b3f37bea"
+    },
+    {
+      "canonicalName": "platform-web-moco-apple-touch-icon-180-png",
+      "namespace": "brand",
+      "path": "platform/web/moco/apple-touch-icon-180.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 180,
+        "height": 180
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "afceac586120641da5f206e80365bc90b9296bbcb3c677630811be801cf6e250"
+    },
+    {
+      "canonicalName": "platform-web-moco-favicon-16-png",
+      "namespace": "brand",
+      "path": "platform/web/moco/favicon-16.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "png",
+      "dimensions": {
+        "width": 16,
+        "height": 16
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "995dda80b9f544ccbbbce20b15174aa25622bd7d16d995c1985ca48ce51abaf2"
+    },
+    {
+      "canonicalName": "platform-web-moco-favicon-32-png",
+      "namespace": "brand",
+      "path": "platform/web/moco/favicon-32.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "optical",
+      "format": "png",
+      "dimensions": {
+        "width": 32,
+        "height": 32
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "588b1ef5a4b91d4ca3ded46b0b75270a391ce4b7a2e3731cd5baeb0c088585a8"
+    },
+    {
+      "canonicalName": "platform-web-moco-favicon-svg",
+      "namespace": "brand",
+      "path": "platform/web/moco/favicon.svg",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "adaptive",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "svg",
+      "dimensions": {
+        "viewBox": "6.737 6.737 1010.526 1010.526"
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "99830f5f48b986658cc4ede72c9ce97600aecfa7c0fc0debbe3f673c8aa63590"
+    },
+    {
+      "canonicalName": "platform-web-moco-icon-192-png",
+      "namespace": "brand",
+      "path": "platform/web/moco/icon-192.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "png",
+      "dimensions": {
+        "width": 192,
+        "height": 192
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "a5bbf9de12170e56281d49b1cd0f036bd3c088b99dee4133e988be1ae55df4bd"
+    },
+    {
+      "canonicalName": "platform-web-moco-icon-512-png",
+      "namespace": "brand",
+      "path": "platform/web/moco/icon-512.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "transparent",
+      "framing": "optical",
+      "format": "png",
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "42e246f975131db3fb58380b9ef98fcb960a98e0d7cd868ef02396e9ebf09a10"
+    },
+    {
+      "canonicalName": "platform-web-moco-icon-maskable-192-png",
+      "namespace": "brand",
+      "path": "platform/web/moco/icon-maskable-192.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 192,
+        "height": 192
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "f092d1a17e07ccae1a709641ace19ebe50cf6067a2b41b41c263dc12c8196063"
+    },
+    {
+      "canonicalName": "platform-web-moco-icon-maskable-512-png",
+      "namespace": "brand",
+      "path": "platform/web/moco/icon-maskable-512.png",
+      "product": "moco",
+      "artwork": "icon",
+      "appearance": "light",
+      "surface": "plate",
+      "framing": "launcher",
+      "format": "png",
+      "dimensions": {
+        "width": 512,
+        "height": 512
+      },
+      "spriteSymbol": "",
+      "colorBehavior": "protected",
+      "license": "Arai Hu Brand Terms",
+      "source": "platform generator v0.1.0",
+      "sha256": "5611592f364962ca4f549d3bec23e93d854aac555970f082d80404babccdb9b9"
     },
     {
       "canonicalName": "platform-web-x9-apple-touch-icon-180-png",

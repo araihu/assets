@@ -22,7 +22,7 @@ var (
 	lowerSHA256      = regexp.MustCompile(`^[0-9a-f]{64}$`)
 	lowerHexColor    = regexp.MustCompile(`^#[0-9a-f]{6}$`)
 	expectedProducts = map[string]string{
-		"araihu": "Arai Hu", "balemoh": "Balemoh", "goshtoso": "Goshtoso", "manja": "Manja", "x9": "X9",
+		"araihu": "Arai Hu", "balemoh": "Balemoh", "goshtoso": "Goshtoso", "manja": "Manja", "moco": "Mocó", "x9": "X9",
 	}
 )
 

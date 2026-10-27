@@ -211,6 +211,13 @@ GitHub Release archive, verifies `SHA256SUMS`, safely extracts it, and stages
 only those immutable contracts for channel generation. Historical releases do
 not remain in managed `dist/`, and no unpublished release is synthesized.
 
+## Product identities
+
+[Balemoh](docs/brand/balemoh.md) and [Mocó](docs/brand/moco.md) document their
+source geometry, palette and generated variants. Mocó is an unreleased source
+addition; the published `v0.2.5` archive does not include it. A new asset release
+is required before consumers can pin this identity.
+
 ## Catalog and sprites
 
 The `v0.2.5` `dist/catalog.json` is schema v2, language-neutral metadata for

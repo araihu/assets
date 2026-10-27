@@ -24,7 +24,7 @@ func TestBuildIncludesAllPlatformContracts(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Build(): %v", err)
 	}
-	if got, want := len(result.Files), 155; got != want {
+	if got, want := len(result.Files), 186; got != want {
 		t.Fatalf("generated file count = %d, want %d", got, want)
 	}
 	for path, data := range result.Files {
@@ -47,6 +47,11 @@ func TestBuildIncludesAllPlatformContracts(t *testing.T) {
 	requirePNG(t, result, "dist/platform/web/balemoh/icon-maskable-512.png", 512, false, true)
 	requireFile(t, result, "dist/platform/android/balemoh/res/mipmap-anydpi-v33/ic_launcher.xml")
 	requirePNG(t, result, "dist/platform/apple/balemoh/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png", 1024, false, true)
+
+	requirePNG(t, result, "dist/platform/web/moco/favicon-16.png", 16, false, false)
+	requirePNG(t, result, "dist/platform/web/moco/icon-maskable-512.png", 512, false, true)
+	requireFile(t, result, "dist/platform/android/moco/res/mipmap-anydpi-v33/ic_launcher.xml")
+	requirePNG(t, result, "dist/platform/apple/moco/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png", 1024, false, true)
 
 	manifest := string(result.Files["dist/platform/web/araihu/manifest-icons.json"])
 	for _, want := range []string{`"purpose":"any"`, `"purpose":"maskable"`, `"icon-192.png"`, `"icon-maskable-512.png"`} {
@@ -294,7 +299,7 @@ func pngChunk(kind string, payload []byte) []byte {
 
 func testIcons() []BrandIcon {
 	icons := make([]BrandIcon, 0, 5)
-	for _, product := range []string{"araihu", "balemoh", "goshtoso", "manja", "x9"} {
+	for _, product := range []string{"araihu", "balemoh", "goshtoso", "manja", "moco", "x9"} {
 		icons = append(icons, BrandIcon{
 			Product:       product,
 			LightSVG:      []byte(`<svg viewBox="0 0 108 108"><path d="M21 21h66v66"/></svg>`),

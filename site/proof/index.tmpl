@@ -57,8 +57,8 @@
   </aside>
   <main id="proof-main">
     <section aria-labelledby="family-comparison-title">
-      <div class="section-heading"><p>Always visible baseline</p><h2 id="family-comparison-title">Five-product family comparison</h2></div>
-      <div class="family-comparison" role="list" aria-label="Five-product launcher-master comparison">
+      <div class="section-heading"><p>Always visible baseline</p><h2 id="family-comparison-title">Product family comparison</h2></div>
+      <div class="family-comparison" role="list" aria-label="Product launcher-master comparison">
         {{range .Products}}<figure role="listitem"><div class="family-baseline"><img src="{{.Master.URL}}" width="64" height="64" aria-label="{{.Name}} {{.Master.Artwork}}, {{.Master.Variant}}, 64 pixels"></div><figcaption>{{.Name}} / {{.Master.Artwork}} / {{.Master.Variant}} / 64 px</figcaption></figure>{{end}}
       </div>
     </section>

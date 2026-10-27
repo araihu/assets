@@ -265,7 +265,7 @@ func TestProductionScenariosCoverLiteral512AndEveryProduct(t *testing.T) {
 	if !slices.Contains(m.ExactSizes, 512) {
 		t.Fatalf("ExactSizes = %v, want 512", m.ExactSizes)
 	}
-	for _, id := range []string{"araihu", "balemoh", "developer-icons", "goshtoso", "heroicons", "manja", "x9"} {
+	for _, id := range []string{"araihu", "balemoh", "developer-icons", "goshtoso", "heroicons", "manja", "moco", "x9"} {
 		if !m.HasProduct(id) {
 			t.Fatalf("HasProduct(%q) = false", id)
 		}

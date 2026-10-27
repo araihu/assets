@@ -72,6 +72,20 @@ products:
       icon-transparent: 8ad267d033cc75b9470b91b1447502ef169c05654026ef8bd342558dd7913b64
       logo-background: 5bfc0f507a0103d73699fce22c005bd73f7142243ac04b471f035eeadfed084b
       logo-transparent: aae41059ef73d7dfbcf3557c714a2bde6d45f47f8408cb91ea81a04106e8fb4c
+  - id: moco
+    display_name: Mocó
+    aliases: []
+    sources:
+      original:
+        icon-background: source/brand/original/moco-icon-background.svg
+        icon-transparent: source/brand/original/moco-icon-transparent.svg
+        logo-background: source/brand/original/moco-logo-background.svg
+        logo-transparent: source/brand/original/moco-logo-transparent.svg
+    source_hashes:
+      icon-background: 1e7fb3e03c25c4bc2343a583b6cdbbb5213b94bc40d7d9c3f2fb156f915a67f5
+      icon-transparent: 47c5fb0df6bfd639230d79888c7d2b5ac68a2f1aa871cd4c075a1464a50685aa
+      logo-background: 7953dc2516ab819ad8a38040270a92d3b4ae66c6a288f79cb0aa579a2fb99970
+      logo-transparent: 244712d95e0c3c69bb7ea9cc8520417bc74e95f88398a2ed52bb48d9f09dee0e
 palettes:
   light:
     name: light

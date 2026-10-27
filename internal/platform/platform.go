@@ -27,7 +27,7 @@ const (
 	safeRatio       = 66.0 / 108.0
 )
 
-var products = []string{"araihu", "balemoh", "goshtoso", "manja", "x9"}
+var products = []string{"araihu", "balemoh", "goshtoso", "manja", "moco", "x9"}
 
 // BrandIcon is Task 4's static icon matrix for one product. AdaptiveSVG remains
 // an individual SVG, preserving its media-query behavior in web favicon output.
