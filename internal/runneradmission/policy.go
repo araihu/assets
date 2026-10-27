@@ -121,10 +121,6 @@ func trusted(c Config, human bool, p eventPayload) error {
 		if strings.HasPrefix(c.Ref, "refs/tags/") && p.Action == "published" && falseValue(p.Release.Draft) && p.Release.Tag == strings.TrimPrefix(c.Ref, "refs/tags/") {
 			return nil
 		}
-	case "repository_dispatch":
-		if c.Ref == "refs/heads/main" && c.Repository == "araihu/fly-deploy" && slices.Contains([]string{"goshtoso-main", "goshtoso-charts-main", "manja-main"}, p.Action) {
-			return nil
-		}
 	}
 	return errors.New("trusted event metadata")
 }

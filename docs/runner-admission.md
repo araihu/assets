@@ -14,7 +14,9 @@ drift using the pinned, vendored envdoc tool.
 
 Root-owned `/etc/hostinger-runner/trust-domain` chooses `trusted` or
 `pull-request`. `/etc/hostinger-runner/allowed-actors` retains the human allowlist.
-Existing human, Dependabot, release, and fly-deploy event rules are preserved.
+Human, Dependabot, and release event rules are preserved. The retired central
+deployment dispatcher has no admission exception; human repository dispatches
+are denied.
 The Assets App is never added to that global allowlist.
 
 `arai-hu-assets-distribution[bot]` may dispatch `araihu-assets-released` only
