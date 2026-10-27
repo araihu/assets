@@ -79,10 +79,10 @@ func TestTrustedEvents(t *testing.T) {
 		{"release", "refs/tags/v1.2.3", "published", "araihu/manja", "guilycst", true},
 		{"release", "refs/tags/v1.2.3", "created", "araihu/manja", "guilycst", false},
 		{"release", "refs/heads/main", "published", "araihu/manja", "guilycst", false},
-		{"repository_dispatch", "refs/heads/main", "goshtoso-main", "araihu/fly-deploy", "guilycst", true},
-		{"repository_dispatch", "refs/heads/main", "goshtoso-charts-main", "araihu/fly-deploy", "guilycst", true},
-		{"repository_dispatch", "refs/heads/main", "manja-main", "araihu/fly-deploy", "guilycst", true},
-		{"repository_dispatch", "refs/heads/main", "other", "araihu/fly-deploy", "guilycst", false},
+		{"repository_dispatch", "refs/heads/main", "goshtoso-main", "araihu/assets", "guilycst", false},
+		{"repository_dispatch", "refs/heads/main", "goshtoso-charts-main", "araihu/assets", "guilycst", false},
+		{"repository_dispatch", "refs/heads/main", "manja-main", "araihu/assets", "guilycst", false},
+		{"repository_dispatch", "refs/heads/main", "other", "araihu/assets", "guilycst", false},
 		{"repository_dispatch", "refs/heads/main", "manja-main", "araihu/manja", "guilycst", false},
 		{"push", "refs/heads/main", "", "foreign/manja", "guilycst", false},
 		{"push", "refs/heads/main", "", "araihu/manja", "mallory", false},
@@ -221,7 +221,7 @@ func TestPullRequestIsolation(t *testing.T) {
 			case "ref":
 				c.Ref = "refs/heads/main"
 			case "repository":
-				c.Repository = "araihu/fly-deploy"
+				c.Repository = "araihu/assets"
 			case "trusted lane":
 				domain = "trusted"
 			case "target event":
