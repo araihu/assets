@@ -26,16 +26,16 @@ managed tree, including `dist/proof`.
 
 ## Install and verify
 
-The public `v0.2.6` release has an [immutable Git tag](https://github.com/araihu/assets/tree/v0.2.6),
-[GitHub Release](https://github.com/araihu/assets/releases/tag/v0.2.6),
-[tar archive](https://github.com/araihu/assets/releases/download/v0.2.6/araihu-assets-v0.2.6.tar.gz),
-and [SHA256SUMS](https://github.com/araihu/assets/releases/download/v0.2.6/SHA256SUMS).
+The public `v0.2.4` release has an [immutable Git tag](https://github.com/araihu/assets/tree/v0.2.4),
+[GitHub Release](https://github.com/araihu/assets/releases/tag/v0.2.4),
+[tar archive](https://github.com/araihu/assets/releases/download/v0.2.4/araihu-assets-v0.2.4.tar.gz),
+and [SHA256SUMS](https://github.com/araihu/assets/releases/download/v0.2.4/SHA256SUMS).
 
 Install the CLI from that matching public tag when you need to run the
 repository's offline build and catalog commands:
 
 ```sh
-go install github.com/araihu/assets/cmd/araihu-assets@v0.2.6
+go install github.com/araihu/assets/cmd/araihu-assets@v0.2.4
 ```
 
 Use `go run ./cmd/araihu-assets ...` from a matching release checkout for
@@ -56,7 +56,7 @@ while `checksums.txt` is intentionally not self-listed. The tar and zip archives
 are content-equivalent after extraction, not byte-equivalent archives.
 
 ```sh
-tag=v0.2.6
+tag=v0.2.4
 mkdir release-download release-root
 
 gh release download "$tag" --repo araihu/assets \
