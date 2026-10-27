@@ -29,7 +29,7 @@ func TestWorkflowUsesGoToolAndScopedToken(t *testing.T) {
 	plan, outputs, token, dispatch := -1, -1, -1, -1
 	installer := false
 	for i, step := range workflow.Jobs["dispatch"].Steps {
-		if strings.HasPrefix(step.Uses, "dagger/dagger-for-github@") && step.With["version"] == "0.21.8" {
+		if strings.HasPrefix(step.Uses, "dagger/dagger-for-github@") && step.With["version"] == "0.21.11" {
 			installer = true
 		}
 		if strings.Contains(step.Run, "dagger call release-fanout-plan") {

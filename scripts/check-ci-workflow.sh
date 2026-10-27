@@ -9,8 +9,8 @@ for required_tool in git grep ruby; do
   fi
 done
 
-test "$(ruby -rjson -e 'puts JSON.parse(File.read(ARGV[0])).fetch("engineVersion")' "$repo/dagger.json")" = v0.21.8
-grep -Fx 'go 1.27.0' "$repo/go.mod"
+test "$(ruby -rjson -e 'puts JSON.parse(File.read(ARGV[0])).fetch("engineVersion")' "$repo/dagger.json")" = v0.21.11
+grep -Fx 'go 1.27.3' "$repo/go.mod"
 if [[ -e "$repo/.git" ]]; then
   tracked_sdk=$(git -C "$repo" ls-files -- '.dagger/sdk' '.dagger/sdk/**')
   if [[ -n "$tracked_sdk" ]]; then
@@ -29,7 +29,7 @@ dagger = JSON.parse(File.read(File.join(repo, "dagger.json")))
 package = JSON.parse(File.read(File.join(repo, ".dagger/package.json")))
 lock = JSON.parse(File.read(File.join(repo, ".dagger/package-lock.json")))
 actionlint = YAML.safe_load(File.read(File.join(repo, ".github/actionlint.yaml")), aliases: false)
-require_contract.call(dagger == {"name"=>"assets", "engineVersion"=>"v0.21.8", "sdk"=>{"source"=>"typescript"}, "source"=>".dagger"}, "Dagger config differs")
+require_contract.call(dagger == {"name"=>"assets", "engineVersion"=>"v0.21.11", "sdk"=>{"source"=>"typescript"}, "source"=>".dagger"}, "Dagger config differs")
 require_contract.call(actionlint == {"self-hosted-runner"=>{"labels"=>["hostinger-vps-pr", "hostinger-vps-trusted"]}}, "actionlint runner label catalog differs")
 require_contract.call(package.dig("dependencies", "@dagger.io/dagger") == "./sdk", "TypeScript SDK must resolve from ./sdk")
 require_contract.call(package.dig("dependencies", "typescript") == "6.0.3", "TypeScript runtime version differs")
@@ -51,7 +51,7 @@ workflows.each do |path|
     require_contract.call(use.match?(%r{\A[^/\s]+/[^@\s]+@[0-9a-f]{40}\z}), "mutable action in #{File.basename(path)}: #{use}")
   end
   steps.select { |step| step["uses"]&.start_with?("dagger/dagger-for-github@") }.each do |step|
-    require_contract.call(step["with"] == {"version"=>"0.21.8"}, "Dagger action must be installer-only in #{File.basename(path)}")
+    require_contract.call(step["with"] == {"version"=>"0.21.11"}, "Dagger action must be installer-only in #{File.basename(path)}")
   end
   steps.select { |step| step["run"].to_s.include?("dagger call") }.each do |step|
     require_contract.call(!step["run"].include?("${{"), "provider expression reached Dagger command in #{File.basename(path)}")
@@ -63,7 +63,7 @@ workflows.each do |path|
   end
   if File.basename(path) != "release-fanout.yml" && steps.any? { |step| step["run"].to_s.include?("dagger call") }
     exact = steps.select { |step| step["run"].to_s.include?("dagger version") }
-    require_contract.call(exact.length == 1 && exact.first["run"].include?("= v0.21.8"), "exact Dagger CLI gate differs in #{File.basename(path)}")
+    require_contract.call(exact.length == 1 && exact.first["run"].include?("= v0.21.11"), "exact Dagger CLI gate differs in #{File.basename(path)}")
   end
 end
 
@@ -79,7 +79,7 @@ require_contract.call(ci_runner.include?(%q{fromJSON('["self-hosted","Linux","X6
 require_contract.call(ci_runner.include?(%q{fromJSON('["self-hosted","Linux","X64","hostinger-vps-trusted"]')}), "CI protected runner lane differs")
 require_contract.call(!ci_runner.include?("github.event.pull_request") && !ci_runner.include?("HOSTINGER_PR_ACTORS"), "PR runner isolation still depends on fork/internal/actor workflow guards")
 installer = ci_steps.find { |step| step["uses"]&.start_with?("dagger/dagger-for-github@") }
-require_contract.call(installer["if"] == "runner.environment == 'github-hosted'", "hosted installer routing differs")
+require_contract.call(installer["if"].nil?, "exact CLI installer must run on every runner")
 require_contract.call(ci_steps.any? { |step| step["run"].to_s.include?("materialize-dagger-input.sh ci") }, "CI provider boundary missing")
 require_contract.call(ci_steps.any? { |step| step["run"].to_s.include?("dagger call ci --source=. --payload=.dagger-inputs/ci.json") }, "CI Dagger call differs")
 dagger_ci = File.read(File.join(repo, "scripts/dagger/ci.sh"))
@@ -103,8 +103,8 @@ source = File.read(File.join(repo, ".dagger/src/index.ts"))
 require_contract.call(!source.include?("TrustDomain") && !source.include?("trustDomain") && !source.include?("untrusted"), "workflow trust argument remains in Dagger module")
 require_contract.call(source.include?('value !== "trusted" && value !== "pr"') && source.include?('throw new Error("unknown cache namespace")'), "cache namespace validation differs")
 require_contract.call(source.include?('make nodejs npm python3 ruby'), "Dagger-owned CI runtimes differ")
-go_image = 'golang:1.27.0-trixie@sha256:6212da3924947f4b6a939df02ea627c13f338f1a41d6c3fcb0dd9d076eef46c4'
-require_contract.call(source.scan(go_image).length == 1, "Dagger base must be exact Go 1.27.0 on pinned Debian trixie image")
+go_image = 'golang:1.27.3-trixie@sha256:fbb7ae40b62ff8afe31662df570d39b4f5052ac32b90dae8e60d7657a20a74f4'
+require_contract.call(source.scan(go_image).length == 1, "Dagger base must be exact Go 1.27.3 on pinned Debian trixie image")
 %w[go-build go-mod muamba cargo].each do |kind|
   require_contract.call(source.include?("araihu-ci-v1-assets-${cacheNamespace}-#{kind}"), "#{kind} cache lacks stable PR/trusted namespace")
 end
