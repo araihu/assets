@@ -132,7 +132,7 @@ func TestRunEmitsConsistentV024ReleaseFields(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	const wantRelease = "v0.2.6"
+	const wantRelease = "v0.2.7"
 	for name, got := range map[string]string{
 		"catalog":  assetCatalog.Release,
 		"themes":   themeCatalog.Release,

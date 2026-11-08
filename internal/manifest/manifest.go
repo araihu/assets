@@ -22,7 +22,7 @@ var (
 	lowerSHA256      = regexp.MustCompile(`^[0-9a-f]{64}$`)
 	lowerHexColor    = regexp.MustCompile(`^#[0-9a-f]{6}$`)
 	expectedProducts = map[string]string{
-		"araihu": "Arai Hu", "balemoh": "Balemoh", "goshtoso": "Goshtoso", "manja": "Manja", "moco": "Mocó", "x9": "X9",
+		"araihu": "Arai Hu", "balemoh": "Balemoh", "goshtoso": "Goshtoso", "manja": "Manja", "moco": "Mocó", "oie": "Oiê", "x9": "X9",
 	}
 )
 
@@ -37,6 +37,8 @@ type Brand struct {
 
 // Product identifies one published product identity.
 type Product struct {
+	// Paint optionally maps exact source colors per appearance; absent products keep the shared palette.
+	Paint        map[string]map[string]string `yaml:"paint,omitempty"`
 	ID           string                       `yaml:"id"`
 	DisplayName  string                       `yaml:"display_name"`
 	Aliases      []string                     `yaml:"aliases"`
@@ -136,6 +138,9 @@ func (brand Brand) Validate() error {
 		if err := validateProductSources(product); err != nil {
 			return err
 		}
+		if err := validateProductPaint(product); err != nil {
+			return err
+		}
 	}
 	if len(brand.Products) != len(expectedProducts) {
 		return fmt.Errorf("brand products = %d, want %d", len(brand.Products), len(expectedProducts))
@@ -186,8 +191,21 @@ func validateProductSources(product Product) error {
 		}
 	}
 	original, ok := product.Sources["original"]
-	if !ok || len(original) != 4 {
-		return fmt.Errorf("product %q must declare four original sources", product.ID)
+	if !ok || (len(original) != 4 && len(original) != 6) {
+		return fmt.Errorf("product %q must declare four original sources and an optional monochrome pair", product.ID)
+	}
+	for _, key := range []string{"icon-background", "icon-transparent", "logo-background", "logo-transparent"} {
+		if original[key] == "" {
+			return fmt.Errorf("product %q missing source %q", product.ID, key)
+		}
+	}
+	for key := range original {
+		if !slices.Contains([]string{"icon-background", "icon-transparent", "logo-background", "logo-transparent", "icon-monochrome", "logo-monochrome"}, key) {
+			return fmt.Errorf("product %q has unknown source %q", product.ID, key)
+		}
+	}
+	if len(original) == 6 && (original["icon-monochrome"] == "" || original["logo-monochrome"] == "") {
+		return fmt.Errorf("product %q monochrome sources must be paired", product.ID)
 	}
 	if len(product.SourceHashes) != len(original) {
 		return fmt.Errorf("product %q source_hashes = %d, want %d", product.ID, len(product.SourceHashes), len(original))
@@ -306,4 +324,43 @@ func brandRecipe(artwork, appearance, surface, framing, colorBehavior string) Br
 		Name: strings.Join([]string{artwork, appearance, surface, framing}, "-"), Artwork: artwork,
 		Appearance: appearance, Surface: surface, Framing: framing, ColorBehavior: colorBehavior,
 	}
+}
+
+// Exact per-product paint maps preserve protected full-color identities without
+// changing the shared palette or relying on color-brightness guesses.
+func validateProductPaint(p Product) error {
+	if len(p.Paint) == 0 {
+		return nil
+	}
+	if len(p.Paint) != 4 {
+		return fmt.Errorf("product %q paint requires all four appearances", p.ID)
+	}
+	baseline := p.Paint["light"]
+	if len(baseline) == 0 || len(baseline) > 16 {
+		return fmt.Errorf("product %q paint requires 1..16 source colors", p.ID)
+	}
+	for _, name := range []string{"light", "dark", "grayscale", "tinted"} {
+		colors, ok := p.Paint[name]
+		if !ok || len(colors) != len(baseline) {
+			return fmt.Errorf("product %q incomplete paint %q", p.ID, name)
+		}
+		for source, target := range colors {
+			if !lowerHexColor.MatchString(source) || !lowerHexColor.MatchString(target) {
+				return fmt.Errorf("product %q invalid paint color", p.ID)
+			}
+			if _, ok := baseline[source]; !ok {
+				return fmt.Errorf("product %q paint source differs across appearances", p.ID)
+			}
+		}
+	}
+	return nil
+}
+
+// ProductLicense preserves the underlying Noto artwork license alongside the
+// terms for using the Oiê identity. Other identities retain their catalog terms.
+func ProductLicense(id string) string {
+	if id == "oie" {
+		return "Apache-2.0 (Noto Emoji artwork); Arai Hu Brand Terms (identity)"
+	}
+	return "Arai Hu Brand Terms"
 }

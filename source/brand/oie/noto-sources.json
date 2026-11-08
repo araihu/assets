@@ -1,0 +1,37 @@
+{
+  "upstream": "https://github.com/googlefonts/noto-emoji",
+  "commit": "99701e07d3d1fe1bdbcdb14964547f0fd592966f",
+  "sources": [
+    {
+      "file": "noto-new-moon-face.svg",
+      "upstreamPath": "2D/svg/emoji_u1f31a.svg",
+      "url": "https://raw.githubusercontent.com/googlefonts/noto-emoji/99701e07d3d1fe1bdbcdb14964547f0fd592966f/2D/svg/emoji_u1f31a.svg",
+      "sha256": "a879f50a60925fd5154f62f676070c2f5d4400c336c5f5730f879f3bb3bd889f"
+    },
+    {
+      "file": "noto-speech-balloon.svg",
+      "upstreamPath": "2D/svg/emoji_u1f4ac.svg",
+      "url": "https://raw.githubusercontent.com/googlefonts/noto-emoji/99701e07d3d1fe1bdbcdb14964547f0fd592966f/2D/svg/emoji_u1f4ac.svg",
+      "sha256": "d2d2e6ae39b25dfafd8abce29c96f0fb90beafa2cabde9e8d8ac10db96d80ff1"
+    }
+  ],
+  "changes": [
+    "Use unchanged speech balloon outline from U+1F4AC; remove its ellipsis circles and black outline.",
+    "Reuse the original face path geometry from U+1F31A; translate the complete face by (0,-13) into the balloon and replace shading with solid colors.",
+    "Oiê lettering reused from the original hand-drawn vector studies, not a Noto font.",
+    "Chosen identity uses the flat balloon without shadows, gradient shading or cheek highlights.",
+    "Wordmark updated to Oiê, with uppercase O and a circumflex on ê. The lettering is drawn as vector paths."
+  ],
+  "brand": {
+    "displayName": "Oiê",
+    "technicalSlug": "oie",
+    "description": "Oiê é uma saudação informal e amigável da língua portuguesa, usada para cumprimentar ou iniciar uma conversa com carinho e proximidade.",
+    "style": "flat",
+    "colors": {
+      "balloon": "#6092AB",
+      "facePrimary": "#212121",
+      "faceSecondary": "#274C5E",
+      "wordmark": "#274C5E"
+    }
+  }
+}

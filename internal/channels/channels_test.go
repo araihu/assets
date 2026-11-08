@@ -112,7 +112,7 @@ func TestSourceDefaultRemainsV025WhileLatestResolvesBaseline(t *testing.T) {
 	if err := json.NewDecoder(themeFile).Decode(&themeCatalog); err != nil {
 		t.Fatal(err)
 	}
-	if assetCatalog.Release != "v0.2.6" || themeCatalog.Release != "v0.2.6" {
+	if assetCatalog.Release != "v0.2.7" || themeCatalog.Release != "v0.2.7" {
 		t.Fatalf("latest release mismatch: catalog=%q themes=%q", assetCatalog.Release, themeCatalog.Release)
 	}
 	latestPromotion := defaultPromotion

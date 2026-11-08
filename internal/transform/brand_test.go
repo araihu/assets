@@ -21,7 +21,7 @@ import (
 func TestBuildBrandProducesCompleteDeclaredMatrix(t *testing.T) {
 	result := mustBuildBrand(t)
 
-	const products = 6
+	const products = 7
 	const variantsPerProduct = 24 // icon: 13; logo: 11
 	if got, want := len(result.Files), products*variantsPerProduct+1; got != want {
 		t.Fatalf("BuildBrand() files = %d, want %d", got, want)
@@ -104,7 +104,7 @@ func TestBuildBrandCatalogAssetsValidate(t *testing.T) {
 func TestBuildBrandMonochromeSpriteSymbolsRemainTintable(t *testing.T) {
 	result := mustBuildBrand(t)
 	spriteSVG := result.Files["dist/icons/brand/sprite.svg"]
-	for _, product := range []string{"araihu", "balemoh", "goshtoso", "manja", "moco", "x9"} {
+	for _, product := range []string{"araihu", "balemoh", "goshtoso", "manja", "moco", "oie", "x9"} {
 		want := `<symbol id="` + product + `-icon-monochrome-transparent-optical"`
 		start := bytes.Index(spriteSVG, []byte(want))
 		if start < 0 {
@@ -205,7 +205,17 @@ func TestBuildBrandReparsesEveryGeneratedSVG(t *testing.T) {
 	}
 	for path, svg := range result.Files {
 		if strings.Contains(path, "-adaptive-") || strings.Contains(path, "/adaptive-") {
-			if _, err := validateAdaptiveSVG(svg, adaptiveStyle(palettes["dark"])); err != nil {
+			dark := palettes["dark"]
+			for _, asset := range result.Assets {
+				if "dist/"+asset.Path == path {
+					for _, product := range brand.Products {
+						if product.ID == asset.Product {
+							dark.paint = product.Paint["dark"]
+						}
+					}
+				}
+			}
+			if _, err := validateAdaptiveSVG(svg, adaptiveStyle(dark)); err != nil {
 				t.Errorf("validate adaptive %s: %v", path, err)
 			}
 			continue
@@ -316,7 +326,18 @@ func TestBuildBrandPreservesEveryPathGeometry(t *testing.T) {
 					if err != nil {
 						t.Fatalf("Parse(%q): %v", path, err)
 					}
-					if got, want := string(generatedDoc.GeometrySignature()), string(sourceDoc.GeometrySignature()); got != want {
+					expectedDoc := sourceDoc
+					if asset.Appearance == "monochrome" && product.Sources["original"][artwork+"-monochrome"] != "" {
+						data, err := os.ReadFile(filepath.Join("../..", product.Sources["original"][artwork+"-monochrome"]))
+						if err != nil {
+							t.Fatal(err)
+						}
+						expectedDoc, err = svgasset.Parse(normalizedSource(data))
+						if err != nil {
+							t.Fatal(err)
+						}
+					}
+					if got, want := string(generatedDoc.GeometrySignature()), string(expectedDoc.GeometrySignature()); got != want {
 						t.Errorf("geometry changed: %s", path)
 					}
 				}

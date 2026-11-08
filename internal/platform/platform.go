@@ -17,6 +17,7 @@ import (
 	"strings"
 
 	"github.com/araihu/assets/internal/catalog"
+	"github.com/araihu/assets/internal/manifest"
 	"github.com/araihu/assets/internal/svgasset"
 )
 
@@ -27,7 +28,7 @@ const (
 	safeRatio       = 66.0 / 108.0
 )
 
-var products = []string{"araihu", "balemoh", "goshtoso", "manja", "moco", "x9"}
+var products = []string{"araihu", "balemoh", "goshtoso", "manja", "moco", "oie", "x9"}
 
 // BrandIcon is Task 4's static icon matrix for one product. AdaptiveSVG remains
 // an individual SVG, preserving its media-query behavior in web favicon output.
@@ -113,7 +114,7 @@ func catalogAsset(name string, data []byte) (catalog.Asset, error) {
 	return catalog.Asset{
 		CanonicalName: platformCanonicalName(path, format), Namespace: "brand", Path: path, Product: parts[2], Artwork: "icon",
 		Appearance: platformAppearance(path), Surface: platformSurface(path), Framing: platformFraming(path), Format: format, Dimensions: dimensions,
-		ColorBehavior: platformColorBehavior(path), License: "Arai Hu Brand Terms", Source: "platform generator v0.1.0", SHA256: hex.EncodeToString(sum[:]),
+		ColorBehavior: platformColorBehavior(path), License: manifest.ProductLicense(parts[2]), Source: "platform generator v0.1.0", SHA256: hex.EncodeToString(sum[:]),
 	}, nil
 }
 

@@ -86,6 +86,49 @@ products:
       icon-transparent: 47c5fb0df6bfd639230d79888c7d2b5ac68a2f1aa871cd4c075a1464a50685aa
       logo-background: 7953dc2516ab819ad8a38040270a92d3b4ae66c6a288f79cb0aa579a2fb99970
       logo-transparent: 244712d95e0c3c69bb7ea9cc8520417bc74e95f88398a2ed52bb48d9f09dee0e
+  - id: oie
+    display_name: Oiê
+    aliases: []
+    sources:
+      original:
+        icon-transparent: source/brand/original/oie-icon-transparent.svg
+        icon-background: source/brand/original/oie-icon-background.svg
+        icon-monochrome: source/brand/original/oie-icon-monochrome.svg
+        logo-transparent: source/brand/original/oie-logo-transparent.svg
+        logo-background: source/brand/original/oie-logo-background.svg
+        logo-monochrome: source/brand/original/oie-logo-monochrome.svg
+    source_hashes:
+      icon-transparent: 43978d56800509c71626a76da2998081e9a960e752c70d813913e38b0dc8f3f9
+      icon-background: 81db2851f68be67db6ef95f3e4602f587a63c4d6dfbb6b9362d0b1c2af465ace
+      icon-monochrome: d96dfdfb3d663f475408f22bdf7ea3b1b7700a289c8fac13d5ab956e79390c95
+      logo-transparent: fedbe8cf3efc066780e76d0cf5b2e4efc58929cdcc1d13ffd8b64413b155d6f9
+      logo-background: e136845bd6fa8064fd5d75c0e0adf4163af537167a9fd8f93326f9fc85588f04
+      logo-monochrome: 8c942ae581f90b23d3bfa23c4621b0d6096312e06c91977f5c565338a2601283
+    paint:
+      light:
+        "#f3f2e9": "#fffaf4"
+        "#07111f": "#274c5e"
+        "#6092ab": "#6092ab"
+        "#212121": "#212121"
+        "#274c5e": "#274c5e"
+      dark:
+        "#f3f2e9": "#07111f"
+        "#07111f": "#fffaf4"
+        "#6092ab": "#6092ab"
+        "#212121": "#212121"
+        "#274c5e": "#274c5e"
+      grayscale:
+        "#f3f2e9": "#e6e6e6"
+        "#07111f": "#202020"
+        "#6092ab": "#878787"
+        "#212121": "#212121"
+        "#274c5e": "#454545"
+      tinted:
+        "#f3f2e9": "#d5ddeb"
+        "#07111f": "#173b72"
+        "#6092ab": "#8da6ca"
+        "#212121": "#07111f"
+        "#274c5e": "#31588f"
 palettes:
   light:
     name: light

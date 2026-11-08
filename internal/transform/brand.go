@@ -20,7 +20,6 @@ import (
 )
 
 const (
-	brandLicense = "Arai Hu Brand Terms"
 	opticalRatio = 0.76
 	safeRatio    = 66.0 / 108.0
 )
@@ -33,6 +32,8 @@ var (
 	hexColor       = regexp.MustCompile(`(?i)^#[0-9a-f]{6}$`)
 
 	opticalViewBoxes = map[string]string{
+		"oie/icon":      "-124 -124 1272 1272",
+		"oie/logo":      "370 0 1310 508",
 		"moco/icon":     "6.737 6.737 1010.526 1010.526",
 		"moco/logo":     "48 0 1912 474",
 		"balemoh/icon":  "-3.789 -3.789 1031.578 1031.578",
@@ -48,7 +49,10 @@ var (
 	}
 )
 
-type palette struct{ surface, ink, signal string }
+type palette struct {
+	surface, ink, signal string
+	paint                map[string]string
+}
 
 // Result contains all generated SVG files and catalog/sprite records for a brand build.
 type Result struct {
@@ -68,8 +72,13 @@ func BuildBrand(fsys fs.FS, brand manifest.Brand) (Result, error) {
 	}
 	result := Result{Files: make(map[string][]byte)}
 	for _, product := range brand.Products {
+		scoped := make(map[string]palette, len(palettes))
+		for name, p := range palettes {
+			p.paint = product.Paint[name]
+			scoped[name] = p
+		}
 		for _, recipe := range brand.Recipes {
-			variant, err := buildVariant(fsys, product, recipe, palettes)
+			variant, err := buildVariant(fsys, product, recipe, scoped)
 			if err != nil {
 				return Result{}, err
 			}
@@ -103,6 +112,9 @@ func buildVariant(fsys fs.FS, product manifest.Product, recipe manifest.BrandRec
 	sourceKind := recipe.Artwork + "-transparent"
 	if recipe.Surface == "plate" {
 		sourceKind = recipe.Artwork + "-background"
+	}
+	if recipe.Appearance == "monochrome" && product.Sources["original"][recipe.Artwork+"-monochrome"] != "" {
+		sourceKind = recipe.Artwork + "-monochrome"
 	}
 	sourcePath := product.Sources["original"][sourceKind]
 	source, err := fs.ReadFile(fsys, sourcePath)
@@ -159,7 +171,7 @@ func buildVariant(fsys fs.FS, product manifest.Product, recipe manifest.BrandRec
 		CanonicalName: canonical, Namespace: "brand", Path: strings.TrimPrefix(path, "dist/"), Product: product.ID,
 		Artwork: recipe.Artwork, Appearance: recipe.Appearance, Surface: recipe.Surface, Framing: recipe.Framing,
 		Format: "svg", Dimensions: catalog.Dimensions{ViewBox: viewBox}, SpriteSymbol: spriteSymbol,
-		ColorBehavior: recipe.ColorBehavior, License: brandLicense, Source: sourcePath + "#sha256=" + product.SourceHashes[sourceKind], SHA256: fmtHash(sha256.Sum256(normalized)),
+		ColorBehavior: recipe.ColorBehavior, License: manifest.ProductLicense(product.ID), Source: sourcePath + "#sha256=" + product.SourceHashes[sourceKind], SHA256: fmtHash(sha256.Sum256(normalized)),
 	}
 	return builtVariant{path: path, svg: normalized, asset: asset}, nil
 }
@@ -261,13 +273,13 @@ func applyAdaptivePalette(svg []byte, light palette) ([]byte, error) {
 				case "fill":
 					hasFill = true
 					if !current.excluded && hexColor.MatchString(attr.Value) {
-						attr.Value = adaptivePaint(colorRole(attr.Value), light)
+						attr.Value = adaptivePaint(light.roleFor(attr.Value), light)
 					}
 					current.fill = attr.Value
 				case "stroke":
 					hasStroke = true
 					if !current.excluded && hexColor.MatchString(attr.Value) {
-						attr.Value = adaptivePaint(colorRole(attr.Value), light)
+						attr.Value = adaptivePaint(light.roleFor(attr.Value), light)
 					}
 					current.stroke = attr.Value
 				}
@@ -352,7 +364,16 @@ func declaredPalettes(declared map[string]manifest.Palette) (map[string]palette,
 }
 
 func adaptiveStyle(dark palette) string {
-	return fmt.Sprintf(`<style>@media (prefers-color-scheme: dark) {:root {--araihu-logo-auto-surface: %s;--araihu-logo-auto-ink: %s;--araihu-logo-auto-signal: %s;}}</style>`, dark.surface, dark.ink, dark.signal)
+	extra := ""
+	keys := make([]string, 0, len(dark.paint))
+	for key := range dark.paint {
+		keys = append(keys, key)
+	}
+	slices.Sort(keys)
+	for _, key := range keys {
+		extra += fmt.Sprintf("--araihu-logo-auto-paint-%s: %s;", strings.TrimPrefix(key, "#"), dark.paint[key])
+	}
+	return fmt.Sprintf(`<style>@media (prefers-color-scheme: dark) {:root {--araihu-logo-auto-surface: %s;--araihu-logo-auto-ink: %s;--araihu-logo-auto-signal: %s;%s}}</style>`, dark.surface, dark.ink, dark.signal, extra)
 }
 
 // validateAdaptiveSVG permits only this generator's exact, palette-derived
@@ -377,10 +398,23 @@ func validateAdaptiveSVG(svg []byte, style string) (svgasset.Document, error) {
 }
 
 func (p palette) colorFor(value string) string {
-	return p.color(colorRole(value))
+	return p.color(p.roleFor(value))
+}
+
+func (p palette) roleFor(value string) string {
+	key := strings.ToLower(value)
+	if _, ok := p.paint[key]; ok {
+		return "paint-" + strings.TrimPrefix(key, "#")
+	}
+	return colorRole(value)
 }
 
 func (p palette) color(role string) string {
+	if strings.HasPrefix(role, "paint-") {
+		if value, ok := p.paint["#"+strings.TrimPrefix(role, "paint-")]; ok {
+			return value
+		}
+	}
 	switch role {
 	case "signal":
 		return p.signal

@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "release": "v0.2.6",
+  "release": "v0.2.7",
   "identityRevision": 11,
   "runtimeVersion": 1,
-  "catalogSha256": "172fab5947b0aa1f3cb72113e9f8a91af353bd733da2102f4844b5d20b847121",
-  "themesSha256": "fd6c16d918f52d764694ec9d3f15d9f745ee82bac572072d1c30f3a8f96cbcac",
+  "catalogSha256": "72efbb3a9c6cadf03f255d16aaa4f0aa061e6113dc68ee75147037691fc52a18",
+  "themesSha256": "a921568e34368cba66cbc7c02cebd4b0b53da2d6e0565edc3634efb5eee70e08",
   "campaignsSha256": "fd0393fed7bcf92c7323ba88467b042ca14744da93442f8700bb242f1f23756a",
   "files": [
     {
       "path": "catalog.json",
-      "sha256": "172fab5947b0aa1f3cb72113e9f8a91af353bd733da2102f4844b5d20b847121",
-      "size": 1325328
+      "sha256": "72efbb3a9c6cadf03f255d16aaa4f0aa061e6113dc68ee75147037691fc52a18",
+      "size": 1360214
     },
     {
       "path": "themes.json",
-      "sha256": "fd6c16d918f52d764694ec9d3f15d9f745ee82bac572072d1c30f3a8f96cbcac",
+      "sha256": "a921568e34368cba66cbc7c02cebd4b0b53da2d6e0565edc3634efb5eee70e08",
       "size": 532
     },
     {
@@ -24,8 +24,8 @@
     },
     {
       "path": "NOTICE",
-      "sha256": "a2352282b84512d3d19605db486143ae092bc54a0b26e87f3ee4b0968fbf998e",
-      "size": 260
+      "sha256": "24fcde85d4f95f86ebef0097b724c553e429916bf5c1b33252cbe84509d61fbb",
+      "size": 332
     },
     {
       "path": "brand/araihu/logo/adaptive-plate-optical.svg",
@@ -301,6 +301,61 @@
       "path": "brand/moco/logo/tinted-transparent-optical.svg",
       "sha256": "6abf67d33984b57542b23ec59ccd655aefce1e4aa678c5baa29a9ad971b338b6",
       "size": 1410
+    },
+    {
+      "path": "brand/oie/logo/adaptive-plate-optical.svg",
+      "sha256": "9c2a2a9908c436a073b8ff8089c9b4c71654ed93ab369d0f1a6c102808fb8efe",
+      "size": 3820
+    },
+    {
+      "path": "brand/oie/logo/adaptive-transparent-optical.svg",
+      "sha256": "89db019702ddf2dd34bca1e35ab068a46913a3568cc137a5704572129c749946",
+      "size": 3697
+    },
+    {
+      "path": "brand/oie/logo/dark-plate-optical.svg",
+      "sha256": "fae229144e1b2767310dbb86c62e4c1d66508eb0891d7fef161b6a8f3cf1704f",
+      "size": 2441
+    },
+    {
+      "path": "brand/oie/logo/dark-transparent-optical.svg",
+      "sha256": "bddb83c180ebcd41641569993c51956e8e264d2229b623a9ca5af77d92071f96",
+      "size": 2389
+    },
+    {
+      "path": "brand/oie/logo/grayscale-plate-optical.svg",
+      "sha256": "ae887e1a7ba8fb0b764c6a946bc04eff017446c58a2868d06c880599288271d6",
+      "size": 2441
+    },
+    {
+      "path": "brand/oie/logo/grayscale-transparent-optical.svg",
+      "sha256": "0553e15a91f1b65a2de93a138ebd434edce65363844ef69f682411f72c02bf8d",
+      "size": 2389
+    },
+    {
+      "path": "brand/oie/logo/light-plate-optical.svg",
+      "sha256": "6121f198eed634effaa3e93e6b53085145fcb9c39e9a07acb96e54f1982dd575",
+      "size": 2441
+    },
+    {
+      "path": "brand/oie/logo/light-transparent-optical.svg",
+      "sha256": "eba6e0185dc788aa00a68f0964041b0af9663cbec03a54a457aedde5600265bc",
+      "size": 2389
+    },
+    {
+      "path": "brand/oie/logo/monochrome-transparent-optical.svg",
+      "sha256": "c7a50cc3b2789ea69032fb11c2757b6ecb4db4785fff2d62b2cf621ba13be6ff",
+      "size": 2790
+    },
+    {
+      "path": "brand/oie/logo/tinted-plate-optical.svg",
+      "sha256": "05ce83b2b0fe6caa21cd1e9cc351f6ebfd3d9e85aa43c9a057310a10b344f2c3",
+      "size": 2441
+    },
+    {
+      "path": "brand/oie/logo/tinted-transparent-optical.svg",
+      "sha256": "808ccef4ecf9c643fe65a09e024eaba5377ae43b2850302a5e915f718f2dd2f4",
+      "size": 2389
     },
     {
       "path": "brand/x9/logo/adaptive-plate-optical.svg",
@@ -2288,9 +2343,74 @@
       "size": 372
     },
     {
+      "path": "icons/brand/oie-icon-adaptive-plate-launcher.svg",
+      "sha256": "208a0ac49ef2b40486313c9cd5b928170fcf2762ee4942336d3f861dadb121cf",
+      "size": 2732
+    },
+    {
+      "path": "icons/brand/oie-icon-adaptive-plate-optical.svg",
+      "sha256": "d0b11a19809760067f84bca5a784c4031c58a7c7645e37f998b00d57bc017ce3",
+      "size": 2698
+    },
+    {
+      "path": "icons/brand/oie-icon-adaptive-transparent-optical.svg",
+      "sha256": "71f947cc8459db0c7aed7e54e0ca65e10d86cea23c5e6998bb2b405f30e95169",
+      "size": 2578
+    },
+    {
+      "path": "icons/brand/oie-icon-dark-plate-optical.svg",
+      "sha256": "942b69e8f73d432ff7304d4a97ad83d85ece42acd20e278fc783f11741784b27",
+      "size": 1832
+    },
+    {
+      "path": "icons/brand/oie-icon-dark-transparent-optical.svg",
+      "sha256": "1ae89576691c5ee195c4e0c8fee1cb20ed8bb4efb0b9dcd850ba7445a6f291d7",
+      "size": 1783
+    },
+    {
+      "path": "icons/brand/oie-icon-grayscale-plate-optical.svg",
+      "sha256": "2a1a4f109d4d3efc84841b980e3bc8b70624a403ed5bbdd1e467413a473828ce",
+      "size": 1832
+    },
+    {
+      "path": "icons/brand/oie-icon-grayscale-transparent-optical.svg",
+      "sha256": "bff04148bc504764d186d8fa5aef805d0eabcbeb6081e1b5112e46fca8d60ea1",
+      "size": 1783
+    },
+    {
+      "path": "icons/brand/oie-icon-light-plate-optical.svg",
+      "sha256": "b38f004d6fea0ec107a40d1694eb3ba315f9cbf3a7d198316443a2270ca00cfb",
+      "size": 1832
+    },
+    {
+      "path": "icons/brand/oie-icon-light-transparent-optical.svg",
+      "sha256": "1ae89576691c5ee195c4e0c8fee1cb20ed8bb4efb0b9dcd850ba7445a6f291d7",
+      "size": 1783
+    },
+    {
+      "path": "icons/brand/oie-icon-monochrome-transparent-optical.svg",
+      "sha256": "3d34bdc541bd124059dd7050f59e5c194ee32d4de603b3b93a72d7720a7a8d54",
+      "size": 2169
+    },
+    {
+      "path": "icons/brand/oie-icon-tinted-plate-launcher.svg",
+      "sha256": "3c2c71358422ec2e5209bce1d1dbe81294065f04a5d1893b859328ed364d35c1",
+      "size": 1866
+    },
+    {
+      "path": "icons/brand/oie-icon-tinted-plate-optical.svg",
+      "sha256": "bc26dfd37dd25be25bdef3e3aeb6c495d7da50d0e7e4602848f983242756af9f",
+      "size": 1832
+    },
+    {
+      "path": "icons/brand/oie-icon-tinted-transparent-optical.svg",
+      "sha256": "c5e99c96c76bdc3216cb6cc0d1fc2cbc56aa6b7f16eb44982aa25709cd7b6cd3",
+      "size": 1783
+    },
+    {
       "path": "icons/brand/sprite.svg",
-      "sha256": "f861c22c113f84ae5b03929425e196f1edbfdbe612193fb78c3f27a0018fafa3",
-      "size": 301535
+      "sha256": "89fc8aeb263b14dd4c9c68bbaf9e54973ec305e9dc0231a51c3dd6bf1eaaa443",
+      "size": 342304
     },
     {
       "path": "icons/brand/x9-icon-adaptive-plate-launcher.svg",
@@ -8813,6 +8933,16 @@
       "size": 11358
     },
     {
+      "path": "licenses/brand/noto-emoji-NOTICE.txt",
+      "sha256": "cb86bd131a8303ec45d8c9c961dbc4a533f04a39d2d69cf0da601c4430f1d044",
+      "size": 1425
+    },
+    {
+      "path": "licenses/brand/noto-emoji-upstream-OFL.txt",
+      "sha256": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+      "size": 4330
+    },
+    {
       "path": "licenses/developer-icons-MIT.txt",
       "sha256": "b479c9dc8a44b8766c4272faeb431fc7864026a01d9f56e75be9c6452860b88f",
       "size": 1084
@@ -9248,6 +9378,91 @@
       "size": 119
     },
     {
+      "path": "platform/android/oie/res/drawable-xxxhdpi/ic_launcher_foreground.png",
+      "sha256": "73be8bacdb2796185e7a21d151fce7c10e79f210c74646e0fb6d5b41cae4f2f3",
+      "size": 12369
+    },
+    {
+      "path": "platform/android/oie/res/drawable-xxxhdpi/ic_launcher_monochrome.png",
+      "sha256": "18a9feddb688377579a668d52c21d65756b20906cd5ad27e99c69adcad0614da",
+      "size": 7727
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-anydpi-v33/ic_launcher.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-anydpi-v33/ic_launcher_round.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-hdpi/ic_launcher.png",
+      "sha256": "e9161f26758d13b243700d0280163e0b56af3263d3b2c6cb581e12329ae83e3e",
+      "size": 1768
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-hdpi/ic_launcher_round.png",
+      "sha256": "e9161f26758d13b243700d0280163e0b56af3263d3b2c6cb581e12329ae83e3e",
+      "size": 1768
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-mdpi/ic_launcher.png",
+      "sha256": "aa474ef5e321b0d2e944f878e06ad215f5358b157ae272704c2e9fe5150201c6",
+      "size": 1125
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-mdpi/ic_launcher_round.png",
+      "sha256": "aa474ef5e321b0d2e944f878e06ad215f5358b157ae272704c2e9fe5150201c6",
+      "size": 1125
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-xhdpi/ic_launcher.png",
+      "sha256": "ac44724b90c59cd22bac1135c6678313c0654a1b522dfcaa2c9be43fd6c43a91",
+      "size": 2410
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-xhdpi/ic_launcher_round.png",
+      "sha256": "ac44724b90c59cd22bac1135c6678313c0654a1b522dfcaa2c9be43fd6c43a91",
+      "size": 2410
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-xxhdpi/ic_launcher.png",
+      "sha256": "e4fcb41393f87b0157a874d26dbaeb654dac6243388bf4cbd279224e98b62bed",
+      "size": 3628
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "sha256": "e4fcb41393f87b0157a874d26dbaeb654dac6243388bf4cbd279224e98b62bed",
+      "size": 3628
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-xxxhdpi/ic_launcher.png",
+      "sha256": "1218aa40b8a0f01fd186c0648e423d235da0713b99de4c4ca2d75fce808a2ae1",
+      "size": 4761
+    },
+    {
+      "path": "platform/android/oie/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "sha256": "1218aa40b8a0f01fd186c0648e423d235da0713b99de4c4ca2d75fce808a2ae1",
+      "size": 4761
+    },
+    {
+      "path": "platform/android/oie/res/values/colors.xml",
+      "sha256": "5ff60af86c09ba6de6a41bccbf4efe80c5c5b4296b639fcf8bbac653f54b2c71",
+      "size": 119
+    },
+    {
       "path": "platform/android/x9/res/drawable-xxxhdpi/ic_launcher_foreground.png",
       "sha256": "c3a7710ad776c287d1a427bbbd5c5add52aa66bbfc6ca7236472ac72c07af6b4",
       "size": 8036
@@ -9454,6 +9669,31 @@
     },
     {
       "path": "platform/apple/moco/Assets.xcassets/Contents.json",
+      "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
+      "size": 41
+    },
+    {
+      "path": "platform/apple/oie/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
+      "sha256": "eea4a3500bd384cb5fc908a62a77d56f07d216bac1aabe8e859e7d921aae4542",
+      "size": 31306
+    },
+    {
+      "path": "platform/apple/oie/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-tinted.png",
+      "sha256": "8a80ca1c8ba3c895ee94ea44491c09ebd6ff2fa8d790e28f4f3d0a2d265feb08",
+      "size": 28119
+    },
+    {
+      "path": "platform/apple/oie/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "sha256": "4e6c69f769398269a7c925830e6d63e34ef5135c8a37126ff81a4bd3374b6d03",
+      "size": 30211
+    },
+    {
+      "path": "platform/apple/oie/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "6cfa296f7b0d78219f6cc2d1db6fd6d626633e5216f8538483567992d3bdb2f1",
+      "size": 448
+    },
+    {
+      "path": "platform/apple/oie/Assets.xcassets/Contents.json",
       "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
       "size": 41
     },
@@ -9708,6 +9948,51 @@
       "size": 344
     },
     {
+      "path": "platform/web/oie/apple-touch-icon-180.png",
+      "sha256": "6767428040dba8e8da27a4b8d8f59a757763451c70058b6e3bea653a3ce437ee",
+      "size": 4628
+    },
+    {
+      "path": "platform/web/oie/favicon-16.png",
+      "sha256": "eb28358d9eb8e45934e5a2f63a262a618938c606dc0aae5ffd5b5a25ec7aadf7",
+      "size": 466
+    },
+    {
+      "path": "platform/web/oie/favicon-32.png",
+      "sha256": "60c2df4c96471f0365911a874431e91b05731e2f546d2506fdd7e6d59280e170",
+      "size": 913
+    },
+    {
+      "path": "platform/web/oie/favicon.svg",
+      "sha256": "71f947cc8459db0c7aed7e54e0ca65e10d86cea23c5e6998bb2b405f30e95169",
+      "size": 2578
+    },
+    {
+      "path": "platform/web/oie/icon-192.png",
+      "sha256": "484058d522fb63d1cc0ff1db38cb14ab85412b6d9f21dd5e4c8f63998618bb29",
+      "size": 6227
+    },
+    {
+      "path": "platform/web/oie/icon-512.png",
+      "sha256": "ec236fcbfc31f37655f1cc1aca8088e919268871b9078542f40e68e31638c337",
+      "size": 17873
+    },
+    {
+      "path": "platform/web/oie/icon-maskable-192.png",
+      "sha256": "1218aa40b8a0f01fd186c0648e423d235da0713b99de4c4ca2d75fce808a2ae1",
+      "size": 4761
+    },
+    {
+      "path": "platform/web/oie/icon-maskable-512.png",
+      "sha256": "f04989d17443b851ed2a549fc6e7997d2462e58c660f9df68281c0902d6929fe",
+      "size": 13891
+    },
+    {
+      "path": "platform/web/oie/manifest-icons.json",
+      "sha256": "46522597d9c995b795ca75f7cb250b4fabb4eb9810d162c8cd1142b3c44f6bf6",
+      "size": 344
+    },
+    {
       "path": "platform/web/x9/apple-touch-icon-180.png",
       "sha256": "a93ce84be320156fc9bde45a8fd49751f9418962e17d9a9143ae0e87414e99c2",
       "size": 3181
@@ -9759,8 +10044,8 @@
     },
     {
       "path": "proof/assets/NOTICE",
-      "sha256": "a2352282b84512d3d19605db486143ae092bc54a0b26e87f3ee4b0968fbf998e",
-      "size": 260
+      "sha256": "24fcde85d4f95f86ebef0097b724c553e429916bf5c1b33252cbe84509d61fbb",
+      "size": 332
     },
     {
       "path": "proof/assets/brand/araihu/logo/adaptive-plate-optical.svg",
@@ -10036,6 +10321,61 @@
       "path": "proof/assets/brand/moco/logo/tinted-transparent-optical.svg",
       "sha256": "6abf67d33984b57542b23ec59ccd655aefce1e4aa678c5baa29a9ad971b338b6",
       "size": 1410
+    },
+    {
+      "path": "proof/assets/brand/oie/logo/adaptive-plate-optical.svg",
+      "sha256": "9c2a2a9908c436a073b8ff8089c9b4c71654ed93ab369d0f1a6c102808fb8efe",
+      "size": 3820
+    },
+    {
+      "path": "proof/assets/brand/oie/logo/adaptive-transparent-optical.svg",
+      "sha256": "89db019702ddf2dd34bca1e35ab068a46913a3568cc137a5704572129c749946",
+      "size": 3697
+    },
+    {
+      "path": "proof/assets/brand/oie/logo/dark-plate-optical.svg",
+      "sha256": "fae229144e1b2767310dbb86c62e4c1d66508eb0891d7fef161b6a8f3cf1704f",
+      "size": 2441
+    },
+    {
+      "path": "proof/assets/brand/oie/logo/dark-transparent-optical.svg",
+      "sha256": "bddb83c180ebcd41641569993c51956e8e264d2229b623a9ca5af77d92071f96",
+      "size": 2389
+    },
+    {
+      "path": "proof/assets/brand/oie/logo/grayscale-plate-optical.svg",
+      "sha256": "ae887e1a7ba8fb0b764c6a946bc04eff017446c58a2868d06c880599288271d6",
+      "size": 2441
+    },
+    {
+      "path": "proof/assets/brand/oie/logo/grayscale-transparent-optical.svg",
+      "sha256": "0553e15a91f1b65a2de93a138ebd434edce65363844ef69f682411f72c02bf8d",
+      "size": 2389
+    },
+    {
+      "path": "proof/assets/brand/oie/logo/light-plate-optical.svg",
+      "sha256": "6121f198eed634effaa3e93e6b53085145fcb9c39e9a07acb96e54f1982dd575",
+      "size": 2441
+    },
+    {
+      "path": "proof/assets/brand/oie/logo/light-transparent-optical.svg",
+      "sha256": "eba6e0185dc788aa00a68f0964041b0af9663cbec03a54a457aedde5600265bc",
+      "size": 2389
+    },
+    {
+      "path": "proof/assets/brand/oie/logo/monochrome-transparent-optical.svg",
+      "sha256": "c7a50cc3b2789ea69032fb11c2757b6ecb4db4785fff2d62b2cf621ba13be6ff",
+      "size": 2790
+    },
+    {
+      "path": "proof/assets/brand/oie/logo/tinted-plate-optical.svg",
+      "sha256": "05ce83b2b0fe6caa21cd1e9cc351f6ebfd3d9e85aa43c9a057310a10b344f2c3",
+      "size": 2441
+    },
+    {
+      "path": "proof/assets/brand/oie/logo/tinted-transparent-optical.svg",
+      "sha256": "808ccef4ecf9c643fe65a09e024eaba5377ae43b2850302a5e915f718f2dd2f4",
+      "size": 2389
     },
     {
       "path": "proof/assets/brand/x9/logo/adaptive-plate-optical.svg",
@@ -12028,9 +12368,74 @@
       "size": 372
     },
     {
+      "path": "proof/assets/icons/brand/oie-icon-adaptive-plate-launcher.svg",
+      "sha256": "208a0ac49ef2b40486313c9cd5b928170fcf2762ee4942336d3f861dadb121cf",
+      "size": 2732
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-adaptive-plate-optical.svg",
+      "sha256": "d0b11a19809760067f84bca5a784c4031c58a7c7645e37f998b00d57bc017ce3",
+      "size": 2698
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-adaptive-transparent-optical.svg",
+      "sha256": "71f947cc8459db0c7aed7e54e0ca65e10d86cea23c5e6998bb2b405f30e95169",
+      "size": 2578
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-dark-plate-optical.svg",
+      "sha256": "942b69e8f73d432ff7304d4a97ad83d85ece42acd20e278fc783f11741784b27",
+      "size": 1832
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-dark-transparent-optical.svg",
+      "sha256": "1ae89576691c5ee195c4e0c8fee1cb20ed8bb4efb0b9dcd850ba7445a6f291d7",
+      "size": 1783
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-grayscale-plate-optical.svg",
+      "sha256": "2a1a4f109d4d3efc84841b980e3bc8b70624a403ed5bbdd1e467413a473828ce",
+      "size": 1832
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-grayscale-transparent-optical.svg",
+      "sha256": "bff04148bc504764d186d8fa5aef805d0eabcbeb6081e1b5112e46fca8d60ea1",
+      "size": 1783
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-light-plate-optical.svg",
+      "sha256": "b38f004d6fea0ec107a40d1694eb3ba315f9cbf3a7d198316443a2270ca00cfb",
+      "size": 1832
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-light-transparent-optical.svg",
+      "sha256": "1ae89576691c5ee195c4e0c8fee1cb20ed8bb4efb0b9dcd850ba7445a6f291d7",
+      "size": 1783
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-monochrome-transparent-optical.svg",
+      "sha256": "3d34bdc541bd124059dd7050f59e5c194ee32d4de603b3b93a72d7720a7a8d54",
+      "size": 2169
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-tinted-plate-launcher.svg",
+      "sha256": "3c2c71358422ec2e5209bce1d1dbe81294065f04a5d1893b859328ed364d35c1",
+      "size": 1866
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-tinted-plate-optical.svg",
+      "sha256": "bc26dfd37dd25be25bdef3e3aeb6c495d7da50d0e7e4602848f983242756af9f",
+      "size": 1832
+    },
+    {
+      "path": "proof/assets/icons/brand/oie-icon-tinted-transparent-optical.svg",
+      "sha256": "c5e99c96c76bdc3216cb6cc0d1fc2cbc56aa6b7f16eb44982aa25709cd7b6cd3",
+      "size": 1783
+    },
+    {
       "path": "proof/assets/icons/brand/sprite.svg",
-      "sha256": "f861c22c113f84ae5b03929425e196f1edbfdbe612193fb78c3f27a0018fafa3",
-      "size": 301535
+      "sha256": "89fc8aeb263b14dd4c9c68bbaf9e54973ec305e9dc0231a51c3dd6bf1eaaa443",
+      "size": 342304
     },
     {
       "path": "proof/assets/icons/brand/x9-icon-adaptive-plate-launcher.svg",
@@ -18553,6 +18958,16 @@
       "size": 11358
     },
     {
+      "path": "proof/assets/licenses/brand/noto-emoji-NOTICE.txt",
+      "sha256": "cb86bd131a8303ec45d8c9c961dbc4a533f04a39d2d69cf0da601c4430f1d044",
+      "size": 1425
+    },
+    {
+      "path": "proof/assets/licenses/brand/noto-emoji-upstream-OFL.txt",
+      "sha256": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+      "size": 4330
+    },
+    {
       "path": "proof/assets/licenses/developer-icons-MIT.txt",
       "sha256": "b479c9dc8a44b8766c4272faeb431fc7864026a01d9f56e75be9c6452860b88f",
       "size": 1084
@@ -18988,6 +19403,91 @@
       "size": 119
     },
     {
+      "path": "proof/assets/platform/android/oie/res/drawable-xxxhdpi/ic_launcher_foreground.png",
+      "sha256": "73be8bacdb2796185e7a21d151fce7c10e79f210c74646e0fb6d5b41cae4f2f3",
+      "size": 12369
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/drawable-xxxhdpi/ic_launcher_monochrome.png",
+      "sha256": "18a9feddb688377579a668d52c21d65756b20906cd5ad27e99c69adcad0614da",
+      "size": 7727
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-anydpi-v26/ic_launcher_round.xml",
+      "sha256": "dfe8d39ecc5035b615774796a0f031d234bea9eef612d1cbf2881ac1da55d604",
+      "size": 266
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-anydpi-v33/ic_launcher.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-anydpi-v33/ic_launcher_round.xml",
+      "sha256": "e08219d7e00e4b15f64ec414fcd36853e61277a2008fe923cb6010a0d13dddf0",
+      "size": 335
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-hdpi/ic_launcher.png",
+      "sha256": "e9161f26758d13b243700d0280163e0b56af3263d3b2c6cb581e12329ae83e3e",
+      "size": 1768
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-hdpi/ic_launcher_round.png",
+      "sha256": "e9161f26758d13b243700d0280163e0b56af3263d3b2c6cb581e12329ae83e3e",
+      "size": 1768
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-mdpi/ic_launcher.png",
+      "sha256": "aa474ef5e321b0d2e944f878e06ad215f5358b157ae272704c2e9fe5150201c6",
+      "size": 1125
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-mdpi/ic_launcher_round.png",
+      "sha256": "aa474ef5e321b0d2e944f878e06ad215f5358b157ae272704c2e9fe5150201c6",
+      "size": 1125
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-xhdpi/ic_launcher.png",
+      "sha256": "ac44724b90c59cd22bac1135c6678313c0654a1b522dfcaa2c9be43fd6c43a91",
+      "size": 2410
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-xhdpi/ic_launcher_round.png",
+      "sha256": "ac44724b90c59cd22bac1135c6678313c0654a1b522dfcaa2c9be43fd6c43a91",
+      "size": 2410
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-xxhdpi/ic_launcher.png",
+      "sha256": "e4fcb41393f87b0157a874d26dbaeb654dac6243388bf4cbd279224e98b62bed",
+      "size": 3628
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "sha256": "e4fcb41393f87b0157a874d26dbaeb654dac6243388bf4cbd279224e98b62bed",
+      "size": 3628
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-xxxhdpi/ic_launcher.png",
+      "sha256": "1218aa40b8a0f01fd186c0648e423d235da0713b99de4c4ca2d75fce808a2ae1",
+      "size": 4761
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "sha256": "1218aa40b8a0f01fd186c0648e423d235da0713b99de4c4ca2d75fce808a2ae1",
+      "size": 4761
+    },
+    {
+      "path": "proof/assets/platform/android/oie/res/values/colors.xml",
+      "sha256": "5ff60af86c09ba6de6a41bccbf4efe80c5c5b4296b639fcf8bbac653f54b2c71",
+      "size": 119
+    },
+    {
       "path": "proof/assets/platform/android/x9/res/drawable-xxxhdpi/ic_launcher_foreground.png",
       "sha256": "c3a7710ad776c287d1a427bbbd5c5add52aa66bbfc6ca7236472ac72c07af6b4",
       "size": 8036
@@ -19194,6 +19694,31 @@
     },
     {
       "path": "proof/assets/platform/apple/moco/Assets.xcassets/Contents.json",
+      "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
+      "size": 41
+    },
+    {
+      "path": "proof/assets/platform/apple/oie/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-dark.png",
+      "sha256": "eea4a3500bd384cb5fc908a62a77d56f07d216bac1aabe8e859e7d921aae4542",
+      "size": 31306
+    },
+    {
+      "path": "proof/assets/platform/apple/oie/Assets.xcassets/AppIcon.appiconset/AppIcon-1024-tinted.png",
+      "sha256": "8a80ca1c8ba3c895ee94ea44491c09ebd6ff2fa8d790e28f4f3d0a2d265feb08",
+      "size": 28119
+    },
+    {
+      "path": "proof/assets/platform/apple/oie/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png",
+      "sha256": "4e6c69f769398269a7c925830e6d63e34ef5135c8a37126ff81a4bd3374b6d03",
+      "size": 30211
+    },
+    {
+      "path": "proof/assets/platform/apple/oie/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "6cfa296f7b0d78219f6cc2d1db6fd6d626633e5216f8538483567992d3bdb2f1",
+      "size": 448
+    },
+    {
+      "path": "proof/assets/platform/apple/oie/Assets.xcassets/Contents.json",
       "sha256": "56d4c36660122ed4a621b995e9d481c654662fa72c8eade16dcd6702b196d9a0",
       "size": 41
     },
@@ -19448,6 +19973,51 @@
       "size": 344
     },
     {
+      "path": "proof/assets/platform/web/oie/apple-touch-icon-180.png",
+      "sha256": "6767428040dba8e8da27a4b8d8f59a757763451c70058b6e3bea653a3ce437ee",
+      "size": 4628
+    },
+    {
+      "path": "proof/assets/platform/web/oie/favicon-16.png",
+      "sha256": "eb28358d9eb8e45934e5a2f63a262a618938c606dc0aae5ffd5b5a25ec7aadf7",
+      "size": 466
+    },
+    {
+      "path": "proof/assets/platform/web/oie/favicon-32.png",
+      "sha256": "60c2df4c96471f0365911a874431e91b05731e2f546d2506fdd7e6d59280e170",
+      "size": 913
+    },
+    {
+      "path": "proof/assets/platform/web/oie/favicon.svg",
+      "sha256": "71f947cc8459db0c7aed7e54e0ca65e10d86cea23c5e6998bb2b405f30e95169",
+      "size": 2578
+    },
+    {
+      "path": "proof/assets/platform/web/oie/icon-192.png",
+      "sha256": "484058d522fb63d1cc0ff1db38cb14ab85412b6d9f21dd5e4c8f63998618bb29",
+      "size": 6227
+    },
+    {
+      "path": "proof/assets/platform/web/oie/icon-512.png",
+      "sha256": "ec236fcbfc31f37655f1cc1aca8088e919268871b9078542f40e68e31638c337",
+      "size": 17873
+    },
+    {
+      "path": "proof/assets/platform/web/oie/icon-maskable-192.png",
+      "sha256": "1218aa40b8a0f01fd186c0648e423d235da0713b99de4c4ca2d75fce808a2ae1",
+      "size": 4761
+    },
+    {
+      "path": "proof/assets/platform/web/oie/icon-maskable-512.png",
+      "sha256": "f04989d17443b851ed2a549fc6e7997d2462e58c660f9df68281c0902d6929fe",
+      "size": 13891
+    },
+    {
+      "path": "proof/assets/platform/web/oie/manifest-icons.json",
+      "sha256": "46522597d9c995b795ca75f7cb250b4fabb4eb9810d162c8cd1142b3c44f6bf6",
+      "size": 344
+    },
+    {
       "path": "proof/assets/platform/web/x9/apple-touch-icon-180.png",
       "sha256": "a93ce84be320156fc9bde45a8fd49751f9418962e17d9a9143ae0e87414e99c2",
       "size": 3181
@@ -19494,7 +20064,7 @@
     },
     {
       "path": "proof/assets/themes.json",
-      "sha256": "fd6c16d918f52d764694ec9d3f15d9f745ee82bac572072d1c30f3a8f96cbcac",
+      "sha256": "a921568e34368cba66cbc7c02cebd4b0b53da2d6e0565edc3634efb5eee70e08",
       "size": 532
     },
     {
@@ -19509,8 +20079,8 @@
     },
     {
       "path": "proof/index.html",
-      "sha256": "e6a216c9458492df595ac025a79dac7fe9a1cb7b326caf25a310d5213994d82e",
-      "size": 3088077
+      "sha256": "457f5dcda6b8be958f4d2698156087b44a542e2a5860ca11fb3fb23ecfbb91c0",
+      "size": 3448519
     },
     {
       "path": "proof/og.png",
