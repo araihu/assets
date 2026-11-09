@@ -31,7 +31,7 @@ var (
 	visualElements = map[string]bool{
 		"circle": true, "ellipse": true, "line": true, "path": true, "polygon": true, "polyline": true, "rect": true, "use": true,
 	}
-	generatedAdaptiveStyle = regexp.MustCompile(`^<style>@media \(prefers-color-scheme: dark\) \{:root \{--araihu-logo-auto-surface: #[0-9a-f]{6};--araihu-logo-auto-ink: #[0-9a-f]{6};--araihu-logo-auto-signal: #[0-9a-f]{6};\}\}</style>`)
+	generatedAdaptiveStyle = regexp.MustCompile(`^<style>@media \(prefers-color-scheme: dark\) \{:root \{--araihu-logo-auto-surface: #[0-9a-f]{6};--araihu-logo-auto-ink: #[0-9a-f]{6};--araihu-logo-auto-signal: #[0-9a-f]{6};(?:--araihu-logo-auto-paint-[0-9a-f]{6}: #[0-9a-f]{6};)*\}\}</style>`)
 	mixedCaseAttributes    = map[string]struct{}{
 		"clipPathUnits": {}, "filterUnits": {}, "gradientTransform": {}, "gradientUnits": {}, "markerHeight": {}, "markerUnits": {}, "markerWidth": {}, "maskUnits": {}, "preserveAspectRatio": {}, "refX": {}, "refY": {}, "spreadMethod": {}, "stdDeviation": {}, "viewBox": {},
 	}
@@ -427,6 +427,10 @@ func normalizePaint(root *node, hasFill, hasStroke bool) {
 }
 
 func normalizePaintNode(n *node, parentFillNone, parentStrokePaint, globalStroke bool) {
+	// Masks and clips encode geometry with paint; recoloring them erases cutouts.
+	if n.name == "mask" || n.name == "clipPath" {
+		return
+	}
 	fill, hasFill := paintAttribute(*n, "fill")
 	stroke, hasStroke := paintAttribute(*n, "stroke")
 	fillNone := parentFillNone

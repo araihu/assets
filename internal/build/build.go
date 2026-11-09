@@ -233,7 +233,35 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 		return nil, fmt.Errorf("build: read LICENSE: %w", err)
 	}
 	files["licenses/Apache-2.0.txt"] = license
-	files["NOTICE"] = []byte("Arai Hu Assets " + releaseinfo.Version + "\n\nArai Hu brand assets are subject to Arai Hu Brand Terms.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\nDeveloper Icons material is included under its MIT license in licenses/developer-icons-MIT.txt.\n")
+	brandNotices := filepath.Join(repo, "LICENSES", "brand")
+	if _, err := os.Stat(brandNotices); err == nil {
+		if err := filepath.WalkDir(brandNotices, func(path string, entry fs.DirEntry, walkErr error) error {
+			if walkErr != nil {
+				return walkErr
+			}
+			if entry.IsDir() {
+				return nil
+			}
+			if !entry.Type().IsRegular() {
+				return fmt.Errorf("nonregular brand notice %s", path)
+			}
+			relative, err := filepath.Rel(brandNotices, path)
+			if err != nil {
+				return err
+			}
+			data, err := os.ReadFile(path)
+			if err != nil {
+				return err
+			}
+			files["licenses/brand/"+filepath.ToSlash(relative)] = data
+			return nil
+		}); err != nil {
+			return nil, err
+		}
+	} else if !os.IsNotExist(err) {
+		return nil, err
+	}
+	files["NOTICE"] = []byte("Arai Hu Assets " + releaseinfo.Version + "\n\nArai Hu brand assets are subject to Arai Hu Brand Terms. Third-party artwork retains its original licenses; see licenses/brand/.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\nDeveloper Icons material is included under its MIT license in licenses/developer-icons-MIT.txt.\n")
 	proofFiles, err := proofStaticFiles(repo)
 	if err != nil {
 		return nil, err

@@ -2,14 +2,14 @@
 
 Deterministic identity and interface assets for Arai Hû products.
 `dist/catalog.json` is the versioned, language-neutral consumer contract for
-the `v0.2.6` release.
+the `v0.2.7` source candidate.
 
 ## Current checkout
 
 Requires Go `1.27.3`. A supported older local Go installation may select that
 toolchain with `GOTOOLCHAIN=auto`.
 
-The managed `dist/` tree is the `v0.2.6` release. Its catalog, generated
+The managed `dist/` tree is the `v0.2.7` source candidate. Its catalog, generated
 sprites, catalog-driven proof, and deterministic archives are consumer inputs.
 Use a disposable checkout when regenerating it:
 
@@ -221,7 +221,7 @@ archive remains unchanged.
 
 ## Catalog and sprites
 
-The `v0.2.6` `dist/catalog.json` is schema v2, language-neutral metadata for
+The `v0.2.7` `dist/catalog.json` is schema v2, language-neutral metadata for
 generated files only. It records canonical name,
 namespace, variant dimensions,
 `spriteSymbol`, color behavior, license, source label, and SHA-256. Public
@@ -248,7 +248,7 @@ generation is provided by this CLI; consumers own any project-local bindings.
 
 ## Platform files and archives
 
-The `v0.2.6` build emits individual brand/UI SVGs, web/Android/Apple platform
+The `v0.2.7` build emits individual brand/UI SVGs, web/Android/Apple platform
 packages, catalog, checksums, notices, licenses, the self-contained
 `dist/proof/**` review site, and deterministic `.tar.gz` and `.zip` archives
 under `dist/releases/`. Platform launchers
@@ -259,7 +259,7 @@ The catalog is the current interoperability boundary. Release archives contain
 the complete managed distribution, including all `dist/proof/**` local assets;
 review screenshots and critique files remain outside release membership.
 
-A local `v0.2.6` checkout is not a substitute for published-release
+A local `v0.2.7` checkout is not a substitute for published-release
 verification. Consumers must verify the matching Git tag, GitHub Release,
 `SHA256SUMS`, archive, and extracted member checksums before treating its
 archive names or module version as public.
@@ -301,3 +301,21 @@ for consumer-local generators.
 The temporary V11 calibration scaffold remains only for historical reference.
 Generated `dist/proof` is release evidence, not a public consumer path or a
 second source of truth.
+
+## Oiê identity
+
+The v0.2.7 source candidate adds `oie`, displayed as **Oiê**, using the approved
+flat chat balloon with the Noto Emoji moon face. The spelling is Portuguese:
+a friendly greeting with warmth and proximity. Technical paths keep `oie`.
+The new identity is a candidate until its tag and release archives are published.
+
+Protected colors are declared as exact per-product `paint` maps for each of
+light/dark/grayscale/tinted. Unspecified products keep their existing shared
+palette. Original monochrome sources may be supplied as a paired
+`icon-monochrome`/`logo-monochrome` override so facial cutouts remain visible.
+Mask/clip paint is structural and stays untouched during monochrome conversion.
+
+Original source artwork, immutable upstream revision and derivation notes are
+in `source/brand/oie`; distribution notices are emitted from `LICENSES/brand`.
+Generated icons, web/PWA files and logos use the same catalog/proof/archive
+pipeline as all other products. The default channel remains v0.2.5.
