@@ -11,8 +11,8 @@ github.com/araihu/muamba/internal/lifecycle
 github.com/araihu/muamba/internal/manifest
 github.com/araihu/muamba/internal/safepath
 github.com/araihu/muamba/internal/transport
-# github.com/caarlos0/env/v11 v11.4.1
-## explicit; go 1.18
+# github.com/caarlos0/env/v11 v11.4.2
+## explicit; go 1.26.0
 github.com/caarlos0/env/v11
 # github.com/g4s8/envdoc v1.12.0
 ## explicit; go 1.25.1
