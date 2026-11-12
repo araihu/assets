@@ -17,3 +17,15 @@ inactive campaign proof: it applies only when a consumer explicitly sets
 `data-theme="araihu-signal-night"`. Its midnight (`#07111f`), storm
 (`#10233d`), paper (`#f7f8f3`), and lime-signal (`#c7ff4a`) foreground pairs
 meet normal-text contrast requirements; it does not select a default theme.
+
+`themes/oie.css` uses the [Oiê application palette](https://github.com/araihu/oie/blob/main/docs/branding.md)
+for light and dark modes. Load the stylesheet after Goshtoso and set
+`data-theme="oie"` on the document root. Use the `dark` class on that root
+for dark mode. Primary controls use the icon blue with a dark foreground.
+The stylesheet also defines Margo's document colors.
+
+Margo consumers can pin `themes/oie.css` and `themes/oie.tokens.yaml` to the
+same Git revision. The catalog stays alongside the source stylesheet and
+binds its exact bytes with `css_digest`. Recompute that SHA-256 after editing
+the CSS. The catalog is adapted from Margo's example under the MIT license
+in `LICENSES/Margo-MIT.txt`.

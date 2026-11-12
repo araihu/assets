@@ -14,6 +14,12 @@
       "cssPath": "themes/araihu-signal-night.css",
       "tokenContract": "goshtoso-theme-v1",
       "sha256": "77f6b500b240644eb52ee35d8e8901550a94db5a0d71284fbaa6158ce358d709"
+    },
+    {
+      "id": "oie",
+      "cssPath": "themes/oie.css",
+      "tokenContract": "goshtoso-theme-v1",
+      "sha256": "e34167a90cac0ed4688d9ce6b2b2de65eba8eaf1d811c8f3f3af16dfa6278cbe"
     }
   ]
 }

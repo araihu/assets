@@ -1,0 +1,205 @@
+schema: margo.theme.tokens/v1
+css_digest: sha256-e34167a90cac0ed4688d9ce6b2b2de65eba8eaf1d811c8f3f3af16dfa6278cbe
+fonts: []
+minimum_text_size: 1rem
+touch_target:
+  min_css_px: 44
+typography:
+  display:
+    font_family: ui-sans-serif, system-ui, sans-serif
+    size: clamp(2.6rem, 6vw, 5.25rem)
+    weight: 750
+    line_height: 1.05
+    letter_spacing: -0.04em
+    responsive: {mode: fluid}
+  headline:
+    font_family: ui-sans-serif, system-ui, sans-serif
+    size: clamp(1.75rem, 3vw, 2.5rem)
+    weight: 750
+    line_height: 1.1
+    letter_spacing: -0.03em
+    responsive: {mode: fluid}
+  title:
+    font_family: ui-sans-serif, system-ui, sans-serif
+    size: 1.5rem
+    weight: 700
+    line_height: 1.25
+    letter_spacing: -0.02em
+    responsive: {mode: fixed}
+  body:
+    font_family: ui-sans-serif, system-ui, sans-serif
+    size: 1rem
+    weight: 400
+    line_height: 1.6
+    responsive:
+      mode: fixed
+      narrow: {size: 1rem, line_height: 1.6}
+      mid: {size: 1rem, line_height: 1.6}
+      wide: {size: 1rem, line_height: 1.6}
+  label:
+    font_family: ui-sans-serif, system-ui, sans-serif
+    size: 0.875rem
+    weight: 500
+    line_height: 1.4
+    responsive: {mode: fixed}
+  caption: {alias_of: label}
+reading_measure:
+  token: token://layout.tokens.main-measure
+  min_ch: 65
+  max_ch: 75
+layout:
+  tokens:
+    main-measure: {type: length, value: 68ch, min: 65ch, max: 75ch}
+    main-measure-mid: {type: length, value: 68ch, min: 65ch, max: 75ch}
+    main-three-column-measure: {type: length, value: 65ch, min: 65ch, max: 75ch}
+    spacing-base: {type: length, value: 0.25rem, min: 0.25rem, max: 0.5rem}
+    spacing-prose: {type: length, value: 1rem, min: 0.75rem, max: 2rem}
+    spacing-section: {type: length, value: 2.5rem, min: 1.5rem, max: 6rem}
+    gap: {type: length, value: 1.5rem, min: 0.5rem, max: 3rem}
+    component-padding: {type: length, value: 1rem, min: 0.5rem, max: 2rem}
+    sidebar-inline-size-wide: {type: length, value: 16rem, min: 12rem, max: 20rem}
+    sidebar-inline-size-mid: {type: length, value: 14rem, min: 12rem, max: 18rem}
+    drawer-inline-size: {type: length, value: 18rem, min: 16rem, max: 22rem}
+spacing:
+  scale: [0.25rem, 0.5rem, 0.75rem, 1rem, 1.5rem, 2rem]
+  semantic:
+    base: token://layout.tokens.spacing-base
+    prose: token://layout.tokens.spacing-prose
+    section: token://layout.tokens.spacing-section
+    layout-section-gap: token://layout.tokens.gap
+    component-padding: token://layout.tokens.component-padding
+breakpoints:
+  - {name: narrow, min_css_px: 0, max_css_px: 720}
+  - {name: mid, min_css_px: 720, max_css_px: 1100}
+  - {name: wide, min_css_px: 1100}
+grid:
+  track_tokens:
+    main-wide: {type: track, function: minmax, min: 0, max: token://layout.tokens.main-measure}
+    main-mid: {type: track, function: minmax, min: 0, max: token://layout.tokens.main-measure-mid}
+    main-three-column-mid: {type: track, function: minmax, min: 0, max: token://layout.tokens.main-three-column-measure}
+    narrow-content: {type: track, function: minmax, min: 0, max: token://layout.tokens.main-measure}
+    fluid: {type: track, function: minmax, min: 0, max: 1fr}
+  reference_syntax: token://grid.track_tokens/<name>
+drawer:
+  inline_size: token://layout.tokens.drawer-inline-size
+  max_inline_size: min(22rem, 85vi)
+colors:
+  light:
+    accent: '#274C5E'
+    surface: '#F7F8F7'
+    surface-alt: '#F0F2F1'
+    text: '#17211C'
+    text-strong: '#17211C'
+    outline: '#6B7871'
+    focus-ring: '#274C5E'
+  dark:
+    accent: '#9AC3D8'
+    surface: '#1C1D1C'
+    surface-alt: '#2B2C2B'
+    text: '#F3F4F3'
+    text-strong: '#F3F4F3'
+    outline: '#858E88'
+    focus-ring: '#9AC3D8'
+mermaid:
+  light:
+    canvas: '#F0F2F1'
+    node: '#E1EEF5'
+    node-border: '#274C5E'
+    text: '#17211C'
+    edge: '#274C5E'
+    edge-label: '#17211C'
+    edge-label-background: '#F7F8F7'
+    description: '#274C5E'
+  dark:
+    canvas: '#2B2C2B'
+    node: '#203D4D'
+    node-border: '#9AC3D8'
+    text: '#F3F4F3'
+    edge: '#9AC3D8'
+    edge-label: '#F3F4F3'
+    edge-label-background: '#1C1D1C'
+    description: '#9AC3D8'
+states:
+  light:
+    default: {background: '#F0F2F1', foreground: '#17211C'}
+    hover: {background: '#E1EEF5', foreground: '#17211C'}
+    pressed: {background: '#CDDDE5', foreground: '#17211C'}
+    focus: {background: '#F0F2F1', foreground: '#17211C'}
+    disabled: {background: '#F0F2F1', foreground: '#4B5951'}
+    selected: {background: '#CDDDE5', foreground: '#17211C'}
+  dark:
+    default: {background: '#2B2C2B', foreground: '#F3F4F3'}
+    hover: {background: '#203D4D', foreground: '#F3F4F3'}
+    pressed: {background: '#274C5E', foreground: '#F3F4F3'}
+    focus: {background: '#2B2C2B', foreground: '#F3F4F3'}
+    disabled: {background: '#2B2C2B', foreground: '#AFB5B0'}
+    selected: {background: '#274C5E', foreground: '#F3F4F3'}
+feedback:
+  light:
+    success: {foreground: '#1B5A39', background: '#E5F3E9', cue: icon-or-text}
+    warning: {foreground: '#714400', background: '#FFF0CF', cue: icon-or-text}
+    error: {foreground: '#8A2436', background: '#FDE8E7', cue: icon-or-text}
+    info: {foreground: '#274C5E', background: '#E1EEF5', cue: icon-or-text}
+  dark:
+    success: {foreground: '#BDE8C8', background: '#1B4536', cue: icon-or-text}
+    warning: {foreground: '#FFE1A3', background: '#4C381A', cue: icon-or-text}
+    error: {foreground: '#FFC1BD', background: '#552B35', cue: icon-or-text}
+    info: {foreground: '#9AC3D8', background: '#203D4D', cue: icon-or-text}
+contrast_pairs:
+  required_modes: [light, dark]
+  required_states: [default, hover, pressed, focus, disabled, selected]
+  required_feedback: [success, warning, error, info]
+  required_non_text: [focus-ring]
+  required_focus_surfaces: [page-background, focus-state-background, alternate-background]
+  required_role_pairs:
+    - text/surface
+    - text-strong/surface
+    - text/surface-alt
+    - text-strong/surface-alt
+    - accent/surface
+    - accent/surface-alt
+    - outline/surface
+    - outline/surface-alt
+  entries:
+    - {mode: light, state: default, foreground: token://states.light.default.foreground, background: token://states.light.default.background, ratio: 4.5}
+    - {mode: light, state: hover, foreground: token://states.light.hover.foreground, background: token://states.light.hover.background, ratio: 4.5}
+    - {mode: light, state: pressed, foreground: token://states.light.pressed.foreground, background: token://states.light.pressed.background, ratio: 4.5}
+    - {mode: light, state: focus, foreground: token://states.light.focus.foreground, background: token://states.light.focus.background, ratio: 4.5}
+    - {mode: light, state: disabled, foreground: token://states.light.disabled.foreground, background: token://states.light.disabled.background, ratio: 4.5}
+    - {mode: light, state: selected, foreground: token://states.light.selected.foreground, background: token://states.light.selected.background, ratio: 4.5}
+    - {mode: dark, state: default, foreground: token://states.dark.default.foreground, background: token://states.dark.default.background, ratio: 4.5}
+    - {mode: dark, state: hover, foreground: token://states.dark.hover.foreground, background: token://states.dark.hover.background, ratio: 4.5}
+    - {mode: dark, state: pressed, foreground: token://states.dark.pressed.foreground, background: token://states.dark.pressed.background, ratio: 4.5}
+    - {mode: dark, state: focus, foreground: token://states.dark.focus.foreground, background: token://states.dark.focus.background, ratio: 4.5}
+    - {mode: dark, state: disabled, foreground: token://states.dark.disabled.foreground, background: token://states.dark.disabled.background, ratio: 4.5}
+    - {mode: dark, state: selected, foreground: token://states.dark.selected.foreground, background: token://states.dark.selected.background, ratio: 4.5}
+    - {mode: light, feedback: success, foreground: token://feedback.light.success.foreground, background: token://feedback.light.success.background, ratio: 4.5}
+    - {mode: light, feedback: warning, foreground: token://feedback.light.warning.foreground, background: token://feedback.light.warning.background, ratio: 4.5}
+    - {mode: light, feedback: error, foreground: token://feedback.light.error.foreground, background: token://feedback.light.error.background, ratio: 4.5}
+    - {mode: light, feedback: info, foreground: token://feedback.light.info.foreground, background: token://feedback.light.info.background, ratio: 4.5}
+    - {mode: dark, feedback: success, foreground: token://feedback.dark.success.foreground, background: token://feedback.dark.success.background, ratio: 4.5}
+    - {mode: dark, feedback: warning, foreground: token://feedback.dark.warning.foreground, background: token://feedback.dark.warning.background, ratio: 4.5}
+    - {mode: dark, feedback: error, foreground: token://feedback.dark.error.foreground, background: token://feedback.dark.error.background, ratio: 4.5}
+    - {mode: dark, feedback: info, foreground: token://feedback.dark.info.foreground, background: token://feedback.dark.info.background, ratio: 4.5}
+    - {mode: light, non_text: focus-ring, surface: page-background, foreground: token://colors.light.focus-ring, background: token://colors.light.surface, ratio: 3}
+    - {mode: light, non_text: focus-ring, surface: focus-state-background, foreground: token://colors.light.focus-ring, background: token://states.light.focus.background, ratio: 3}
+    - {mode: light, non_text: focus-ring, surface: alternate-background, foreground: token://colors.light.focus-ring, background: token://colors.light.surface-alt, ratio: 3}
+    - {mode: dark, non_text: focus-ring, surface: page-background, foreground: token://colors.dark.focus-ring, background: token://colors.dark.surface, ratio: 3}
+    - {mode: dark, non_text: focus-ring, surface: focus-state-background, foreground: token://colors.dark.focus-ring, background: token://states.dark.focus.background, ratio: 3}
+    - {mode: dark, non_text: focus-ring, surface: alternate-background, foreground: token://colors.dark.focus-ring, background: token://colors.dark.surface-alt, ratio: 3}
+    - {mode: light, role: text/surface, foreground: token://colors.light.text, background: token://colors.light.surface, ratio: 4.5}
+    - {mode: light, role: text-strong/surface, foreground: token://colors.light.text-strong, background: token://colors.light.surface, ratio: 4.5}
+    - {mode: light, role: text/surface-alt, foreground: token://colors.light.text, background: token://colors.light.surface-alt, ratio: 4.5}
+    - {mode: light, role: text-strong/surface-alt, foreground: token://colors.light.text-strong, background: token://colors.light.surface-alt, ratio: 4.5}
+    - {mode: light, role: accent/surface, foreground: token://colors.light.accent, background: token://colors.light.surface, ratio: 4.5}
+    - {mode: light, role: accent/surface-alt, foreground: token://colors.light.accent, background: token://colors.light.surface-alt, ratio: 4.5}
+    - {mode: light, role: outline/surface, foreground: token://colors.light.outline, background: token://colors.light.surface, ratio: 3}
+    - {mode: light, role: outline/surface-alt, foreground: token://colors.light.outline, background: token://colors.light.surface-alt, ratio: 3}
+    - {mode: dark, role: text/surface, foreground: token://colors.dark.text, background: token://colors.dark.surface, ratio: 4.5}
+    - {mode: dark, role: text-strong/surface, foreground: token://colors.dark.text-strong, background: token://colors.dark.surface, ratio: 4.5}
+    - {mode: dark, role: text/surface-alt, foreground: token://colors.dark.text, background: token://colors.dark.surface-alt, ratio: 4.5}
+    - {mode: dark, role: text-strong/surface-alt, foreground: token://colors.dark.text-strong, background: token://colors.dark.surface-alt, ratio: 4.5}
+    - {mode: dark, role: accent/surface, foreground: token://colors.dark.accent, background: token://colors.dark.surface, ratio: 4.5}
+    - {mode: dark, role: accent/surface-alt, foreground: token://colors.dark.accent, background: token://colors.dark.surface-alt, ratio: 4.5}
+    - {mode: dark, role: outline/surface, foreground: token://colors.dark.outline, background: token://colors.dark.surface, ratio: 3}
+    - {mode: dark, role: outline/surface-alt, foreground: token://colors.dark.outline, background: token://colors.dark.surface-alt, ratio: 3}

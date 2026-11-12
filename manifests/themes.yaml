@@ -5,3 +5,5 @@ themes:
     css_path: themes/araihu.css
   - id: araihu-signal-night
     css_path: themes/araihu-signal-night.css
+  - id: oie
+    css_path: themes/oie.css

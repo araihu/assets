@@ -1,0 +1,55 @@
+/* Oiê for Goshtoso and Margo. Load with data-theme="oie".
+ * Colors follow araihu/oie docs/branding.md and the application palette.
+ */
+[data-theme="oie"] {
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-title: var(--font-body);
+  --document-font-body: var(--font-body);
+  --document-font-heading: var(--font-title);
+  --radius-radius: .65rem;
+
+  --color-surface: #f7f8f7;
+  --color-surface-alt: #f0f2f1;
+  --color-on-surface: #17211c;
+  --color-on-surface-strong: #17211c;
+  --color-on-surface-muted: #4b5951;
+  --color-outline: #d7ddd9;
+  --color-outline-strong: #6b7871;
+  --color-primary: #6092ab;
+  --color-on-primary: #07111f;
+  --color-focus-ring: #274c5e;
+
+  --color-surface-dark: #1c1d1c;
+  --color-surface-dark-alt: #2b2c2b;
+  --color-on-surface-dark: #f3f4f3;
+  --color-on-surface-dark-strong: #f3f4f3;
+  --color-on-surface-dark-muted: #afb5b0;
+  --color-outline-dark: #383b38;
+  --color-outline-dark-strong: #858e88;
+  --color-control-outline-dark: var(--color-outline-dark-strong);
+  --color-primary-dark: #6092ab;
+  --color-on-primary-dark: #07111f;
+  --color-focus-ring-dark: #9ac3d8;
+
+  --margo-surface: var(--color-surface);
+  --margo-surface-alt: var(--color-surface-alt);
+  --margo-text: var(--color-on-surface);
+  --margo-text-strong: var(--color-on-surface-strong);
+  --margo-accent: #274c5e;
+  --margo-outline: var(--color-outline);
+  --margo-focus-ring: var(--color-focus-ring);
+  --margo-reading-measure: 68ch;
+  --oie-accent-soft: #e1eef5;
+  --color-control-outline: var(--color-outline-strong);
+}
+
+[data-theme="oie"].dark {
+  --margo-surface: var(--color-surface-dark);
+  --margo-surface-alt: var(--color-surface-dark-alt);
+  --margo-text: var(--color-on-surface-dark);
+  --margo-text-strong: var(--color-on-surface-dark-strong);
+  --margo-accent: #9ac3d8;
+  --margo-outline: var(--color-outline-dark);
+  --margo-focus-ring: var(--color-focus-ring-dark);
+  --oie-accent-soft: #203d4d;
+}
