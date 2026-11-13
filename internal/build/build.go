@@ -261,7 +261,7 @@ func assembledFiles(ctx context.Context, repo string, input Inputs) (map[string]
 	} else if !os.IsNotExist(err) {
 		return nil, err
 	}
-	files["NOTICE"] = []byte("Arai Hu Assets " + releaseinfo.Version + "\n\nArai Hu brand assets are subject to Arai Hu Brand Terms. Third-party artwork retains its original licenses; see licenses/brand/.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\nDeveloper Icons material is included under its MIT license in licenses/developer-icons-MIT.txt.\n")
+	files["NOTICE"] = []byte("Arai Hu Assets " + releaseinfo.Version + "\n\nOiê and Goshtoso artwork is licensed under Apache-2.0. See licenses/brand/oie-goshtoso-NOTICE.txt for the copyright and trademark notice. Other Arai Hu brand assets are subject to Arai Hu Brand Terms. Third-party artwork retains its original licenses; see licenses/brand/.\nHeroicons material is included under its MIT license in licenses/heroicons-MIT.txt.\nDeveloper Icons material is included under its MIT license in licenses/developer-icons-MIT.txt.\n")
 	proofFiles, err := proofStaticFiles(repo)
 	if err != nil {
 		return nil, err
