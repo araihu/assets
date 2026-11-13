@@ -356,11 +356,12 @@ func validateProductPaint(p Product) error {
 	return nil
 }
 
-// ProductLicense preserves the underlying Noto artwork license alongside the
-// terms for using the Oiê identity. Other identities retain their catalog terms.
+// ProductLicense reports the copyright terms for source and generated brand art.
 func ProductLicense(id string) string {
-	if id == "oie" {
-		return "Apache-2.0 (Noto Emoji artwork); Arai Hu Brand Terms (identity)"
+	switch id {
+	case "oie", "goshtoso":
+		return "Apache-2.0"
+	default:
+		return "Arai Hu Brand Terms"
 	}
-	return "Arai Hu Brand Terms"
 }

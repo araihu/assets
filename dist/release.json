@@ -3,14 +3,14 @@
   "release": "v0.2.7",
   "identityRevision": 11,
   "runtimeVersion": 1,
-  "catalogSha256": "72efbb3a9c6cadf03f255d16aaa4f0aa061e6113dc68ee75147037691fc52a18",
+  "catalogSha256": "3ef5be348290d5bcf98213a661fc96f0b0699e0fc883864a3d4ebc553f02f521",
   "themesSha256": "55fb6deb7b735be5a13a7a552822188e692ffbc5e66550cf74e365793244bd17",
   "campaignsSha256": "fd0393fed7bcf92c7323ba88467b042ca14744da93442f8700bb242f1f23756a",
   "files": [
     {
       "path": "catalog.json",
-      "sha256": "72efbb3a9c6cadf03f255d16aaa4f0aa061e6113dc68ee75147037691fc52a18",
-      "size": 1360214
+      "sha256": "3ef5be348290d5bcf98213a661fc96f0b0699e0fc883864a3d4ebc553f02f521",
+      "size": 1357300
     },
     {
       "path": "themes.json",
@@ -24,8 +24,8 @@
     },
     {
       "path": "NOTICE",
-      "sha256": "24fcde85d4f95f86ebef0097b724c553e429916bf5c1b33252cbe84509d61fbb",
-      "size": 332
+      "sha256": "3f8e400453dc6f0dbd25967ca58011d38624934991c345c1ebbe9d17df0a53ad",
+      "size": 477
     },
     {
       "path": "brand/araihu/logo/adaptive-plate-optical.svg",
@@ -8943,6 +8943,11 @@
       "size": 4330
     },
     {
+      "path": "licenses/brand/oie-goshtoso-NOTICE.txt",
+      "sha256": "7a071f1ad7003637d250187113889596d845a8ab800768e1d965099b325e3176",
+      "size": 827
+    },
+    {
       "path": "licenses/developer-icons-MIT.txt",
       "sha256": "b479c9dc8a44b8766c4272faeb431fc7864026a01d9f56e75be9c6452860b88f",
       "size": 1084
@@ -10044,8 +10049,8 @@
     },
     {
       "path": "proof/assets/NOTICE",
-      "sha256": "24fcde85d4f95f86ebef0097b724c553e429916bf5c1b33252cbe84509d61fbb",
-      "size": 332
+      "sha256": "3f8e400453dc6f0dbd25967ca58011d38624934991c345c1ebbe9d17df0a53ad",
+      "size": 477
     },
     {
       "path": "proof/assets/brand/araihu/logo/adaptive-plate-optical.svg",
@@ -18968,6 +18973,11 @@
       "size": 4330
     },
     {
+      "path": "proof/assets/licenses/brand/oie-goshtoso-NOTICE.txt",
+      "sha256": "7a071f1ad7003637d250187113889596d845a8ab800768e1d965099b325e3176",
+      "size": 827
+    },
+    {
       "path": "proof/assets/licenses/developer-icons-MIT.txt",
       "sha256": "b479c9dc8a44b8766c4272faeb431fc7864026a01d9f56e75be9c6452860b88f",
       "size": 1084
@@ -20084,8 +20094,8 @@
     },
     {
       "path": "proof/index.html",
-      "sha256": "457f5dcda6b8be958f4d2698156087b44a542e2a5860ca11fb3fb23ecfbb91c0",
-      "size": 3448519
+      "sha256": "dc685c9363eaf9a824fdbc4f7e43bdffed24e41a5c12d42eed12f1230807d357",
+      "size": 3445605
     },
     {
       "path": "proof/og.png",

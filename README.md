@@ -318,4 +318,4 @@ Mask/clip paint is structural and stays untouched during monochrome conversion.
 Original source artwork, immutable upstream revision and derivation notes are
 in `source/brand/oie`; distribution notices are emitted from `LICENSES/brand`.
 Generated icons, web/PWA files and logos use the same catalog/proof/archive
-pipeline as all other products. The default channel remains v0.2.5.
+pipeline as all other products. See the [copyright and trademark notice](LICENSES/brand/oie-goshtoso-NOTICE.txt) for the Apache-2.0 grant covering Oiê and Goshtoso artwork. The default channel remains v0.2.5.
